@@ -1,0 +1,11 @@
+url='http://192.168.2.31:8099/';
+loginurl=url+'authmodule/index/login' ;//登陆接口
+yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
+rowurl=url+'authmodule/index/getRow' ;//登陆次数接口
+menuselecturl=url+'authmodule/menuInformation/select' ;//菜单查询接口
+menuaddurl=url+'authmodule/menuInformation/add' ;//菜单添加接口
+menudeleteurl=url+'authmodule/menuInformation/delete' ;//菜单删除接口
+menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
+menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
+menuimg=url+'filemodule/currency/uploadFile/add' //图片上传接口
+useraddselect=url+'authmodule/managerInformation/select' //用户管理查询

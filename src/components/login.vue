@@ -1,0 +1,130 @@
+<template>
+  <div id="login">
+    <el-row>
+      <el-col :span="5" :push='13'><div class="grid-content bg-purple" style="margin-top: 350px;padding-left: 45px">
+        <div id="reg">管理员登陆</div>
+        <div class="divHeight" style="margin-top: 20px">
+          <img src="../base/img/login/icon_1.png" class="imgHeight">
+          <input type="text" placeholder="请输入电话号码/身份证/邮箱" id="name" notnull info="用户名"  mustlength="18" class="inputHeight" v-model="form.name">
+        </div>
+        <div class="divHeight">
+          <img src="../base/img/login/icon_2.png" class="imgHeight">
+          <input type="password" placeholder="请输入密码" id="pwd" notnull info="密码" maxlength="30" class="inputHeight" v-model="form.password">
+        </div>
+        <div class="divHeight" id="yzm">
+          <input type="text" placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
+          <span><img src="" id="imgYzm"></span>
+        </div>
+        <div style="margin-top: 55px">
+          <button @click="submit">登录</button>
+        </div>
+        <div id="msg"></div>
+      </div></el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "login.vue",
+    data:function(){
+      return {
+        form:{
+          name:'',
+          password:'',
+          yzm:'',
+        },
+      }
+    },
+    methods:{
+      submit(){
+        this.axios.post( loginurl ,({account:this.form.name,
+          password:this.form.password,identifyingCode:this.form.yzm})).then(function (request) {
+          console.log(request);
+          if(request.data.state==true){
+            var authorization=response.headers['authorization']
+            localStorage.setItem('authorization',authorization)
+            this.$router.push('/navigate');
+          }else{
+            if($('#name').val()&&$('#pwd').val())
+              $('#msg').html(request.data.msg)
+            if(request.data.row>2){
+              $('#yzm').show()
+              $('#imgYzm').attr("src",yzmurl+Math.random());
+            }
+          }
+        })
+      },
+    },
+    mounted:function(){
+      this.axios.post( rowurl ,({})).then(function (request) {
+        console.log(request);
+        if(request.data.row>2){
+          $('#yzm').show()
+          $('#imgYzm').attr("src",yzmurl+Math.random());
+        }
+      })
+      $('#yzm').hide()
+    }
+  }
+</script>
+
+<style scoped>
+  #login{
+    background-image: url("../base/img/login/login_bg_3.png");
+    background-size: cover;
+    height: 1080px;
+    width: 1920px;
+  }
+  #reg{
+    font-size:35px;
+    color: #0096FF;
+    font-weight: bold;
+  }
+  .divHeight{
+    height: 68px;
+    width: 300px;
+    border-bottom: 1px solid lightgray;
+    position: relative;
+  }
+  .imgHeight{
+    position: absolute;
+    top:30px;
+    height: 26px;
+  }
+  .inputHeight{
+    position: absolute;
+    top: 30px;
+    left: 35px;
+    font-size: 20px;
+    outline: none;
+    border: none;
+  }
+  input::-webkit-input-placeholder{
+    color: lightgray;
+  }
+  button{
+    width: 300px;
+    height: 50px;
+    border-radius: 30px;
+    border: none;
+    background-color:#0096FF ;
+    color: white;
+    font-size: 20px;
+    outline:none;
+  }
+  #msg{
+    font-size: 15px;
+    color: red;
+    text-align: center;
+    width: 300px;
+    margin-top: 5px;
+  }
+  #imgYzm{
+    position: relative;
+    left:170px;
+    top:15px;
+    width: 130px;
+    height: 45px
+  }
+</style>

@@ -1,0 +1,588 @@
+<template>
+  <div class="index">
+    <!-- 首栏信息 -->
+    <section class="bookInfo">
+      <div class="cardBox sell">
+        <div class="sellicon">
+          <img src="../base/img/index/borrow.png">
+        </div>
+        <div class="sellInfo">
+          <p class="text">520</p>
+          <div class="progress">
+            <div class="percentprogress"></div>
+          </div>
+          <div class="iconBox">
+            <p class="icon">今日借出</p>
+          </div>
+        </div>
+      </div>
+      <div class="cardBox repay">
+        <div class="sellicon">
+          <img src="../base/img/index/repay.png">
+        </div>
+        <div class="sellInfo">
+          <p class="text">680</p>
+          <div class="progress">
+            <div class="percentprogress"></div>
+          </div>
+          <div class="iconBox">
+            <p class="icon">今日归还</p>
+          </div>
+        </div>
+      </div>
+      <div class="cardBox deal">
+        <div class="sellicon">
+          <img src="../base/img/index/deal.png">
+        </div>
+        <div class="sellInfo">
+          <p class="text">520</p>
+          <div class="progress">
+            <div class="percentprogress"></div>
+          </div>
+          <div class="iconBox">
+            <p class="icon">今日办卡</p>
+          </div>
+        </div>
+      </div>
+      <div class="cardBox online">
+        <div class="sellicon">
+          <img src="../base/img/index/online.png">
+        </div>
+        <div class="sellInfo">
+          <p class="text">520</p>
+          <div class="progress">
+            <div class="percentprogress"></div>
+          </div>
+          <div class="iconBox">
+            <p class="icon">在线图书</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- charts图表 -->
+    <section class="chartsBox">
+      <div class="sellData">
+        <div class="sellIcon">
+          <i class="icon"></i>
+          <span class="text">借出数据表</span>
+        </div>
+        <div class="checkBox">
+          <el-select v-model="optionValue" class="selectBorder">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="Vhis">
+          <ve-his 
+            width="780px" height="400px"
+            :data="HisData"
+            :legend-visible="false"
+            :settings="HisSetting"
+            :extend="HisExtend"
+          >
+
+          </ve-his>
+        </div>
+      </div>
+      <div class="cataroyData">
+        <div class="cataIcon">
+          <i class="icon"></i>
+          <span class="text">图书分类</span>
+        </div>
+        <div class="Vpie">
+          <ve-pie 
+            width="780px" height="400px"
+            :data="PieData"
+            :colors="PieColors"
+            :settings="PieSetting"
+            :extend="PieExtend"
+            >
+          </ve-pie>
+        </div>
+      </div>
+    </section>
+    <!-- 实时更新信息 -->
+    <section class="messageBox">
+      <!-- 实时借还列表 -->
+      <div class="faseList">
+        <div class="title">
+          <i class="icon"></i>
+          <span class="text">实时借还列表</span>
+        </div>
+        <!-- 信息列表循环处 -->
+        <div class="forlist">
+          <ul>
+            <li class="listBox" v-for="(item,index) of faseList" :key="index">
+              <p class="listInfo">
+                <span class="listInfo">{{item.id}}、</span>
+                <span class="listInfo">{{item.info}}、</span>
+              </p>
+              <p class>
+                <span class="listDate">{{item.time}}</span>
+                <span class="listDatehours">{{item.secods}}</span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 系统公告 -->
+      <div class="systemInfo">
+        <div class="title">
+          <i class="icon"></i>
+          <span class="text">系统公告</span>
+        </div>
+        <!-- 信息列表循环处 -->
+        <div class="forlist">
+          <ul>
+            <li class="listBox" v-for="(item,index) of faseList" :key="index">
+              <p class="listInfo">
+                <span class="listInfo">{{item.id}}、</span>
+                <span class="listInfo">{{item.info}}、</span>
+              </p>
+              <p class>
+                <span class="listDate">{{item.time}}</span>
+                <span class="listDatehours">{{item.secods}}</span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+import VePie from "v-charts/lib/pie.common";
+import VeHis from "v-charts/lib/histogram.common";
+export default {
+  
+  data() {
+    return {
+      /*====== 上层展示数据 ======*/
+
+      /*====== 中层图表战术数据 ======*/
+      // 下拉框数据
+      options:[{
+        value:'0',
+        label:'周借出数据'
+      },
+      {
+        value:'1',
+        label:'月借出数据'
+      },
+      {
+        value:'2',
+        label:'年借出数据'
+      }
+      
+      ],
+      optionValue:'周借出数据',
+      // 柱形图相关数据
+      /*
+        尚未完成其一：坐标轴的偏移
+        尚未完成其二：X轴元素离X轴距离过远
+       */
+      HisData:{
+        columns: ["日期", "周借出数据"],
+        rows: [
+          { 日期: "周一", 周借出数据: "300" },
+          { 日期: "周二", 周借出数据: "700" },
+          { 日期: "周三", 周借出数据: "900" },
+          { 日期: "周四", 周借出数据: "400" },
+          { 日期: "周五", 周借出数据: "600" },
+          { 日期: "周六", 周借出数据: "700" },
+          { 日期: "周日", 周借出数据: "800" }
+        ]
+      },
+      HisSetting:{
+        itemStyle: {
+            normal: {
+              //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组 但未实现
+              color: function(params) {
+                var colorList = [
+                  "#1e9eff",
+                  "#00d2ff",
+                  "#1e9eff",
+                  "#00d2ff",
+                  "#1e9eff",
+                  "#00d2ff",
+                  "#1e9eff"
+                ];
+                return colorList[params.dataIndex];
+              },
+              barBorderRadius: [8, 8, 0, 0] // 柱子的阴影
+            }
+          }
+      },
+      HisExtend:{
+        grid:{
+          x:45, // 相对于绝对定义的left x2是right
+          x2:45,
+          y:68,
+          y2:28 // bottom y是top
+          
+        },
+        xAxis: {
+            show: true,
+            axisLine: {
+              show: true,
+              lineStyle:{ // 设置坐标轴
+                color:'#CECECE' //Y轴轴线的颜色
+              }
+            },
+            splitLine: { // 是否启用网格线
+              show: false
+            },
+            axisLabel:{ // 轴线和坐标名的距离
+              margin:10
+            },
+            
+          },
+          yAxis: {
+            show: true, // 是否展示Y轴
+            position:'left', // 设置Y轴位置 多个Y轴全部合并到左边就是视觉上的一条了
+            axisLine: {
+              show: true, // 是否显示轴线
+              lineStyle:{ // 设置坐标轴
+                color:'#CECECE' //Y轴轴线的颜色
+              }
+            },
+            axisLabel:{ // X轴轴线和坐标名的距离
+              margin:10
+            },
+            splitLine: { //是否展示网格
+              show: false
+            },
+            nameTextStyle:{ // 字体设置
+              fontSize:'14',
+              fontFamily:'Microsoft YaHei',
+              color:'#CECECE'
+            }
+          },
+          series: {
+            //barWidth: 50, // 柱条长度定死
+            //barGap: '-5%',
+            barCategoryGap:'40' //同类目的间距 默认百分20% 谁的20%
+          },
+      },
+      // 饼图数据相关
+      /*
+        尚未完成1. 饼图整体的位移距离
+        尚未完成2： label的位移距离
+       */
+      PieData:{ // 饼图具体展示数据
+        columns: ["type", "value"], // 两个参数选择X轴和Y轴展示的数据
+        rows: [
+          { type: "文学类", value: 1393 },
+          { type: "理科类", value: 3530 },
+          { type: "科学类", value: 2923 },
+          { type: "艺术类", value: 1723 },
+          { type: "生活常识类", value: 3792 }
+        ],
+      },
+      /* 饼图配置项 */
+      // 饼图常规设置项
+      PieColors:["#00A2FF", "#FC32F0", "#00D2FF", "#ff5c3c", "#ff9231"],
+      PieSetting:{ // 饼图设置
+        roseType: "radius", // 玫瑰图配置项
+        // 引导线
+        labelLine: {
+          show: false
+        },
+        // 引导标签
+        label: {
+          show: false
+        }
+      },
+      PieExtend:{ // 饼图扩展使用echarts配置覆盖原始配置
+        grid:{ // 位置无法调整
+
+        },
+        legend: {
+          // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+          orient: "vertical",
+          // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+          x: "600px", // 要设置位置 否则位置和文字会相反
+          // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+          y: "center",
+          icon: "circle" // 设置显示图标
+        }
+      },
+      // 
+      /*====== 下层信息展示数据 ======*/
+      faseList: [ 
+        {
+          id: 1,
+          info: "干脆面借《UI必修课》一本",
+          time: "2019/2/3",
+          secods: "17:49"
+        },
+        {
+          id: 2,
+          info: "干脆面借《UI必修课》一本",
+          time: "2019/2/3",
+          secods: "17:49"
+        },
+        {
+          id: 1,
+          info: "干脆面借《UI必修课》一本",
+          time: "2019/2/3",
+          secods: "17:49"
+        }
+      ]
+    };
+  },
+  components:{
+    VePie,
+    VeHis
+  }
+};
+</script>
+
+<style scoped>
+/*首栏信息*/
+.index {
+  background-color: rgb(235, 247, 255);
+  padding-bottom: 30px;
+}
+/*======图书信息=======*/
+.bookInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 40px;
+}
+.bookInfo .cardBox {
+  width: 370px;
+  height: 200px;
+  background: rgba(0, 162, 255, 1);
+  border-radius: 20px;
+  display: flex;
+}
+/*卡片不同颜色开始 hover颜色待定*/
+.bookInfo .sell {
+  background: rgba(0, 162, 255, 1);
+}
+.bookInfo .sell .progress {
+  background: rgba(48, 180, 255, 1);
+}
+.bookInfo .sell .iconBox .icon {
+  background: rgba(48, 180, 255, 1); /*颜色*/
+}
+
+.bookInfo .repay {
+  background: rgba(255, 146, 49, 1);
+}
+.bookInfo .repay .progress {
+  background-color: #ffa85a;
+}
+.bookInfo .repay .iconBox .icon {
+  background: #fca75a; /*颜色*/
+}
+
+.bookInfo .deal {
+  background: rgba(0, 210, 255, 1);
+}
+.bookInfo .deal .progress {
+  background-color: #33dbff;
+}
+.bookInfo .deal .iconBox .icon {
+  background: #33dbff; /*颜色*/
+}
+
+.bookInfo .online {
+  background: rgba(255, 92, 60, 1);
+}
+.bookInfo .online .progress {
+  background-color: #ff7d63;
+}
+.bookInfo .online .iconBox .icon {
+  background-color: #ff7d63;
+}
+/*卡片不同颜色结束*/
+.bookInfo .cardBox .sellicon {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  padding-left: 20px;
+  margin-right: 20px;
+}
+.bookInfo .cardBox .sellInfo {
+  padding-top: 30px;
+  padding-right: 30px;
+}
+.bookInfo .cardBox .sellInfo .text {
+  color: #fff;
+  font-size: 55px;
+  margin-bottom: 20px;
+  text-align: right;
+}
+.bookInfo .cardBox .sellInfo .progress {
+  position: relative;
+  width: 208px;
+  height: 13px;
+
+  border-radius: 7px;
+  z-index: 2;
+  margin-bottom: 15px;
+}
+.bookInfo .cardBox .sellInfo .percentprogress {
+  position: absolute;
+  width: 100px;
+  height: 13px;
+  background: rgba(255, 255, 255, 1);
+
+  border-radius: 7px;
+  z-index: 3;
+}
+.bookInfo .cardBox .sellInfo .iconBox {
+  display: flex;
+  justify-content: flex-end;
+}
+.bookInfo .cardBox .sellInfo .iconBox .icon {
+  width: 100px;
+  height: 25px;
+
+  border-radius: 13px;
+  text-align: center;
+  line-height: 25px;
+  color: #fff;
+  font-size: 16px;
+}
+
+/*======echarts图表部分======*/
+.chartsBox {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.chartsBox .sellData,
+.chartsBox .cataroyData {
+  width: 780px;
+  height: 400px;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+.chartsBox .sellData {
+  margin-right: 40px;
+}
+/*柱形图*/
+.chartsBox .sellData .sellIcon{
+  position: absolute;
+  top: 24px;
+  left: 21px;
+  display: flex;
+  align-items: center;
+}
+.chartsBox .sellData .sellIcon .icon {
+  width: 12px;
+  height: 12px;
+  background-image: url("../base/img/index/chartslist.png");
+  display: inline-block;
+  margin-right: 8px;
+  /*margin-top: 2px;居中待定*/
+}
+.chartsBox .sellData .sellIcon .text {
+  font-size: 16px;
+  color: rgba(135, 135, 135, 1);
+}
+/*选择框*/
+.chartsBox .sellData .checkBox{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 150px;
+  z-index: 55;
+}
+
+/*饼图*/
+.chartsBox .cataroyData .cataIcon {
+  position: absolute;
+  top: 24px;
+  left: 21px;
+  display: flex;
+  align-items: center;
+}
+.chartsBox .cataroyData .cataIcon .icon {
+  width: 12px;
+  height: 12px;
+  background-image: url("../base/img/index/chartsType.png");
+  display: inline-block;
+  margin-right: 8px;
+  /*margin-top: 2px;居中待定*/
+}
+.chartsBox .cataroyData .cataIcon .text {
+  font-size: 16px;
+  color: rgba(135, 135, 135, 1);
+}
+.chartsBox .cataroyData .Vpie{
+
+}
+/*======下层信息框======*/
+.messageBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.messageBox .faseList,
+.messageBox .systemInfo {
+  width: 780px;
+  height: 254px;
+  background-color: #fff;
+}
+.messageBox .faseList {
+  margin-right: 40px;
+}
+.messageBox .faseList .title,
+.messageBox .systemInfo .title {
+  padding-top: 20px;
+  padding-left: 20px;
+  margin-bottom: 25px;
+}
+.messageBox .faseList .title .icon {
+  margin-top: -5px;
+  display: inline-block;
+  background-image: url("../base/img/index/datelist.png");
+  height: 10px;
+  width: 15px;
+  margin-right: 4px;
+  /*margin-top:2px;  居中待定*/
+}
+.messageBox .systemInfo .title .icon {
+  margin-top: -5px;
+  display: inline-block;
+  background-image: url("../base/img/index/datesystem.png");
+  height: 10px;
+  width: 15px;
+  margin-right: 4px;
+}
+.messageBox .faseList .title .text,
+.messageBox .systemInfo .title .text {
+  font-size: 16px;
+  color: rgba(135, 135, 135, 1);
+}
+.messageBox .faseList .forlist,
+.messageBox .systemInfo .forlist {
+  padding: 0 50px;
+}
+.messageBox .faseList .forlist ul li,
+.messageBox .systemInfo .forlist ul li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.messageBox .faseList .forlist ul li:last-child,
+.messageBox .faseList .systemInfo ul li:last-child {
+  margin-bottom: 0;
+}
+/*系统列表*/
+</style>
