@@ -4,6 +4,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '../src/base/css/reset.css'
+import '../src/base/css/common.css'
 import axios from 'axios'
 
 import '../src/base/js/yf/url'
