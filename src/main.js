@@ -4,6 +4,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '../src/base/css/reset.css'
+<<<<<<< HEAD
+=======
+import '../src/base/css/common.css'
+>>>>>>> 881be371f97fe460e898b1db92ac8a94e85a4417
 import axios from 'axios'
 
 import '../src/base/js/yf/url'
@@ -18,6 +22,7 @@ import './zTree_v3/js/jquery.ztree.exhide.min'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import './zTree_v3/css/zTreeStyle/zTreeStyle.css'
+//import './zTree_v3/css/metroStyle/metroStyle.css'
 Vue.config.productionTip = false
 
 

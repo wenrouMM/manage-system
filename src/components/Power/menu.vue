@@ -400,6 +400,7 @@ export default {
           iconSelected: this.photo,
           fkMenuTypeCode: this.value2,
           fkParentMenuId: parent,
+          fkParentMenuId: 0,
           authTbMenuElements: authTbMenuElementsAdd
         };
         console.log(add);

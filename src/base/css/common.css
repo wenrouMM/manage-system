@@ -1,0 +1,72 @@
+/*====== 通用样式 包含在el-container内 ======*/
+
+
+/*通用标题*/
+.index{
+  width: 100%;
+}
+.commonMode {
+  padding: 30px;
+}
+/*通用颜色设置*/
+.commonMode .error{
+    color: #ff5c3c;
+}
+.commonMode .sonTitle {}
+
+.commonMode .sonTitle .titleName {
+  border-left: 4px solid #0096ff;
+  padding-left: 10px;
+  font-size: 16px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(135, 135, 135, 1);
+  display: inline-block;
+  margin-bottom: 33px;
+}
+
+/*通用按钮*/
+.searchButton {}
+
+/*通用表单初始化设置*/
+/*调整搜索input框的宽度 使用方法 在elementUI的基础上 size="" 输入宽度尺寸*/
+.commonMode .el-input .el-input__inner{
+    text-align: center;
+}
+.el-input.el-input--120 {
+  width: 160px;
+}
+
+.el-input.el-input--120 input {
+  height: 36px;
+  line-height: 36px;
+}
+
+.el-input.el-input--160 {
+  width: 160px;
+}
+
+.el-range-editor--130 {
+  width: 300px;
+}
+
+.el-select.el-select--160 {
+  width: 160px;
+}
+
+
+
+/*通用表格设置*/
+.commonMode .el-form-item{
+    margin-bottom: 30px;
+}
+.headTableCell {
+  background: '#0096FF';
+  color: '#fff';
+  height: '60px';
+  font-size: '18px';
+}
+
+
+
+/*通用分页器设置*/

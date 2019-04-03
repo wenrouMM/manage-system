@@ -24,6 +24,10 @@
               </el-form-item>
               <el-form-item label="角色名称:" size="160">
                 <el-select v-model="formInline.roleCode" placeholder="请选择角色">
+                <el-input size="120" v-model="formInline.userName" placeholder="请输入姓名"></el-input>
+              </el-form-item>
+              <el-form-item label="角色名称:" size="160">
+                <el-select v-model="formInline.userType" placeholder="请选择角色">
                   <el-option
                     v-for="(option,index) of optionsData"
                     :key="index"
@@ -54,6 +58,24 @@
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searCh">查询</el-button>
+                <el-input v-model="formInline.userId" placeholder="请输入身份证号"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号码:" size="160">
+                <el-input v-model="formInline.userPhone" placeholder="请输入手机号码"></el-input>
+              </el-form-item>
+              <el-form-item label="创建时间:" size="130">
+                <el-date-picker
+                  v-model="formInline.date"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item>
+                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
               </el-form-item>
             </el-form>
           </section>
@@ -77,6 +99,7 @@
             >
               <el-table-column align="center" type="selection" width="100"></el-table-column>
               <el-table-column align="center" width="100" prop="id" label="序号"></el-table-column>
+              <el-table-column align="center" width="100" prop="idType" label="序号"></el-table-column>
               <el-table-column align="center" width="100" prop="srcdata" label="头像">
                 <template slot-scope="scope">
                   <span class="imgDefault">
@@ -98,6 +121,13 @@
               <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="isLock" width="70" label="状态"></el-table-column>
+              <el-table-column align="center" prop="name" width="100" label="角色名称"></el-table-column>
+              <el-table-column align="center" prop="password" width label="姓名"></el-table-column>
+              <el-table-column align="center" width="100" prop="sex" label="性别"></el-table-column>
+              <el-table-column align="center" prop="ID" width="200" label="身份证号"></el-table-column>
+              <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
+              <el-table-column align="center" prop="startTime" width="200" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="now" width="70" label="状态"></el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
@@ -164,6 +194,8 @@
             <!-- 表单域 -->
             <el-form-item label="姓　　名" prop="username" :label-width="formLabelWidth">
               <el-input v-model="addForm.username" autocomplete="off"></el-input>
+            <el-form-item label="姓　　名" prop="name" :label-width="formLabelWidth">
+              <el-input v-model="addForm.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item class="select" label="性　　别" prop="sex">
               <el-radio-group v-model="addForm.sex">
@@ -173,6 +205,8 @@
             </el-form-item>
             <el-form-item label="角色类型" prop="fkRoleNames" :label-width="formLabelWidth">
               <el-select v-model="addForm.fkRoleNames" placeholder="性别">
+            <el-form-item label="角色类型" prop="userType" :label-width="formLabelWidth">
+              <el-select v-model="addForm.userType" placeholder="性别">
                 <el-option label="图书管理" value="shanghai"></el-option>
                 <el-option label="其他管理" value="beijing"></el-option>
               </el-select>
@@ -185,6 +219,13 @@
             </el-form-item>
             <el-form-item class="select" prop="status" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
+              <el-input v-model="addForm.id" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
+              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item class="select" prop="status" label="状　　态">
+              <el-radio-group v-model="addForm.status">
                 <el-radio label="禁用"></el-radio>
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
@@ -235,6 +276,27 @@ export default {
           { required: true, message: "请输入手机号码", trigger: "blur" }
         ],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
+        preloadImg: "", // 图片相关
+        files: "", // 用于上传
+        name: "", // 姓名
+        sex: "", // 性别
+        userType: "", // 角色类型 不明参数
+        id: "", // 身份证
+        phoneNumber: "", // 电话号码
+        status: "" // 状态
+      },
+      addRules: {
+        // 添加的参数验证
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+        userType: [
+          { required: true, message: "请选择用户类型", trigger: "change" }
+        ],
+        id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
+        phoneNumber: [
+          { required: true, message: "请输入手机号码", trigger: "blur" }
+        ],
+        status: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "120px",
       /*====== 2.0表单提交数据项 ======*/
@@ -253,6 +315,11 @@ export default {
         idCard: "",
         phone: "",
         data: "" // 选择日期
+        userName: "",
+        userType: "",
+        userId: "",
+        userPhone: "",
+        date: "" // 选择日期
       },
       search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
@@ -265,8 +332,84 @@ export default {
       },
       tableData: [
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-
-
+        {
+          idType: "1",
+          srcdata:
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3031412719,4225417772&fm=11&gp=0.jpg",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "2",
+          srcdata: "",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "3",
+          username: "",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "4",
+          username: "admin",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "5",
+          username: "admin",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "6",
+          username: "admin",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        },
+        {
+          idType: "7",
+          username: "admin",
+          name: "王小虎",
+          password: "123456",
+          sex: "男",
+          ID: 500221199502011716,
+          phone: 18223213182,
+          startTime: "2019-03-24 12:33",
+          now: "禁用"
+        }
       ]
       /*====== 5.0 分页相关设置项 ======*/
     };
@@ -282,6 +425,9 @@ export default {
         console.log(response)
         this.tableData=response.data.row
       })
+    onSubmit() {
+      // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
+      console.log(this.formInline);
     },
 
     /*====== 3.0添加删除相关操作 ======*/
@@ -309,7 +455,6 @@ export default {
       this.dialogFormVisible = true
       console.log(index, row);
     },
-
     /*====== 弹框相关函数 ======*/
     submitDialog() {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
@@ -388,6 +533,7 @@ export default {
       return searchForm
     },
   },
+  }
 };
 </script>
 
