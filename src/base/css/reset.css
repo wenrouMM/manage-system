@@ -1,0 +1,359 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*个性化修改elementUI*/
+/*====== 弹框  ======*/
+/*notice 公司统一的弹框 上边距和下边距应该固定一个尺寸 按钮的颜色大小也应有个标准*/
+/* 弹框位置居中 */
+.el-dialog{
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+	margin-top: 0!important;
+	border-radius:20px;
+	background:rgba(0,150,255,0);
+	
+	box-shadow: none;
+}
+/* 弹框头部颜色大小 按钮更改 */
+.dialogBan{
+	width: 500px;
+}
+.el-dialog__header{
+	background-color:#0096FF;
+	padding-top: 27px;
+	padding-bottom: 27px;
+	color:#fff;
+	border-radius: 20px 20px 0 0;
+	text-align: center;
+}
+.el-dialog__title {
+    line-height: 24px;
+    font-size: 26px;
+    color: #FFFFFF;
+}
+.el-dialog__headerbtn{
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 2px solid #fff;
+}
+.el-dialog__headerbtn .el-dialog__close{
+	color: #fff;
+}
+.el-dialog__headerbtn:hover .el-dialog__close{
+	color: #fff;
+}
+.el-dialog__body{
+	min-height: 140px;
+	
+	box-sizing: border-box;
+	background-color: #fff;
+	
+	/*后期不居中的时候删掉*/
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.row1 .el-input .el-input__inner{
+	width: 200px;
+  }
+.el-dialog__footer{
+	font-size: 0;
+	padding: 0 75px;
+	padding-bottom: 46px;
+	background-color: #fff;
+	box-sizing: border-box;
+	border-radius: 0 0 20px 20px;
+}
+
+.forbid .dialogBody{
+	text-align: center;
+	color:#878787;
+	font-size:20px;
+	padding: 30px;
+}
+.edit .el-dialog__body{
+	border-radius: 0 0 20px 20px;
+}
+.dialogBody{
+	width: 100%;
+	
+}
+.dialog-footer{
+	font-size: 0;
+	padding: 0 75px;
+	padding-bottom: 16px;
+	background-color: #fff;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	padding-top: 20px;
+}
+/* 弹框中的按钮 */
+.dialogButton{
+	height: 46px;
+	line-height: 46px;
+	width: 150px;
+	border-radius:10px;
+	display: inline-block;
+	cursor: pointer;
+	font-size:18px;
+	color:#fff;
+	border: none;
+	box-sizing: border-box;
+	text-align: center;
+}
+.dialogButton.true{
+	background-color:#0096FF;
+}
+.dialogButton.cancel{
+	background-color: #D5D5D5;
+}
+.dialogTrue:hover{
+
+}
+/* 弹框中的按钮 */
+.dialogButton{
+	height: 46px;
+	line-height: 46px;
+	width: 150px;
+	border-radius:10px;
+	display: inline-block;
+	cursor: pointer;
+	font-size:18px;
+	color:#fff;
+	border: none;
+	box-sizing: border-box;
+	text-align: center;
+}
+.dialogButton.true{
+	background-color:#0096FF;
+}
+.dialogButton.cancel{
+	background-color: #D5D5D5;
+}
+.dialogTrue:hover{
+
+}
+/**/
+#app{
+	min-height: 100vh;
+	width: 100%;
+	background: #ebf7ff;
+}
+/*====== 表格覆盖 ======*/
+.el-table__body-wrapper{
+	font-size: 16px;
+}
+.el-form-item__label{
+	color: #878787;
+}
+.el-date-editor .el-range-separator{
+	color: #878787;
+}
+/*main应该设置高度百分百 像 这种在不需要内容的情况下撑开 就需要用到最小高度这个值*/
+.el-main{
+	background: #ebf7ff;
+	padding: 20px;
+	padding-top:30px;
+	height: 100%;
+}
+/*分页器覆盖*/
+.el-pagination{
+	font-weight: 400;
+}
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
+    background-color: #fff;
+    color: #878787;
+    min-width: 34px;
+    line-height: 34px;
+    height: 34px;
+    border-radius: 5px;
+    border: 1px solid #D5D5D5;
+    font-size: 14px;
+}
+.el-pagination__editor{
+	height: 34px!important;
+	line-height: 34px!important;
+	font-size:14px!important;
+}
+.el-pagination__editor.el-input .el-input__inner{
+	height: 34px!important;
+	line-height: 34px!important;
+	font-size:14px!important;
+}
+/**/
+.el-pagination__total{
+	height: 34px!important;
+	line-height: 34px!important;
+	font-size:14px!important;
+}
+.el-pagination__jump{
+	height: 34px!important;
+	line-height: 34px!important;
+	font-size:14px!important;
+}
+/*表单输入框高度覆盖*/
+.el-input .el-input__inner{
+	height: 36px;
+	line-height: 36px;
+}
+
+/*按钮覆盖*/
+.el-button{
+	color: #fff;
+	font-size: 16px;
+}
+.el-button--primary{ /*primary 默认搜索用按钮*/
+	background:rgba(0,150,255,1);
+	border-radius:6px;
+	font-size: 16px;
+	
+}
+
+/*自定义按钮类型 自定义尺寸属性*/
+.el-button--add{
+	padding-left:18px;
+	padding-right:18px; 
+	height:40px;
+	background:rgba(255,146,49,1);
+	border-radius: 10px;
+	margin-right: 30px; 
+}
+.el-button--delete{
+	padding-left:18px;
+	padding-right:18px; 
+	height:40px;
+	background:rgba(255,92,60,1);
+	border-radius: 10px;
+}
+/*通用部分*/
+/*字体大小*/
+
+/*====== 背景颜色 ======*/
+.bgBlue{
+	background:rgba(0,150,255,1);
+}
+/*====== 按钮 ======*/
+
+/**/
+.circularButton{
+	border-radius:18px;
+	text-align: center;
+	height: 36px;
+	line-height: 36px;
+	font-size:16px;
+	width:140px;
+	background-color: #fff;
+	color:rgba(135,135,135,1);
+	border: 1px solid #D5D5D5;
+	box-sizing: border-box;
+}
+/*间距*/
+.mb_30{
+	margin-bottom: 30px;
+}
+.mr_30{
+	margin-right: 30px;
+}
+.mr_40{
+	margin-right: 30px;
+}
+
+/*自定义添加弹框*/
+.addEditDialog{
+
+}
+.addEditDialog form.el-form {
+    width: 100%;
+	display: flex;
+    flex-wrap: wrap;
+    
+}
+.addEditDialog .el-dialog__body{
+	border-radius: 0 0 20px 20px;
+}
+.addEditDialog .el-form-item{
+	margin-bottom: 30px;
+}
+.addEditDialog .el-form-item.uploadBox{
+	width: 100%;
+}
+.addEditDialog .el-form-item.select {
+    width: 260px;
+    margin-left: 50px;
+}
+.addEditDialog .el-input .el-input__inner {
+    width: 200px;
+}
+.addEditDialog .dialogFooter{
+	width: 100%;
+	padding-top: 20px;
+	text-align: center;
+	font-size: 0;
+}
+.addEditDialog .el-button{
+	height: 46px;
+	width: 150px;
+	border-radius:10px;
+	display: inline-block;
+	cursor: pointer;
+	font-size:18px;
+	color:#fff;
+	border: none;
+	box-sizing: border-box;
+	text-align: center;
+	margin-right: 20px;
+}
+.addEditDialog .el-button.buttonTrueColor{
+	background-color:#0096FF;
+}
+.addEditDialog .el-button.buttonCancelColor{
+	background-color:#D5D5D5;
+}
+
