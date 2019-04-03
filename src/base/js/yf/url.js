@@ -9,3 +9,5 @@ menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
 menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
 menuimg=url+'filemodule/currency/uploadFile/add' //图片上传接口
 useraddselect=url+'authmodule/managerInformation/select' //用户管理查询
+useradddelete=url+'authmodule/managerInformation/delete' //用户管理删除
+useraddAdd=url+'authmodule/managerInformation/add' //用户管理添加
