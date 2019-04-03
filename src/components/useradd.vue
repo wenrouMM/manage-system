@@ -20,10 +20,10 @@
           <section class="searchBox">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="姓名:">
-                <el-input size="120" v-model="formInline.userName" placeholder="请输入姓名"></el-input>
+                <el-input size="120" v-model="formInline.name" placeholder="请输入姓名"></el-input>
               </el-form-item>
               <el-form-item label="角色名称:" size="160">
-                <el-select v-model="formInline.userType" placeholder="请选择角色">
+                <el-select v-model="formInline.roleCode" placeholder="请选择角色">
                   <el-option
                     v-for="(option,index) of optionsData"
                     :key="index"
@@ -33,20 +33,23 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="身份证号:" size="160">
-                <el-input v-model="formInline.userId" placeholder="请输入身份证号"></el-input>
+                <el-input v-model="formInline.idCard" placeholder="请输入身份证号"></el-input>
               </el-form-item>
               <el-form-item label="手机号码:" size="160">
-                <el-input v-model="formInline.userPhone" placeholder="请输入手机号码"></el-input>
+                <el-input v-model="formInline.phone" placeholder="请输入手机号码"></el-input>
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
-                  v-model="formInline.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="formInline.startTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="formInline.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -159,8 +162,8 @@
               </section>
             </el-form-item>
             <!-- 表单域 -->
-            <el-form-item label="姓　　名" prop="name" :label-width="formLabelWidth">
-              <el-input v-model="addForm.name" autocomplete="off"></el-input>
+            <el-form-item label="姓　　名" prop="username" :label-width="formLabelWidth">
+              <el-input v-model="addForm.username" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item class="select" label="性　　别" prop="sex">
               <el-radio-group v-model="addForm.sex">
@@ -168,20 +171,20 @@
                 <el-radio label="女"></el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="角色类型" prop="userType" :label-width="formLabelWidth">
-              <el-select v-model="addForm.userType" placeholder="性别">
+            <el-form-item label="角色类型" prop="fkRoleNames" :label-width="formLabelWidth">
+              <el-select v-model="addForm.fkRoleNames" placeholder="性别">
                 <el-option label="图书管理" value="shanghai"></el-option>
                 <el-option label="其他管理" value="beijing"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
-              <el-input v-model="addForm.id" autocomplete="off"></el-input>
+              <el-input v-model="addForm.idCard" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
-              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
+              <el-input v-model="addForm.phone" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item class="select" prop="status" label="状　　态">
-              <el-radio-group v-model="addForm.status">
+              <el-radio-group v-model="addForm.isLock">
                 <el-radio label="禁用"></el-radio>
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
@@ -211,27 +214,27 @@ export default {
       addForm: {
         // 添加的数据表单 共8个参数
         addDialog: false,
-        preloadImg: "", // 图片相关
+        headerAddress: "", // 图片相关
         files: "", // 用于上传
-        name: "", // 姓名
+        username: "", // 姓名
         sex: "", // 性别
-        userType: "", // 角色类型 不明参数
-        id: "", // 身份证
-        phoneNumber: "", // 电话号码
-        status: "" // 状态
+        fkRoleNames: "", // 角色类型 不明参数
+        idCard: "", // 身份证
+        phone: "", // 电话号码
+        isLock: "" // 状态
       },
       addRules: {
         // 添加的参数验证
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        username: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-        userType: [
+        fkRoleNames: [
           { required: true, message: "请选择用户类型", trigger: "change" }
         ],
-        id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
-        phoneNumber: [
+        idCard: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
+        phone: [
           { required: true, message: "请输入手机号码", trigger: "blur" }
         ],
-        status: [{ required: true, message: "请选择状态", trigger: "change" }]
+        isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "120px",
       /*====== 2.0表单提交数据项 ======*/
@@ -245,11 +248,11 @@ export default {
       ],
       formInline: {
         // 搜索需要的表单数据
-        userName: "",
-        userType: "",
-        userId: "",
-        userPhone: "",
-        date: "" // 选择日期
+        name: "",
+        roleCode: "",
+        idCard: "",
+        phone: "",
+        data: "" // 选择日期
       },
       search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
@@ -274,17 +277,18 @@ export default {
 
     searCh() {
       // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-      console.log(this.formInline);
-      /*this.axios.get(useraddselect,{params:formInline}).then((response)=>{
-
-      })*/
-
+      var list=this.formInline
+      this.axios.get(useraddselect,{params:list}).then((response)=>{
+        console.log(response)
+        this.tableData=response.data.row
+      })
     },
 
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       this.i = 3;
       this.dialogFormVisible = true
+
     },
     batchDelete() {
       // 批量删除
@@ -311,7 +315,6 @@ export default {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
       let i = this.i;
       let tips = this.Dialogtitle[i];
-
       alert(`${tips}成功`); // 成功之后映射到数组的操作
       this.centerDialogVisible = false;
     },
@@ -372,7 +375,19 @@ export default {
         console.log(this.tableData)
       }
     })
-  }
+  },
+  computed: {
+    searchTimeForm(){ // 计算属性 真正传递的数据
+      let searchForm = {
+        pageSize: this.pageSize,
+        currentPage:1,
+        loginSource: this.searchForm.loginSource === '全部'? null : this.searchForm.loginSource,
+        beginTime: this.searchForm.beginTime === ""? null : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
+        endTime: this.searchForm.endTime === ""? null : moment(this.searchForm.endTime).format("YYYY-MM-DD"), //结束时间
+      }
+      return searchForm
+    },
+  },
 };
 </script>
 
