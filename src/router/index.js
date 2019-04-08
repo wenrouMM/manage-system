@@ -16,6 +16,7 @@ import Test2 from '../common/test/test2.vue'
 import TestBook from '../common/test/testBook.vue'
 import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
+import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibBookType from '../components/Book/libraryManage/libBookType.vue'
 import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
 import TestArea from '../common/test/testArea.vue'
@@ -82,8 +83,12 @@ export default new Router({
               component:BookInfo
             },
             {
-              path:'/libBookType',
-              component:LibBookType
+              path:'/bookpublishhouse',
+              component:BookPublishHouse
+            },
+            {
+              path:'/libBookInfo',
+              component:LibBookInfo
             },
             {
               path:'/libBookInfo',
