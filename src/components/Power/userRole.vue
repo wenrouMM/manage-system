@@ -54,7 +54,7 @@
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table class="tableBorder" v-loading="tableLoading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
               <el-table-column align="center" type="selection" width="100" ></el-table-column>
               <el-table-column align="center" prop="id" label="序号"></el-table-column>
               <el-table-column align="center" prop="roleName" width="100" label="角色名称" v-model="tableData.roleName"></el-table-column>
@@ -70,16 +70,16 @@
                 </template>
               </el-table-column>
             </el-table>
-          </section>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination">
-            <el-pagination style="display: inline-block"
-                           background
-                           layout="prev, pager, next,total, jumper, ->"
-                           :total="total"
-                           :current-page="currentPage"
-                           @current-change="current_change"
-            ></el-pagination>
+            <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+            <section class="pagination">
+              <el-pagination style="display: inline-block;padding-top: 30px;"
+                             background
+                             layout="prev, pager, next,total, jumper, ->"
+                             :total="total"
+                             :current-page="currentPage"
+                             @current-change="current_change"
+              ></el-pagination>
+            </section>
           </section>
         </div>
       </div>
@@ -99,14 +99,9 @@
       <!-- 添加弹框 -->
       <div class="addEditDialog">
         <!-- Form -->
-        <el-dialog
-          @close="closeForm"
-          width="500px"
-          :title="Dialogtitle[i]"
-          :visible.sync="dialogFormVisible"
-        >
-          <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm" style="display: flex;flex-direction: column">
-            <el-form-item label="名称" prop="userType" style="margin-left: 50px">
+        <el-dialog @close="closeForm" width="586px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
+          <el-form id="addFormYf" :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm" style="display: flex;flex-direction: column">
+            <el-form-item label="名称" prop="userType" style="margin-left: 50px;">
               <el-input v-model="addForm.userType"></el-input>
             </el-form-item>
             <el-form-item label="上级" prop="parent" style="margin-left: 50px">
@@ -125,8 +120,8 @@
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否默认" prop="isdefalut" style="margin-left: 80px">
-              <el-radio-group v-model="addForm.isdefault">
+            <el-form-item label="是否默认" prop="isDefault" style="margin-left: 80px">
+              <el-radio-group v-model="addForm.isDefault">
                 <el-radio label="是"></el-radio>
                 <el-radio label="否" ></el-radio>
               </el-radio-group>
@@ -181,7 +176,7 @@
           addDialog: false,
           userType: "", // 角色名称 不明参数
           parent: "", // 上级
-          isdefault: "", // 是否禁用
+          isDefault: "", // 是否默认
           status: "" // 状态
         },
         rules: {
@@ -189,7 +184,7 @@
           userType: [{ required: true, message: "请选择角色类型", trigger: "change" }],
           parent: [{ required: true, message: "选择角色名称", trigger: "blur" }],
           status: [{ required: true, message: "请选择状态", trigger: "change" }],
-          isdefalut: [{ required: true, message: "请选择是否默认", trigger: "change" }],
+          isDefault: [{ required: true, message: "请选择是否默认", trigger: "change" }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -204,6 +199,7 @@
           currentPage:0,
         },
         /*======4.0分页器相关数据 ======*/
+        tableLoading:false,
         /*初始化 */
         total: 0,
         pageSize: 7,
@@ -245,16 +241,20 @@
         this.currentPage = 1
       },
       select(value){
+        this.tableLoading = true
         this.axios.get(userroleselect,{params:value}).then((response)=>{
           console.log(response)
           if (response.data.state === true) {
             this.tableData = response.data.row.list; //获取返回数据
             this.total = response.data.row.total; //总条目数
             this.paginationForm = Object.assign({},value) // 保存上次的查询结果
+            this.tableLoading = false
           } else {
             this.$message.error(response.data.msg);
+            this.tableLoading = false
           }
         })
+        //
       },
       current_change: function(currentPage) {
         //分页查询
@@ -292,10 +292,20 @@
         //console.log(this.addForm.userType)
         this.i = 2;
         this.dialogFormVisible = true;
-        console.log(index, row);
-        console.log(row.id,row.roleName,row.roleCode,row.isDefault,row.disabled,row.fkParentRoleCode)
+        console.log(row);
+        console.log(row.id,row.roleName,row.roleCode,row.isDefault,row.disabled)
         this.addForm.userType=row.roleName
         this.addForm.parent=row.fkParentRoleCode
+        if(row.disabled==1){
+          this.addForm.status='禁用'
+        }else{
+          this.addForm.status='启用'
+        }
+        if(row.isDefault==1){
+          this.addForm.isDefault='是'
+        }else{
+          this.addForm.isDefault='否'
+        }
         this.id=row.id
         this.roleCode=row.roleCode
         //this.addForm.push({userType:,parent:this.tableData.roleCode,isdefault:this.tableData.isDefault,status:this.tableData.disabled,})
@@ -325,6 +335,17 @@
           console.log(deleteParam)
           this.axios.delete(userroledelete,{data:deleteStr}).then((response)=>{
             console.log(response)
+            if(response.data.state==true){
+              this.$message({
+                message: response.data.msg,
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                message: response.data.msg,
+                type: 'error'
+              });
+            }
           })
         }
         let tips = this.Dialogtitle[i];
@@ -336,26 +357,13 @@
         console.log(formName)
         console.log(this.i)
         if(this.i===3){
-          alert(111)
+          //alert(111)
           this.add(this.newaddForm)
         }
         if(this.i===2){
-          alert(222)
+          //alert(222)
           this.edit(this.neweditForm) //
         }
-        /*switch (this.i) {
-          case 1:
-            alert(111)
-            break
-          case 2:
-            alert(222)
-            this.edit(this.neweditForm)
-            break
-          case 3:
-            alert(333)
-            this.add(this.newaddForm)
-            break
-        }*/
         this.$refs[formName].validate(valid => {
           if (valid) {
             alert("submit!");
@@ -370,7 +378,7 @@
       //修改
       edit(value){
         this.axios.put(userroleedit,value).then((respones)=>{
-          console.log(respones)
+          //console.log(respones)
           if(respones.data.state==true){
             this.$message({
               message: respones.data.msg,
@@ -408,27 +416,6 @@
       pointer() {
         this.$refs.file.click();
       },
-      getFile(e) {
-        // 1.判断选择事件是否为空
-        // 2. 获取数据
-        let _this = this; // 缓存this
-        let value = _this.$refs.file.value;
-
-        var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-        _this.addForm.files = files;
-        console.log(_this.addForm.files);
-        // 2.1 防止后台拿不到数据 可能需要提交额外数据时
-        var formdatas = new FormData();
-        var fordata = formdatas.append("file", files);
-        if (!e || !window.FileReader) return; // 看支持不支持FileReader
-        let reader = new FileReader(); // 定义 fileReader对象
-        reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-        reader.onloadend = function() {
-          _this.addForm.preloadImg = this.result; // 此时this指向的fileReader对象
-          _this.$refs.file.value = "";
-          console.log(_this.addForm.preloadImg);
-        };
-      },
       closeForm() {
         // 弹框关闭的时候执行 清空数据
         console.log("关闭测试");
@@ -440,14 +427,18 @@
     },
     mounted(){
       console.log(this.searchTimeForm)
-      this.select(this.searchTimeForm)
+      //this.select(this.searchTimeForm)
+      //页面初始化加载的表格数据
       this.axios.get(userrole).then((response)=>{
         console.log(response.data.row)
-        for(var item of response.data.row){
-          console.log(item.roleName)
-          this.optionsData.push({roleName:item.roleName,roleCode:item.roleCode})
+        if(response.data.state==true){
+          for(var item of response.data.row){
+            console.log(item.roleName)
+            this.optionsData.push({roleName:item.roleName,roleCode:item.roleCode})
+          }
         }
       })
+      //表单中下拉框上级的初始化数据
       this.axios.get(userroleselect).then((response)=>{
         //console.log(response.data.row.list)
         if(response.data.state=true){
@@ -458,12 +449,6 @@
     computed: {
       //模糊查询参数
       searchTimeForm(){ // 计算属性 真正传递的数据
-        /*formInline: {
-          // 搜索需要的表单数据
-          parent:'',
-          startTime:'',
-          endTime:''
-        },*/
         let searchForm = {
           pageSize: this.pageSize,
           currentPage:1,
@@ -506,8 +491,9 @@
 
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
-  #userRole{
-    margin-left: 100px;
+  section.pagination {
+    display: flex;
+    justify-content: center;
   }
   .routerBox {
     background-color: #fff;
