@@ -80,6 +80,7 @@ body,
 }
 .index {
   height: 100%;
+  width: 100% ;
 }
 .index .title {
   font-size: 14px;

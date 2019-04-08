@@ -23,31 +23,27 @@
             <button class="add" @click="addDialogOpen">
               <i class="addIcon el-icon-plus"></i>添加
             </button>
-            <button class="delete" @click="batchDelete">
+            <button class="delete" @click="batchDelete(tableChecked)">
               <i class="deleteIcon el-icon-delete"></i>批量删除
             </button>
           </div>
           <section class="searchBox" style='margin-left:320px'>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="上级:" size="160">
-                <el-select v-model="formInline.userType" placeholder="请选择上级">
-                  <el-option
-                    v-for="(option,index) of optionsData"
-                    :key="index"
-                    :label="option"
-                    :value="option"
-                  ></el-option>
-                </el-select>
+              <el-form-item label="角色名称:" size="160">
+                <el-input size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
-                  v-model="formInline.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="formInline.startTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="formInline.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -58,36 +54,14 @@
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table
-              class="tableBorder"
-              :data="tableData"
-              style="width: 100%; text-align:center;"
-              :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-            >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" width="100" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="name" width="100" label="角色名称"></el-table-column>
-              <el-table-column align="center" prop="password" width label="姓名"></el-table-column>
-              <el-table-column align="center" width="100" prop="sex" label="性别"></el-table-column>
-              <el-table-column align="center" prop="ID" width="200" label="身份证号"></el-table-column>
-              <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
-              <el-table-column align="center" prop="startTime" width="200" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="now" width="70" label="状态"></el-table-column>
+            <el-table class="tableBorder" v-loading="tableLoading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+              <el-table-column align="center" type="selection" width="100" ></el-table-column>
+              <el-table-column align="center" prop="id" label="序号"></el-table-column>
+              <el-table-column align="center" prop="roleName" width="100" label="角色名称" v-model="tableData.roleName"></el-table-column>
+              <el-table-column align="center" prop="fkParentRoleCode" width label="上級" v-model="tableData.roleCode"></el-table-column>
+              <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="isDefault" label="是否默認" v-model="tableData.isDefault"></el-table-column>
+              <el-table-column align="center" prop="disabled" width="70" label="状态" v-model="tableData.disabled"></el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
@@ -96,10 +70,16 @@
                 </template>
               </el-table-column>
             </el-table>
-          </section>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination">
-            <el-pagination background layout="prev, pager, next,total, jumper, ->" :total="1000"></el-pagination>
+            <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+            <section class="pagination">
+              <el-pagination style="display: inline-block;padding-top: 30px;"
+                             background
+                             layout="prev, pager, next,total, jumper, ->"
+                             :total="total"
+                             :current-page="currentPage"
+                             @current-change="current_change"
+              ></el-pagination>
+            </section>
           </section>
         </div>
       </div>
@@ -119,75 +99,37 @@
       <!-- 添加弹框 -->
       <div class="addEditDialog">
         <!-- Form -->
-        <el-dialog
-          @close="closeForm"
-          width="685px"
-          :title="Dialogtitle[3]"
-          :visible.sync="dialogFormVisible"
-        >
-          <el-form ref="addForm" :model="addForm" :rules="addRules">
-            <el-form-item class="uploadBox">
-              <section class="upload mb_30" @click="pointer">
-                <!-- 背景图片做改动 -->
-                <div class="defultHead" style="width:100px; height:100px; border-radius:50%;">
-                  <img
-                    class="defaultimage"
-                    style="width:100px; height:100px; border-radius:50%;"
-                    alt="user image"
-                    :src="defaultImg"
-                    v-if="!addForm.preloading"
-                  >
-                  <img
-                    style="width:100px; height:100px ;border-radius:50%;"
-                    v-if="addForm.preloadImg"
-                    :src="addForm.preloadImg"
-                    alt="预览照片"
-                    class="preloadImg"
-                  >
-                  <input
-                    type="file"
-                    accept="jpg/png"
-                    style="display:none;"
-                    ref="file"
-                    id="file"
-                    @change="getFile"
-                  >
-                  <div class="bgload" style="width:100px; height:100px; border-radius:50%;">上传头像</div>
-                </div>
-              </section>
+        <el-dialog @close="closeForm" width="586px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
+          <el-form id="addFormYf" :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-ruleForm" style="display: flex;flex-direction: column">
+            <el-form-item label="名称" prop="userType" style="margin-left: 50px;">
+              <el-input v-model="addForm.userType"></el-input>
             </el-form-item>
-            <!-- 表单域 -->
-            <el-form-item label="姓　　名" prop="name" :label-width="formLabelWidth">
-              <el-input v-model="addForm.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item class="select" label="性　　别" prop="sex">
-              <el-radio-group v-model="addForm.sex">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="角色类型" prop="userType" :label-width="formLabelWidth">
-              <el-select v-model="addForm.userType" placeholder="性别">
-                <el-option label="图书管理" value="shanghai"></el-option>
-                <el-option label="其他管理" value="beijing"></el-option>
+            <el-form-item label="上级" prop="parent" style="margin-left: 50px">
+              <el-select v-model="addForm.parent" placeholder="请选择上级">
+                <el-option
+                  v-for="(option,index) of optionsData"
+                  :key="index"
+                  :label="option.roleName"
+                  :value="option.roleCode"
+                ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
-              <el-input v-model="addForm.id" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
-              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item class="select" prop="status" label="状　　态">
+            <el-form-item label="状态" prop="status" style="margin-left: 50px">
               <el-radio-group v-model="addForm.status">
-                <el-radio label="禁用"></el-radio>
+                <el-radio label="禁用" ></el-radio>
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="是否默认" prop="isDefault" style="margin-left: 80px">
+              <el-radio-group v-model="addForm.isDefault">
+                <el-radio label="是"></el-radio>
+                <el-radio label="否" ></el-radio>
+              </el-radio-group>
+            </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('addForm')">确定</el-button>
+              <el-button type="info" @click="resetForm('addForm')">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -197,57 +139,74 @@
 </template>
 
 <script>
+  import moment from "moment";
   export default {
     data() {
       return {
+        tableData:[],
+        tableChecked:[],
+        ids:[],
+        /*日期禁用规则 */
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.end_time !== "") {
+              return (
+                time.getTime() > Date.now() || time.getTime() > this.end_time
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
+        },
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.start_time || time.getTime() > Date.now()
+            );
+          }
+        },
         /*====== 0.0初始化弹框数据 ======*/
         centerDialogVisible: false, // 禁用弹框
         Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
-        i: 0, // 切换弹框标题
+        i: null, // 切换弹框标题
         defaultImg: " ", // 上传头像默认头像
         dialogFormVisible: false, // // 添加弹框的展示和消失
         addForm: {
           // 添加的数据表单 共8个参数
           addDialog: false,
-          preloadImg: "", // 图片相关
-          files: "", // 用于上传
-          name: "", // 姓名
-          sex: "", // 性别
-          userType: "", // 角色类型 不明参数
-          id: "", // 身份证
-          phoneNumber: "", // 电话号码
+          userType: "", // 角色名称 不明参数
+          parent: "", // 上级
+          isDefault: "", // 是否默认
           status: "" // 状态
         },
-        addRules: {
+        rules: {
           // 添加的参数验证
-          name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-          sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-          userType: [
-            { required: true, message: "请选择用户类型", trigger: "change" }
-          ],
-          id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
-          phoneNumber: [
-            { required: true, message: "请输入手机号码", trigger: "blur" }
-          ],
-          status: [{ required: true, message: "请选择状态", trigger: "change" }]
+          userType: [{ required: true, message: "请选择角色类型", trigger: "change" }],
+          parent: [{ required: true, message: "选择角色名称", trigger: "blur" }],
+          status: [{ required: true, message: "请选择状态", trigger: "change" }],
+          isDefault: [{ required: true, message: "请选择是否默认", trigger: "change" }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
         optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
+
         ],
         formInline: {
           // 搜索需要的表单数据
-          userName: "",
-          userType: "",
-          userId: "",
-          userPhone: "",
-          date: "" // 选择日期
+          parent:'',
+          startTime:'',
+          endTime:'',
+          currentPage:0,
+        },
+        /*======4.0分页器相关数据 ======*/
+        tableLoading:false,
+        /*初始化 */
+        total: 0,
+        pageSize: 7,
+        currentPage: 1,
+        // 提交的数据 用于保存查询的结果后查询分页
+        paginationForm:{
+
         },
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
@@ -260,97 +219,50 @@
         },
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-          {
-            idType: "1",
-            srcdata:
-              "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3031412719,4225417772&fm=11&gp=0.jpg",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "2",
-            srcdata: "",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "3",
-            username: "",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "4",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "5",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "6",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "7",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          }
-        ]
+
+        ],
+        id:null,
+        roleCode:null,
+        disable:null,
         /*====== 5.0 分页相关设置项 ======*/
       };
     },
 
     methods: {
       /*====== 2.0 表单提交相关函数 ======*/
-
+      handleSelectionChange(val){
+        console.log(val)
+        this.tableChecked=val
+      },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-        console.log(this.formInline);
+        //console.log(this.formInline);
+        this.select(this.searchTimeForm)
+        this.currentPage = 1
       },
-
+      select(value){
+        this.tableLoading = true
+        this.axios.get(userroleselect,{params:value}).then((response)=>{
+          console.log(response)
+          if (response.data.state === true) {
+            this.tableData = response.data.row.list; //获取返回数据
+            this.total = response.data.row.total; //总条目数
+            this.paginationForm = Object.assign({},value) // 保存上次的查询结果
+            this.tableLoading = false
+          } else {
+            this.$message.error(response.data.msg);
+            this.tableLoading = false
+          }
+        })
+        //
+      },
+      current_change: function(currentPage) {
+        //分页查询
+        this.currentPage = currentPage; //点击第几页
+        this.paginationForm.currentPage = currentPage+1;
+        //console.log('保存当前查询',this.paginationForm);
+        this.select(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
         this.i = 3;
@@ -368,24 +280,90 @@
         console.log(index, row); // 当前选中表格的索引和对象
         this.i = 0;
         this.centerDialogVisible = true;
+        this.id=row.id;
+        this.disable=row.disabled
+        this.roleCode=row.roleCode
+        console.log(row.roleCode)
       },
       handleEdit(index, row) {
         // 编辑
+        //console.log(this.tableData.roleName)
+        //this.addForm.userType=this.tableData.roleName
+        //console.log(this.addForm.userType)
         this.i = 2;
         this.dialogFormVisible = true;
-        console.log(index, row);
+        console.log(row);
+        console.log(row.id,row.roleName,row.roleCode,row.isDefault,row.disabled)
+        this.addForm.userType=row.roleName
+        this.addForm.parent=row.fkParentRoleCode
+        if(row.disabled==1){
+          this.addForm.status='禁用'
+        }else{
+          this.addForm.status='启用'
+        }
+        if(row.isDefault==1){
+          this.addForm.isDefault='是'
+        }else{
+          this.addForm.isDefault='否'
+        }
+        this.id=row.id
+        this.roleCode=row.roleCode
+        //this.addForm.push({userType:,parent:this.tableData.roleCode,isdefault:this.tableData.isDefault,status:this.tableData.disabled,})
       },
 
       /*====== 弹框相关函数 ======*/
       submitDialog() {
         // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
         let i = this.i;
+        console.log(this.i)
+        if(this.i===0){
+          console.log(this.roleCode)
+          var roleCode=this.roleCode
+          this.axios.put(userroleedit,{id:this.id,disabled:1,roleCode:roleCode}).then((respones)=>{
+            console.log(respones)
+          })
+        }
+        if(this.i===1){
+          var deleteParam=[]
+          for(var item of this.tableChecked){
+            console.log(item.id ,item.roleCode)
+            deleteParam.push({id:item.id,code:item.roleCode})
+          }
+          var deleteStr={
+            deleteParam:deleteParam
+          }
+          console.log(deleteParam)
+          this.axios.delete(userroledelete,{data:deleteStr}).then((response)=>{
+            console.log(response)
+            if(response.data.state==true){
+              this.$message({
+                message: response.data.msg,
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                message: response.data.msg,
+                type: 'error'
+              });
+            }
+          })
+        }
         let tips = this.Dialogtitle[i];
         alert(`${tips}成功`); // 成功之后映射到数组的操作
         this.centerDialogVisible = false;
       },
       // 编辑弹框
       submitForm(formName) {
+        console.log(formName)
+        console.log(this.i)
+        if(this.i===3){
+          //alert(111)
+          this.add(this.newaddForm)
+        }
+        if(this.i===2){
+          //alert(222)
+          this.edit(this.neweditForm) //
+        }
         this.$refs[formName].validate(valid => {
           if (valid) {
             alert("submit!");
@@ -397,32 +375,47 @@
           }
         });
       },
+      //修改
+      edit(value){
+        this.axios.put(userroleedit,value).then((respones)=>{
+          //console.log(respones)
+          if(respones.data.state==true){
+            this.$message({
+              message: respones.data.msg,
+              type: 'success'
+            });
+            this.centerDialogVisible=false
+          }else{
+            this.$message({
+              message: respones.data.msg,
+              type: 'error'
+            });
+          }
+        })
+      },
+      // 添加
+      add(value){
+        this.axios.post(userroleadd,value).then((respones)=>{
+          //console.log(respones)
+          if(respones.data.state==true){
+            this.$message({
+              message: respones.data.msg,
+              type: 'success'
+            });
+            this.closeForm()
+          }else{
+            this.$message({
+              message: respones.data.msg,
+              type: 'error'
+            });
+          }
+        })
+      },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
       pointer() {
         this.$refs.file.click();
-      },
-      getFile(e) {
-        // 1.判断选择事件是否为空
-        // 2. 获取数据
-        let _this = this; // 缓存this
-        let value = _this.$refs.file.value;
-
-        var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-        _this.addForm.files = files;
-        console.log(_this.addForm.files);
-        // 2.1 防止后台拿不到数据 可能需要提交额外数据时
-        var formdatas = new FormData();
-        var fordata = formdatas.append("file", files);
-        if (!e || !window.FileReader) return; // 看支持不支持FileReader
-        let reader = new FileReader(); // 定义 fileReader对象
-        reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-        reader.onloadend = function() {
-          _this.addForm.preloadImg = this.result; // 此时this指向的fileReader对象
-          _this.$refs.file.value = "";
-          console.log(_this.addForm.preloadImg);
-        };
       },
       closeForm() {
         // 弹框关闭的时候执行 清空数据
@@ -432,14 +425,76 @@
           obj[i] = "";
         }
       }
-    }
+    },
+    mounted(){
+      console.log(this.searchTimeForm)
+      //this.select(this.searchTimeForm)
+      //页面初始化加载的表格数据
+      this.axios.get(userrole).then((response)=>{
+        console.log(response)
+        if(response.data.state==true){
+          for(var item of response.data.row){
+            console.log(item.roleName)
+            this.optionsData.push({roleName:item.roleName,roleCode:item.roleCode})
+          }
+        }
+      })
+      //表单中下拉框上级的初始化数据
+      this.axios.get(userroleselect).then((response)=>{
+        //console.log(response.data.row.list)
+        if(response.data.state=true){
+          this.tableData=response.data.row.list
+        }
+      })
+    },
+    computed: {
+      //模糊查询参数
+      searchTimeForm(){ // 计算属性 真正传递的数据
+        let searchForm = {
+          pageSize: this.pageSize,
+          currentPage:1,
+          roleName:this.formInline.parent,
+          beginTime: this.formInline.startTime === ""? null : moment(this.formInline.startTime).format("YYYY-MM-DD"), //开始时间
+          endTime: this.formInline.endTime === ""? null : moment(this.formInline.endTime).format("YYYY-MM-DD"), //结束时间
+        }
+        //console.log(searchForm)
+        return searchForm
+      },
+      //添加参数
+      newaddForm(){
+        let newForm={
+          roleName:this.addForm.userType,
+          //isDefault:this.addForm.isdefault,
+          isDefault:this.addForm.isdefault==='是'?1:0,
+          disabled:this.addForm.disabled==='禁用'?1:0,
+          fkParentRoleCode:this.addForm.parent
+        }
+        //console.log(newForm)
+        return newForm
+      },
+      //修改参数
+      neweditForm(){
+        let newForm={
+          id:this.id,
+          roleCode:this.roleCode,
+          roleName:this.addForm.userType,
+          //isDefault:this.addForm.isdefault,
+          isDefault:this.addForm.isdefault==='是'?1:0,
+          disabled:this.addForm.disabled==='禁用'?1:0,
+          fkParentRoleCode:this.addForm.parent
+        }
+        //console.log(newForm)
+        return newForm
+      }
+    },
   };
 </script>
 
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
-  #userRole{
-    margin-left: 100px;
+  section.pagination {
+    display: flex;
+    justify-content: center;
   }
   .routerBox {
     background-color: #fff;

@@ -1,0 +1,5 @@
+/*======图书出版社表单input框宽度 ======*/
+#addFormYf .el-input .el-input__inner{
+  width: 286px;
+}
+
