@@ -23,7 +23,7 @@
 
               <el-menu-item index="/bookType">图书类型</el-menu-item>
               <el-menu-item index="/bookInfo">图书信息</el-menu-item>
-              <el-menu-item index="/bookLib">图书出版社</el-menu-item>
+              <el-menu-item index="/bookpublishhouse">图书出版社</el-menu-item>
 
           </el-submenu>
           <el-submenu background-color="#545c64" index="2">
