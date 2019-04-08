@@ -2,15 +2,12 @@
 
 
 /*通用标题*/
-.index{
-  width: 100%;
-}
 .commonMode {
   padding: 30px;
 }
 /*通用颜色设置*/
 .commonMode .error{
-    color: #ff5c3c;
+  color: #ff5c3c;
 }
 .commonMode .sonTitle {}
 
@@ -31,7 +28,7 @@
 /*通用表单初始化设置*/
 /*调整搜索input框的宽度 使用方法 在elementUI的基础上 size="" 输入宽度尺寸*/
 .commonMode .el-input .el-input__inner{
-    text-align: center;
+  text-align: center;
 }
 .el-input.el-input--120 {
   width: 160px;
@@ -58,7 +55,7 @@
 
 /*通用表格设置*/
 .commonMode .el-form-item{
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 .headTableCell {
   background: '#0096FF';
@@ -70,3 +67,32 @@
 
 
 /*通用分页器设置*/
+
+/*elementUI覆盖部分*/
+/*右侧侧边栏 多重下拉框*/
+.el-submenu__title{
+  font-size: 18px;
+}
+.el-submenu__title:hover{
+
+}
+
+/*通用边距设置*/
+.mb_30{
+  margin-bottom: 30px;
+}
+.mb_25{
+  margin-bottom: 25px;
+}
+.mb_20{
+  margin-bottom: 20px;
+}
+.mt_30{
+  margin-top: 30px;
+}
+.mr_30{
+  margin-right: 30px;
+}
+.userManage .searchBox .el-form{
+  display: flex;
+}

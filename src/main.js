@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '../src/base/css/reset.css'
 import '../src/base/css/zyf.css'
 import '../src/base/css/common.css'
+import '../src/base/css/spReset.css'
 import axios from 'axios'
 
 import '../src/base/js/yf/url'
