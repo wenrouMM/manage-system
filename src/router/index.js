@@ -4,24 +4,27 @@ import Index from '@/components/Index'
 import UserAdd from '@/components/useradd'
 import Userlist from '@/components/userlist'
 import Home from '@/components/home'
-import Login from '@/components/login'
-import Menu from '@/components/Power/menu'
-import UserRole from '@/components/Power/userRole'
-import Authorization from '@/components/Power/Authorization'
-import BookPublishingHouse from '@/components/Book/BookPublishingHouse'
-import PasswordRedirect from '../components/passwordRedirect.vue'
 import UserManage from '../components/Power/userManage.vue'
+import UserRole from '../components/Power/userRole.vue'
+import PowerControl from '../components/Power/powerControl.vue'
+import Menu from '../components/Power/menu.vue'
 import LoginRecord from '../components/Power/loginrecord.vue'
+
+import PasswordRedirect from '../components/passwordRedirect.vue'
 import Test from '../common/test/test.vue'
 import Test2 from '../common/test/test2.vue'
+import TestBook from '../common/test/testBook.vue'
+import BookType from '../components/Book/BookManage/bookType.vue'
+import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
+import LibBookType from '../components/Book/libraryManage/libBookType.vue'
+import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
+import TestArea from '../common/test/testArea.vue'
+import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
+import TestReader from '../common/test/testReader.vue'
 Vue.use(Router)
 // 暴露一个router对象
 export default new Router({
   routes: [
-    {
-      path:'/login',
-      component:Login
-    },
     {
       path:'/test', // 一级路由 管理横条
       component:Test,
@@ -39,26 +42,60 @@ export default new Router({
               component:UserManage,
             },
             {
-              path:'/loginRecord',
-              component:LoginRecord,
+              path:'/userRole',
+              component:UserRole,
+            },
+            {
+              path:'/powerControl',
+              component:PowerControl,
             },
             {
               path:'/menu',
-              component:Menu
+              component:Menu,
             },
             {
-              path:'/userrole',
-              component:UserRole
-            },
-            {
-              path:'/authorization',
-              component:Authorization
-            },
-            {
-              path:'/bookpublishinghouse',
-              component:BookPublishingHouse
+              path:'/loginRecord',
+              component:LoginRecord
             }
           ]
+        },
+        {
+          path:'/areaMode',
+          component:TestArea,
+          children:[
+            {
+              path:'/stoneroomInfo',
+              component:StoneRoomInfo
+            }
+          ]
+        },
+        {
+          path:'/bookMode',
+          component:TestBook,
+          children:[
+            {
+              path:'/bookType',
+              component:BookType,
+            },
+            {
+              path:'/bookInfo',
+              component:BookInfo
+            },
+            {
+              path:'/libBookType',
+              component:LibBookType
+            },
+            {
+              path:'/libBookInfo',
+              component:LibBookInfo
+            }
+          ]
+        },
+
+        {
+          path:'/readerMode',
+          component:TestReader,
+
         }
       ]
     },

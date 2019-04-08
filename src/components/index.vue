@@ -30,7 +30,7 @@
         <!-- 用户头像模块 点击交互功能尚未完成 小图标添加及相应功能 -->
         <div class="headBox">
           <div class="headiconBox">
-            <img src>  
+            <img src>
           </div>
           <div class="userBox">
             <div class="username">
@@ -66,7 +66,7 @@
             </el-menu-item>
             <el-menu-item class="activeMenu" index="userlist">角色管理</el-menu-item>
             <el-menu-item class="activeMenu" index="passwordRediret">权限管理</el-menu-item>
-            <el-menu-item class="activeMenu" index="/">菜单管理</el-menu-item>
+            <el-menu-item class="activeMenu" index="menu">菜单管理</el-menu-item>
             <el-menu-item class="activeMenu" index="upload">登录记录</el-menu-item>
           </el-menu>
         </el-aside>
@@ -143,7 +143,7 @@ body,
   justify-content: center;
   align-items: center;
   margin-right: 78px;
-  cursor: pointer; 
+  cursor: pointer;
 }
 .headmode .logoBox .logo {
 }

@@ -384,6 +384,7 @@
               message: respones.data.msg,
               type: 'success'
             });
+            this.centerDialogVisible=false
           }else{
             this.$message({
               message: respones.data.msg,
@@ -430,7 +431,7 @@
       //this.select(this.searchTimeForm)
       //页面初始化加载的表格数据
       this.axios.get(userrole).then((response)=>{
-        console.log(response.data.row)
+        console.log(response)
         if(response.data.state==true){
           for(var item of response.data.row){
             console.log(item.roleName)

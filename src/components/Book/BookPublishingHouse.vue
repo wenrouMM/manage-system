@@ -1,78 +1,78 @@
 <template>
-  <div id="menu">
-    <div style="display: flex;flex-direction: row" id="mymenu">
-      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow:auto">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
+  <div id="bookpublishhouse">
+    <div style="display: flex;flex-direction: row" id="mybook">
+      <div style="background-color:white;width:250px;height:852px;display: flex;flex-direction:column;overflow:auto">
+        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
-        <div class="important">
-          <!-- 1.0 标题 -->
-          <div class="sonTitle">
-            <span class="titleName">图书出版社</span>
-          </div>
-          <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <div style='display:flex;flex-direction:row'>
-            <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
-            <div class="buttonBox">
-              <button class="add" @click="addDialogOpen">
-                <i class="addIcon el-icon-plus"></i>添加
-              </button>
+        <el-container>
+          <div class="box-card">
+            <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
+            <div class="space"></div>
+            <!-- 估计是第三层路由展示区域 -->
+            <div class="important">
+              <!-- 1.0 标题 -->
+              <div class="sonTitle">
+                <span class="titleName">图书出版社</span>
+              </div>
+              <div style="display: flex;flex-direction: row">
+                <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
+                <div class="buttonBox">
+                  <button class="add" @click="addDialogOpen">
+                    <i class="addIcon el-icon-plus"></i>添加
+                  </button>
+                </div>
+              </div>
+              <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
+              <section class="text item tablebox" v-loading="loading">
+                <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+                  <el-table-column align="center" type="selection" width="100"></el-table-column>
+                  <el-table-column align="center" prop="index" width="200" label="序号"></el-table-column>
+                  <el-table-column align="center" prop="name" width="250" label="出版社名称"></el-table-column>
+                  <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
+                  <el-table-column align="center" prop="contacts" width="230" label="联系人"></el-table-column>
+                  <el-table-column align="center" prop="telephone" width="230" label="联系电话"></el-table-column>
+                </el-table>
+                <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+                <section class="pagination">
+                  <el-pagination style="display: inline-block;padding-top: 30px;"
+                                 background
+                                 layout="prev, pager, next,total, jumper, ->"
+                                 :total="total"
+                                 :current-page="currentPage"
+                                 @current-change="current_change"
+                  ></el-pagination>
+                </section>
+              </section>
             </div>
-            <section class="searchBox" style='margin-left:720px'>
-              <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="出版社名称:" size="160">
-                  <el-input v-model="formInline.userId" placeholder="请输入出版社名称"></el-input>
+          </div>
+          <!-- 添加弹框 -->
+          <div class="addEditDialog">
+            <!-- Form -->
+            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[3]" :visible.sync="dialogFormVisible">
+              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" style="display: flex;flex-direction: column">
+                <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
+                  <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
+                <el-form-item label="公司地址 :" prop="componentAddress" style="padding-left: 70px">
+                  <el-input v-model="addForm.componentAddress"></el-input>
+                </el-form-item>
+                <el-form-item label="联 系 人 :" prop="contacts" style="padding-left: 70px">
+                  <el-input v-model="addForm.contacts"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话 :" prop="contactPhone" style="padding-left: 70px">
+                  <el-input v-model="addForm.contactPhone"></el-input>
+                </el-form-item>
+                <!-- 弹框表单按钮  验证失效-->
                 <el-form-item>
-                  <el-button size="15" type="primary" @click="onSubmit">搜索</el-button>
+                  <el-button type="primary" @click="submitForm('addForm')" >确定</el-button>
+                  <el-button type="info" @click="resetForm('addForm')" >取消</el-button>
                 </el-form-item>
               </el-form>
-            </section>
+            </el-dialog>
           </div>
-          <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox">
-            <el-table
-              class="tableBorder"
-              :data="tableData"
-              style="width: 100%; text-align:center;"
-              :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-            >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" width="100" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="bookname" width="100" label="出版社名称"></el-table-column>
-              <el-table-column align="center" prop="address" width label="公司地址"></el-table-column>
-              <el-table-column align="center" prop="name" width="100" label="联系人"></el-table-column>
-              <el-table-column align="center" prop="phone" label="联系电话"></el-table-column>
-              <el-table-column align="center" label="操作" width="200">
-                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </section>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination" style="margin-top: 80px">
-            <el-pagination background layout="prev, pager, next,total, jumper, ->" :total="1000"></el-pagination>
-          </section>
-        </div>
+        </el-container>
       </div>
     </div>
   </div>
@@ -86,8 +86,8 @@
         setting: {
           edit: {
             enable: true,
-            showRemoveBtn: true,
-            addHoverBtn: true,
+            showRemoveBtn: false,
+            addHoverBtn:true,
             removeTitle: "删除节点",
             showRenameBtn: false,
             editNameSelectAll: true
@@ -117,69 +117,37 @@
             onRemove: this.onRemove //删除事件
           }
         },
+        loading:false,
         zNodes: [
-          {
-            id: 1,
-            pId: 0,
-            name: "图书馆管理平台",
-            code: null,
-            msg: null,
-            href: null,
-            disabled: null,
-            icon_default: null,
-            icon_selected: null,
-            menu_code_type: null
-          }
+
         ],
         /*====== 0.0初始化弹框数据 ======*/
+        /*初始化 */
+        total: 0,
+        pageSize: 7,
+        currentPage: 1,
+        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
         centerDialogVisible: false, // 禁用弹框
         Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
         i: 0, // 切换弹框标题
-        defaultImg: " ", // 上传头像默认头像
         dialogFormVisible: false, // // 添加弹框的展示和消失
         addForm: {
           // 添加的数据表单 共8个参数
-          addDialog: false,
-          preloadImg: "", // 图片相关
-          files: "", // 用于上传
-          name: "", // 姓名
-          sex: "", // 性别
-          userType: "", // 角色类型 不明参数
-          id: "", // 身份证
-          phoneNumber: "", // 电话号码
-          status: "" // 状态
+          idType:"", //序号
+          publishName:"", //出版社名称
+          companyAddress:"", //公司地址
+          contacts:"", //联系人
+          contactPhone:"" //联系电话
         },
         addRules: {
           // 添加的参数验证
-          name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-          sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-          userType: [
-            { required: true, message: "请选择用户类型", trigger: "change" }
-          ],
-          id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
-          phoneNumber: [
-            { required: true, message: "请输入手机号码", trigger: "blur" }
-          ],
-          status: [{ required: true, message: "请选择状态", trigger: "change" }]
+          publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
+          componentAddress: [{ required: true, message: "请输入公司地址", trigger: "change" }],
+          contacts: [{ required: true, message: "请输入联系人", trigger: "change" }],
+          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "change" }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
-        optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
-        ],
-        formInline: {
-          // 搜索需要的表单数据
-          userName: "",
-          userType: "",
-          userId: "",
-          userPhone: "",
-          date: "" // 选择日期
-        },
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
         /*====== 3.0添加 批量删除所需数据 ======*/
@@ -191,91 +159,13 @@
         },
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-          {
-            idType: "1",
-            srcdata:
-              "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3031412719,4225417772&fm=11&gp=0.jpg",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "2",
-            srcdata: "",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "3",
-            username: "",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "4",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "5",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "6",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          },
-          {
-            idType: "7",
-            username: "admin",
-            name: "王小虎",
-            password: "123456",
-            sex: "男",
-            ID: 500221199502011716,
-            phone: 18223213182,
-            startTime: "2019-03-24 12:33",
-            now: "禁用"
-          }
-        ]
+        ],
         /*====== 5.0 分页相关设置项 ======*/
+        zTree:{}
       };
     },
     methods: {
       /*====== 2.0 表单提交相关函数 ======*/
-
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
         console.log(this.formInline);
@@ -284,14 +174,38 @@
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
         this.i = 3;
-        this.dialogFormVisible = true;
+        this.dialogFormVisible = true
       },
-      batchDelete() {
-        // 批量删除
-        this.i = 1;
-        this.centerDialogVisible = true;
+      current_change: function(currentPage) {
+        //分页查询
+        this.currentPage = currentPage; //点击第几页
       },
-
+      /*====== 3.1ztree城市树状图 ======*/
+      async freshArea() {
+        this.axios.get(bookurlcity).then((response)=>{
+          console.log(response)
+          for (var item of response.data.row) {
+            this.zNodes.push({
+              name:item.name,
+              code: item.code, //节点菜单编码
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+        })
+      },
+      /*====== 3.1点击ztree节点获取节点信息======*/
+      zTreeOnClick(event, treeId, treeNode){
+        console.log(treeNode.name,treeNode.code)
+        var list={
+          name:treeNode.name,
+          code:treeNode.code
+        }
+        this.zTree=list
+        this.$alert('点击右侧添加按钮添加出版社', '提示', {
+          confirmButtonText: '确定',
+        });
+      },
       /*====== 4.0表格操作相关 ======*/
       handleBan(index, row) {
         // 删除
@@ -301,62 +215,54 @@
       },
       handleEdit(index, row) {
         // 编辑
-        this.i = 2;
-        this.dialogFormVisible = true;
+        this.i = 2
+        this.dialogFormVisible = true
         console.log(index, row);
       },
 
       /*====== 弹框相关函数 ======*/
-      submitDialog() {
-        // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-        let i = this.i;
-        let tips = this.Dialogtitle[i];
-        alert(`${tips}成功`); // 成功之后映射到数组的操作
-        this.centerDialogVisible = false;
-      },
       // 编辑弹框
       submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            alert("submit!");
-            this.dialogFormVisible = true; // 关闭弹框
-          } else {
-            console.log("error submit!!");
-            console.log(this.addForm);
-            return false;
+        /*addForm: {
+          // 添加的数据表单 共8个参数
+          idType:"", //序号
+          publishName:"", //出版社名称
+          companyAddress:"", //公司地址
+          contacts:"", //联系人
+          contactPhone:"" //联系电话
+        },*/
+        var addStr=[{
+          id: null,
+          code: "",
+          name:this.addForm.publishName,
+          fkCityCode:this.zTree.code,
+          fkCityName:this.zTree.name,
+          address:this.addForm.componentAddress,
+          contacts:this.addForm.contacts,
+          telephone:this.addForm.contactPhone
+        }]
+        this.axios.post(bookurladd,addStr).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            });
+            this.dialogFormVisible=false
+            this.closeForm()
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
           }
-        });
+        })
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-      pointer() {
-        this.$refs.file.click();
-      },
-      getFile(e) {
-        // 1.判断选择事件是否为空
-        // 2. 获取数据
-        let _this = this; // 缓存this
-        let value = _this.$refs.file.value;
-
-        var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-        _this.addForm.files = files;
-        console.log(_this.addForm.files);
-        // 2.1 防止后台拿不到数据 可能需要提交额外数据时
-        var formdatas = new FormData();
-        var fordata = formdatas.append("file", files);
-        if (!e || !window.FileReader) return; // 看支持不支持FileReader
-        let reader = new FileReader(); // 定义 fileReader对象
-        reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-        reader.onloadend = function() {
-          _this.addForm.preloadImg = this.result; // 此时this指向的fileReader对象
-          _this.$refs.file.value = "";
-          console.log(_this.addForm.preloadImg);
-        };
-      },
-      closeForm() {
-        // 弹框关闭的时候执行 清空数据
-        console.log("关闭测试");
+      closeForm() { // 弹框关闭的时候执行 清空数据
+        //console.log("关闭测试");
         let obj = this.addForm;
         for (var i in obj) {
           obj[i] = "";
@@ -364,12 +270,36 @@
       }
     },
     mounted(){
-      $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+      //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+      /*页面初始化表格内容*/
+      this.freshArea()
+      this.loading=true
+      this.axios.get(bookurlselect).then((res)=>{
+        console.log(res)
+        let nomal = res.data.row.list
+        let i =1
+        for (item of nomal) {
+          item.index = i;
+          i++
+        }
+        this.tableData=nomal
+        console.log(res.data.row.list.length)
+        this.total=res.data.row.list.length
+        this.loading=false
+      });
     }
   };
 </script>
 
 <style scoped>
+  section.pagination {
+    display: flex;
+    justify-content: center;
+  }
+  .formbutton button{
+    width: 150px;
+    border-radius: 10px
+  }
   .important {
     padding: 30px;
   }
@@ -386,8 +316,6 @@
     display: inline-block;
     margin-bottom: 33px;
   }
-  .useradd {
-  }
   .useradd .box-card {
     width: 100%;
   }
@@ -397,6 +325,7 @@
   /* 按钮 */
   .buttonBox {
     margin-bottom: 30px;
+    margin-right: 800px;
   }
   .buttonBox button {
     padding-left: 18px;

@@ -424,7 +424,7 @@ export default {
             console.log(request);
             if (request.data.state == true) {
               this.$message({
-                message: request.data.msg,
+                message: request.data.msg+',刷新网页可查看！',
                 type: "success"
               });
             } else {
@@ -436,7 +436,7 @@ export default {
             console.log(request);
             if (request.data.state == true) {
               this.$message({
-                message: request.data.msg,
+                message: request.data.msg+',刷新网页可查看！',
                 type: "success"
               });
             } else {

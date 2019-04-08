@@ -14,17 +14,25 @@
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
 
-          <el-menu-item index="/">首页</el-menu-item>
+          <el-menu-item index="powerMode">首页</el-menu-item>
           <el-menu-item class="activeMenu" index="userManage">
             <i class="el-icon-message iconpath"></i>用户管理
           </el-menu-item>
-          <el-menu-item class="activeMenu" index="userlist">角色管理</el-menu-item>
-          <el-menu-item class="activeMenu" index="passwordRediret">权限管理</el-menu-item>
-          <el-menu-item class="activeMenu" index="/">菜单管理</el-menu-item>
+          <el-menu-item class="activeMenu" index="userRole">角色管理</el-menu-item>
+          <el-menu-item class="activeMenu" index="powerControl">权限管理</el-menu-item>
+          <el-menu-item class="activeMenu" index="menu">菜单管理</el-menu-item>
           <el-menu-item class="activeMenu" index="LoginRecord">登录记录</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
+        <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
+        <div class="routerBox" v-if="navRouter">
+          <span class="routerButton circularButton labelActive">
+            用户管理
+            <i class="Iconerror">x</i>
+          </span>
+        </div>
+        <div class="space"></div>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -36,7 +44,8 @@ export default {
   data() {
     return {
       activeIndex: "1",
-      activeIndex2: "1"
+      activeIndex2: "1",
+      navRouter:true, // 点击到首页的时候清空这个数组 面包屑导航
     };
   },
   methods: {
@@ -69,136 +78,27 @@ body,
   /*vh好用 100%不行*/
   min-height: 100vh;
 }
-/*====== 头部区域Column  ======*/
-.index .headmode {
-  background: #0096ff;
-  color: #333;
-  height: 70px !important;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-  padding-right: 20px !important;
-  padding-left: 0px !important;
-}
-.headmode .logoNav {
-  display: flex;
-  flex-direction: row;
-}
-/*logo区域*/
-/* 应该可以点击回到首页 */
-.headmode .logoBox {
-  width: 260px;
-  color: #fff;
-  font-size: 20px;
-  font-family: MicrosoftYaHei;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 78px;
-  cursor: pointer;
-}
-.headmode .logoBox .logo {
-}
-/*头部nav区域*/
-.headmode .navBar {
-  display: flex;
-  align-items: center;
-}
-.headmode .navBar .el-menu-item {
-  width: 140px;
-  height: 36px;
-  background: #2bcbff;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  position: relative;
-}
-
-/*修改默认样式 傻逼样式*/
-.navBar .el-menu-item:hover {
-  outline: 0 !important;
-  color: #fff !important;
-  background: #2bcbff !important;
-}
-
-.navBar .el-menu-item.is-active {
-  color: #fff !important;
-  background: #2bcbff !important;
-}
-.index .headmode .el-menu.el-menu--horizontal {
-  border-bottom: none;
-}
-/* 头像区域 */
-
-.headmode .headBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.headBox .headiconBox {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+/*====== 路由导航部分 ======*/
+.routerBox {
   background-color: #fff;
-  margin-right: 10px;
-  cursor: pointer;
-}
-.headBox .userBox {
-  display: flex;
+  min-height: 70px;
+  width: 100%;
+  padding: 0 30px;
   align-items: center;
-}
-.headBox .username {
-  font-size: 18px;
-  color: #ffffff;
-  margin-right: 10px;
-  padding-right: 25px;
-  position: relative;
-  cursor: pointer;
   display: flex;
-  align-items: center;
-  height: 65px;
-}
-/* 下拉框 */
-.headBox .username .userDrop {
-  position: absolute;
-  background-color: #fff;
-  border-radius: 10px;
-  text-align: center;
-  color: #fff;
-  top: 60px;
-  left: -30px;
-  display: none;
-}
-.headBox .username:hover .userDrop {
-  display: block;
-}
-.username .userDrop .dropItem {
-  display: block;
-  color: #878787;
-  font-size: 14px;
-  height: 35px;
-  line-height: 35px;
-  padding: 0 17px;
-  min-width: 90px;
   box-sizing: border-box;
 }
-.username .userDrop .dropItem:last-child {
-  border-radius: 0 0 10px 10px;
+.routerButton {
+  margin-right: 30px;
 }
-.username .userDrop .dropItem:hover {
+.space {
+  background-color: #ebf7ff;
+  height: 30px;
+}
+.labelActive {
   background-color: #0096ff;
   color: #fff;
-}
-.headBox .username::before {
-  content: "";
-  position: absolute;
-  right: 0px;
-  top: 28px;
-  border: 8px solid transparent;
-  border-top: 8px solid #fff;
-  cursor: pointer;
+  border: none;
 }
 /*====== body部分 ======*/
 /*侧边导航部分*/
