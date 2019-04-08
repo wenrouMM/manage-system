@@ -710,7 +710,7 @@ export default {
   display: block;
 }
 .bgload {
-  background-color: rgba(0, 0, 0);
+  background-color: rgba(0, 0, 0,0);
   position: absolute;
   top: 0;
   text-align: center;

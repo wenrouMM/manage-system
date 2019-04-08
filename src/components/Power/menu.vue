@@ -14,7 +14,7 @@
             </p>
             <p class="myfont">
               U R L :&nbsp;&nbsp;
-              <input type="text" class="myinput" name="href" id="url" url info="url" autocomplete="off">
+              <input type="text" class="myinput" name="href" id="url" info="url" autocomplete="off">
             </p>
             <div style="display: flex;flex-direction: row;margin-top: 40px;">
               <p class="myfont">ICON&nbsp;:&nbsp;&nbsp;&nbsp;</p>
@@ -65,7 +65,7 @@
               按钮集&nbsp;&nbsp;:&nbsp;&nbsp;
               <img src="../../base/img/menu/tianjia.png" style="width: 25px;height: 25px;margin-bottom: -7px;" @click="btn_type" @mouseover="myMessagebox" @mouseleave="myMessagebox1">
               <img src="../../base/img/menu/messagebox.png" style="position: absolute;top: 20px;left: 49px;width: 330px;height: 60px;display: none" id="messagebox">
-              <p style="font-size: 10px;color: white;position: absolute;top: 28px;left: 75px">如果您有已存在的按钮，则不能添加与之相同的按钮</p>
+              <p style="font-size: 10px;color: white;position: absolute;top: 40px;left: 75px">如果您有已存在的按钮，则不能添加与之相同的按钮</p>
               <div style="margin-left: 120px;margin-top: -20px;" id="but_show">
                 <button style="width:70px;height: 26px;border-radius: 10px;border:1px solid lightgray;margin-left:10px;background-color:white" v-for="item of but_type1">{{item.fk_elm_code}}</button>
               </div>
@@ -167,8 +167,8 @@ export default {
       },
       zNodes: [
         {
-          id: 1,
-          pId: 0,
+          id: 0,
+          //pId: 0,
           name: "图书馆管理平台",
           code: null,
           msg: null,
@@ -335,9 +335,9 @@ export default {
         "checked",
         "checked"
       ); //展示节点是否禁用
-      this.src1 =
-        "http://192.168.2.31:8099/authmodule/menuInformation/getImg?id=" +
-        treeNode.id; //展示节点图片
+      this.src1 = menugetimg + treeNode.id; //展示节点图片
+      this.photo=treeNode.icon_default
+      console.log(this.photo)
       $("#icon1").show(); //点击节点是显示,否则隐藏
       this.zTree = treeNode; //将点击节点后的节点信息给treeNode
     },
@@ -396,8 +396,8 @@ export default {
           menuDescribe: $("#menu_msg").val(),
           menuHref: $("#url").val(),
           disabled: $('input:radio[name="disabled"]:checked').val(),
-          iconDefault: "",
-          iconSelected: this.photo,
+          iconDefault:this.photo ,
+          iconSelected:'' ,
           fkMenuTypeCode: this.value2,
           fkParentMenuId: parent,
           fkParentMenuId: 0,
@@ -413,11 +413,12 @@ export default {
           menuDescribe: $("#menu_msg").val(),
           menuHref: $("#url").val(),
           disabled: $('input:radio[name="disabled"]:checked').val(),
-          iconDefault: "",
+          iconDefault: this.photo,
           iconSelected: "",
           fkMenuTypeCode: this.value2,
           authTbMenuElements: authTbMenuElementsEdit
         };
+        console.log(edit)
         if (id === undefined) {
           this.axios.post(menuaddurl, add).then((request) => {
             console.log(request);
@@ -471,7 +472,13 @@ export default {
         ContentType: "multipart/form-data"
       }).then(request => {
         console.log(request);
-        this.photo = request.data.row;
+        if(request.data.state==false){
+          return
+        }else{
+          this.photo=request.data.row
+          alert(1111)
+          console.log(this.photo)
+        }
       });
       if (!e || !window.FileReader) return;
       let reader = new FileReader();
@@ -505,7 +512,7 @@ button:hover {
 }
 .but_div {
   width: 100%;
-  height: 100%;
+  height: 972px;
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid lightgray;
   position: absolute;
@@ -520,8 +527,8 @@ button:hover {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 150px;
-  left: 600px;
+  top: 300px;
+  left: 750px;
 }
 .but_type {
   width: 150px;
@@ -599,7 +606,6 @@ input[type="radio"] {
 #mymenu {
   width: 1600px;
   height: 852px;
-  position: relative;
 }
 #myForm{
   margin-left: 300px;
