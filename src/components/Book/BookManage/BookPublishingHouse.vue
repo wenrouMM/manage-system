@@ -5,7 +5,7 @@
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
-      <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
+      <div style="width:1288px;margin-left: 30px;background-color:white;height:852px">
         <el-container>
           <div class="box-card">
             <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
@@ -29,8 +29,8 @@
                 <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
                   <el-table-column align="center" type="selection" width="100"></el-table-column>
                   <el-table-column align="center" prop="index" width="200" label="序号"></el-table-column>
-                  <el-table-column align="center" prop="name" width="250" label="出版社名称"></el-table-column>
-                  <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
+                  <el-table-column align="center" prop="name" width="230" label="出版社名称"></el-table-column>
+                  <el-table-column align="center" prop="address" width="230" label="公司地址"></el-table-column>
                   <el-table-column align="center" prop="contacts" width="230" label="联系人"></el-table-column>
                   <el-table-column align="center" prop="telephone" width="230" label="联系电话"></el-table-column>
                 </el-table>
@@ -292,6 +292,9 @@
 </script>
 
 <style scoped>
+  #mybook{
+    width: 100%;
+  }
   section.pagination {
     display: flex;
     justify-content: center;
