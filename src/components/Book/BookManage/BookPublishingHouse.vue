@@ -39,6 +39,7 @@
                   <el-pagination style="display: inline-block;padding-top: 30px;"
                                  background
                                  layout="prev, pager, next,total, jumper, ->"
+                                 :page-size="pageSize"
                                  :total="total"
                                  :current-page="currentPage"
                                  @current-change="current_change"
@@ -278,7 +279,7 @@
         console.log(res)
         let nomal = res.data.row.list
         let i =1
-        for (item of nomal) {
+        for (var item of nomal) {
           item.index = i;
           i++
         }
