@@ -17,11 +17,17 @@ import TestBook from '../common/test/testBook.vue'
 import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
-import LibBookType from '../components/Book/libraryManage/libBookType.vue'
 import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
+import LibInfo from '../components/Book/libraryManage/libInfo.vue'
 import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
+import ShelfBind from '../components/Area/areaManage/shelfBind'
 import TestReader from '../common/test/testReader.vue'
+import ReaderAdmin from '../components/Reader/ReaderAdmin/readeradmin.vue'
+import GetCard from '../components/Reader/ReaderAdmin/getAcard.vue'
+import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
+import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
+import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 Vue.use(Router)
 // 暴露一个router对象
 export default new Router({
@@ -67,6 +73,10 @@ export default new Router({
             {
               path:'/stoneroomInfo',
               component:StoneRoomInfo
+            },
+            {
+              path:'/shelfBind',
+              component:ShelfBind
             }
           ]
         },
@@ -93,6 +103,10 @@ export default new Router({
             {
               path:'/libBookInfo',
               component:LibBookInfo
+            },
+            {
+              path:'/libInfo',
+              component:LibInfo
             }
           ]
         },
@@ -100,7 +114,28 @@ export default new Router({
         {
           path:'/readerMode',
           component:TestReader,
-
+          children:[
+            {
+              path:'/readeradmin',
+              component:ReaderAdmin,
+            },
+            {
+              path:'/getcard',
+              component:GetCard,
+            },
+            {
+              path:'/readercardmanagement',
+              component:ReaderCardManagement,
+            },
+            {
+              path:'/readercardtype',
+              component:ReaderCardType,
+            },
+            {
+              path:'/readercardgrade',
+              component:ReaderCardGrade,
+            }
+          ]
         }
       ]
     },
