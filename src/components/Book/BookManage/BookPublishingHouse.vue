@@ -175,10 +175,6 @@
         this.i = 3;
         this.dialogFormVisible = true
       },
-      current_change: function(currentPage) {
-        //分页查询
-        this.currentPage = currentPage; //点击第几页
-      },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
         this.axios.get(bookurlcity).then((response)=>{
@@ -269,7 +265,7 @@
       },
       handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
-        console.log(this.currentPage)  //点击第几页
+        //console.log(this.currentPage)  //点击第几页
       },
     },
     mounted(){
