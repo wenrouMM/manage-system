@@ -26,7 +26,7 @@
               </div>
               <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
               <section class="text item tablebox" v-loading="loading">
-                <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+                <el-table class="tableBorder" :data="userList.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
                   <el-table-column align="center" type="selection" width="100"></el-table-column>
                   <el-table-column align="center" prop="index" width="200" label="序号"></el-table-column>
                   <el-table-column align="center" prop="name" width="230" label="出版社名称"></el-table-column>
@@ -40,9 +40,9 @@
                                  background
                                  layout="prev, pager, next,total, jumper, ->"
                                  :page-size="pageSize"
-                                 :total="total"
+                                 :total="userList.length"
+                                 @current-change="handleCurrentChange"
                                  :current-page="currentPage"
-                                 @current-change="current_change"
                   ></el-pagination>
                 </section>
               </section>
@@ -124,9 +124,10 @@
         ],
         /*====== 0.0初始化弹框数据 ======*/
         /*初始化 */
-        total: 0,
+        //total: 0,
         pageSize: 7,
         currentPage: 1,
+        userList:[],
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
         centerDialogVisible: false, // 禁用弹框
         Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
@@ -158,9 +159,6 @@
         rowStyle: {
           height: "60px"
         },
-        tableData: [
-          // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-        ],
         /*====== 5.0 分页相关设置项 ======*/
         zTree:{}
       };
@@ -268,7 +266,11 @@
         for (var i in obj) {
           obj[i] = "";
         }
-      }
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage)  //点击第几页
+      },
     },
     mounted(){
       //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
@@ -283,9 +285,9 @@
           item.index = i;
           i++
         }
-        this.tableData=nomal
+        this.userList=nomal
         console.log(res.data.row.list.length)
-        this.total=res.data.row.list.length
+        this.userList=res.data.row.list
         this.loading=false
       });
     }
