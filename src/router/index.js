@@ -11,6 +11,7 @@ import Menu from '../components/Power/menu.vue'
 import LoginRecord from '../components/Power/loginrecord.vue'
 
 import PasswordRedirect from '../components/passwordRedirect.vue'
+import Cirle from '../common/test/cirle.vue'
 import Test from '../common/test/test.vue'
 import Test2 from '../common/test/test2.vue'
 import TestBook from '../common/test/testBook.vue'
@@ -23,15 +24,25 @@ import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
 import ShelfBind from '../components/Area/areaManage/shelfBind'
 import TestReader from '../common/test/testReader.vue'
+
 import ReaderAdmin from '../components/Reader/ReaderAdmin/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderAdmin/getAcard.vue'
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
+
+import Login from '@/components/login.vue'
+
 Vue.use(Router)
 // 暴露一个router对象
 export default new Router({
   routes: [
+    {
+      path:'/login',
+      
+      component:Login
+    },
+    
     {
       path:'/test', // 一级路由 管理横条
       component:Test,
@@ -139,16 +150,19 @@ export default new Router({
         }
       ]
     },
-
     {
-      path:'/',
+      path:'/home',
       name:'Index',
       component: Index,
       children:[
         {
-          path:'/',
+          path:'/home',
           name: 'home',
           component: Home
+        },
+        {
+          path:'/cirle',
+          component:Cirle
         },
         {
           path: '/useradd',
