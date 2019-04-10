@@ -263,7 +263,7 @@ import {
   headimg
 } from "../../request/api/base.js";
 import moment from "moment";
-import axios from "axios";
+import axios from "../../request/http.js";
 export default {
   created() {
     this.roleType(); // 获取角色类型
