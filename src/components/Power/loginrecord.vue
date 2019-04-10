@@ -21,7 +21,7 @@
 
             <el-form-item size="130">
               <el-date-picker
-                v-model="searchForm.startTime"
+                v-model="searchForm.beginTime"
                 type="date"
                 placeholder="开始日期"
                 :picker-options="pickerOptions0"
@@ -64,7 +64,7 @@
           <!-- 4.0 分页 -->
           <section class="page_div">
             <el-pagination
-              
+
               style="display: inline-block"
               background
               layout="prev, pager, next,total,jumper"
@@ -122,9 +122,9 @@ export default {
       },
       pickerOptions0: {
         disabledDate: time => {
-          if (this.end_time !== "") {
+          if (this.searchForm.endTime !== "") {
             return (
-              time.getTime() > Date.now() || time.getTime() > this.end_time
+              time.getTime() > Date.now() || time.getTime() > this.searchForm.endTime
             );
           } else {
             return time.getTime() > Date.now();
@@ -134,7 +134,7 @@ export default {
       pickerOptions1: {
         disabledDate: time => {
           return (
-            time.getTime() < this.start_time || time.getTime() > Date.now()
+            time.getTime() < this.searchForm.beginTime || time.getTime() > Date.now()
           );
         }
       },
@@ -157,18 +157,9 @@ export default {
       let searchForm = {
         pageSize: this.pageSize,
         currentPage: 1,
-        fkLoginName:
-          this.searchForm.loginSource === "全部"
-            ? null
-            : this.searchForm.loginSource,
-        beginTime:
-          this.searchForm.beginTime === ""
-            ? null
-            : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
-        endTime:
-          this.searchForm.endTime === ""
-            ? null
-            : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
+        fkLoginName: this.searchForm.loginSource === "全部" ? null : this.searchForm.loginSource,
+        beginTime: this.searchForm.beginTime === "" ? null : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
+        endTime: this.searchForm.endTime === "" ? null : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
       };
       return searchForm;
     }
