@@ -25,6 +25,7 @@ import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
 import ShelfBind from '../components/Area/areaManage/shelfBind'
 import TestReader from '../common/test/testReader.vue'
 
+
 import ReaderAdmin from '../components/Reader/ReaderAdmin/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderAdmin/getAcard.vue'
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
@@ -32,6 +33,8 @@ import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCard
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 
 import Login from '@/components/login.vue'
+
+
 
 Vue.use(Router)
 // 暴露一个router对象
