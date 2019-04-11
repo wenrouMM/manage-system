@@ -23,10 +23,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './zTree_v3/css/zTreeStyle/zTreeStyle.css'
 //import './zTree_v3/css/metroStyle/metroStyle.css'
 Vue.config.productionTip = false
-
+/*
 router.beforeEach((to, from, next) => {
   if(to.path === '/login'){
-    if(store.state.token){ // token存在的话
+    if(store.state.token){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
       console.log('???')
       next('/')
     } else { // token不存在
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
   
   
 })
-
+*/
 Vue.use(ElementUI) // 注册插件
 // vuerouter会自动调用 这就是可以直接this.$router.push的根本？
 Vue.prototype.axios = axios // 挂载到vue实例 注册到vue实例中
