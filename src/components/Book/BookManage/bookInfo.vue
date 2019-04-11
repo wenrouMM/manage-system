@@ -7,6 +7,7 @@
           <!-- 1.0 标题 -->
           <div class="sonTitle">
             <span class="titleName">图书信息列表</span>
+            <span @click="testButton">查看详情按钮测试</span>
           </div>
           <!-- 2.0 表单填写 查询添加 内容需做调整  -->
           <section class="searchBox Posleft">
@@ -63,7 +64,7 @@
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="detail" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
+                  <span class="detail" @click="openDetail(scope.$index, scope.row)">查看详情</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -298,7 +299,12 @@ export default {
     },
     /*====== 3.0表格操作相关 ======*/
     // 打开详情页
-
+    openDetail(index,row) {
+      console.log(index,row)
+      this.$router.push({ // 路由跳转并把参数交给详情页面
+        path:`/bookInfo/${index}`
+      });
+    },
     /*====== 3.1 分页查询和初始化 ======*/
     current_change: function(currentPage) {
       //分页查询
@@ -436,6 +442,11 @@ export default {
           console.log(error);
         });
       
+    },
+    testButton() {
+      this.$router.push({ // 路由跳转并把参数交给详情页面
+        path:`/bookInfo/A00001`
+      });
     },
     addApi(data) {}
   }

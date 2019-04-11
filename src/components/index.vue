@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       Mode:1,
-      读者模块: {
+      leftMenus: {
         entity: null,
         childs: [
           {

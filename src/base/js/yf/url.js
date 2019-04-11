@@ -1,4 +1,4 @@
-url='http://192.168.2.121:8099/';
+url='http://192.168.2.32:8088/';
 loginurl=url+'authmodule/index/login' ;//登陆接口
 yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
 rowurl=url+'authmodule/index/getRow' ;//登陆次数接口

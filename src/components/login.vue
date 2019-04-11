@@ -25,7 +25,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
   export default {
     name: "login.vue",
     data:function(){
@@ -39,11 +39,12 @@
     },
     methods:{
       submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
-        this.axios.post( 'http://192.168.2.31:8088/authmodule/index/login' ,({account:this.form.name,
+        console.log('???执行了没')
+        axios.post( 'http://192.168.2.32:8088/authmodule/index/login' ,({account:this.form.name,
           password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
           console.log(res)
           if(res.data.state==true){ // 获取数据后进行存取操作
-            var token=res.data.row.authorization // 获取token
+            var token=res.data.row // 获取token
             console.log(token)
             
             //localStorage.setItem('token',token) // 存入本地 字符串形式存取
@@ -56,8 +57,8 @@
             this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
           }else{
             if($('#name').val()&&$('#pwd').val())
-              $('#msg').html(request.data.msg)
-            if(request.data.row>2){
+              $('#msg').html(res.data.msg)
+            if(res.data.row>2){
               $('#yzm').show()
               $('#imgYzm').attr("src",yzmurl+Math.random());
             }
@@ -66,7 +67,7 @@
       },
     },
     mounted:function(){ // 二维码的获取
-      this.axios.post( rowurl ,({})).then(function (request) {
+      axios.post( rowurl ,({})).then(function (request) {
         console.log(request);
         if(request.data.row>2){
           $('#yzm').show()

@@ -19,6 +19,7 @@ import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
+import libBookType from '../components/Book/libraryManage/libBookType.vue'
 import LibInfo from '../components/Book/libraryManage/libInfo.vue'
 import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
@@ -33,18 +34,14 @@ import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCard
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 
 import Login from '@/components/login.vue'
-
+import Detail from '../components/Book/detail.vue'
 
 
 Vue.use(Router)
 // 暴露一个router对象
 export default new Router({
   routes: [
-    {
-      path:'/login',
-      
-      component:Login
-    },
+    
     
     {
       path:'/test', // 一级路由 管理横条
@@ -107,6 +104,10 @@ export default new Router({
               component:BookInfo
             },
             {
+              path: '/bookInfo/:id',
+              component:Detail
+            },
+            {
               path:'/bookpublishhouse',
               component:BookPublishHouse
             },
@@ -115,8 +116,8 @@ export default new Router({
               component:LibBookInfo
             },
             {
-              path:'/libBookInfo',
-              component:LibBookInfo
+              path:'/libBookType',
+              component:libBookType
             },
             {
               path:'/libInfo',
@@ -155,20 +156,20 @@ export default new Router({
     },
     {
       path:'/home',
-      name:'Index',
+      name:'index',
       component: Index,
       children:[
         {
-          path:'/home',
+          path:'home',
           name: 'home',
           component: Home
         },
         {
-          path:'/cirle',
+          path:'cirle',
           component:Cirle
         },
         {
-          path: '/useradd',
+          path: 'useradd',
           name: 'useradd',
           component: UserAdd
         },
@@ -178,16 +179,21 @@ export default new Router({
           component: UserAdd
         },
         {
-          path: '/userlist',
+          path: 'userlist',
           name: 'userlist',
           component: Userlist
         },
         {
-          path: '/passwordRedirect',
+          path: 'passwordRedirect',
           name: 'passwordRedirect',
           component: PasswordRedirect
         },
       ]
+    },
+    {
+      path:'/login',
+      
+      component:Login
     }
   ]
 })
