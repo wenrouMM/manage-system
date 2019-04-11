@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import UserAdd from '@/components/useradd'
-import Userlist from '@/components/userlist'
+
 import Home from '@/components/home'
 import UserManage from '../components/Power/userManage.vue'
 import UserRole from '../components/Power/userRole.vue'
@@ -10,7 +10,7 @@ import PowerControl from '../components/Power/powerControl.vue'
 import Menu from '../components/Power/menu.vue'
 import LoginRecord from '../components/Power/loginrecord.vue'
 
-import PasswordRedirect from '../components/passwordRedirect.vue'
+
 import Cirle from '../common/test/cirle.vue'
 import Test from '../common/test/test.vue'
 import Test2 from '../common/test/test2.vue'
@@ -35,14 +35,47 @@ import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCar
 
 import Login from '@/components/login.vue'
 import Detail from '../components/Book/detail.vue'
-
+import Not from '../components/error.vue'
 
 Vue.use(Router)
 // 暴露一个router对象
 export default new Router({
+  //mode:history,
   routes: [
+    {
+      path: '/',
+      redirect: '/home'
+    },
+    {
+      path:'/login',
+      component:Login
+    },
     
-    
+    {
+      path:'/home',
+      name:'index',
+      component: Index,
+      children:[
+        {
+          path:'home',
+          name: 'home',
+          component: Home
+        },
+        {
+          path:'cirle',
+          component:Cirle
+        },
+        {
+          path: 'useradd',
+          name: 'useradd',
+          component: UserAdd
+        },
+      ]
+    },
+    {
+      path:'*',
+      component:Not
+    },
     {
       path:'/test', // 一级路由 管理横条
       component:Test,
@@ -153,47 +186,8 @@ export default new Router({
           ]
         }
       ]
-    },
-    {
-      path:'/home',
-      name:'index',
-      component: Index,
-      children:[
-        {
-          path:'home',
-          name: 'home',
-          component: Home
-        },
-        {
-          path:'cirle',
-          component:Cirle
-        },
-        {
-          path: 'useradd',
-          name: 'useradd',
-          component: UserAdd
-        },
-        {
-          path: '/useradd',
-          name: 'useradd',
-          component: UserAdd
-        },
-        {
-          path: 'userlist',
-          name: 'userlist',
-          component: Userlist
-        },
-        {
-          path: 'passwordRedirect',
-          name: 'passwordRedirect',
-          component: PasswordRedirect
-        },
-      ]
-    },
-    {
-      path:'/login',
-      
-      component:Login
     }
+    
+    
   ]
 })

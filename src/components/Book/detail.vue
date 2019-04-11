@@ -10,40 +10,45 @@
         </span>
       </div>
     </section>
-    <div class="dataBind" v-if="bookData.length">
-      <section class="Book">
-        <div class="imgBox">
-          <img alt="书籍封面">
-        </div>
-        <div class="bookInfo">
-          <p>
-            <span>书籍名称： {{bookData[0].name}}</span>
-            <span>索书号：{{bookData[0].searchNumber}}</span>
-          </p>
+    <div class="dataBind" >
+      <div v-if="!bookData.length">
+        无数据
+      </div>
+      <div v-if="bookData.length">
+        <section class="Book">
+          <div class="imgBox">
+            <img alt="书籍封面">
+          </div>
+          <div class="bookInfo">
+            <p>
+              <span>书籍名称： {{bookData[0].name}}</span>
+              <span>索书号：{{bookData[0].searchNumber}}</span>
+            </p>
 
-          <p>
-            <span>作者： {{bookData[0].author}}</span>
-            <span>出版社：{{bookData[0].fkPressName}}</span>
-          </p>
+            <p>
+              <span>作者： {{bookData[0].author}}</span>
+              <span>出版社：{{bookData[0].fkPressName}}</span>
+            </p>
 
-          <p>
-            <span>页码： {{bookData[0].pageNumber}}</span>
-            <span>价格：{{bookData[0].price}}</span>
-          </p>
-          <p>
-            <span>条码： 123456789</span>
-            <span>类型名称：{{bookData[0].fkTypeName}}</span>
-          </p>
-        </div>
-      </section>
-      <section class="BookAbstract">
-        <div class="bookTitle">
-          <span class="name">《设计心理学1：日常的设计》：</span>
-        </div>
-        <div class="bookContent">
-          <p>{{bookData[0].introduction}}</p>
-        </div>
-      </section>
+            <p>
+              <span>页码： {{bookData[0].pageNumber}}</span>
+              <span>价格：{{bookData[0].price}}</span>
+            </p>
+            <p>
+              <span>条码： 123456789</span>
+              <span>类型名称：{{bookData[0].fkTypeName}}</span>
+            </p>
+          </div>
+        </section>
+        <section class="BookAbstract">
+          <div class="bookTitle">
+            <span class="name">《设计心理学1：日常的设计》：</span>
+          </div>
+          <div class="bookContent">
+            <p>{{bookData[0].introduction}}</p>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -76,11 +81,15 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push('/bookInfo');
+      this.$router.push("/bookInfo");
     },
     getData(id) {
       // 发送请求
       console.log(id);
+      if (!this.index) {
+        this.$router.push("/recommand");
+      }
+
       let data = {
         searchNumber: id
       };
@@ -103,13 +112,14 @@ export default {
   },
   created() {
     console.log("数据给予前");
+
     this.getData(this.index);
   }
 };
 </script>
 
 <style scoped>
-[v-cloak]{
+[v-cloak] {
   display: none;
 }
 .detail {

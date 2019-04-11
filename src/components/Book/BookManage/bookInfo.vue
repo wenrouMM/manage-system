@@ -445,7 +445,7 @@ export default {
     },
     testButton() {
       this.$router.push({ // 路由跳转并把参数交给详情页面
-        path:`/bookInfo/A00001`
+        path:`/bookInfo/A00005`
       });
     },
     addApi(data) {}
