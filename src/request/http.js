@@ -25,7 +25,7 @@ axios.interceptors.request.use(
 )
 
 axios.interceptors.response.use(
-  response => { // 回复信息配置
+  response => { // 回复信息配置 code！=200 
     return response
   },
   error => {

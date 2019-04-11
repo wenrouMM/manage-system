@@ -44,7 +44,7 @@ import axios from 'axios'
           password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
           console.log(res)
           if(res.data.state==true){ // 获取数据后进行存取操作
-            var token=res.data.row // 获取token
+            var token=res.data.row.authorization // 获取token
             console.log(token)
             
             //localStorage.setItem('token',token) // 存入本地 字符串形式存取

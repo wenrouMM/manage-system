@@ -39,6 +39,8 @@ import Not from '../components/error.vue'
 
 Vue.use(Router)
 // 暴露一个router对象
+/*导航守卫 */
+
 export default new Router({
   //mode:history,
   routes: [
