@@ -537,7 +537,7 @@ export default {
           params: value
         })
         .then(res => {
-          console.log("当前获取的数据", res.data);
+          console.log("当前获取的数据", res);
           if (res.data.state === true) {
             let nomol = res.data.row;
             let i = 1;
@@ -553,6 +553,7 @@ export default {
             console.log("保存当前查询", this.paginationForm);
             this.tableLoading = false;
           } else {
+            console.log(res)
             this.$message.error(res.data.msg);
             this.tableLoading = false;
           }

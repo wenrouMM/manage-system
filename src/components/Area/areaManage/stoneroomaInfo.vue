@@ -60,21 +60,11 @@
               <div class="circle">
                 <!-- 颜色的传递更改 -->
                 <div class="temperature">
-                  <svg width="162" height="162" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                      <circle class="circle-bg" r="73" cx="81" cy="81" fill="transparent" />
-                      <circle class="progress" r="73" cx="81" cy="81" fill="transparent" 
-                            :stroke-dasharray="dashArray"
-                            :stroke-dashoffset="dashOffset"/>
-                  </svg>
+                  <ring :percent="percent"></ring>
                   <span class="text">温度: 80%</span>
                 </div>
                 <div class="humidity">
-                  <svg width="162" height="162" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                      <circle class="circle-bg" r="73" cx="81" cy="81" fill="transparent" />
-                      <circle class="progress" r="73" cx="81" cy="81" fill="transparent" 
-                            :stroke-dasharray="dashArray"
-                            :stroke-dashoffset="dashOffset"/>
-                  </svg>
+                  <ring :percent="percent" :ringColor="'#0096ff'"></ring>
                   <!-- 插槽内容 -->
                   <span class="text">湿度: 40%</span>
                 </div>
@@ -89,6 +79,7 @@
 
 <script>
 import VeHis from "v-charts/lib/histogram.common";
+import Ring from '../../../common/test/cirle'
 export default {
   data() {
     return {
@@ -205,7 +196,8 @@ export default {
     }
   },
   components: {
-    VeHis
+    VeHis,
+    Ring
   }
 };
 </script>

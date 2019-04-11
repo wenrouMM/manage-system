@@ -8,7 +8,7 @@ import {
 import {getToken} from '../base/js/normal'
 
 
- axios.defaults.timeout = 5000
+ axios.defaults.timeout = 10000
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 axios.interceptors.request.use(
   config => { // 做判断 如果有token就发送token 这里应该判定vuex内的状态
@@ -26,6 +26,14 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   response => { // 回复信息配置 code！=200 
+    
+    if(response.data.code == 3001 || response.data.code ==3003){ // 没有登录 token失效
+      
+    }
+    if(response.code == 3002){ // 权限不足
+
+    }
+    
     return response
   },
   error => {
