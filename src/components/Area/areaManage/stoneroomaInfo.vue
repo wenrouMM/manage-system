@@ -29,6 +29,11 @@
               </div>
             </div>
           </div>
+          <div class="addBox">
+            <div class="iconBox">
+              <i class="el-icon-plus"></i>
+            </div>
+          </div>
         </section>
       </section>
       <!-- 右侧图表展示区 柱状图数据与环形图数据 -->
@@ -41,8 +46,8 @@
             </div>
             <div class="areaOparate">
               <span>编辑区</span>
-              <span>绑定区</span>
-              <span>删除</span>
+              <span @click="openBindDialog">绑定区</span>
+              <span @click="openDelete">删除区</span>
             </div>
           </div>
           <div class="areaCharts">
@@ -74,12 +79,51 @@
         </div>
       </section>
     </div>
+    <!-- 弹框组 -->
+    <div class="dialogBox">
+      <!-- 左侧弹框组 -->
+
+      <!-- 右侧弹框组 -->
+      <!-- 绑定区 -->
+      <div class="bind">
+        <el-dialog title="提示" :visible.sync="bindDialog" width="30%" :before-close="handleClose">
+          <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
+            <el-form-item label="绑定区" prop="value">
+              <el-select v-model="bindForm.value" placeholder="请选择">
+                <el-option label="区域一" value="区域一"></el-option>
+                <el-option label="区域二" value="区域二"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item class="dialogFooter">
+              <el-button class="buttonTrueColor" @click="submitBind()">确定</el-button>
+              <el-button class="buttonCancelColor" @click="cancelBind()">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
+      <!-- 删除区 -->
+      <div class="forbid bind">
+        <el-dialog title="删除" :visible.sync="deleteDialog" width="500px" center>
+          <div class="dialogBody">是否删除?</div>
+          <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
+            <el-form-item class="dialogFooter">
+              <el-button class="buttonTrueColor" @click="subDelete()">确定</el-button>
+              <el-button class="buttonCancelColor" @click="cancelDelete()">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
+      <!-- 编辑区 -->
+      <div class="editArea bind">
+
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import VeHis from "v-charts/lib/histogram.common";
-import Ring from '../../../common/test/cirle'
+import Ring from "../../../common/test/cirle";
 export default {
   data() {
     return {
@@ -114,7 +158,6 @@ export default {
             },
             barBorderRadius: [8, 8, 0, 0] // 柱子的圆角
           }
-          
         }
       },
       HisExtend: {
@@ -174,25 +217,72 @@ export default {
           }
         },
         series: {
-          barWidth: 50, // 柱条长度定死
+          barWidth: 50 // 柱条长度定死
           //barGap: '-5%',
-         // barCategoryGap: "40" //同类目的间距 默认百分20% 谁的20%
+          // barCategoryGap: "40" //同类目的间距 默认百分20% 谁的20%
         }
       },
       //-------- 圆环 组件可以避免命名空间污染 这里还是需要封装为组件------//
-      percent:0.1,
-      percentH:0.3,
-      dashArray: Math.PI * 162
+      percent: 0.1,
+      percentH: 0.3,
       /*====== 弹框配置项 ======*/
 
       /*====== 左侧弹框配置项 ======*/
 
       /*====== 右侧弹框配置项 ======*/
+      /*------ 删除区 ------*/
+      deleteDialog:false,
+      /*------ 绑定区 ------*/
+      bindDialog: false,
+      bindForm: {
+        value: ""
+      },
+      bindRules: {
+        value: [{ required: true, message: "请选择区", trigger: "change" }]
+      }
     };
   },
-  computed:{
+  computed: {
     dashOffset() {
-      return (1 - this.percent) * this.dashArray
+      return (1 - this.percent) * this.dashArray;
+    }
+  },
+  methods: {
+    /*====== 弹框组  ======*/
+    /*------ 左侧弹框 ------*/
+
+    /*------ 右侧弹框 ------*/
+    /*------ 打开的按钮 ------*/
+    openBindDialog() {
+      this.bindDialog = true;
+    },
+    submitBind(){
+      this.bindDialog = false;
+    },
+    cancelBind() {
+      this.bindDialog = false;
+    },
+    /*------ 删除的按钮 ------*/
+    openDelete() {
+      this.deleteDialog = true
+    },
+    subDelete() {
+
+    },
+    cancelDelete() {
+
+    },
+
+    handleClose() { // 关闭和取消 确定结束后都要清除数据
+      
+      console.log("清空表单的哇");
+      this.bindDialog = false;
+    },
+    submitForm() {
+      
+    },
+    resetForm() {
+      
     }
   },
   components: {
@@ -201,6 +291,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .stoneRoom {
@@ -274,6 +365,26 @@ export default {
   display: flex;
   justify-content: center;
 }
+.addBox {
+  height: 180px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.addBox i {
+  font-size: 24px;
+  color: #0096ff;
+}
+.addBox .iconBox {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #0096ff;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
 /*====== 右侧图表 ======*/
 /*------ 标题区 ------*/
 .area {
@@ -305,49 +416,97 @@ export default {
   color: #0096ff;
 }
 /*----- 图表区 ------*/
-.areaCharts{
+.areaCharts {
   display: flex;
   justify-content: space-between;
 }
-.Vhis{
+.Vhis {
   width: 680px;
   height: 360px;
 }
 /*------ 圆环区 ------*/
-.circleBox{
+.circleBox {
   display: flex;
   align-items: flex-end;
-  padding-bottom: 55px; 
+  padding-bottom: 55px;
   padding-right: 21px;
 }
-.circle{
+.circle {
   display: flex;
   flex-direction: row;
 }
-.temperature,.humidity{
+.temperature,
+.humidity {
   position: relative;
 }
-.temperature circle, .humidity circle{
+.temperature circle,
+.humidity circle {
   stroke-width: 12px;
   transform-origin: center;
 }
 /*设计稿是带圆角的 = =*/
-.temperature .circle-bg, .humidity .circle-bg{
-  stroke:#eaeef2;
+.temperature .circle-bg,
+.humidity .circle-bg {
+  stroke: #eaeef2;
 }
-.temperature .progress{
+.temperature .progress {
   stroke: #ff5c3f;
 }
-.humidity{
+.humidity {
   margin-left: 86px;
 }
-.humidity .progress{
+.humidity .progress {
   stroke: #00d2ff;
 }
-.temperature .text, .humidity .text{
+.temperature .text,
+.humidity .text {
   position: absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+<style>
+/*====== 弹框 ======*/
+.bind {
+}
+.bind .el-dialog {
+  width: 448px !important;
+}
+.bind .el-form {
+  width: 100%;
+}
+.bind .dialogFooter {
+  width: 100%;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0;
+}
+.bind .dialogFooter .el-button {
+  height: 46px;
+  width: 150px;
+  border-radius: 10px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+  border: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+.bind .dialogFooter .el-button:first-child {
+  margin-right: 20px;
+}
+.bind .el-button.buttonTrueColor {
+  background-color: #0096ff;
+}
+.bind .el-button.buttonCancelColor {
+  background-color: #d5d5d5;
+}
+.bind .el-select {
+  width: 300px;
+}
+.bind .el-dialog__body {
+  border-radius: 0 0 30px 30px;
 }
 </style>
