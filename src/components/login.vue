@@ -15,7 +15,7 @@
           <input type="text" placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
           <span><img src="" id="imgYzm"></span>
         </div>
-        <div style="margin-top: 55px">
+        <div style="margin-top: 55px;">
           <button @click="submit">登录</button>
         </div>
         <div id="msg"></div>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
     name: "login.vue",
     data:function(){
@@ -37,18 +38,27 @@
       }
     },
     methods:{
-      submit(){
-        this.axios.post( loginurl ,({account:this.form.name,
-          password:this.form.password,identifyingCode:this.form.yzm})).then(function (request) {
-          console.log(request);
-          if(request.data.state==true){
-            var authorization=response.headers['authorization']
-            localStorage.setItem('authorization',authorization)
-            this.$router.push('/navigate');
+      submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
+        console.log('???执行了没')
+        axios.post( 'http://192.168.2.31:8088/authmodule/index/login' ,({account:this.form.name,
+          password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
+          console.log(res)
+          if(res.data.state==true){ // 获取数据后进行存取操作
+            var token=res.data.row.authorization // 获取token
+            console.log(token)
+            
+            //localStorage.setItem('token',token) // 存入本地 字符串形式存取
+            this.$store.commit('login', token)// 存入Vuex
+            // 获取路由信息
+            // 过滤生成动态路由
+            // 过滤生成权限菜单信息
+            // 存储动态路由
+            // 存储权限带单信息
+            this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
           }else{
             if($('#name').val()&&$('#pwd').val())
-              $('#msg').html(request.data.msg)
-            if(request.data.row>2){
+              $('#msg').html(res.data.msg)
+            if(res.data.row>2){
               $('#yzm').show()
               $('#imgYzm').attr("src",yzmurl+Math.random());
             }
@@ -56,8 +66,8 @@
         })
       },
     },
-    mounted:function(){
-      this.axios.post( rowurl ,({})).then(function (request) {
+    mounted:function(){ // 二维码的获取
+      axios.post( rowurl ,({})).then(function (request) {
         console.log(request);
         if(request.data.row>2){
           $('#yzm').show()
@@ -73,8 +83,8 @@
   #login{
     background-image: url("../base/img/login/login_bg_3.png");
     background-size: cover;
-    height: 1080px;
-    width: 1920px;
+    min-height: 100vh;
+    width: 100%;
   }
   #reg{
     font-size:35px;
@@ -112,6 +122,7 @@
     color: white;
     font-size: 20px;
     outline:none;
+    cursor: pointer;
   }
   #msg{
     font-size: 15px;

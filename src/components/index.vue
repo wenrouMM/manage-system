@@ -15,14 +15,13 @@
             <el-menu
               text-color="#fff"
               mode="horizontal"
-              router
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="readerMode">读者模块</el-menu-item>
-              <el-menu-item index="bookMode">图书管理</el-menu-item>
-              <el-menu-item index="areaMode">区域管理</el-menu-item>
-              <el-menu-item index="commanMode">权限管理</el-menu-item>
+              <el-menu-item index="1">读者模块</el-menu-item>
+              <el-menu-item index="2">图书管理</el-menu-item>
+              <el-menu-item index="3">区域管理</el-menu-item>
+              <el-menu-item index="4">权限管理</el-menu-item>
             </el-menu>
           </div>
         </div>
@@ -59,15 +58,8 @@
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
-
-            <el-menu-item index="/">首页</el-menu-item>
-            <el-menu-item class="activeMenu" index="useradd">
-              <i class="el-icon-message iconpath"></i>用户管理
-            </el-menu-item>
-            <el-menu-item class="activeMenu" index="userlist">角色管理</el-menu-item>
-            <el-menu-item class="activeMenu" index="passwordRediret">权限管理</el-menu-item>
-            <el-menu-item class="activeMenu" index="menu">菜单管理</el-menu-item>
-            <el-menu-item class="activeMenu" index="upload">登录记录</el-menu-item>
+            <el-menu-item index="powerMode">首页</el-menu-item>
+            <NavMenu v-show="Mode==1" :navMenus="leftMenus.childs"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
@@ -79,18 +71,254 @@
 </template>
 
 <script>
-
+import NavMenu from "../common/test/NavMenu";
 export default {
   data() {
     return {
-      activeIndex: "1",
-      activeIndex2: "1"
+      Mode:1,
+      leftMenus: {
+        entity: null,
+        childs: [
+          {
+            entity: { // index与路由属性的区别
+              id: 1, // 自身ID用于 与下面的parentId应该是用来形成树结构的
+              parentMenuId: 0, 
+              name: "systemManage", // 用来做index路由跳转
+              icon: "el-icon-message\r\n", // 用于自己选项的图标
+              alias: "系统管理", // 名字
+              state: "ENABLE", // 是否被渲染
+              sort: 0, // 排序？
+              value: null, // 路由地址
+              type: "NONE", // 类型
+              discription: "用于系统管理的菜单", // 描述
+              createUserId: 1 // 生成用户的ID
+            },
+            childs: [
+              {
+                entity: {
+                  id: 3,
+                  parentMenuId: 1,
+                  name: "authManage",
+                  icon: "el-icon-loading",
+                  alias: "权限管理",
+                  state: "ENABLE",
+                  sort: 0,
+                  value: "/system/auth",
+                  type: "NONE",
+                  discription: "用于权限管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              },
+              {
+                entity: {
+                  id: 4,
+                  parentMenuId: 1,
+                  name: "roleManage",
+                  icon: "el-icon-bell",
+                  alias: "角色管理",
+                  state: "ENABLE",
+                  sort: 1,
+                  value: "/system/role",
+                  type: "LINK",
+                  discription: "用于角色管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              },
+              {
+                entity: {
+                  id: 2,
+                  parentMenuId: 1,
+                  name: "menuManage",
+                  icon: "el-icon-edit",
+                  alias: "菜单管理",
+                  state: "ENABLE",
+                  sort: 2,
+                  value: "/system/menu",
+                  type: "LINK",
+                  discription: "用于菜单管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              },
+              {
+                entity: {
+                  id: 5,
+                  parentMenuId: 1,
+                  name: "groupManage",
+                  icon: "el-icon-mobile-phone\r\n",
+                  alias: "分组管理",
+                  state: "ENABLE",
+                  sort: 3,
+                  value: "/system/group",
+                  type: "LINK",
+                  discription: "用于分组管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              }
+            ]
+          },
+          {
+            entity: {
+              id: 6,
+              parentMenuId: 0,
+              name: "userManage",
+              icon: "el-icon-news",
+              alias: "用户管理",
+              state: "ENABLE",
+              sort: 1,
+              value: null,
+              type: "NONE",
+              discription: "用于用户管理的菜单",
+              createUserId: 1
+            },
+            childs: [
+              {
+                entity: {
+                  id: 7,
+                  parentMenuId: 6,
+                  name: "accountManage",
+                  icon: "el-icon-phone-outline\r\n",
+                  alias: "帐号管理",
+                  state: "ENABLE",
+                  sort: 0,
+                  value: "",
+                  type: "NONE",
+                  discription: "用于帐号管理的菜单",
+                  createUserId: 1
+                },
+                childs: [
+                  {
+                    entity: {
+                      id: 14,
+                      parentMenuId: 7,
+                      name: "emailManage",
+                      icon: "el-icon-sold-out\r\n",
+                      alias: "邮箱管理",
+                      state: "ENABLE",
+                      sort: 0,
+                      value: "/content/email",
+                      type: "LINK",
+                      discription: "用于邮箱管理的菜单",
+                      createUserId: 1
+                    },
+                    childs: null
+                  },
+                  {
+                    entity: {
+                      id: 13,
+                      parentMenuId: 7,
+                      name: "passManage",
+                      icon: "el-icon-service\r\n",
+                      alias: "密码管理",
+                      state: "ENABLE",
+                      sort: 1,
+                      value: "/content/pass",
+                      type: "LINK",
+                      discription: "用于密码管理的菜单",
+                      createUserId: 1
+                    },
+                    childs: null
+                  }
+                ]
+              },
+              {
+                entity: {
+                  id: 8,
+                  parentMenuId: 6,
+                  name: "integralManage",
+                  icon: "el-icon-picture",
+                  alias: "积分管理",
+                  state: "ENABLE",
+                  sort: 1,
+                  value: "/user/integral",
+                  type: "LINK",
+                  discription: "用于积分管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              }
+            ]
+          },
+          {
+            entity: {
+              id: 9,
+              parentMenuId: 0,
+              name: "contentManage",
+              icon: "el-icon-rank",
+              alias: "内容管理",
+              state: "ENABLE",
+              sort: 2,
+              value: null,
+              type: "NONE",
+              discription: "用于内容管理的菜单",
+              createUserId: 1
+            },
+            childs: [
+              {
+                entity: {
+                  id: 10,
+                  parentMenuId: 9,
+                  name: "classifyManage",
+                  icon: "el-icon-printer",
+                  alias: "分类管理",
+                  state: "ENABLE",
+                  sort: 0,
+                  value: "/content/classify",
+                  type: "LINK",
+                  discription: "用于分类管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              },
+              {
+                entity: {
+                  id: 11,
+                  parentMenuId: 9,
+                  name: "articleManage",
+                  icon: "el-icon-star-on",
+                  alias: "文章管理",
+                  state: "ENABLE",
+                  sort: 1,
+                  value: "/content/article",
+                  type: "LINK",
+                  discription: "用于文章管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              },
+              {
+                entity: {
+                  id: 12,
+                  parentMenuId: 9,
+                  name: "commentManage",
+                  icon: "el-icon-share",
+                  alias: "评论管理",
+                  state: "ENABLE",
+                  sort: 2,
+                  value: "/content/comment",
+                  type: "LINK",
+                  discription: "用于评论管理的菜单",
+                  createUserId: 1
+                },
+                childs: null
+              }
+            ]
+          }
+        ]
+      },
     };
   },
   methods: {
     handleSelect(key, keyPath) {
+      this.Mode = key
       console.log(key, keyPath);
     }
+  },
+  components: {
+    NavMenu
   }
 };
 </script>
@@ -193,7 +421,7 @@ body,
   margin-right: 10px;
   cursor: pointer;
 }
-.headBox .userBox{
+.headBox .userBox {
   display: flex;
   align-items: center;
 }
@@ -201,43 +429,43 @@ body,
   font-size: 18px;
   color: #ffffff;
   margin-right: 10px;
-  padding-right:25px;
+  padding-right: 25px;
   position: relative;
   cursor: pointer;
   display: flex;
   align-items: center;
-  height:65px;
+  height: 65px;
 }
 /* 下拉框 */
-.headBox .username .userDrop{
+.headBox .username .userDrop {
   position: absolute;
-   background-color:#fff;
-   border-radius:10px;
-   text-align:center;
-   color:#fff;
-   top:60px;
-   left:-30px;
-   display:none;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+  top: 60px;
+  left: -30px;
+  display: none;
 }
-.headBox .username:hover .userDrop{
-  display:block;
+.headBox .username:hover .userDrop {
+  display: block;
 }
-.username .userDrop .dropItem{
-  display:block;
-  color:#878787;
-  font-size:14px;
-  height:35px;
-  line-height:35px;
-  padding:0 17px;
-  min-width:90px;
-  box-sizing:border-box;
+.username .userDrop .dropItem {
+  display: block;
+  color: #878787;
+  font-size: 14px;
+  height: 35px;
+  line-height: 35px;
+  padding: 0 17px;
+  min-width: 90px;
+  box-sizing: border-box;
 }
-.username .userDrop .dropItem:last-child{
-  border-radius:0 0 10px 10px;
+.username .userDrop .dropItem:last-child {
+  border-radius: 0 0 10px 10px;
 }
-.username .userDrop .dropItem:hover{
-  background-color:#0096FF;
-  color:#fff;
+.username .userDrop .dropItem:hover {
+  background-color: #0096ff;
+  color: #fff;
 }
 .headBox .username::before {
   content: "";
@@ -281,7 +509,7 @@ body,
   transition: all 0.5s;
 }
 /*当初这里是被显示挡住了*/
-.el-menu-item.activeMenu.is-active::after{
+.el-menu-item.activeMenu.is-active::after {
   content: "";
   position: absolute;
   top: 0px;
@@ -311,28 +539,28 @@ body,
 }
 
 /*====== 图标类 可能后期需要更换 ======*/
-.logo{
-  background-image:url('../base/img/normal/email-icon.png');
-  background-repeat:no-repeat;
-  width:40px;
-  height:40px;
-  margin-right:9px;
-  background-position-y:10px;
+.logo {
+  background-image: url("../base/img/normal/email-icon.png");
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  margin-right: 9px;
+  background-position-y: 10px;
 }
-.notice{
-  background-image:url('../base/img/normal/email-icon.png');
-  background-repeat:no-repeat;
-  background-position-y:0px;
-  width:28px;
-  height:22px;
+.notice {
+  background-image: url("../base/img/normal/email-icon.png");
+  background-repeat: no-repeat;
+  background-position-y: 0px;
+  width: 28px;
+  height: 22px;
   display: inline-block;
-  margin-right:15px;
+  margin-right: 15px;
 }
-.set{
-  background-image:url('../base/img/normal/Layer.png');
-  background-repeat:no-repeat;
-  width:28px;
-  height:22px;
+.set {
+  background-image: url("../base/img/normal/Layer.png");
+  background-repeat: no-repeat;
+  width: 28px;
+  height: 22px;
   display: inline-block;
 }
 </style>

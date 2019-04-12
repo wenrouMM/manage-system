@@ -36,7 +36,7 @@
                   v-model="searchForm.date"
                   type="daterange"
                   align="right"
-                  unlink-panels
+                 
                   range-separator="至"
                   :picker-options="pickerOptions"
                   start-placeholder="开始日期"
@@ -263,7 +263,7 @@ import {
   headimg
 } from "../../request/api/base.js";
 import moment from "moment";
-import axios from "axios";
+import axios from "../../request/http.js";
 export default {
   created() {
     this.roleType(); // 获取角色类型
@@ -315,10 +315,8 @@ export default {
       formLabelWidth: "100px",
       /*====== 2.0表单提交数据项 ======*/
       pickerOptions: {
-        disabledDate(date) {
-          const maxDate = Date.now();
-          const time = date.getTime();
-          return time > maxDate;
+        disabledDate(time) {
+         return time.getTime() > Date.now() 
         }
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
@@ -373,7 +371,7 @@ export default {
         beginTime: null,
         endTime: null
       };
-      if (date != null) {
+      if (date != '') {
         searchForm.beginTime = moment(this.searchForm.date[0]).format(
           "YYYY-MM-DD"
         ); //开始时间
@@ -533,12 +531,13 @@ export default {
     SearchApi(value) {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
       this.tableLoading = true; // 加载前控制加载状态
+      console.log("初始化查询", this.searchForm);
       axios
         .get(userManageInterface.select, {
           params: value
         })
         .then(res => {
-          console.log("当前获取的数据", res.data);
+          console.log("当前获取的数据", res);
           if (res.data.state === true) {
             let nomol = res.data.row;
             let i = 1;
@@ -554,6 +553,7 @@ export default {
             console.log("保存当前查询", this.paginationForm);
             this.tableLoading = false;
           } else {
+            console.log(res)
             this.$message.error(res.data.msg);
             this.tableLoading = false;
           }

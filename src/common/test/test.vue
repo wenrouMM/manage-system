@@ -38,7 +38,7 @@
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
-                <span class="dropItem">切换账户</span>
+                <span class="dropItem" @click="loginOut">切换账户</span>
               </div>
             </div>
             <i class="notice"></i>
@@ -65,6 +65,10 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    loginOut() {
+      this.$store.commit('logOut')
+      this.$router.push('/login')
     }
   }
 };

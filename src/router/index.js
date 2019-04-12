@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import UserAdd from '@/components/useradd'
-import Userlist from '@/components/userlist'
+
 import Home from '@/components/home'
 import UserManage from '../components/Power/userManage.vue'
 import UserRole from '../components/Power/userRole.vue'
@@ -18,7 +18,6 @@ import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
-import LibBookType from '../components/Book/libraryManage/libBookType'
 import LibInfo from '../components/Book/libraryManage/libInfo.vue'
 import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
@@ -29,27 +28,52 @@ import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
-import LoanRecorde from '../components/Reader/LoanManagement/loanRecords.vue'
-import LoanHistory from '../components/Reader/LoanManagement/loanHistory.vue'
-import BorrowingBooks from '../components/Reader/LoanManagement/borrowingBooks.vue'
-import BorrowingStatus from '../components/Reader/LoanManagement/borrowingStatus.vue'
-import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
-import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
-import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
-import DepositRecord from '../components/Reader/RechargeManagement/depositRecord.vue'
-import PaymentRecord from '../components/Reader/RechargeManagement/paymentRecord.vue'
-import DepositDetails from '../components/Reader/RechargeManagement/depositDetails.vue'
-import PaymentDetails from '../components/Reader/RechargeManagement/paymentDetails.vue'
-import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
-import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
-import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
-import IncreditRecord from '../components/Reader/IncreditManagement/increditRecord.vue'
-import IncreditHistory from '../components/Reader/IncreditManagement/incredithistory.vue'
-import IncreditSetting from '../components/Reader/IncreditManagement/increditsettings.vue'
+
+import Login from '@/components/login.vue'
+import Detail from '../components/Book/detail.vue'
+import Not from '../components/error.vue'
+
 Vue.use(Router)
 // 暴露一个router对象
+/*导航守卫 */
+
 export default new Router({
+  //mode:history,
   routes: [
+    {
+      path: '/',
+      redirect: '/home'
+    },
+    {
+      path:'/login',
+      component:Login
+    },
+
+    {
+      path:'/home',
+      name:'index',
+      component: Index,
+      children:[
+        {
+          path:'home',
+          name: 'home',
+          component: Home
+        },
+        {
+          path:'cirle',
+          component:Cirle
+        },
+        {
+          path: 'useradd',
+          name: 'useradd',
+          component: UserAdd
+        },
+      ]
+    },
+    {
+      path:'*',
+      component:Not
+    },
     {
       path:'/test', // 一级路由 管理横条
       component:Test,
@@ -109,6 +133,10 @@ export default new Router({
             {
               path:'/bookInfo',
               component:BookInfo
+            },
+            {
+              path: '/bookInfo/:id',
+              component:Detail
             },
             {
               path:'/bookpublishhouse',
@@ -224,39 +252,8 @@ export default new Router({
           ]
         }
       ]
-    },
-
-    {
-      path:'/',
-      name:'Index',
-      component: Index,
-      children:[
-        {
-          path:'/',
-          name: 'home',
-          component: Home
-        },
-        {
-          path: '/useradd',
-          name: 'useradd',
-          component: UserAdd
-        },
-        {
-          path: '/useradd',
-          name: 'useradd',
-          component: UserAdd
-        },
-        {
-          path: '/userlist',
-          name: 'userlist',
-          component: Userlist
-        },
-        {
-          path: '/passwordRedirect',
-          name: 'passwordRedirect',
-          component: PasswordRedirect
-        },
-      ]
     }
+
+
   ]
 })

@@ -89,7 +89,7 @@ table {
 }
 .el-dialog__body{
 	min-height: 140px;
-
+	padding: 30px;
 	box-sizing: border-box;
 	background-color: #fff;
 
