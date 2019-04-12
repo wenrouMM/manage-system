@@ -31,29 +31,11 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" width="100" prop="id" label="序号"></el-table-column>
-              <el-table-column align="center" prop="username" width label="姓名"></el-table-column>
-              <el-table-column align="center" width="100" prop="sex" label="性别">
-                <template slot-scope="scope">
-                  <span>{{scope.row.sex ===1?'男':'女'}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="idCard" width="200" label="身份证号"></el-table-column>
-              <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="isLock" width="80" label="状态">
-                <template slot-scope="scope">
-                  <span>{{scope.row.isLock ===0?'启用':'禁用'}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="操作" width="200">
-                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span>
-                </template>
-              </el-table-column>
+              <el-table-column align="center" prop="id" width="100" label="序号"></el-table-column>
+              <el-table-column align="center" prop="name" width label="类型名称"></el-table-column>
+              <el-table-column align="center" prop="code" width="200" label="类型标识"></el-table-column>
+              <el-table-column align="center" prop="parentCode" label="上级名称"></el-table-column>
+              <el-table-column align="center" prop="parentCode" width="200" label="上级标识"></el-table-column>
             </el-table>
 
             <!-- 3.1 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
@@ -63,15 +45,12 @@
                 layout="prev, pager, next,total, jumper, ->"
                 :total="total"
                 :current-page="currentPage"
-                page-size="7"
                 @current-change="current_change"
               ></el-pagination>
             </section>
           </section>
         </div>
       </div>
-      <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
-      <!-- 禁用弹框/批量删除弹框 -->
     </el-container>
   </div>
 </template>
@@ -104,7 +83,13 @@ export default {
       },
       tableData: [
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
+        /*{id
+        typeName
+        typeFage
+        parentName
+        parentFage}*/
       ],
+      tableChecked:[],
       /*====== 3.1 分页相关 搜索相关设置项 ======*/
       total: 0, // 总页数
       pageSize: 7, // 页面个数
@@ -115,13 +100,22 @@ export default {
   computed: {
     searchTimeForm() {
       // 计算属性 真正传递的数据
+      /*{id
+        typeName
+        typeFage
+        parentName
+        parentFage}*/
       let searchForm = {
-        keywords: this.searchForm.keywords
+        fkTypeCode: this.searchForm.keywords
       };
       return searchForm;
     }
   },
   methods: {
+    handleSelectionChange(val){
+      console.log(val)
+      this.tableChecked=val
+    },
     /*====== 2.0 表单提交相关函数 ======*/
     searchSubmit() { // 条件查询 执行的按钮应该个函数节流 查询的定义：获取查询条件的初次数据排序展示
       console.log("此时传给后台的搜索数据", this.searchTimeForm);
@@ -139,15 +133,16 @@ export default {
     /*====== endApi调用区 ======*/
     SearchApi(value) { //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
 
-      this.loadingTable = true; // 加载前控制加载状态
+      this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(userManageInterface.select, {
+        .get(bookurltype, {
           params: value
         })
         .then(res => {
           console.log("当前获取的数据", res.data);
           if (res.data.state === true) {
-            let nomol = res.data.row;
+            console.log('123')
+            let nomol = res.data.row.list;
             let i = 1;
             for (let item of nomol) {
               item.index = i;
@@ -158,17 +153,25 @@ export default {
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             console.log("过滤后的数据", nomol);
             console.log("保存当前查询", this.paginationForm);
-            this.loadingTable = false;
+            this.tableLoading = false;
           } else {
             this.$message.error(res.data.msg);
-            this.loadingTable = false;
+            this.tableLoading = false;
           }
         })
         .catch(error => {
           console.log(error);
         });
-      
-    }
+    },
+
+  },
+  mounted(){
+    this.tableLoading=true
+    this.axios.get(bookurltype).then((res)=>{
+      console.log(res.data)
+      this.tableData=res.data.row.list
+      this.tableLoading=false
+    })
   }
 };
 </script>

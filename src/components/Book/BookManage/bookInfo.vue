@@ -46,20 +46,14 @@
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
               <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="src" label="书籍名称"></el-table-column>
-              <el-table-column
-                align="center"
-                :show-overflow-tooltip="true"
-                prop="fkRoleNames"
-                width="100"
-                label="索书号"
-              ></el-table-column>
-              <el-table-column align="center" prop="username" label="作者"></el-table-column>
-              <el-table-column align="center" width="100" prop="sex" label="出版社"></el-table-column>
-              <el-table-column align="center" prop="idCard" width="200" label="页码"></el-table-column>
-              <el-table-column align="center" prop="phone" label="价格"></el-table-column>
+              <el-table-column align="center" width="180" prop="name" label="书籍名称"></el-table-column>
+              <el-table-column align="center" :show-overflow-tooltip="true" prop="searchNumber" width="110" label="索书号"></el-table-column>
+              <el-table-column align="center" prop="author" width="150" label="作者"></el-table-column>
+              <el-table-column align="center" width="150" prop="fkPressName" label="出版社"></el-table-column>
+              <el-table-column align="center" prop="pageNumber" width="150" label="页码"></el-table-column>
+              <el-table-column align="center" prop="price" width="150" label="价格"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="条码"></el-table-column>
-              <el-table-column align="center" prop="isLock" width="80" label="类型"></el-table-column>
+              <el-table-column align="center" prop="fkTypeName" width="150" label="类型"></el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
@@ -164,9 +158,9 @@
                 <el-input v-model="addForm.barcode" autocomplete="off"></el-input>
               </el-form-item>
             </div>
-
-            <el-form-item label="类型名称" prop="typeName" :label-width="formLabelWidth">
+            <el-form-item label="类型名称" prop="typeName" :label-width="formLabelWidth" style="position: relative" >
               <el-input v-model="addForm.typeName" autocomplete="off"></el-input>
+              <img src="../../../../src/base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 160px" @click="typeMessage">
             </el-form-item>
             <div class="row1">
               <el-form-item label="书籍简介" prop="bookContent" :label-width="formLabelWidth">
@@ -182,6 +176,13 @@
         </el-dialog>
       </div>
     </el-container>
+    <!-- 类型名称弹框-->
+    <div id="typeMessage">
+      <div>请选择类型名称</div>
+      <div>
+        <ul id="treeDemo" class="ztree"></ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -195,10 +196,6 @@ import {
 import moment from "moment";
 import axios from "axios";
 export default {
-  created() {},
-  mounted() {
-    this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
-  },
   data() {
     return {
       /*====== 2.0表单搜索提交数据项 ======*/
@@ -264,26 +261,122 @@ export default {
           { required: true, message: "请输入书籍简介", trigger: "change" }
         ]
       },
-      formLabelWidth: "90px"
+      formLabelWidth: "90px",
+      /*====== 1.0类型名称ztree树 ======*/
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          showRenameBtn: false,
+          editNameSelectAll: true
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: false,
+          selectedMulti: true,
+        },
+        callback: {
+          onClick: this.zTreeOnClick, //节点点击事件
+        }
+      },
+      zNodes: [],
+      typeName:null
     };
   },
   computed: {
     searchTimeForm() {
       // 搜索所需数据 过滤数据 传递给后端的数据
-
-      let searchForm = {};
-
+      /*searchForm: {
+        bookName: "",
+        bookIndex: "",
+        author: "",
+        lib: ""
+      },*/
+      let searchForm = {
+        name:this.searchForm.bookName,
+        searchNumber:this.searchForm.bookIndex,
+        author:this.searchForm.author,
+        PressName:this.searchForm.lib
+      };
       return searchForm;
     },
     addEdit() {
       // 添加传递数据
+    /*addForm: {
+        // 添加的数据表单 共8个参数
+        addDialog: false,
+        headerAddress: "", // 传递来的图片
+        headIcon: "", // 预览的图片
+        files: "", // 用于上传
 
-      let data = {};
+        bookName: "", // 书籍名称
+        bookIndex: "", // 书籍索引
+        author: null, // 作者
+        lib: "", // 出版社
+        page: "", // 页码
+        barcode: "", // 条码
+        value: "", // 价格
+        typeName: "", // 类型名称
+        bookcontent: "" // 书籍简介
+      },*/
+      let data = {
+        /*id:
+        searchNumber
+        name
+        author
+        price
+        fkTypeCode
+        fkTypeName
+        pageNumber
+        fkPressCode
+        fkPressName
+        creatTime
+        updateTime
+        introduction*/
+      };
 
       return data;
     }
   },
   methods: {
+    /*====== 0.0类型名称ztree树的渲染 ======*/
+    async freshArea() {
+      this.axios.get(bookurltypemes).then((response)=>{
+        console.log(response)
+        for (var item of response.data.row) {
+          console.log(item)
+          this.zNodes.push({
+            id: item.id, //节点id
+            pId: item.pid, //节点父id
+            name: item.name, //节点名称
+            code:item.code, //
+          });
+        }
+        //将数据渲染到ztree树
+        $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+      })
+    },
+    /*====== 0.1类型名称ztree树（点击树节点选中并且传） ======*/
+    zTreeOnClick(event, treeId, treeNode) {
+      this.typeName=treeNode
+        console.log(treeNode)
+        $('#typeMessage').fadeOut()
+        this.addForm.typeName=treeNode.name
+    },
+    /*====== 1.0 类型名称弹框 ======*/
+    typeMessage(){
+      $('#typeMessage').fadeIn()
+    },
     /*====== 2.0 搜索与添加按钮触发 ======*/
     searchSubmit() {
       // 条件查询按钮
@@ -335,7 +428,7 @@ export default {
             //console.log(formdatas.get('file'))
             this.axios({
               method: "post",
-              url: headUpload,
+              url: bookurlimg,
               data: formdatas,
               //cache: false,//上传文件无需缓存
               processData: false, //用于对data参数进行序列化处理 这里必须false
@@ -407,15 +500,15 @@ export default {
     /*====== baseAPI调用相关 ======*/
     SearchApi(value) {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
-      this.loadingTable = true; // 加载前控制加载状态
+      this.tableLoading= true; // 加载前控制加载状态
       axios
-        .get(userManageInterface.select, {
+        .get(bookurlmessage, {
           params: value
         })
         .then(res => {
           console.log("当前获取的数据", res.data);
           if (res.data.state === true) {
-            let nomol = res.data.row;
+            let nomol = res.data.row.list;
             let i = 1;
             for (let item of nomol) {
               item.index = i;
@@ -426,25 +519,82 @@ export default {
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             console.log("过滤后的数据", nomol);
             console.log("保存当前查询", this.paginationForm);
-            this.loadingTable = false;
+            this.tableLoading = false;
           } else {
             this.$message.error(res.data.msg);
-            this.loadingTable = false;
+            this.tableLoading = false;
           }
         })
         .catch(error => {
           console.log(error);
         });
-      
+
     },
-    addApi(data) {}
+    addApi(data) {
+      this.axios.post(bookurladd,data).then((res)=>{
+        console.log(res)
+      })
+    }
+  },
+  mounted(){
+    this.freshArea()
+    this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
+    $('#typeMessage').fadeOut()
+    this.tableLoading=true
+    this.axios.get(bookurlmessage).then((res)=>{
+      console.log(res)
+      let nomal = res.data.row.list
+      let i =1
+      for (var item of nomal) {
+        item.index = i;
+        i++
+      }
+      this.tableData=res.data.row.list
+      this.tableLoading=false
+    })
   }
 };
 </script>
 
 <style scoped>
 /*====== 0.0 初始化部分 ======*/
+#typeMessage{
+  display: none;
+  position: absolute;
+  top: 200px;
+  left:750px;
+  z-index: 30000;
 
+}
+#typeMessage div:nth-child(1){
+  width: 400px;
+  height: 50px;
+  background-color: #0096FF;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:2px 2px 10px #909090;
+}
+#typeMessage div:nth-child(2){
+  overflow: auto;
+  height:500px ;
+  width: 370px;
+  background-color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:2px 2px 10px #909090;
+}
 .box-card {
   background-color: #fff;
   box-sizing: border-box;

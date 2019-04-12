@@ -2,7 +2,6 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
-        <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
@@ -10,18 +9,18 @@
             <span class="titleName">读者卡等级管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline" style="display: flex;flex-direction: row;">
-              <div class="buttonBox">
-                <button class="add" @click="addDialogOpen">
-                  <i class="addIcon el-icon-plus"></i>添加
-                </button>
-                <button class="delete" @click="batchDelete">
-                  <i class="deleteIcon el-icon-delete"></i>批量禁用
-                </button>
-              </div>
-              <el-form-item label="等级:" size="160" style="margin-left: 950px">
-                <el-select v-model="formInline.userType" placeholder="请选择等级">
+          <section class="searchBox" style="display: flex;flex-direction: row;justify-content: space-between">
+            <div class="buttonBox">
+              <button class="add" @click="addDialogOpen">
+                <i class="addIcon el-icon-plus"></i>添加
+              </button>
+              <button class="delete" @click="batchDelete">
+                <i class="deleteIcon el-icon-delete"></i>批量禁用
+              </button>
+            </div>
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+              <el-form-item label="等级:" size="160">
+                <el-select v-model="formInline.grade" placeholder="请选择等级">
                   <el-option
                     v-for="(option,index) of optionsData"
                     :key="index"
@@ -87,50 +86,20 @@
         <!-- Form -->
         <el-dialog @close="closeForm" width="685px" :title="Dialogtitle[3]" :visible.sync="dialogFormVisible">
           <el-form ref="addForm" :model="addForm" :rules="addRules">
-            <el-form-item class="uploadBox">
-              <section class="upload mb_30" @click="pointer">
-                <!-- 背景图片做改动 -->
-                <div class="defultHead" style="width:100px; height:100px; border-radius:50%;">
-                  <img
-                    class="defaultimage"
-                    style="width:100px; height:100px; border-radius:50%;"
-                    alt="user image"
-                    :src="defaultImg"
-                    v-if="!addForm.preloading"
-                  >
-                  <img
-                    style="width:100px; height:100px ;border-radius:50%;"
-                    v-if="addForm.preloadImg"
-                    :src="addForm.preloadImg"
-                    alt="预览照片"
-                    class="preloadImg"
-                  >
-                  <input
-                    type="file"
-                    accept="jpg/png"
-                    style="display:none;"
-                    ref="file"
-                    id="file"
-                    @change="getFile"
-                  >
-                  <div class="bgload" style="width:100px; height:100px; border-radius:50%;">上传头像</div>
-                </div>
-              </section>
-            </el-form-item>
             <!-- 表单域 -->
-            <el-form-item label="用户名" prop="name" :label-width="formLabelWidth">
+            <el-form-item label="等级名称" prop="grade" :label-width="formLabelWidth">
               <el-input v-model="addForm.name" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item class="select" label="性　　别" prop="sex">
-              <el-radio-group v-model="addForm.sex">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
+            <el-form-item label="续借天数" prop="renewNum" :label-width="formLabelWidth">
               <el-input v-model="addForm.id" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
+            <el-form-item label="借阅时间" prop="readerTime" :label-width="formLabelWidth">
+              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="借书数量" prop="bookNum" :label-width="formLabelWidth">
+              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
               <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item class="select" prop="status" label="状　　态">
@@ -172,22 +141,20 @@
         addForm: {
           // 添加的数据表单 共8个参数
           addDialog: false,
-          preloadImg: "", // 图片相关
-          files: "", // 用于上传
-          name: "", // 用户名
-          sex: "", // 性别
-          id: "", // 身份证
-          phoneNumber: "", // 电话号码
+          grade: "", // 等级名称
+          renewNum: "", // 续借天数
+          readerTime: "", // 借阅时间
+          bookNum: "", // 借阅数量
+          deposit:"",//押金金额
           status: "" // 状态
         },
         addRules: {
           // 添加的参数验证
-          name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-          sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-          id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
-          phoneNumber: [
-            { required: true, message: "请输入手机号码", trigger: "blur" }
-          ],
+          grade: [{ required: true, message: "请输入等级名称", trigger: "blur" }],
+          renewNum: [{ required: true, message: "请输入续借天数", trigger: "blur" }],
+          readerTime: [{ required: true, message: "请输入借阅时间", trigger: "blur" }],
+          bookNum: [{ required: true, message: "请输入借阅数量", trigger: "blur" }],
+          deposit: [{ required: true, message: "请输入押金金额", trigger: "blur" }],
           status: [{ required: true, message: "请选择状态", trigger: "change" }]
         },
         formLabelWidth: "120px",
@@ -202,11 +169,7 @@
         ],
         formInline: {
           // 搜索需要的表单数据
-          userName: "",
-          userType: "",
-          userId: "",
-          userPhone: "",
-          date: "" // 选择日期
+          grade:"" //等级
         },
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 

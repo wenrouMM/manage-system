@@ -6,35 +6,28 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">读者卡类型管理列表</span>
+            <span class="titleName">读者信息管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox" style="display: flex;flex-direction: row;justify-content: space-between">
-            <div class="buttonBox">
-              <button class="add" @click="addDialogOpen">
-                <i class="addIcon el-icon-plus"></i>添加
-              </button>
-            </div>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="类型名称:" size="160">
-                <el-select v-model="formInline.userType" placeholder="请选择类型">
-                  <el-option
-                    v-for="(option,index) of optionsData"
-                    :key="index"
-                    :label="option"
-                    :value="option"
-                  ></el-option>
-                </el-select>
+              <el-form-item label="用户名:" size="160">
+                <el-input v-model="formInline.userName" placeholder="请输入用户名"></el-input>
               </el-form-item>
-              <el-form-item label="等级名称:" size="160">
-                <el-select v-model="formInline.grade" placeholder="请选择等级">
-                  <el-option
-                    v-for="(option,index) of optionsData"
-                    :key="index"
-                    :label="option"
-                    :value="option"
-                  ></el-option>
-                </el-select>
+              <el-form-item label="卡号:">
+                <el-input size="120" v-model="formInline.cardNum" placeholder="请输入卡号"></el-input>
+              </el-form-item>
+              <el-form-item label="创建时间:" size="130">
+                <el-date-picker
+                  v-model="formInline.date"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  :picker-options="pickerOptions"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                ></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
@@ -50,18 +43,28 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" width="100" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" prop="typeName" width="250" label="类型名称"></el-table-column>
-              <el-table-column align="center" prop="gradeName" width="250" label="等级名称"></el-table-column>
-              <el-table-column align="center" prop="startTime" width="270" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="editTime" width="300" label="修改时间"></el-table-column>
-              <el-table-column align="center" label="操作" width="270">
-                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+              <el-table-column align="center" width="120" prop="idType" label="序号"></el-table-column>
+              <el-table-column align="center" width="140" prop="srcdata" label="头像">
                 <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
+                  <span class="imgDefault">
+                    <img
+                      v-if="scope.row.srcdata"
+                      class="head_pic"
+                      :src="scope.row.srcdata"
+                      width="30px"
+                      height="30px;"
+                      style="border-radius: 50%"
+                    >
+                  </span>
                 </template>
               </el-table-column>
+              <el-table-column align="center" prop="name"width="180" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNum" width="180" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="typeName" width="180" label="身份证号"></el-table-column>
+              <el-table-column align="center" prop="address" width="180" label="手机号码"></el-table-column>
+              <el-table-column align="center" prop="now" width="180" label="备注"></el-table-column>
+              <el-table-column align="center" prop="startTime" width="200" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="now" width="180" label="处理方式"></el-table-column>
             </el-table>
           </section>
           <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
@@ -70,32 +73,15 @@
           </section>
         </div>
       </div>
-      <!-- 编辑弹框 -->
-      <!-- 添加弹框 -->
-      <div class="addEditDialog">
-        <!-- Form -->
-        <el-dialog @close="closeForm" width="685px" :title="Dialogtitle[3]" :visible.sync="dialogFormVisible">
-          <el-form ref="addForm" :model="addForm" :rules="addRules" style="width: 400px;">
-            <!-- 表单域 -->
-            <el-form-item label="类型名称" prop="type" :label-width="formLabelWidth">
-              <el-input v-model="addForm.type" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="等级名称:" prop="grade" size="160" style="width: 250px;margin-left: 40px">
-              <el-select v-model="addForm.grade" placeholder="请选择类型">
-                <el-option
-                  v-for="(option,index) of optionsData"
-                  :key="index"
-                  :label="option"
-                  :value="option"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 弹框表单按钮  验证失效-->
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
-            </el-form-item>
-          </el-form>
+      <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
+      <!-- 禁用弹框/批量删除弹框 -->
+      <div class="forbid">
+        <el-dialog :title="Dialogtitle" :visible.sync="centerDialogVisible" width="500px" center>
+          <div class="dialogBody">是否撤销 他(她) 的记录 ?</div>
+          <div slot="footer" class="dialog-footer">
+            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
         </el-dialog>
       </div>
     </el-container>
@@ -108,7 +94,7 @@
       return {
         /*====== 0.0初始化弹框数据 ======*/
         centerDialogVisible: false, // 禁用弹框
-        Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
+        Dialogtitle: '撤销',
         i: 0, // 切换弹框标题
         defaultImg: " ", // 上传头像默认头像
         dialogFormVisible: false, // // 添加弹框的展示和消失
@@ -121,14 +107,19 @@
           "系统管理员"
         ],
         addForm: {
-          // 添加的数据表单 共8个参数
-          type:"", //类型名称
-          grade: "" //等级名称
+          // 补卡的新卡号
+          addDialog: false,
+          cardNum:""
         },
         addRules: {
           // 添加的参数验证
-          type: [{ required: true, message: "请输入类型名称", trigger: "blur" }],
-          grade: [{ required: true, message: "请选择等级名称", trigger: "change" }],
+          name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+          sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+          id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
+          phoneNumber: [
+            { required: true, message: "请输入手机号码", trigger: "blur" }
+          ],
+          status: [{ required: true, message: "请选择状态", trigger: "change" }]
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -142,8 +133,10 @@
         ],
         formInline: {
           // 搜索需要的表单数据
-          userType: "",
-          grade:""
+          cardNum: "", //卡号
+          userName: "", //用户名
+          userType: "", //类型名称
+          status: "", //状态
         },
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
@@ -158,17 +151,14 @@
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
           {
             idType: "1",
-            typeName:"文学",
-            gradeName:"化学",
-            startTime: "2019-03-24 12:33",
-            editTime:'2019-4-32 12:44',
-          },
-          {
-            idType: "1",
-            typeName:"文学",
-            gradeName:"化学",
-            startTime: "2019-03-24 12:33",
-            editTime:'2019-4-32 12:44',
+            srcdata:'',//头像地址
+            name:"张三",
+            cardNum:'6226523131655',
+            typeName:'文学',
+            address:'重庆渝北',
+            startTime:'2019',
+            editTime:'2020',
+            now:'设备'
           },
         ]
         /*====== 5.0 分页相关设置项 ======*/
@@ -179,20 +169,19 @@
       /*====== 2.0 表单提交相关函数 ======*/
 
       onSubmit() {
-        // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
+        // 搜索 date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
         console.log(this.formInline);
       },
 
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
-        this.i = 3;
-        this.dialogFormVisible = true
+        //办卡跳转办卡页面
+        this.$router.push({name:'GetCard'})
       },
       /*====== 4.0表格操作相关 ======*/
       handleEdit(index, row) {
-        // 编辑
-        this.i = 2
-        this.dialogFormVisible = true
+        // 补卡
+        this.centerDialogVisible = true;
         console.log(index, row);
       },
 
@@ -204,7 +193,7 @@
         alert(`${tips}成功`); // 成功之后映射到数组的操作
         this.centerDialogVisible = false;
       },
-      // 编辑弹框
+      // 补卡弹窗点击确定向后端发送数据
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
@@ -217,8 +206,33 @@
           }
         });
       },
+      //弹窗取消按钮
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      pointer() {
+        this.$refs.file.click();
+      },
+      getFile(e) {
+        // 1.判断选择事件是否为空
+        // 2. 获取数据
+        let _this = this; // 缓存this
+        let value = _this.$refs.file.value;
+
+        var files = e.target.files[0]; // 事件对象包含的信息 files是路径
+        _this.addForm.files = files;
+        console.log(_this.addForm.files);
+        // 2.1 防止后台拿不到数据 可能需要提交额外数据时
+        var formdatas = new FormData();
+        var fordata = formdatas.append("file", files);
+        if (!e || !window.FileReader) return; // 看支持不支持FileReader
+        let reader = new FileReader(); // 定义 fileReader对象
+        reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
+        reader.onloadend = function() {
+          _this.addForm.preloadImg = this.result; // 此时this指向的fileReader对象
+          _this.$refs.file.value = "";
+          console.log(_this.addForm.preloadImg);
+        };
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         console.log("关闭测试");
@@ -227,6 +241,10 @@
           obj[i] = "";
         }
       }
+    },
+    mounted(){
+
+      console.log(this.Dialogtitle[1])
     }
   };
 </script>

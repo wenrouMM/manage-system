@@ -1,8 +1,8 @@
 <template>
   <div id="layerbinding">
     <div style="display: flex;flex-direction: row" id="mybook">
-      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow:auto">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;padding-left:40px;line-height: 60px ">藏馆信息</div>
+      <div style="background-color:white;width:250px;display: flex;flex-direction:column;">
+        <div style="width: 210px;height:60px;background-color: #0096FF;font-size: 18px;color: white;padding-left:40px;line-height: 60px ">藏馆信息</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
@@ -124,6 +124,6 @@
 
 <style scoped>
   .inputDiv{
-    margin: 337px auto;
+    margin: 200px auto;
   }
 </style>

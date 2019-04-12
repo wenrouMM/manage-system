@@ -1,8 +1,13 @@
 <template>
     <div class="getCard">
-      <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
-        <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-        <div style="font-size: 16px;color: #878787;margin-left:10px;">办卡</div>
+      <div style="display: flex;flex-direction: row;justify-content:space-between;padding-left: 30px;padding-top: 30px;padding-right: 30px">
+        <div>
+          <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
+          <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">办卡</div>
+        </div>
+        <div>
+          <router-link :to="{path:'/readeradmin'}"  style="font-size: 15px;color: #878787;text-decoration: none">&#8678;跳转上一页</router-link>
+        </div>
       </div>
       <div style="width: 610px;height: 600px;" class="formDiv">
         <el-form ref="addForm" :model="addForm" :rules="addRules">
@@ -119,7 +124,7 @@
   .getCard{
     width: 100%;
     background-color: white;
-    height: 757px;
+    height: 852px;
   }
   .inputDiv{
     width: 200px;

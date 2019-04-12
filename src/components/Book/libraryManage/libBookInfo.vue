@@ -6,7 +6,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">图书信息列表</span>
+            <span class="titleName">馆内图书信息</span>
           </div>
           <!-- 2.0 表单填写 查询添加 内容需做调整  -->
           <section class="searchBox Posleft">
@@ -17,7 +17,7 @@
             </div>
 
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="书籍名称:">
+              <el-form-item label="书名:">
                 <el-input size="120" v-model="searchForm.bookName" placeholder="请输入书籍名称"></el-input>
               </el-form-item>
               <el-form-item label="索书号:" size="160">
@@ -25,10 +25,24 @@
               </el-form-item>
               <!-- 下拉框 -->
               <el-form-item label="类型:" size="160">
-                <el-input v-model="searchForm.author" placeholder="请输入作家"></el-input>
+                <el-select v-model="searchForm.type" placeholder="请选择类型">
+                  <el-option
+                    v-for="(option,index) of optionsType"
+                    :key="index"
+                    :label="option"
+                    :value="option"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="状态:" size="160">
-                <el-input v-model="searchForm.lib" placeholder="请输入关键字"></el-input>
+                <el-select v-model="searchForm.status" placeholder="请选择状态">
+                  <el-option
+                    v-for="(option,index) of optionsStatus"
+                    :key="index"
+                    :label="option"
+                    :value="option"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searchSubmit">搜索</el-button>
@@ -46,22 +60,22 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="src" label="书籍名称"></el-table-column>
+              <el-table-column align="center" width="120" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" width="200" prop="src" label="书籍名称"></el-table-column>
               <el-table-column
                 align="center"
                 :show-overflow-tooltip="true"
                 prop="fkRoleNames"
-                width="100"
+                width="150"
                 label="索书号"
               ></el-table-column>
-              <el-table-column align="center" prop="username" label="作者"></el-table-column>
-              <el-table-column align="center" width="100" prop="sex" label="出版社"></el-table-column>
-              <el-table-column align="center" prop="idCard" width="200" label="页码"></el-table-column>
-              <el-table-column align="center" prop="phone" label="价格"></el-table-column>
+              <el-table-column align="center" prop="username" width="150" label="作者"></el-table-column>
+              <el-table-column align="center" prop="sex" width="150" label="出版社"></el-table-column>
+              <el-table-column align="center" prop="idCard" width="150" label="页码"></el-table-column>
+              <el-table-column align="center" prop="phone" width="150" label="价格"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="条码"></el-table-column>
-              <el-table-column align="center" prop="isLock" width="80" label="类型"></el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" prop="isLock" width="150" label="类型"></el-table-column>
+              <el-table-column align="center" label="操作" width="120">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="detail" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
@@ -145,18 +159,30 @@ import {
 import moment from "moment";
 import axios from "axios";
 export default {
-  created() {},
-  mounted() {
-    this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
-  },
   data() {
     return {
+      optionsStatus: [
+        "出纳",
+        "前台",
+        "图书盘点员",
+        "采购员",
+        "仓库管理员",
+        "系统管理员"
+      ],
+      optionsType: [
+        "出纳",
+        "前台",
+        "图书盘点员",
+        "采购员",
+        "仓库管理员",
+        "系统管理员"
+      ],
       /*====== 2.0表单搜索提交数据项 ======*/
       searchForm: {
         bookName: "",
         bookIndex: "",
-        author: "",
-        lib: ""
+        type: "",
+        status: ""
       },
 
       /*====== 3.0表格设置项 ======*/
@@ -232,6 +258,12 @@ export default {
 
       return data;
     }
+  },
+  mounted() {
+    this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
+    this.axios.get(libbook).then((res)=>{
+      console.log(res)
+    })
   },
   methods: {
     /*====== 2.0 搜索与添加按钮触发 ======*/
@@ -385,7 +417,7 @@ export default {
         .catch(error => {
           console.log(error);
         });
-      
+
     },
     addApi(data) {}
   }

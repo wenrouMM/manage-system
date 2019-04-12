@@ -7,14 +7,14 @@
         <el-menu
           class="content"
           router
-          :default-openeds="['1', '3']"
+          :default-active="this.$route.path"
           background-color="#343b4a"
           text-color="#fff"
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
           <el-menu-item index="powerMode">首页</el-menu-item>
-          <el-menu-item>读者管理</el-menu-item>
+          <el-menu-item index="/readeradmin">读者管理</el-menu-item>
           <el-submenu index="readerCard">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -32,10 +32,10 @@
               <span>借阅管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="shelfBind">借阅记录</el-menu-item>
-              <el-menu-item index="stoneroomInfo">借阅历史记录</el-menu-item>
-              <el-menu-item index="shelfBind">借书</el-menu-item>
-              <el-menu-item index="shelfBind">还书</el-menu-item>
+              <el-menu-item index="/loanrecorde">借阅记录</el-menu-item>
+              <el-menu-item index="/loanhistory">借阅历史记录</el-menu-item>
+              <el-menu-item index="/borrowingbooks">借书</el-menu-item>
+              <el-menu-item index="/returnbooks">还书</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="recharge">
@@ -44,9 +44,9 @@
               <span>充值管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="shelfBind">余额充值</el-menu-item>
-              <el-menu-item index="stoneroomInfo">押金记录</el-menu-item>
-              <el-menu-item index="shelfBind">缴费记录</el-menu-item>
+              <el-menu-item index="/chargemoney">余额充值</el-menu-item>
+              <el-menu-item index="/depositrecord">押金记录</el-menu-item>
+              <el-menu-item index="/paymentrecord">缴费记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="outDate">
@@ -55,9 +55,9 @@
               <span>逾期管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="shelfBind">逾期记录</el-menu-item>
-              <el-menu-item index="stoneroomInfo">逾期设置</el-menu-item>
-              <el-menu-item index="shelfBind">逾期历史记录</el-menu-item>
+              <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
+              <el-menu-item index="/overduesetting">逾期设置</el-menu-item>
+              <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="losttrust">
@@ -66,9 +66,9 @@
               <span>失信管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="shelfBind">失信记录</el-menu-item>
-              <el-menu-item index="stoneroomInfo">失信设置</el-menu-item>
-              <el-menu-item index="shelfBind">失信历史记录</el-menu-item>
+              <el-menu-item index="/increditrecord">失信记录</el-menu-item>
+              <el-menu-item index="/increditsetting">失信设置</el-menu-item>
+              <el-menu-item index="/incredithistory">失信历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

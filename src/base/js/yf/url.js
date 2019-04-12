@@ -1,19 +1,34 @@
+//徐汇超  url='http://192.168.2.31:8099/'
 url='http://192.168.2.121:8099/';
-loginurl=url+'authmodule/index/login' ;//登陆接口
-yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
-rowurl=url+'authmodule/index/getRow' ;//登陆次数接口
-menuselecturl=url+'authmodule/menuInformation/select' ;//菜单查询接口
-menuaddurl=url+'authmodule/menuInformation/add' ;//菜单添加接口
-menudeleteurl=url+'authmodule/menuInformation/delete' ;//菜单删除接口
-menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
-menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
-menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
-menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
-userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
-userroleadd=url+'authmodule/roleInformation/add' //角色添加接口
-userrole=url+'authmodule/roleInformation/currency/select'//上级下拉框查询接口
-userroleedit=url+'authmodule/roleInformation/edit' //角色修改接口
-userroledelete=url+'authmodule/roleInformation/delete' //角色批量删除接口
-bookurlselect=url+'bookmodule/bookTbPress/select'//图书出版社初始化查询接口
-bookurlcity=url+'bookmodule/bookTbPress/selectCity ' //图书出版社城市信息
-bookurladd=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
+
+/*登陆页面接口*/
+  loginurl=url+'authmodule/index/login' ;//登陆接口
+  yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
+  rowurl=url+'authmodule/index/getRow' ;//登陆次数接口
+/*菜单页面接口*/
+  menuselecturl=url+'authmodule/menuInformation/select' ;//菜单查询接口
+  menuaddurl=url+'authmodule/menuInformation/add' ;//菜单添加接口
+  menudeleteurl=url+'authmodule/menuInformation/delete' ;//菜单删除接口
+  menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
+  menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
+  menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
+  menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
+/*角色页面接口*/
+  userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
+  userroleadd=url+'authmodule/roleInformation/add' //角色添加接口
+  userrole=url+'authmodule/roleInformation/currency/select'//上级下拉框查询接口
+  userroleedit=url+'authmodule/roleInformation/edit' //角色修改接口
+  userroledelete=url+'authmodule/roleInformation/delete' //角色批量删除接口
+/*图书出版社页面接口*/
+  bookurlselect=url+'bookmodule/bookTbPress/select'//图书出版社初始化查询接口
+  bookurlcity=url+'bookmodule/bookTbPress/selectCity ' //图书出版社城市信息
+  bookurladd=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
+/*图书类型接口*/
+  bookurltype=url+'bookmodule/bookTbType/select' //图书类型表格接口
+/*图书信息页面接口*/
+  bookurlmessage=url+'bookmodule/bookTbInfo/select' //图书信息表格接口
+  bookurltypemes=url+'bookmodule/bookTbType/selectAllBookType' //图书信息类型名称下拉接口
+  bookurlimg=url+'filemodule/currency/uploadFile/addBackage' //图书封面上传
+  bookurladd=url+'bookmodule/bookTbInfo/add' //图书添加接口
+/*馆内图书信息*/
+  libbook=url+'tibetmuseummodule/bookTbInfo/select' //馆内图书信息查询

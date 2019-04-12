@@ -32,9 +32,9 @@
               <span>藏馆管理</span>
             </template>
 
-              <el-menu-item index="libInfo">藏馆信息</el-menu-item>
-              <el-menu-item index="libBookInfo">馆内图书信息</el-menu-item>
-              <el-menu-item index="libBookType">馆内图书类型</el-menu-item>
+              <el-menu-item index="/libInfo">藏馆信息</el-menu-item>
+              <el-menu-item index="/libBookInfo">馆内图书信息</el-menu-item>
+              <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
 
           </el-submenu>
         </el-menu>
