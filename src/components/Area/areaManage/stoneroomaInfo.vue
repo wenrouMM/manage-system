@@ -13,9 +13,9 @@
             <div class="stoneModeTitle">
               <span class="stoneName mr_30">库房一</span>
               <div class="stoneOprate">
-                <span>编辑</span>
-                <span>添加区</span>
-                <span>删除</span>
+                <span @click="editstoneBtn">编辑</span>
+                <span @click="addAreaBtn">添加区</span>
+                <span @click="deleteStoneBtn">删除</span>
               </div>
             </div>
             <div class="stoneTips">
@@ -30,7 +30,7 @@
             </div>
           </div>
           <div class="addBox">
-            <div class="iconBox">
+            <div class="iconBox" @click="addStoneBtn">
               <i class="el-icon-plus"></i>
             </div>
           </div>
@@ -45,9 +45,9 @@
               <span>密集S</span>
             </div>
             <div class="areaOparate">
-              <span>编辑区</span>
-              <span @click="openBindDialog">绑定区</span>
-              <span @click="openDelete">删除区</span>
+              <span @click="editAreaBtn">编辑区</span>
+              <span @click="bindAreaBtn">绑定区</span>
+              <span @click="deleteAreaBtn">删除区</span>
             </div>
           </div>
           <div class="areaCharts">
@@ -82,11 +82,57 @@
     <!-- 弹框组 -->
     <div class="dialogBox">
       <!-- 左侧弹框组 -->
+      <!-- 库房添加/编辑 -->
+      <div class="stoneRoomDia common">
+        <el-dialog
+          :title="dialogTitle[i]"
+          :visible.sync="stoneRoomDialog"
+          width="494px"
+          @close="handleClose('changeStoneForm')"
+        >
+          <el-form ref="changeStoneForm" :rules="changeStoneRules" :model="changeStoneForm">
+            <el-form-item class="spec" label="库房名称:" :label-width="changelabel" prop="stoneName">
+              <el-input v-model="changeStoneForm.stoneName"></el-input>
+            </el-form-item>
+            <div class="row2">
+              <el-form-item prop="temperatureS" label="温度警报" :label-width="changelabel">
+                <el-input v-model="changeStoneForm.temperatureS"></el-input>
+              </el-form-item>
+              <div class="hr">-</div>
+              <el-form-item prop="temperatureE">
+                <el-input v-model="changeStoneForm.temperatureE"></el-input>
+              </el-form-item>
+            </div>
+            <div class="row2">
+              <el-form-item prop="humidityS" label="湿度警报" :label-width="changelabel">
+                <el-input v-model="changeStoneForm.humidityS"></el-input>
+              </el-form-item>
+              <div class="hr">-</div>
+              <el-form-item prop="humidityE">
+                <el-input v-model="changeStoneForm.humidityE"></el-input>
+              </el-form-item>
+            </div>
+            <div class="upload"></div>
+            <el-form-item class="dialogFooter">
+              <el-button class="buttonTrueColor" @click="submitForm('changeStoneForm','stoneRoomDialog')">确定</el-button>
+              <el-button
+                class="buttonCancelColor"
+                @click="resetForm('changeStoneForm','stoneRoomDialog')"
+              >取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
 
       <!-- 右侧弹框组 -->
       <!-- 绑定区 -->
       <div class="bind">
-        <el-dialog title="提示" :visible.sync="bindDialog" width="30%" :before-close="handleClose">
+        <el-dialog
+          :title="dialogTitle[i]"
+          :visible.sync="bindDialog"
+          width="442px"
+          @close="handleClose('bindForm')"
+        >
           <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
             <el-form-item label="绑定区" prop="value">
               <el-select v-model="bindForm.value" placeholder="请选择">
@@ -95,27 +141,93 @@
               </el-select>
             </el-form-item>
             <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitBind()">确定</el-button>
-              <el-button class="buttonCancelColor" @click="cancelBind()">取消</el-button>
+              <el-button class="buttonTrueColor" @click="submitForm('bindForm','bindDialog')">确定</el-button>
+              <el-button class="buttonCancelColor" @click="resetForm('bindForm','bindDialog')">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
       </div>
-      <!-- 删除区 -->
+      <!-- 删除区Or删除库房 -->
       <div class="forbid bind">
-        <el-dialog title="删除" :visible.sync="deleteDialog" width="500px" center>
+        <el-dialog :title="dialogTitle[i]" :visible.sync="deleteDialog" width="448px" center>
           <div class="dialogBody">是否删除?</div>
           <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
             <el-form-item class="dialogFooter">
               <el-button class="buttonTrueColor" @click="subDelete()">确定</el-button>
-              <el-button class="buttonCancelColor" @click="cancelDelete()">取消</el-button>
+              <el-button class="buttonCancelColor" @click="deleteDialog = false">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
       </div>
-      <!-- 编辑区 -->
-      <div class="editArea bind">
+      <!-- 编辑区Or添加区 -->
+      <div class="changeArea common">
+        <el-dialog
+          :title="dialogTitle[i]"
+          :visible.sync="changeDialog"
+          width="732px"
+          @close="handleClose('changeForm')"
+          center
+        >
+          <el-form ref="changeForm" :inline="true" :rules="changeRules" :model="changeForm">
+            <el-form-item label="库房名称:" :label-width="changelabel" prop="stoneName">
+              <el-input v-model="changeForm.stoneName"></el-input>
+            </el-form-item>
+            <el-form-item label="区名称:" :label-width="changelabel" prop="zoneName">
+              <el-input v-model="changeForm.zoneName"></el-input>
+            </el-form-item>
 
+            <div class="row2">
+              <el-form-item label="固定所在列:" :label-width="changelabel" prop="column">
+                <el-select v-model="changeForm.column" placeholder="请选择">
+                  <el-option label="左" value="shanghai"></el-option>
+                  <el-option label="右" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="该去区共有:" :label-width="changelabel" prop="columnNumber">
+                <el-input v-model="changeForm.columnNumber"></el-input>
+              </el-form-item>
+              <span class="text">列</span>
+            </div>
+            <div class="row2">
+              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
+                <el-input v-model="changeForm.floor"></el-input>
+              </el-form-item>
+              <span class="text2">层</span>
+              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
+                <el-input v-model="changeForm.density"></el-input>
+              </el-form-item>
+            </div>
+            <div class="row2">
+              <el-form-item label="本区区号:" :label-width="changelabel" prop="zoneName">
+                <el-input v-model="changeForm.zoneNumber"></el-input>
+              </el-form-item>
+              <el-form-item label="每列有:" :label-width="changelabel" prop="section">
+                <el-input v-model="changeForm.section"></el-input>
+              </el-form-item>
+              <span class="text">节</span>
+            </div>
+
+            <el-form-item label="运行速度:" :label-width="changelabel" prop="speed">
+              <el-input v-model="changeForm.speed"></el-input>
+            </el-form-item>
+            <el-form-item label="密集架IP:" :label-width="changelabel" prop="ip">
+              <el-input v-model="changeForm.ip"></el-input>
+            </el-form-item>
+            <el-form-item label="HTTP端口:" :label-width="changelabel" prop="httpPort">
+              <el-input v-model="changeForm.httpPort"></el-input>
+            </el-form-item>
+            <el-form-item label="通信端口:" :label-width="changelabel" prop="comPort">
+              <el-input v-model="changeForm.comPort"></el-input>
+            </el-form-item>
+            <el-form-item class="dialogFooter">
+              <el-button class="buttonTrueColor" @click="submitForm('changeForm','changeDialog')">确定</el-button>
+              <el-button
+                class="buttonCancelColor"
+                @click="resetForm('changeForm','changeDialog')"
+              >取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -228,10 +340,38 @@ export default {
       /*====== 弹框配置项 ======*/
 
       /*====== 左侧弹框配置项 ======*/
-
+      // 未完待续 验证规则更严格 比如数字的验证 以及表单的placeholder
+      /*------ 添加/编辑库房 ------*/
+      stoneRoomDialog: false,
+      changeStoneForm: {
+        stoneName: "",
+        temperatureS: "",
+        temperatureE: "",
+        humidityS: "",
+        humidityE: "",
+        files: "" // 喜闻乐见的上传图片
+      },
+      changeStoneRules: {
+        stoneName: [
+          { required: true, message: "请输入库房名称", trigger: "blur" }
+        ],
+        temperatureS: [
+          { required: true, message: "请输入温度警告", trigger: "blur" }
+        ],
+        temperatureE: [
+          { required: true, message: "请输入温度警告", trigger: "blur" }
+        ],
+        humidityS: [
+          { required: true, message: "请输入湿度警告", trigger: "blur" }
+        ],
+        humidityE: [
+          { required: true, message: "请输入湿度警告", trigger: "blur" }
+        ]
+      },
       /*====== 右侧弹框配置项 ======*/
+
       /*------ 删除区 ------*/
-      deleteDialog:false,
+      deleteDialog: false,
       /*------ 绑定区 ------*/
       bindDialog: false,
       bindForm: {
@@ -239,50 +379,147 @@ export default {
       },
       bindRules: {
         value: [{ required: true, message: "请选择区", trigger: "change" }]
-      }
+      },
+      /*------ 改变区 添加 编辑 ------*/
+      dialogTitle: [
+        "添加区",
+        "编辑区",
+        "绑定区",
+        "删除区",
+        "编辑库房",
+        "添加库房",
+        "删除库房"
+      ],
+      i: 0, // 控制区弹框的添加编辑绑定 删除标题和调用API
+      changeDialog: false,
+      changeForm: {
+        stoneName: "",
+        zoneName: "",
+        column: "",
+        columnNumber: "", // 数据格式
+        floor: "",
+        density: "",
+        zoneNumber: "",
+        section: "",
+        speed: "",
+        ip: "",
+        httpPort: "",
+        comPort: ""
+      },
+      changeRules: {
+        stoneName: [
+          { required: true, message: "请输入库房名称", trigger: "blur" }
+        ],
+        zoneName: [
+          { required: true, message: "请输入区名称", trigger: "blur" }
+        ],
+        column: [
+          { required: true, message: "请输入固定所在列", trigger: "change" }
+        ],
+        columnNumber: [
+          { required: true, message: "请输入去区列数", trigger: "blur" }
+        ],
+        floor: [{ required: true, message: "请输入层数", trigger: "blur" }],
+        density: [
+          { required: true, message: "请输入密集架宽度", trigger: "blur" }
+        ],
+        zoneNumber: [
+          { required: true, message: "请输入本区区号", trigger: "blur" }
+        ],
+        section: [
+          { required: true, message: "请输入每列节数", trigger: "blur" }
+        ],
+        speed: [{ required: true, message: "请输入运行速度", trigger: "blur" }],
+        ip: [{ required: true, message: "请输入密集架Ip", trigger: "blur" }],
+        httpPort: [
+          { required: true, message: "请输入http端口", trigger: "blur" }
+        ],
+        comPort: [
+          { required: true, message: "请输入通信端口", trigger: "blur" }
+        ]
+      },
+      changelabel: "100px",
+      changeOption: [] // 这里下拉肯定是个变量
     };
   },
   computed: {
     dashOffset() {
       return (1 - this.percent) * this.dashArray;
-    }
+    },
+    bindTimeForm() {},
+    changeTimeForm() {}
   },
   methods: {
     /*====== 弹框组  ======*/
-    /*------ 左侧弹框 ------*/
 
-    /*------ 右侧弹框 ------*/
-    /*------ 打开的按钮 ------*/
-    openBindDialog() {
+    /*------ 启动按钮 ------*/
+    editstoneBtn() { // 其实可以写成一个switch
+      this.i = 4;
+      this.stoneRoomDialog = true;
+    },
+    addStoneBtn() {
+      this.i = 5;
+      this.stoneRoomDialog = true;
+    },
+    deleteStoneBtn() {
+      this.i = 6;
+      this.deleteDialog = true;
+    },
+
+    addAreaBtn() {
+      this.i = 0;
+      this.changeDialog = true;
+    },
+    editAreaBtn() {
+      this.i = 1;
+      this.changeDialog = true;
+    },
+    bindAreaBtn() {
+      this.i = 2;
       this.bindDialog = true;
     },
-    submitBind(){
-      this.bindDialog = false;
+    deleteAreaBtn() {
+      this.i = 3;
+      this.deleteDialog = true;
     },
-    cancelBind() {
-      this.bindDialog = false;
-    },
+    /*------ 弹框按钮 ------*/
     /*------ 删除的按钮 ------*/
-    openDelete() {
-      this.deleteDialog = true
+    // 未按待续 图片上传按钮功能
+    Bancacncel() {
+      this.deleteDialog = false;
     },
     subDelete() {
-
+      let flag = this.i; // 关闭弹框
+      switch (flag) {
+        case 3:
+          console.log("删除区Api");
+          break;
+        case 6:
+          console.log("删除库房API");
+      }
     },
-    cancelDelete() {
-
-    },
-
-    handleClose() { // 关闭和取消 确定结束后都要清除数据
+    submitForm(formName,dialogName) {
+      // 提交后也要清空 表单验证要开起来
+      console.log("提交了哦");
       
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          
+          this[dialogName] = false;
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+
+    },
+    resetForm(formName, dialogName) {
+      this[dialogName] = false;
+    },
+    handleClose(formName) {
+      // 关闭和取消 确定结束后都要清除数据
       console.log("清空表单的哇");
-      this.bindDialog = false;
-    },
-    submitForm() {
-      
-    },
-    resetForm() {
-      
+      this.$refs[formName].resetFields();
     }
   },
   components: {
@@ -468,21 +705,25 @@ export default {
 </style>
 <style>
 /*====== 弹框 ======*/
-.bind {
+.bind,
+.common {
 }
 .bind .el-dialog {
-  width: 448px !important;
 }
-.bind .el-form {
+.bind .el-form,
+.common .el-form {
   width: 100%;
+  text-align: center;
 }
-.bind .dialogFooter {
+.bind .dialogFooter,
+.common .dialogFooter {
   width: 100%;
   padding-top: 20px;
   text-align: center;
   font-size: 0;
 }
-.bind .dialogFooter .el-button {
+.bind .dialogFooter .el-button,
+.common .dialogFooter .el-button {
   height: 46px;
   width: 150px;
   border-radius: 10px;
@@ -494,19 +735,65 @@ export default {
   box-sizing: border-box;
   text-align: center;
 }
-.bind .dialogFooter .el-button:first-child {
+.bind .dialogFooter .el-button:first-child,
+.common .dialogFooter .el-button:first-child {
   margin-right: 20px;
 }
-.bind .el-button.buttonTrueColor {
+.bind .el-button.buttonTrueColor,
+.common .el-button.buttonTrueColor {
   background-color: #0096ff;
 }
-.bind .el-button.buttonCancelColor {
+.bind .el-button.buttonCancelColor,
+.common .el-button.buttonCancelColor {
   background-color: #d5d5d5;
 }
 .bind .el-select {
   width: 300px;
 }
-.bind .el-dialog__body {
+.bind .el-dialog__body,
+.common .el-dialog__body {
   border-radius: 0 0 30px 30px;
+}
+/*自定义样式*/
+.changeArea .el-select {
+  width: 202px;
+}
+.changeArea .el-form--inline .el-form-item {
+  margin-right: 30px;
+}
+.row2 {
+  position: relative;
+}
+.stoneRoomDia .el-form {
+  text-align: inherit;
+}
+.stoneRoomDia .row2 {
+  display: flex;
+}
+.row2 .text {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  font-size: 14px;
+  color: #878787;
+}
+.row2 .text2 {
+  position: absolute;
+  top: 13px;
+  left: 318px;
+  font-size: 14px;
+  color: #878787;
+}
+
+.stoneRoomDia .spec input.el-input__inner {
+  width: 300px;
+}
+.stoneRoomDia .row2 input.el-input__inner {
+  width: 130px;
+}
+.hr {
+  font-size: 16px;
+  margin: 0 15px;
+  line-height: 40px;
 }
 </style>
