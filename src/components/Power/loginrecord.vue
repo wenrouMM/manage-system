@@ -169,7 +169,8 @@
         //条件查询
         this.login_recod(this.searchTimeForm) // 查询后 把新数据保存到分页表单中
         this.currentPage = 1
-      },
+      }
+      ,
       login_recod (value) {
         //获取登录记录
         console.log(value)
