@@ -64,9 +64,11 @@ router.beforeEach((to, from, next) => {
   if(token == null){
     if(to.path === '/login'){
       next()
+    } else{
+      next('login') // 沒有出口 但是login需要斜杠也不影響結果
+      Message.error("请先登录")
     }
-    next('login') // 沒有出口 但是login需要斜杠也不影響結果
-    Message.error("请先登录")
+    
   } else {
     
     if(store.state.token == null){

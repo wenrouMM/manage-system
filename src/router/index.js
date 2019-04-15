@@ -75,10 +75,7 @@ export default new Router({
           name: 'home',
           component: Home
         },
-        {
-          path: 'cirle',
-          component: Cirle
-        },
+        /*
         {
 
           path: 'useradd',
@@ -106,13 +103,9 @@ export default new Router({
           component: LibBookInfo
         },
         {
-          path: '/libBookType',
-          component: libBookType
-        },
-        {
           path: '/libInfo',
           component: LibInfo
-        }
+        }*/
       ]
     },
     {
@@ -191,15 +184,6 @@ export default new Router({
               component: LibBookInfo
             },
             {
-<<<<<<< Updated upstream
-              path:'/libBookType',
-              component:LibBookType
-=======
-              path: '/libBookType',
-              component: libBookType
->>>>>>> Stashed changes
-            },
-            {
               path: '/libInfo',
               component: LibInfo
             }
@@ -213,14 +197,10 @@ export default new Router({
               component: ReaderAdmin,
             },
             {
-<<<<<<< Updated upstream
+
               path:'/getcard',
               name:"GetCard",
               component:GetCard,
-=======
-              path: '/getcard',
-              component: GetCard,
->>>>>>> Stashed changes
             },
             {
               path: '/readercardmanagement',
@@ -231,7 +211,7 @@ export default new Router({
               component: ReaderCardType,
             },
             {
-<<<<<<< Updated upstream
+
               path:'/readercardgrade',
               component:ReaderCardGrade,
             },
@@ -299,14 +279,7 @@ export default new Router({
               path:'/incredithistory',
               component:IncreditHistory
             },
-            {
-              path:'/increditsetting',
-              component:IncreditSetting
-=======
-              path: '/readercardgrade',
-              component: ReaderCardGrade,
->>>>>>> Stashed changes
-            }
+            
           ]
         }
       ]

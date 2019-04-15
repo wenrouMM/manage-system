@@ -1,7 +1,9 @@
 // 用来管理接口的域名相关
 // var url = 'http://192.168.2.31:8099/';
-var url = 'http://192.168.2.31:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url ='http://192.168.2.121:8088/'
 var userManage = url + 'authmodule/managerInformation/'
+export const loginInter= url + 'authmodule/index/login'
 export const headimg = url + 'authmodule/menuInformation/currency/getImg'
 export const headUpload = url + 'filemodule/currency/uploadFile/addHead'
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole'

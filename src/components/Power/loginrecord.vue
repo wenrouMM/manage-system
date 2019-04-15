@@ -48,7 +48,7 @@
             :data="tableData"
             :row-style="{height:'60px'}"
           >
-            <el-table-column align="center" prop="id" label="序号"></el-table-column>
+            <el-table-column align="center" prop="index" label="序号"></el-table-column>
             <el-table-column align="center" prop="loginMessage" label="用户名称"></el-table-column>
             <el-table-column align="center" prop="loginIp" label="登录IP"></el-table-column>
             <el-table-column align="center" prop="loginAccount" label="登录账户"></el-table-column>

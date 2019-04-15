@@ -7,10 +7,12 @@
           <!-- 1.0 标题 -->
           <div class="sonTitle">
             <span class="titleName">用户管理列表</span>
-
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
+            <div>
+              
+            </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
                 <el-input size="120" v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
@@ -36,8 +38,7 @@
                 <el-date-picker
                   v-model="searchForm.date"
                   type="daterange"
-                  align="right"
-                 
+                  align="right" 
                   range-separator="至"
                   :picker-options="pickerOptions"
                   start-placeholder="开始日期"
@@ -69,7 +70,9 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
+              
               <el-table-column align="center" type="selection" width="100"></el-table-column>
+              <el-table-column align="center" type="index" width="100" label="序号"></el-table-column>
               <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
               <el-table-column align="center" width="100" prop="src" label="头像">
                 <template slot-scope="scope">
@@ -438,8 +441,10 @@ export default {
       if (this.deleteArr.length) {
         this.i = 1;
         this.centerDialogVisible = true;
+      }else{
+        this.$message.error("请先选择删除对象");
       }
-      this.$message.error("请先选择删除对象");
+      
       
     },
     deleteApi(arr) {
@@ -754,8 +759,7 @@ export default {
   display: inline-block;
   margin-bottom: 33px;
 }
- {
-}
+
 .box-card {
   width: 100%;
 }
@@ -978,9 +982,9 @@ export default {
 遇到的bug
 0.0 bug其一 nav选中状态的处理 :default-active="this.$route.path" 使得当前路由处于选中状态
 4/15
-1.日期按钮消除bug 完成 moment插件在传递空字符串的时候会返回一个非法字符 传递null的时候会返回当前日期
-2.下拉框清除当前按钮或者选中全部 完成 添加 clearable属性即可
-3.手机号码 身份证号码 的正则替换 字符串裁剪完成 正则表达式匹配完成 待定
+1.日期按钮消除bug 完成1 moment插件在传递空字符串的时候会返回一个非法字符 传递null的时候会返回当前日期
+2.下拉框清除当前按钮或者选中全部 完成1 添加 clearable属性即可
+
 4.序号累加 完成 为何elementUI的未生效 若生效则使用 未生效则更改index的值
 5.按钮节点限制点击 完成 :loading="true"添加限制即可
 6.默认图片的替换 完成  table表格显示图像 用户头像自定义
@@ -990,6 +994,9 @@ export default {
 10.text文本框禁止拉伸
 11.echarts数字显示
 12.日期显示统一规格
+13.角色管理 是否默认 删除 选项删除 默认全传否、
+14.用户管理 身份证 性别 姓名禁用 字段修改 3.手机号码 身份证号码 的正则替换 不写 字符串裁剪完成 正则表达式匹配完成 待定
+ 
 */
 </style>
 

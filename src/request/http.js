@@ -26,12 +26,6 @@ axios.interceptors.request.use(
 )
 
 axios.interceptors.response.use(
-
-  response => { // 回复信息配置 code！=200
-
-    if(response.data.code == 3001 || response.data.code ==3003){ // 没有登录 token失效
-
-
   response => { // 回复信息配置 code！=200 
     // 还要其他的方法获得权限吗 这样是否有一些缺陷
     if(response.data.code == 3001 || response.data.code ==3003){ // 没有登录 token失效
@@ -45,14 +39,13 @@ axios.interceptors.response.use(
 
     }
     if(response.code == 3002){ // 权限不足
-      // 进入404页面Or权限不够页面
-      window.vm.$router.push('/404')
+      
+      window.vm.$router.push('/404') // 进入404页面Or权限不够页面
     }
 
     return response
   },
   error => {
-
     // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
     return Promise.reject(error)
   },
