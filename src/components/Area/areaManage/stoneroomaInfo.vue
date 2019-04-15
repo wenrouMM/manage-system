@@ -493,9 +493,11 @@ export default {
       switch (flag) {
         case 3:
           console.log("删除区Api");
+          this.deleteDialog = false;
           break;
         case 6:
           console.log("删除库房API");
+          this.deleteDialog = false;
       }
     },
     submitForm(formName,dialogName) {

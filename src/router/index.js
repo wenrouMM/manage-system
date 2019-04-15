@@ -15,7 +15,7 @@ import Test from '../common/test/test.vue'
 import Test2 from '../common/test/test2.vue'
 import TestBook from '../common/test/testBook.vue'
 import BookType from '../components/Book/BookManage/bookType.vue'
-import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
+import BookInfo from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
 import LibInfo from '../components/Book/libraryManage/libInfo.vue'
@@ -57,141 +57,181 @@ Vue.use(Router)
 
 export default new Router({
   //mode:history,
-  routes: [
-    {
+  routes: [{
       path: '/',
       redirect: '/home'
     },
     {
-      path:'/login',
-      component:Login
+      path: '/login',
+      component: Login
     },
 
     {
-      path:'/home',
-      name:'index',
+      path: '/home',
+      name: 'index',
       component: Index,
-      children:[
-        {
-          path:'home',
+      children: [{
+          path: '/home',
           name: 'home',
           component: Home
         },
         {
+          path: 'cirle',
+          component: Cirle
+        },
+        {
+
           path: 'useradd',
           name: 'useradd',
           component: UserAdd
         },
+        {
+          path: '/bookType',
+          component: BookType,
+        },
+        {
+          path: '/bookInfo',
+          component: BookInfo
+        },
+        {
+          path: '/bookInfo/:id',
+          component: Detail
+        },
+        {
+          path: '/bookpublishhouse',
+          component: BookPublishHouse
+        },
+        {
+          path: '/libBookInfo',
+          component: LibBookInfo
+        },
+        {
+          path: '/libBookType',
+          component: libBookType
+        },
+        {
+          path: '/libInfo',
+          component: LibInfo
+        }
       ]
     },
     {
-      path:'*',
-      component:Not
+      path: '*',
+      component: Not
     },
     {
-      path:'/test', // 一级路由 管理横条
-      component:Test,
-      children:[
-        {
-          path:'/powerMode',// 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
+      path: '/test', // 一级路由 管理横条
+      component: Test,
+      children: [{
+          path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
           component: Test2,
-          children:[
-            {
-              path:'/powerMode', // 三级路由 真正的内容
-              component:Home,
+          children: [{
+              path: '/powerMode', // 三级路由 真正的内容
+              component: Home,
             },
             {
-              path:'/userManage',
-              component:UserManage,
+              path: '/userManage',
+              component: UserManage,
+              meta:{
+                menuName:'权限管理'
+              }
             },
             {
-              path:'/userRole',
-              component:UserRole,
+              path: '/userRole',
+              component: UserRole,
             },
             {
-              path:'/powerControl',
-              component:PowerControl,
+              path: '/powerControl',
+              component: PowerControl,
             },
             {
-              path:'/menu',
-              component:Menu,
+              path: '/menu',
+              component: Menu,
             },
             {
-              path:'/loginRecord',
-              component:LoginRecord
+              path: '/loginRecord',
+              component: LoginRecord
             }
           ]
         },
         {
-          path:'/areaMode',
-          component:TestArea,
-          children:[
-            {
-              path:'/stoneroomInfo',
-              component:StoneRoomInfo
+          path: '/areaMode',
+          component: TestArea,
+          children: [{
+              path: '/stoneroomInfo',
+              component: StoneRoomInfo
             },
             {
-              path:'/shelfBind',
-              component:ShelfBind
+              path: '/shelfBind',
+              component: ShelfBind
             }
           ]
         },
         {
-          path:'/bookMode',
-          component:TestBook,
-          children:[
-            {
-              path:'/bookType',
-              component:BookType,
+          path: '/bookMode',
+          component: TestBook,
+          children: [{
+              path: '/bookType',
+              component: BookType,
             },
             {
-              path:'/bookInfo',
-              component:BookInfo
+              path: '/bookInfo',
+              component: BookInfo
             },
             {
               path: '/bookInfo/:id',
-              component:Detail
+              component: Detail
             },
             {
-              path:'/bookpublishhouse',
-              component:BookPublishHouse
+              path: '/bookpublishhouse',
+              component: BookPublishHouse
             },
             {
-              path:'/libBookInfo',
-              component:LibBookInfo
+              path: '/libBookInfo',
+              component: LibBookInfo
             },
             {
+<<<<<<< Updated upstream
               path:'/libBookType',
               component:LibBookType
+=======
+              path: '/libBookType',
+              component: libBookType
+>>>>>>> Stashed changes
             },
             {
-              path:'/libInfo',
-              component:LibInfo
+              path: '/libInfo',
+              component: LibInfo
             }
           ]
         },
         {
-          path:'/readerMode',
-          component:TestReader,
-          children:[
-            {
-              path:'/readeradmin',
-              component:ReaderAdmin,
+          path: '/readerMode',
+          component: TestReader,
+          children: [{
+              path: '/readeradmin',
+              component: ReaderAdmin,
             },
             {
+<<<<<<< Updated upstream
               path:'/getcard',
               name:"GetCard",
               component:GetCard,
+=======
+              path: '/getcard',
+              component: GetCard,
+>>>>>>> Stashed changes
             },
             {
-              path:'/readercardmanagement',
-              component:ReaderCardManagement,
+              path: '/readercardmanagement',
+              component: ReaderCardManagement,
             },
             {
-              path:'/readercardtype',
-              component:ReaderCardType,
+              path: '/readercardtype',
+              component: ReaderCardType,
             },
             {
+<<<<<<< Updated upstream
               path:'/readercardgrade',
               component:ReaderCardGrade,
             },
@@ -262,6 +302,10 @@ export default new Router({
             {
               path:'/increditsetting',
               component:IncreditSetting
+=======
+              path: '/readercardgrade',
+              component: ReaderCardGrade,
+>>>>>>> Stashed changes
             }
           ]
         }
