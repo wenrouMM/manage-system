@@ -10,16 +10,18 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
-            <div>
-              
-            </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
                 <el-input size="120" v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
               </el-form-item>
               <el-form-item label="角色名称:" size="160">
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
-                <el-select clearable v-model="searchForm.userType" value-key="roleCode" placeholder="请选择角色">
+                <el-select
+                  clearable
+                  v-model="searchForm.userType"
+                  value-key="roleCode"
+                  placeholder="请选择角色"
+                >
                   <el-option
                     v-for="(option) of optionsData"
                     :key="option.roleCode"
@@ -38,7 +40,7 @@
                 <el-date-picker
                   v-model="searchForm.date"
                   type="daterange"
-                  align="right" 
+                  align="right"
                   range-separator="至"
                   :picker-options="pickerOptions"
                   start-placeholder="开始日期"
@@ -46,7 +48,12 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button size="15" type="primary" @click="searchSubmit">查询</el-button>
+                <el-button
+                  :loading="searchLoading"
+                  size="15"
+                  type="primary"
+                  @click="searchSubmit"
+                >查询</el-button>
               </el-form-item>
             </el-form>
           </section>
@@ -70,17 +77,28 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              
               <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" type="index" width="100" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="src" label="头像">
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+                <template scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column align="center" width="100" prop="headerAddress" label="头像">
                 <template slot-scope="scope">
-                  <span class="imgDefault">
+                  <span class="imgDefault" width="30px" height="30px;" style="border-radius: 50%">
                     <img
-                      v-if="scope.row.src"
                       class="head_pic"
-                      :src="scope.row.src"
+                      v-if="!scope.row.headerAddress"
+                      src="../../base/img/timg.jpg"
+                      width="30px"
+                      height="30px"
+                      style="border-radius: 50%"
+                    >
+                    <img
+                      class="head_pic"
+                      v-if="scope.row.headerAddress"
+                      :src="scope.row.headerAddress"
                       width="30px"
                       height="30px;"
                       style="border-radius: 50%"
@@ -101,8 +119,8 @@
                   <span>{{scope.row.sex ===1?'男':'女'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="idCard" width="200" label="身份证号"></el-table-column>
-              <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
+              <el-table-column align="center" prop="idShow" width="200" label="身份证号"></el-table-column>
+              <el-table-column align="center" prop="phoneShow" label="手机号码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="isLock" width="80" label="状态">
                 <template slot-scope="scope">
@@ -168,7 +186,6 @@
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
-            
             :model="addForm"
             :rules="addRules"
           >
@@ -179,10 +196,11 @@
                   <img
                     class="defaultimage"
                     style="width:100px; height:100px; border-radius:50%;"
-                    alt="user image"
-                    :src="addForm.headerAddress"
+                    alt="怎么回事小老弟"
+                    :src="addForm.headerAddress==''?'/static/img/timg.38262dc.jpg':addForm.headerAddress"
                     v-if="!addForm.headIcon"
                   >
+
                   <img
                     style="width:100px; height:100px ;border-radius:50%;"
                     v-if="addForm.headIcon"
@@ -208,10 +226,10 @@
             </el-form-item>
             <!-- 表单域 -->
             <el-form-item label="姓　　名" prop="username" :label-width="formLabelWidth">
-              <el-input v-model="addForm.username" autocomplete="off"></el-input>
+              <el-input :disabled="addForm.username && i==2?true:false" v-model="addForm.username" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item class="select" label="性　　别" prop="sex">
-              <el-radio-group v-model="addForm.sex">
+              <el-radio-group :disabled="addForm.sex && i==2?true:false" v-model="addForm.sex">
                 <el-radio label="1">男</el-radio>
                 <el-radio label="0">女</el-radio>
               </el-radio-group>
@@ -232,8 +250,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="身份证号" prop="idCard" :label-width="formLabelWidth">
-              <el-input v-model="addForm.idCard" autocomplete="off"></el-input>
+            <el-form-item  label="身份证号" prop="idCard" :label-width="formLabelWidth">
+              <el-input :disabled="addForm.idCard && i==2?true:false" v-model="addForm.idCard" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="注册邮箱" prop="email" :label-width="formLabelWidth">
               <el-input v-model="addForm.email" autocomplete="off"></el-input>
@@ -252,7 +270,11 @@
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
+              <el-button
+                :loading="submitLoading"
+                class="buttonTrueColor"
+                @click="submitForm('addForm')"
+              >确定</el-button>
               <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
             </el-form-item>
           </el-form>
@@ -273,9 +295,9 @@ import moment from "moment";
 import axios from "../../request/http.js";
 export default {
   created() {
-    let route = this.$route.path
-    console.log(this.$route.path)
-    console.log(this.$route.meta.menuName)
+    let route = this.$route.path;
+    console.log(this.$route.path);
+    console.log(this.$route.meta.menuName);
     this.roleType(); // 获取角色类型
   },
   mounted() {
@@ -326,7 +348,7 @@ export default {
       /*====== 2.0表单提交数据项 ======*/
       pickerOptions: {
         disabledDate(time) {
-         return time.getTime() > Date.now() 
+          return time.getTime() > Date.now();
         }
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
@@ -346,10 +368,12 @@ export default {
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
       ],
       /*====== 5.0 分页相关 搜索相关设置项 ======*/
+      searchLoading: false,
+
       loading: true,
       optionsData: [],
       total: 0,
-      pageSize: 7,
+      pageSize: 10,
       currentPage: 1,
       searchForm: {
         // 搜索需要的表单数据
@@ -361,8 +385,10 @@ export default {
       },
       paginationForm: {},
       /*===== 6.0弹框初始化数据 ======*/
+      submitLoading: false,
       editLoading: false,
-      banDeleteLoading: false
+      banDeleteLoading: false,
+      LabelWidth: "100px"
     };
   },
   computed: {
@@ -381,7 +407,7 @@ export default {
         beginTime: null,
         endTime: null
       };
-      if (date != null && date!= '') {
+      if (date != null && date != "") {
         searchForm.beginTime = moment(this.searchForm.date[0]).format(
           "YYYY-MM-DD"
         ); //开始时间
@@ -402,7 +428,7 @@ export default {
         address: this.addForm.address,
         phone: this.addForm.phone,
         sex: sexNumber,
-        email:this.addForm.email,
+        email: this.addForm.email,
         headerAddress: this.addForm.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
         isLock: lock
@@ -411,6 +437,10 @@ export default {
         data.id = this.addForm.id;
       }
       return data;
+    },
+    banForm(){
+      let ban = null
+      
     }
   },
   methods: {
@@ -436,16 +466,13 @@ export default {
     },
     batchDelete() {
       // 批量删除按钮
-     
-      
+
       if (this.deleteArr.length) {
         this.i = 1;
         this.centerDialogVisible = true;
-      }else{
+      } else {
         this.$message.error("请先选择删除对象");
       }
-      
-      
     },
     deleteApi(arr) {
       // 批量删除API调用 deleteArr 确认按钮就是执行相应的API
@@ -473,23 +500,16 @@ export default {
     },
     /*====== 4.0表格操作相关 ======*/
     handleBan(index, row) {
-      this.i = 0;
-        this.banArr.id = row.id;
-        console.log(index, row, this.banArr); // 当前选中表格的索引和对
-        this.centerDialogVisible = true;
       // 禁用按钮 按钮的作用就是获取一切初始化信息
-      /*
+
       if (row.isLock == 1) {
         this.$message.error("该用户已被禁用");
-        
-      } else{
+      } else {
         this.i = 0;
         this.banArr.id = row.id;
         console.log(index, row, this.banArr); // 当前选中表格的索引和对
         this.centerDialogVisible = true;
       }
-      */
-      
     },
     banApi(arr) {
       this.banDeleteLoading = true;
@@ -498,9 +518,9 @@ export default {
         console.log(res.data);
         if (res.data.state === true) {
           console.log(res.data);
-          
+
           this.banDeleteLoading = false;
-          this.centerDialogVisible = false
+          this.centerDialogVisible = false;
           this.SearchApi(this.paginationForm); // 禁用成功就重新加载一次数据
           this.$message.success("禁用成功");
         } else {
@@ -517,7 +537,7 @@ export default {
       this.addForm.idCard = row.idCard;
       this.addForm.address = row.address;
       this.addForm.phone = row.phone;
-
+      // this.addForm.fkRoleNames = row.fkRoleNames
       this.addForm.sex = row.sex.toString(); // 要转化为字符串格式才行
       this.addForm.headerAddress = row.headerAddress;
       this.addForm.isLock = row.isLock.toString();
@@ -533,7 +553,7 @@ export default {
         // 没有数据怎么办
         if (res.data.state === true) {
           let data = res.data.row;
-          let optionsData = [{roleCode:'',roleName:'全部角色'}];
+          let optionsData = [{ roleCode: "", roleName: "全部角色" }];
           for (let item of data) {
             let obj = {};
             obj.roleCode = item.roleCode;
@@ -547,6 +567,7 @@ export default {
     searchSubmit() {
       // 条件查询 执行的按钮应该个函数节流
       console.log("此时传给后台的搜索数据", this.searchTimeForm);
+      this.searchLoading = true;
       this.SearchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1; // 并把结果返回给第一页
     },
@@ -562,15 +583,12 @@ export default {
           console.log("当前获取的数据", res);
           if (res.data.state === true) {
             let nomol = res.data.row;
-            let i = (this.currentPage-1)*7 + 1;
             for (let item of nomol) {
-             // let idValue = item.id
-             // let phoneValue = item.phone
-              item.src = headimg + "?id=" + item.id;
-              item.index = i;
-              //item.idFade = idValue.substr(0,3) + '****' + idValue.substr(-1,-3)
-              //item.phoneValue = phoneValue.substr(0,5) + '********' + phoneValue.substr(-1,-3)
-              i++;
+               let id = item.idCard
+               let tel = item.phone
+               item.idShow = id.substr(0,5) + "********" + id.substr(13)
+               item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
+              
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -578,8 +596,9 @@ export default {
             console.log("过滤后的数据", nomol);
             console.log("保存当前查询", this.paginationForm);
             this.tableLoading = false;
+            this.searchLoading = false; // 按钮放行
           } else {
-            console.log(res)
+            console.log(res);
             this.$message.error(res.data.msg);
             this.tableLoading = false;
           }
@@ -632,7 +651,7 @@ export default {
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.editLoading = true; // 进入执行状态 锁定表单
+          this.submitLoading = true; // 进入执行状态 锁定表单
           console.log("堵塞的话", this.editLoading);
           if (files != null) {
             // 检测是否有文件 有就意味着被更改了
@@ -675,11 +694,11 @@ export default {
             if (res.data.state) {
               this.SearchApi(this.searchTimeForm);
               this.$message.success("执行成功"); // 提示成功信息
-              this.editLoading = false;
+              this.submitLoading = false;
               this.dialogFormVisible = false; // 关闭弹框
             } else {
               this.$message.error(res.data.msg); // 提示失败信息
-              this.editLoading = false;
+              this.submitLoading = false;
             }
           });
 
@@ -722,7 +741,7 @@ export default {
 
       console.log("关闭测试");
       let obj = this.addForm;
-      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态
+      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
       for (var i in obj) {
         obj[i] = "";
       }
@@ -801,7 +820,9 @@ export default {
   width: 160px;
 }
 .el-button--15 {
-  padding: 12px 29px;
+  width: 90px;
+  display: flex;
+  justify-content: center;
 }
 /* 按钮 */
 .buttonBox {
@@ -859,6 +880,7 @@ export default {
   display: inline-block;
   border-radius: 50%;
   background-color: #333;
+  background-image: url("../../base/img/timg.jpg");
 }
 .operator {
 }
@@ -970,6 +992,7 @@ export default {
 6.vueRouter
 7.总结工作
 4/7
+/*
 行动
 1.页面分配  思考中 暂时完成
 2.禁用等弹框尝试封装
@@ -985,18 +1008,18 @@ export default {
 1.日期按钮消除bug 完成1 moment插件在传递空字符串的时候会返回一个非法字符 传递null的时候会返回当前日期
 2.下拉框清除当前按钮或者选中全部 完成1 添加 clearable属性即可
 
-4.序号累加 完成 为何elementUI的未生效 若生效则使用 未生效则更改index的值
+4.序号累加 完成1 为何elementUI的未生效 若生效则使用 未生效则更改index的值
 5.按钮节点限制点击 完成 :loading="true"添加限制即可
-6.默认图片的替换 完成  table表格显示图像 用户头像自定义
-7.邮箱绑定 addForm的获取和传递
-8.分页器确定按钮的增加 完成 10条数据 el-button或者自己手动添加 根据current 根据个鬼= = 按钮没任何功能 就是模糊特效
-9.三级联动
+6.默认图片的替换 完成  table表格显示图像 
+7.邮箱绑定1 addForm的获取和传递
+8.分页器确定按钮的增加1 完成 10条数据 el-button或者自己手动添加 根据current 根据个鬼= = 按钮没任何功能 就是模糊特效
+9.三级联动 2
 10.text文本框禁止拉伸
 11.echarts数字显示
 12.日期显示统一规格
 13.角色管理 是否默认 删除 选项删除 默认全传否、
 14.用户管理 身份证 性别 姓名禁用 字段修改 3.手机号码 身份证号码 的正则替换 不写 字符串裁剪完成 正则表达式匹配完成 待定
- 
+ 用户头像自定义 有点问题
 */
 </style>
 
