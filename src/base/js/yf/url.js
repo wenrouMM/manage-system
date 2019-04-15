@@ -1,5 +1,5 @@
-//徐汇超  url='http://192.168.2.31:8099/'
-url='http://192.168.2.121:8099/';
+//  url='http://192.168.2.31:8088/'
+url='http://192.168.2.121:8088/';
 
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
@@ -16,13 +16,15 @@ url='http://192.168.2.121:8099/';
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
   userroleadd=url+'authmodule/roleInformation/add' //角色添加接口
-  userrole=url+'authmodule/roleInformation/currency/select'//上级下拉框查询接口
+  userrole=url+'authmodule/roleInformation/currency/addSelectRole'//上级下拉框查询接口
   userroleedit=url+'authmodule/roleInformation/edit' //角色修改接口
   userroledelete=url+'authmodule/roleInformation/delete' //角色批量删除接口
+
+
 /*图书出版社页面接口*/
   bookurlselect=url+'bookmodule/bookTbPress/select'//图书出版社初始化查询接口
   bookurlcity=url+'bookmodule/bookTbPress/selectCity ' //图书出版社城市信息
-  bookurladd=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
+  bookpublishhouse=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
 /*图书类型接口*/
   bookurltype=url+'bookmodule/bookTbType/select' //图书类型表格接口
 /*图书信息页面接口*/
@@ -32,3 +34,6 @@ url='http://192.168.2.121:8099/';
   bookurladd=url+'bookmodule/bookTbInfo/add' //图书添加接口
 /*馆内图书信息*/
   libbook=url+'tibetmuseummodule/bookTbInfo/select' //馆内图书信息查询
+  libbookadd=url+'tibetmuseummodule/bookTbInfo/add' //馆内图书信息添加
+  libbookedit=url+'tibetmuseummodule/bookTbInfo/edit' //馆内图书信息修改下架状态
+  libbooktype=url+'tibetmuseummodule/bookTbType/select' //馆内图书类型查询

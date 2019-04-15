@@ -18,7 +18,7 @@
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
                 <el-select v-model="searchForm.userType" value-key="roleCode" placeholder="请选择角色">
                   <el-option
-                    v-for="(option) of optionsData"
+                    v-for="(option) of selectData"
                     :key="option.roleCode"
                     :label="option.roleName"
                     :value="option"
@@ -36,7 +36,7 @@
                   v-model="searchForm.date"
                   type="daterange"
                   align="right"
-                 
+
                   range-separator="至"
                   :picker-options="pickerOptions"
                   start-placeholder="开始日期"
@@ -218,7 +218,7 @@
                 value-key="roleCode"
               >
                 <el-option
-                  v-for="(option) of optionsData"
+                  v-for="(option) of selectData"
                   :key="option.roleCode"
                   :label="option.roleName"
                   :value="option"
@@ -260,13 +260,15 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  selectRoleType
 } from "../../request/api/base.js";
 import moment from "moment";
 import axios from "../../request/http.js";
 export default {
   created() {
     this.roleType(); // 获取角色类型
+    this.selectRoleType() // 获取添加角色类型
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
@@ -316,7 +318,7 @@ export default {
       /*====== 2.0表单提交数据项 ======*/
       pickerOptions: {
         disabledDate(time) {
-         return time.getTime() > Date.now() 
+         return time.getTime() > Date.now()
         }
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
@@ -338,6 +340,7 @@ export default {
       /*====== 5.0 分页相关 搜索相关设置项 ======*/
       loading: true,
       optionsData: [],
+      selectData:[],
       total: 0,
       pageSize: 7,
       currentPage: 1,
@@ -363,7 +366,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1,
         name: this.searchForm.userName,
-        roleCode: this.searchForm.userType.roleCode, // 只是给了一个code
+        fkRoleCode: this.searchForm.userType.roleCode, // 只是给了一个code
         loginSource:
           this.searchForm.loginSource === "全部"
             ? null
@@ -394,7 +397,8 @@ export default {
         sex: sexNumber,
         headerAddress: this.addForm.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
-        isLock: lock
+        isLock: lock,
+        email:this.addForm.email
       };
       if (i === 2) {
         data.id = this.addForm.id;
@@ -447,9 +451,10 @@ export default {
           if (res.data.state === true) {
             console.log(res.data);
             this.SearchApi(this.paginationForm); // 删除成功就重新加载一次数据
-            this.centerDialogVisible = false; // 提示删除成功 是否需要提示信息
+             // 提示删除成功 是否需要提示信息
             this.$message.success("删除成功");
             this.banDeleteLoading = false;
+            this.centerDialogVisible = false;
           } else {
             this.$message.error(res.data.msg);
             this.banDeleteLoading = false;
@@ -461,15 +466,15 @@ export default {
       // 禁用按钮 按钮的作用就是获取一切初始化信息
       if (row.isLock == 1) {
         this.$message.error("该用户已被禁用");
-        
+
       } else{
         this.i = 0;
         this.banArr.id = row.id;
         console.log(index, row, this.banArr); // 当前选中表格的索引和对
         this.centerDialogVisible = true;
       }
-        
-      
+
+
     },
     banApi(arr) {
       this.banDeleteLoading = true;
@@ -480,6 +485,7 @@ export default {
           console.log(res.data);
           this.SearchApi(this.paginationForm); // 禁用成功就重新加载一次数据
           this.$message.success("禁用成功");
+          this.centerDialogVisible=false;
           this.banDeleteLoading = false;
         } else {
           this.$message.error(res.data.msg); // 提示删除成功
@@ -495,7 +501,7 @@ export default {
       this.addForm.idCard = row.idCard;
       this.addForm.address = row.address;
       this.addForm.phone = row.phone;
-
+      this.addForm.email = row.email;
       this.addForm.sex = row.sex.toString(); // 要转化为字符串格式才行
       this.addForm.headerAddress = row.headerAddress;
       this.addForm.isLock = row.isLock.toString();
@@ -519,6 +525,22 @@ export default {
             optionsData.push(obj);
           }
           this.optionsData = optionsData;
+        }
+      });
+    },
+    selectRoleType() {
+      axios.get(selectRoleType).then(res => {
+        // 没有数据怎么办
+        if (res.data.state === true) {
+          let data = res.data.row;
+          let optionsData = [];
+          for (let item of data) {
+            let obj = {};
+            obj.roleCode = item.roleCode;
+            obj.roleName = item.roleName;
+            optionsData.push(obj);
+          }
+          this.selectData = optionsData;
         }
       });
     },
@@ -581,6 +603,7 @@ export default {
       let i = this.i;
       if (i == 1) {
         this.deleteApi(this.deleteArr);
+
       } else {
         this.banApi(this.banArr);
       }

@@ -1,11 +1,11 @@
 <template>
-  <div id="bookpublishhouse">
-    <div style="display: flex;flex-direction: row" id="mybook">
-      <div style="background-color:white;width:250px;height:852px;display: flex;flex-direction:column;overflow:auto">
+  <div id="bookpublishhouse" style="">
+    <div style="display: flex;flex-direction: row;height: 952px" id="mybook">
+      <div style="background-color:white;width:250px;height:952px;display: flex;flex-direction:column;overflow-y: auto">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
-      <div style="width:1288px;margin-left: 30px;background-color:white;height:852px">
+      <div style="width:1288px;margin-left: 30px;background-color:white;height:952px">
         <el-container>
           <div class="box-card">
             <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
@@ -25,24 +25,31 @@
                 </div>
               </div>
               <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-              <section class="text item tablebox" v-loading="loading">
-                <el-table class="tableBorder" :data="userList.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-                  <el-table-column align="center" type="selection" width="100"></el-table-column>
-                  <el-table-column align="center" prop="index" width="200" label="序号"></el-table-column>
-                  <el-table-column align="center" prop="name" width="230" label="出版社名称"></el-table-column>
-                  <el-table-column align="center" prop="address" width="230" label="公司地址"></el-table-column>
-                  <el-table-column align="center" prop="contacts" width="230" label="联系人"></el-table-column>
-                  <el-table-column align="center" prop="telephone" width="230" label="联系电话"></el-table-column>
+                <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
+                  <el-table
+                    class="tableBorder"
+                    :data="tableData"
+                    empty-text="无数据"
+                    style="width: 100%; text-align:center;"
+                    type="index"
+                    :row-style="rowStyle"
+                    :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+                  >
+                  <el-table-column align="center" prop="index" width="220" label="序号"></el-table-column>
+                  <el-table-column align="center" prop="name" width="250" label="出版社名称"></el-table-column>
+                  <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
+                  <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
+                  <el-table-column align="center" prop="telephone" width="250" label="联系电话"></el-table-column>
                 </el-table>
-                <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-                <section class="pagination">
-                  <el-pagination style="display: inline-block;padding-top: 30px;"
-                                 background
-                                 layout="prev, pager, next,total, jumper, ->"
-                                 :page-size="pageSize"
-                                 :total="userList.length"
-                                 @current-change="handleCurrentChange"
-                                 :current-page="currentPage"
+                  <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+                  <section class="pagination mt_30">
+                  <el-pagination
+                    background
+                    layout="prev, pager, next,total, jumper, ->"
+                    :total="total"
+                    :page-size="pageSize"
+                    :current-page="currentPage"
+                    @current-change="current_change"
                   ></el-pagination>
                 </section>
               </section>
@@ -51,7 +58,7 @@
           <!-- 添加弹框 -->
           <div class="addEditDialog">
             <!-- Form -->
-            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[3]" :visible.sync="dialogFormVisible">
+            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
               <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
                   <el-input v-model="addForm.publishName"></el-input>
@@ -118,19 +125,19 @@
             onRemove: this.onRemove //删除事件
           }
         },
-        loading:false,
+        tableLoading:false,
         zNodes: [
 
         ],
         /*====== 0.0初始化弹框数据 ======*/
         /*初始化 */
         //total: 0,
+        total: 0,
         pageSize: 7,
         currentPage: 1,
-        userList:[],
-        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
+        paginationForm: {},
         centerDialogVisible: false, // 禁用弹框
-        Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
+        Dialogtitle: ["添加"],
         i: 0, // 切换弹框标题
         dialogFormVisible: false, // // 添加弹框的展示和消失
         addForm: {
@@ -160,20 +167,19 @@
           height: "60px"
         },
         /*====== 5.0 分页相关设置项 ======*/
-        zTree:{}
+        zTree:{},
+        tableData:[]
       };
     },
     methods: {
-      /*====== 2.0 表单提交相关函数 ======*/
-      onSubmit() {
-        // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-        console.log(this.formInline);
-      },
-
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
-        this.i = 3;
-        this.dialogFormVisible = true
+        this.$alert('请选择您要添加图书出版社的所在地区', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //this.dialogFormVisible = true
+          }
+        });
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
@@ -197,35 +203,11 @@
           code:treeNode.code
         }
         this.zTree=list
-        this.$alert('点击右侧添加按钮添加出版社', '提示', {
-          confirmButtonText: '确定',
-        });
-      },
-      /*====== 4.0表格操作相关 ======*/
-      handleBan(index, row) {
-        // 删除
-        console.log(index, row); // 当前选中表格的索引和对象
-        this.i = 0;
-        this.centerDialogVisible = true;
-      },
-      handleEdit(index, row) {
-        // 编辑
-        this.i = 2
         this.dialogFormVisible = true
-        console.log(index, row);
       },
-
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
       submitForm(formName) {
-        /*addForm: {
-          // 添加的数据表单 共8个参数
-          idType:"", //序号
-          publishName:"", //出版社名称
-          companyAddress:"", //公司地址
-          contacts:"", //联系人
-          contactPhone:"" //联系电话
-        },*/
         var addStr=[{
           id: null,
           code: "",
@@ -236,7 +218,7 @@
           contacts:this.addForm.contacts,
           telephone:this.addForm.contactPhone
         }]
-        this.axios.post(bookurladd,addStr).then((res)=>{
+        this.axios.post(bookpublishhouse,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -244,12 +226,14 @@
               type: 'success'
             });
             this.dialogFormVisible=false
+            this.table()
             this.closeForm()
           }else{
             this.$message({
               message: res.data.msg,
               type: 'error'
             });
+            this.dialogFormVisible=false
           }
         })
       },
@@ -267,25 +251,44 @@
         this.currentPage = currentPage;
         //console.log(this.currentPage)  //点击第几页
       },
+      table(value){
+        this.tableLoading= true; // 加载前控制加载状态
+        this.axios
+          .get(bookurlselect, {
+            params: value
+          })
+          .then(res => {
+            console.log("当前获取的数据", res.data);
+            if (res.data.state === true) {
+              let nomol = res.data.row;
+              let i = 1;
+              for (let item of nomol) {
+                item.index = i;
+                i++;
+              }
+              this.tableData = nomol; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              console.log("过滤后的数据", nomol);
+              console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+      },
+      current_change: function(currentPage) {
+        //分页查询
+        this.currentPage = currentPage; //点击第几页
+        this.paginationForm.currentPage = currentPage;
+        console.log("保存当前查询", this.paginationForm);
+        this.table(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      },
     },
     mounted(){
-      //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
-      /*页面初始化表格内容*/
+      this.table()
       this.freshArea()
-      this.loading=true
-      this.axios.get(bookurlselect).then((res)=>{
-        console.log(res)
-        let nomal = res.data.row.list
-        let i =1
-        for (var item of nomal) {
-          item.index = i;
-          i++
-        }
-        this.userList=nomal
-        console.log(res.data.row.list.length)
-        this.userList=res.data.row.list
-        this.loading=false
-      });
     }
   };
 </script>

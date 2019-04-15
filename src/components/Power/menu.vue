@@ -3,7 +3,7 @@
     <div style="display: flex;flex-direction: row" id="mymenu">
       <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow:auto">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
-        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px" v-loading="fullscreenLoading"></ul>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
         <form id="myForm">
@@ -102,6 +102,7 @@
         </form>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -165,20 +166,9 @@ export default {
           onRemove: this.onRemove //删除事件
         }
       },
-      zNodes: [
-        {
-          id: 0,
-          //pId: 0,
-          name: "图书馆管理平台",
-          code: null,
-          msg: null,
-          href: null,
-          disabled: null,
-          icon_default: null,
-          icon_selected: null,
-          menu_code_type: null
-        }
-      ]
+      zNodes: [],
+      treeName:null,
+      pId:null
     };
   },
   methods: {
@@ -275,19 +265,21 @@ export default {
     async freshArea() {
       this.axios.get(menuselecturl).then((response)=>{
         console.log(response)
-        for (var item of response.data.row) {
-          this.zNodes.push({
-            id: item.id, //节点id
-            pId: item.fkParentMenuId, //节点父id
-            name: item.menuName, //节点名称
-            code: item.menuCode, //节点菜单编码
-            msg: item.menuDescribe, //节点菜单描述
-            href: item.menuHref, //节点菜单链接
-            disabled: item.disabled, //节点是否禁用
-            icon_default: item.iconDefault, //节点默认图片
-            icon_selected: item.iconSelected, //节点选择图片
-            menu_code_type: item.fkMenuTypeCode //节点菜单类型编码
-          });
+        if(response.data.state=true){
+          for (var item of response.data.row) {
+            this.zNodes.push({
+              id: item.id, //节点id
+              pId: item.fkParentMenuId, //节点父id
+              name: item.menuName, //节点名称
+              code: item.menuCode, //节点菜单编码
+              msg: item.menuDescribe, //节点菜单描述
+              href: item.menuHref, //节点菜单链接
+              disabled: item.disabled, //节点是否禁用
+              icon_default: item.iconDefault, //节点默认图片
+              icon_selected: item.iconSelected, //节点选择图片
+              menu_code_type: item.fkMenuTypeCode, //节点菜单类型编码
+            });
+          }
         }
         //将数据渲染到ztree树
         $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
@@ -321,9 +313,6 @@ export default {
     },
     //修改时点击节点将该节点的数据展示在表单内
     zTreeOnClick(event, treeId, treeNode) {
-      //console.log(treeId)
-      //console.log(treeNode.name,treeNode.id,treeNode.pId,treeNode.code,treeNode.href,treeNode.disabled)
-      //console.log(treeNode.menu_code_type)
       id = treeNode.id; //点击节点时节点自己的id
       click = "click"; //是否点击的赋值
       $("#name").val(treeNode.name); //展示节点名称
@@ -344,27 +333,29 @@ export default {
     //鼠标移入节点时添加按钮
     addHoverDom(treeId, treeNode) {
       //this.addZTree=treeNode
-      console.log(treeNode.menu_code_type);
+      //console.log(treeNode.menu_code_type);
       if (
         treeNode.menu_code_type === "list_menu" ||
         treeNode.menu_code_type === null
       ) {
         var sObj = $("#" + treeNode.tId + "_span");
+        console.log('sObj',sObj)
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
           return;
+        console.log(treeNode.tId)
         var addStr =
-          "<span class='button add' id='addBtn_" +
-          treeNode.tId +
-          "' title='添加子节点' onfocus='this.blur();'></span>";
+          "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加子节点' onfocus='this.blur();'></span>";
+        console.log('addStr',addStr)
         sObj.after(addStr);
         var btn = $("#addBtn_" + treeNode.tId);
+        console.log('btn',btn)
         if (btn)
           btn.bind("click", { paramName: treeNode }, function(e) {
             //console.log(this.zNodes)
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var newNode = { name: "newNode1" };
             newNode = treeObj.addNodes(treeNode, newNode);
-            //console.log(treeNode.id)
+            console.log('添加按钮'+treeNode.id)
             praent = treeNode.id;
             click = "add";
             return false;
@@ -379,6 +370,9 @@ export default {
     },
     //修改或添加时点击保存按钮向后台发送修改或保存后的数据（根据节点id判断发送请求为修改或添加）
     save() {
+      console.log(this.zNodes)
+      this.pId=praent
+      console.log('父id：'+this.pId)
       let files = this.formdata;
       //console.log(files)
       var formdatas = new FormData();
@@ -399,11 +393,9 @@ export default {
           iconDefault:this.photo ,
           iconSelected:'' ,
           fkMenuTypeCode: this.value2,
-          fkParentMenuId: parent,
-          fkParentMenuId: 0,
+          fkParentMenuId: this.pId,
           authTbMenuElements: authTbMenuElementsAdd
         };
-        console.log(add);
         var edit = {
           id: this.zTree.id,
           fkParentMenuId: this.zTree.pId,
@@ -418,27 +410,30 @@ export default {
           fkMenuTypeCode: this.value2,
           authTbMenuElements: authTbMenuElementsEdit
         };
-        console.log(edit)
         if (id === undefined) {
+          this.zNodes.length=0
           this.axios.post(menuaddurl, add).then((request) => {
             console.log(request);
             if (request.data.state == true) {
               this.$message({
-                message: request.data.msg+',刷新网页可查看！',
+                message: request.data.msg+',可展开查看！',
                 type: "success"
               });
+              this.freshArea()
             } else {
               this.$message.error(request.data.msg);
             }
           });
         } else {
           this.axios.post(menuaddurl, edit).then((request) => {
+            this.zNodes.length=0
             console.log(request);
             if (request.data.state == true) {
               this.$message({
-                message: request.data.msg+',刷新网页可查看！',
+                message: request.data.msg+',可展开查看！',
                 type: "success"
               });
+              this.freshArea()
             } else {
               this.$message.error(request.data.msg);
             }
@@ -486,10 +481,10 @@ export default {
       reader.onloadend = function() {
         _this.src = this.result;
       };
-    }
+    },
   },
   mounted() {
-    $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+    //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
     this.freshArea();
     //当菜单页面一加载,就请求后台数据，动态渲染在菜单页面的表单下拉框上
     var list = [];
@@ -497,10 +492,10 @@ export default {
       .get(menutypeurl, { params: { type: "menu" } })
       .then(function(request) {
         //console.log(request)
-        for (var item of request.data.row) {
-          //console.log(item)
-          list.push({ value: item.id, label: item.name, code: item.code });
-        }
+          for (var item of request.data.row) {
+            //console.log(item)
+            list.push({ value: item.id, label: item.name, code: item.code });
+          }
       });
     this.selectList = list;
   }

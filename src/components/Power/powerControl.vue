@@ -2,13 +2,6 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
-        <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
-        <div class="routerBox">
-          <span class="routerButton circularButton labelActive">
-            用户管理
-            <i class="Iconerror">x</i>
-          </span>
-        </div>
         <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
@@ -70,7 +63,9 @@
             >
               <el-table-column align="center" type="selection" width="100"></el-table-column>
               <el-table-column align="center" prop="id" label="序号"></el-table-column>
-              <el-table-column align="center" prop="fkMenuName" label="角色名称"></el-table-column>
+              <el-table-column align="center" prop="fkRoleName" label="角色名称"></el-table-column>
+              <el-table-column align="center" prop="fkMenuName" label="菜单名称"></el-table-column>
+              <el-table-column align="center" prop="fkMenuElementName" label="元素名称"></el-table-column>
               <el-table-column align="center" prop="createTime" :formatter="dateFormat" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" :formatter="dateFormat" label="修改时间"></el-table-column>
               <el-table-column align="center" label="操作">
@@ -258,7 +253,7 @@
         /*====== 5.0 分页相关设置项 ======*/
         /*初始化 */
         total: 0,
-        pageSize: 2,
+        pageSize: 7,
         currentPage: 1,
         // 提交的数据 用于保存查询的结果后查询分页
         paginationForm: {}

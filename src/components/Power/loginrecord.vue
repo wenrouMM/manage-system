@@ -157,7 +157,7 @@ export default {
       let searchForm = {
         pageSize: this.pageSize,
         currentPage: 1,
-        fkLoginName: this.searchForm.loginSource === "全部" ? null : this.searchForm.loginSource,
+        fkLoginType: this.searchForm.loginSource === "全部" ? null : this.searchForm.loginSource,
         beginTime: this.searchForm.beginTime === "" ? null : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
         endTime: this.searchForm.endTime === "" ? null : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
       };
@@ -179,13 +179,13 @@ export default {
           params: value
         })
         .then(res => {
-          console.log(res.data);
+          console.log('登陆记录',res.data);
           if (res.data.state === true) {
             this.tableData = res.data.row; //获取返回数据
-            console.log('获取的表格数据',this.tableData)
+            //console.log('获取的表格数据',this.tableData)
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            console.log("保存当前查询", this.paginationForm);
+            //console.log("保存当前查询", this.paginationForm);
           } else {
             this.$message.error(res.data.msg);
           }

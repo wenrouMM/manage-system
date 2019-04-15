@@ -45,19 +45,19 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" width="80" prop="index" label="序号"></el-table-column>
               <el-table-column align="center" width="180" prop="name" label="书籍名称"></el-table-column>
               <el-table-column align="center" :show-overflow-tooltip="true" prop="searchNumber" width="110" label="索书号"></el-table-column>
               <el-table-column align="center" prop="author" width="150" label="作者"></el-table-column>
-              <el-table-column align="center" width="150" prop="fkPressName" label="出版社"></el-table-column>
+              <el-table-column align="center" width="220" prop="fkPressName" label="出版社"></el-table-column>
               <el-table-column align="center" prop="pageNumber" width="150" label="页码"></el-table-column>
-              <el-table-column align="center" prop="price" width="150" label="价格"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="条码"></el-table-column>
+              <el-table-column align="center" prop="price" width="100" label="价格"></el-table-column>
+              <el-table-column align="center" prop="barcode" width="220" label="条码"></el-table-column>
               <el-table-column align="center" prop="fkTypeName" width="150" label="类型"></el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" label="操作" width="180">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="detail" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
+                  <span class="detail edit" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -164,7 +164,7 @@
             </el-form-item>
             <div class="row1">
               <el-form-item label="书籍简介" prop="bookContent" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="addForm.bookContent" autocomplete="off"></el-input>
+                <el-input type="textarea" v-model="addForm.bookcontent" autocomplete="off"></el-input>
               </el-form-item>
             </div>
             <!-- 弹框表单按钮  验证失效-->
@@ -303,6 +303,8 @@ export default {
         lib: ""
       },*/
       let searchForm = {
+        pageSize: this.pageSize,
+        currentPage:1,
         name:this.searchForm.bookName,
         searchNumber:this.searchForm.bookIndex,
         author:this.searchForm.author,
@@ -349,12 +351,15 @@ export default {
     }
   },
   methods: {
+    closeCheck(){
+      $('#typeMessage').fadeOut()
+    },
     /*====== 0.0类型名称ztree树的渲染 ======*/
     async freshArea() {
       this.axios.get(bookurltypemes).then((response)=>{
         console.log(response)
         for (var item of response.data.row) {
-          console.log(item)
+          //console.log(item)
           this.zNodes.push({
             id: item.id, //节点id
             pId: item.pid, //节点父id
@@ -472,6 +477,7 @@ export default {
       this.$refs[formName].resetFields();
     },
     closeForm() { // 关闭按钮 弹框关闭的时候执行 清空数据
+      $('#typeMessage').fadeOut()
       console.log("关闭测试");
       let obj = this.addForm;
       this.addForm.headIcon = "";
@@ -508,7 +514,7 @@ export default {
         .then(res => {
           console.log("当前获取的数据", res.data);
           if (res.data.state === true) {
-            let nomol = res.data.row.list;
+            let nomol = res.data.row;
             let i = 1;
             for (let item of nomol) {
               item.index = i;
@@ -528,7 +534,6 @@ export default {
         .catch(error => {
           console.log(error);
         });
-
     },
     addApi(data) {
       this.axios.post(bookurladd,data).then((res)=>{
@@ -537,27 +542,23 @@ export default {
     }
   },
   mounted(){
+    console.log(this.dialogFormVisible)
     this.freshArea()
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
+
     $('#typeMessage').fadeOut()
     this.tableLoading=true
-    this.axios.get(bookurlmessage).then((res)=>{
-      console.log(res)
-      let nomal = res.data.row.list
-      let i =1
-      for (var item of nomal) {
-        item.index = i;
-        i++
-      }
-      this.tableData=res.data.row.list
-      this.tableLoading=false
-    })
   }
 };
 </script>
 
 <style scoped>
 /*====== 0.0 初始化部分 ======*/
+.edit {
+  color: #00d7f0;
+  cursor: pointer;
+  margin-right: 20px;
+}
 #typeMessage{
   display: none;
   position: absolute;

@@ -1,15 +1,7 @@
 <template>
   <div class="userRole">
     <el-container>
-      <div class="box-card">
-        <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
-        <div class="routerBox">
-          <span class="routerButton circularButton labelActive">
-            角色管理
-            <i class="Iconerror">x</i>
-          </span>
-        </div>
-        <div class="space"></div>
+      <div class="box-card" style="width: 100%">
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
@@ -54,14 +46,27 @@
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" v-loading="tableLoading" @selection-change="handleSelectionChange" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table class="tableBorder" v-loading="tableLoading"
+                      @selection-change="handleSelectionChange"
+                      :data="tableData" style="width: 100%;
+                      text-align:center;"
+                      :row-style="rowStyle"
+                      :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
               <el-table-column align="center" type="selection" width="100" ></el-table-column>
-              <el-table-column align="center" prop="id" label="序号"></el-table-column>
-              <el-table-column align="center" prop="roleName" width="100" label="角色名称" v-model="tableData.roleName"></el-table-column>
-              <el-table-column align="center" prop="fkParentRoleCode" width label="上級" v-model="tableData.roleCode"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="isDefault" label="是否默認" v-model="tableData.isDefault"></el-table-column>
-              <el-table-column align="center" prop="disabled" width="70" label="状态" v-model="tableData.disabled"></el-table-column>
+              <el-table-column align="center" prop="index" label="序号" width="150"></el-table-column>
+              <el-table-column align="center" prop="roleName" width="220" label="角色名称" ></el-table-column>
+              <el-table-column align="center" prop="fkParentRoleCode" width="200" label="上級"></el-table-column>
+              <el-table-column align="center" prop="createTime" width="250" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="isDefault" width="200" label="状态">
+              <template slot-scope="scope">
+                <span>{{scope.row.isDefault ===0?'否':'是'}}</span>
+              </template>
+            </el-table-column>
+              <el-table-column align="center" prop="disabled" width="200" label="状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
@@ -71,14 +76,15 @@
               </el-table-column>
             </el-table>
             <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-            <section class="pagination">
-              <el-pagination style="display: inline-block;padding-top: 30px;"
-                             background
-                             layout="prev, pager, next,total, jumper, ->"
-                             :total="total"
-                             :current-page="currentPage"
-                             @current-change="current_change"
-              ></el-pagination>
+            <section class="pagination mt_30">
+              <el-pagination
+              background
+              layout="prev, pager, next,total, jumper, ->"
+              :total="total"
+              :page-size="pageSize"
+              :current-page="currentPage"
+              @current-change="current_change"
+            ></el-pagination>
             </section>
           </section>
         </div>
@@ -115,7 +121,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="状态" prop="status" style="margin-left: 50px">
-              <el-radio-group v-model="addForm.status">
+              <el-radio-group v-model="addForm.disabled">
                 <el-radio label="禁用" ></el-radio>
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
@@ -176,14 +182,15 @@
           addDialog: false,
           userType: "", // 角色名称 不明参数
           parent: "", // 上级
+          roleName:"",
           isDefault: "", // 是否默认
-          status: "" // 状态
+          disabled: "" // 状态
         },
         rules: {
           // 添加的参数验证
           userType: [{ required: true, message: "请选择角色类型", trigger: "change" }],
           parent: [{ required: true, message: "选择角色名称", trigger: "blur" }],
-          status: [{ required: true, message: "请选择状态", trigger: "change" }],
+          disabled: [{ required: true, message: "请选择状态", trigger: "change" }],
           isDefault: [{ required: true, message: "请选择是否默认", trigger: "change" }],
         },
         formLabelWidth: "120px",
@@ -191,6 +198,12 @@
         optionsData: [
 
         ],
+        /*======4.0分页器相关数据 ======*/
+        tableLoading:false,
+        /*初始化 */
+        total: 0,
+        pageSize: 7,
+        currentPage: 1,
         formInline: {
           // 搜索需要的表单数据
           parent:'',
@@ -198,18 +211,10 @@
           endTime:'',
           currentPage:0,
         },
-        /*======4.0分页器相关数据 ======*/
-        tableLoading:false,
-        /*初始化 */
-        total: 0,
-        pageSize: 7,
-        currentPage: 1,
         // 提交的数据 用于保存查询的结果后查询分页
         paginationForm:{
 
         },
-        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
-
         /*====== 3.0添加 批量删除所需数据 ======*/
         Allseclet: [], // 存储全选框 单选框的数据/索引 用于传递给后台同时 前端用索引号去删除表格内的内容
 
@@ -237,31 +242,38 @@
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
         //console.log(this.formInline);
-        this.select(this.searchTimeForm)
+        this.selectApi(this.searchTimeForm)
         this.currentPage = 1
       },
-      select(value){
+      selectApi(value){
         this.tableLoading = true
-        this.axios.get(userroleselect,{params:value}).then((response)=>{
-          console.log(response)
-          if (response.data.state === true) {
-            this.tableData = response.data.row.list; //获取返回数据
-            this.total = response.data.row.total; //总条目数
-            this.paginationForm = Object.assign({},value) // 保存上次的查询结果
-            this.tableLoading = false
+        this.axios.get(userroleselect,{params:value}).then((res)=>{
+          console.log('查询分页的页数',res.data)
+          if (res.data.state === true) {
+            let nomal = res.data.row
+            let i =1
+            for (var item of nomal) {
+              item.index = i;
+              i++
+            }
+            this.tableData=nomal
+            this.tableData = res.data.row; //获取返回数据
+            //console.log('获取的表格数据',this.tableData)
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+            //console.log("保存当前查询", this.paginationForm);
           } else {
-            this.$message.error(response.data.msg);
-            this.tableLoading = false
+            this.$message.error(res.data.msg);
           }
         })
-        //
+        this.tableLoading = false
       },
       current_change: function(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
-        this.paginationForm.currentPage = currentPage+1;
+        this.paginationForm.currentPage = currentPage;
         //console.log('保存当前查询',this.paginationForm);
-        this.select(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.selectApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
@@ -297,9 +309,9 @@
         this.addForm.userType=row.roleName
         this.addForm.parent=row.fkParentRoleCode
         if(row.disabled==1){
-          this.addForm.status='禁用'
+          this.addForm.disabled='禁用'
         }else{
-          this.addForm.status='启用'
+          this.addForm.disabled='启用'
         }
         if(row.isDefault==1){
           this.addForm.isDefault='是'
@@ -321,6 +333,18 @@
           var roleCode=this.roleCode
           this.axios.put(userroleedit,{id:this.id,disabled:1,roleCode:roleCode}).then((respones)=>{
             console.log(respones)
+            if(respones.data.state==true){
+              this.$message({
+                message: respones.data.msg,
+                type: 'success'
+              });
+              this.selectApi(this.searchTimeForm)
+            }else{
+              this.$message({
+                message:'存在下级角色无法删除或者禁用',
+                type: 'error'
+              });
+            }
           })
         }
         if(this.i===1){
@@ -340,6 +364,7 @@
                 message: response.data.msg,
                 type: 'success'
               });
+              this.selectApi(this.searchTimeForm)
             }else{
               this.$message({
                 message: response.data.msg,
@@ -349,7 +374,7 @@
           })
         }
         let tips = this.Dialogtitle[i];
-        alert(`${tips}成功`); // 成功之后映射到数组的操作
+        //alert(`${tips}成功`); // 成功之后映射到数组的操作
         this.centerDialogVisible = false;
       },
       // 编辑弹框
@@ -358,25 +383,26 @@
         console.log(this.i)
         if(this.i===3){
           //alert(111)
-          this.add(this.newaddForm)
+          this.addApi(this.newaddForm)
+          this.dialogFormVisible=false
         }
         if(this.i===2){
           //alert(222)
-          this.edit(this.neweditForm) //
+          this.editApi(this.neweditForm)
+
         }
         this.$refs[formName].validate(valid => {
           if (valid) {
-            alert("submit!");
             this.dialogFormVisible = true; // 关闭弹框
           } else {
-            console.log("error submit!!");
-            console.log(this.addForm);
+            //console.log("error submit!!");
+            //console.log(this.addForm);
             return false;
           }
         });
       },
       //修改
-      edit(value){
+      editApi(value){
         this.axios.put(userroleedit,value).then((respones)=>{
           //console.log(respones)
           if(respones.data.state==true){
@@ -384,7 +410,9 @@
               message: respones.data.msg,
               type: 'success'
             });
-            this.centerDialogVisible=false
+            this.selectApi(this.searchTimeForm)
+            this.dialogFormVisible=false
+            this.closeForm()
           }else{
             this.$message({
               message: respones.data.msg,
@@ -394,7 +422,7 @@
         })
       },
       // 添加
-      add(value){
+      addApi(value){
         this.axios.post(userroleadd,value).then((respones)=>{
           //console.log(respones)
           if(respones.data.state==true){
@@ -402,6 +430,8 @@
               message: respones.data.msg,
               type: 'success'
             });
+            this.selectApi(this.searchTimeForm)
+            this.dialogFormVisible=false
             this.closeForm()
           }else{
             this.$message({
@@ -419,7 +449,7 @@
       },
       closeForm() {
         // 弹框关闭的时候执行 清空数据
-        console.log("关闭测试");
+        //console.log("关闭测试");
         let obj = this.addForm;
         for (var i in obj) {
           obj[i] = "";
@@ -429,9 +459,10 @@
     mounted(){
       console.log(this.searchTimeForm)
       //this.select(this.searchTimeForm)
-      //页面初始化加载的表格数据
+      this.selectApi(this.searchTimeForm)
+      //表单中下拉框上级的初始化数据
       this.axios.get(userrole).then((response)=>{
-        console.log(response)
+        console.log('下拉框数据',response)
         if(response.data.state==true){
           for(var item of response.data.row){
             console.log(item.roleName)
@@ -439,13 +470,7 @@
           }
         }
       })
-      //表单中下拉框上级的初始化数据
-      this.axios.get(userroleselect).then((response)=>{
-        //console.log(response.data.row.list)
-        if(response.data.state=true){
-          this.tableData=response.data.row.list
-        }
-      })
+      //页面初始化加载的表格数据
     },
     computed: {
       //模糊查询参数
@@ -464,8 +489,7 @@
       newaddForm(){
         let newForm={
           roleName:this.addForm.userType,
-          //isDefault:this.addForm.isdefault,
-          isDefault:this.addForm.isdefault==='是'?1:0,
+          isDefault:this.addForm.isDefault==='是'?1:0,
           disabled:this.addForm.disabled==='禁用'?1:0,
           fkParentRoleCode:this.addForm.parent
         }
@@ -478,12 +502,11 @@
           id:this.id,
           roleCode:this.roleCode,
           roleName:this.addForm.userType,
-          //isDefault:this.addForm.isdefault,
-          isDefault:this.addForm.isdefault==='是'?1:0,
+          isDefault:this.addForm.isDefault==='是'?1:0,
           disabled:this.addForm.disabled==='禁用'?1:0,
           fkParentRoleCode:this.addForm.parent
         }
-        //console.log(newForm)
+        console.log(newForm)
         return newForm
       }
     },

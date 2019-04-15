@@ -39,10 +39,10 @@ router.beforeEach((to, from, next) => {
     } else {
       next('/login')
     }
-    
+
   }
-  
-  
+
+
 })
 */
 Vue.use(ElementUI) // 注册插件

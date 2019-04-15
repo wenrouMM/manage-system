@@ -2,6 +2,16 @@
   <div class="bookInfo">
     <el-container>
       <div class="box-card">
+        <!-- 类型名称弹框-->
+        <div id="typeMessage" >
+          <div style="position: relative">
+            <p>请选择类型名称</p>
+            <img src="../../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+          </div>
+          <div>
+            <ul id="treeDemo" class="ztree"></ul>
+          </div>
+        </div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
@@ -24,15 +34,9 @@
                 <el-input v-model="searchForm.bookIndex" placeholder="请输入索书号"></el-input>
               </el-form-item>
               <!-- 下拉框 -->
-              <el-form-item label="类型:" size="160">
-                <el-select v-model="searchForm.type" placeholder="请选择类型">
-                  <el-option
-                    v-for="(option,index) of optionsType"
-                    :key="index"
-                    :label="option"
-                    :value="option"
-                  ></el-option>
-                </el-select>
+              <el-form-item label="类型:" size="160"  style="position: relative">
+                <el-input v-model="searchForm.type" placeholder="请输入类型"></el-input>
+                <img src="../../../../src/base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 120px" @click="typeMessage">
               </el-form-item>
               <el-form-item label="状态:" size="160">
                 <el-select v-model="searchForm.status" placeholder="请选择状态">
@@ -50,40 +54,46 @@
             </el-form>
           </section>
           <!-- 3.0 表格展示内容 需做更改部分 -->
-          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
+          <section class="text item tablebox">
             <el-table
+              v-loading="tableLoading"
               class="tableBorder"
               :data="tableData"
-              empty-text="无数据"
               style="width: 100%; text-align:center;"
-              type="index"
               :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column align="center" width="120" prop="index" label="序号"></el-table-column>
-              <el-table-column align="center" width="200" prop="src" label="书籍名称"></el-table-column>
+              <el-table-column align="center" width="80" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" width="120" prop="name" label="书名"></el-table-column>
               <el-table-column
                 align="center"
                 :show-overflow-tooltip="true"
-                prop="fkRoleNames"
+                prop="searchNumber"
                 width="150"
                 label="索书号"
               ></el-table-column>
-              <el-table-column align="center" prop="username" width="150" label="作者"></el-table-column>
-              <el-table-column align="center" prop="sex" width="150" label="出版社"></el-table-column>
-              <el-table-column align="center" prop="idCard" width="150" label="页码"></el-table-column>
-              <el-table-column align="center" prop="phone" width="150" label="价格"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="条码"></el-table-column>
-              <el-table-column align="center" prop="isLock" width="150" label="类型"></el-table-column>
-              <el-table-column align="center" label="操作" width="120">
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="120" label="馆藏码"></el-table-column>
+              <el-table-column align="center" prop="barcode" width="150" :show-overflow-tooltip="true" label="条码"></el-table-column>
+              <el-table-column align="center" prop="lend" width="80" label="借出数量"></el-table-column>
+              <el-table-column align="center" prop="total" width="150" :show-overflow-tooltip="true" label="馆藏数量"></el-table-column>
+              <el-table-column align="center" prop="person" width="80" :show-overflow-tooltip="true" label="录入员"></el-table-column>
+              <el-table-column align="center" prop="entryTime" width="150" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="150" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
+              <el-table-column align="center" prop="fkTypeCode" width="100" label="类型"></el-table-column>
+              <el-table-column align="center" prop="state" width="100" label="状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="操作" width="110">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="detail" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
+                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">详情</span>
+                  <span class="ban" @click="handleBan(scope.$index, scope.row)">下架</span>
                 </template>
               </el-table-column>
             </el-table>
-
-            <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+            <!--分页-->
             <section class="pagination mt_30">
               <el-pagination
                 background
@@ -98,6 +108,16 @@
         </div>
       </div>
       <!-- end弹框组 添加弹框 -->
+      <!-- 下架弹框 -->
+      <div class="forbid">
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+          <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
+          <div slot="footer" class="dialog-footer">
+            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
+        </el-dialog>
+      </div>
       <!-- 添加弹框 -->
       <div class="addEditDialog">
         <!-- Form -->
@@ -117,24 +137,24 @@
           >
             <!-- 初始化未完成 -->
             <div class="row1">
-              <el-form-item label="索书号码" class="mr_30" prop="lib" :label-width="formLabelWidth">
-                <el-input v-model="addForm.lib" autocomplete="off"></el-input>
+              <el-form-item label="索书号码" class="mr_30" prop="indexNum" :label-width="formLabelWidth">
+                <el-input v-model="addForm.indexNum" autocomplete="off"></el-input>
               </el-form-item>
-              <el-form-item label="藏馆号码" prop="page" :label-width="formLabelWidth">
-                <el-input v-model="addForm.page" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row1">
-              <el-form-item label="藏馆数量" class="mr_30" prop="value" :label-width="formLabelWidth">
-                <el-input v-model="addForm.value" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="借出数量" prop="barcode" :label-width="formLabelWidth">
-                <el-input v-model="addForm.barcode" autocomplete="off"></el-input>
+              <el-form-item label="藏馆号码" prop="Num" :label-width="formLabelWidth">
+                <el-input v-model="addForm.Num" autocomplete="off"></el-input>
               </el-form-item>
             </div>
             <div class="row1">
-              <el-form-item label="状态" prop="bookContent" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="addForm.bookContent" autocomplete="off"></el-input>
+              <el-form-item label="藏馆数量" class="mr_30" prop="libNum" :label-width="formLabelWidth">
+                <el-input v-model="addForm.libNum" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="借出数量" prop="returnNum" :label-width="formLabelWidth">
+                <el-input v-model="addForm.returnNum" autocomplete="off"></el-input>
+              </el-form-item>
+            </div>
+            <div class="row1">
+              <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
+                <el-input type="textarea" v-model="addForm.status" autocomplete="off"></el-input>
               </el-form-item>
             </div>
             <!-- 弹框表单按钮  验证失效-->
@@ -161,21 +181,36 @@ import axios from "axios";
 export default {
   data() {
     return {
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          showRenameBtn: false,
+          editNameSelectAll: true
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: false,
+          selectedMulti: true,
+        },
+        callback: {
+          onClick: this.zTreeOnClick, //节点点击事件
+        }
+      },
+      zNodes: [],
       optionsStatus: [
-        "出纳",
-        "前台",
-        "图书盘点员",
-        "采购员",
-        "仓库管理员",
-        "系统管理员"
-      ],
-      optionsType: [
-        "出纳",
-        "前台",
-        "图书盘点员",
-        "采购员",
-        "仓库管理员",
-        "系统管理员"
+        "禁用",
+        "启用",
       ],
       /*====== 2.0表单搜索提交数据项 ======*/
       searchForm: {
@@ -200,72 +235,98 @@ export default {
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/
       dialogFormVisible: false, // // 添加弹框的展示和消失
+      centerDialogVisible:false,
       editLoading: false,
       files: null, // 传递给后台的请求
       defaultImg:'', // 默认图片地址
-      Dialogtitle: ["添加"],
+      i:0,
+      Dialogtitle: ["添加",'下架'],
       addForm: {
         // 添加的数据表单 共8个参数
         addDialog: false,
-        headerAddress: "", // 传递来的图片
-        headIcon: "", // 预览的图片
-        files: "", // 用于上传
-
-        bookName: "", // 书籍名称
-        bookIndex: "", // 书籍索引
-        author: null, // 作者
-        lib: "", // 出版社
-        page: "", // 页码
-        barcode: "", // 条码
-        value: "", // 价格
-        typeName: "", // 类型名称
-        bookcontent: "" // 书籍简介
+        indexNum:"",
+        Num:"",
+        libNum:"",
+        returnNum:"",
+        status:""
       },
       addRules: {
         // 添加的参数验证
-        bookName: [
-          { required: true, message: "请输入书籍名称", trigger: "blur" }
-        ],
-        bookIndex: [
-          { required: true, message: "请输入索书号", trigger: "change" }
-        ],
-        author: [{ required: true, message: "请输入作者", trigger: "change" }],
-        lib: [{ required: true, message: "请输入出版社", trigger: "blur" }],
-        page: [{ required: true, message: "请输入页码", trigger: "blur" }],
-        barcode: [{ required: true, message: "请输入条码", trigger: "blur" }],
-        typeName: [
-          { required: true, message: "请选择类型名称", trigger: "blur" }
-        ],
-        bookcontent: [
-          { required: true, message: "请输入书籍简介", trigger: "change" }
-        ]
+        indexNum: [{ required: true, message: "请输入索书号码", trigger: "blur" }],
+        Num: [{ required: true, message: "请输入藏馆号码", trigger: "blur" }],
+        libNum: [{ required: true, message: "请输入藏馆数量", trigger: "blur" }],
+        returnNum: [{ required: true, message: "请输入借出数量", trigger: "blur" }],
+        status: [{ required: true, message: "请输入状态", trigger: "blur" }],
       },
-      formLabelWidth: "90px"
+      formLabelWidth: "90px",
+      undercarriage:null, //下架所需参数
     };
   },
   computed: {
     searchTimeForm() {
       // 搜索所需数据 过滤数据 传递给后端的数据
-
-      let searchForm = {};
-
+      var state=null
+      if(this.searchForm.status=='禁用'){
+        state=1
+      }else if(this.searchForm.status=='启用'){
+        state=0
+      }else if(this.searchForm.status==''){
+        state=''
+      }
+      let searchForm = {
+        pageSize: this.pageSize,
+        currentPage:1,
+        name:this.searchForm.bookName,
+        searchNumber:this.searchForm.bookIndex,
+        fkTypeCode:this.searchForm.type,
+        state:state
+      };
       return searchForm;
     },
     addEdit() {
       // 添加传递数据
 
-      let data = {};
+      let data = {
 
+      };
       return data;
     }
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
+    this.freshArea()
+    $('#typeMessage').fadeOut()
     this.axios.get(libbook).then((res)=>{
       console.log(res)
     })
   },
   methods: {
+    async freshArea() {
+      this.axios.get(bookurltypemes).then((response)=>{
+        console.log(response)
+        for (var item of response.data.row) {
+          //console.log(item)
+          this.zNodes.push({
+            id: item.id, //节点id
+            pId: item.pid, //节点父id
+            name: item.name, //节点名称
+            code:item.code, //
+          });
+        }
+        //将数据渲染到ztree树
+        $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+      })
+    },
+    typeMessage(){
+      $('#typeMessage').fadeIn()
+    },
+    closeCheck(){
+      $('#typeMessage').fadeOut()
+    },
+    zTreeOnClick(event, treeId, treeNode) {
+      $('#typeMessage').fadeOut()
+      this.searchForm.type=treeNode.name
+    },
     /*====== 2.0 搜索与添加按钮触发 ======*/
     searchSubmit() {
       // 条件查询按钮
@@ -273,6 +334,37 @@ export default {
       console.log("此时传给后台的搜索数据", this.searchTimeForm);
       this.SearchApi(this.searchTimeForm);
       this.currentPage = 1;
+    },
+    handleBan(index, row) {
+      //下架
+      console.log( row); // 当前选中表格的索引和对象
+      this.undercarriage=row
+      this.i= 1;
+      this.centerDialogVisible = true;
+    },
+    submitDialog() {
+      // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
+      let i = this.i;
+      let tips = this.Dialogtitle[i];
+      //alert(`${tips}成功`); // 成功之后映射到数组的操作
+      this.axios.post(libbookedit,this.undercarriage).then((res)=>{
+        console.log(res)
+        if(res.data.state==true){
+          this.$message({
+            message: res.data.msg,
+            type: 'success'
+          });
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+      this.centerDialogVisible = false;
+    },
+    handleEdit(index, row) {
+      // 详情
+      this.i = 2;
+      this.dialogFormVisible = true
+      console.log(index, row);
     },
     addDialogOpen() {
       // 添加按钮
@@ -293,6 +385,7 @@ export default {
     /*====== end 弹框内相关函数 ======*/
     submitForm(formName) {
       // 提交弹框按钮执行函数
+      this.addApi(this.addEdit)
       let url = "";
       let method = "";
       let data = this.addEdit;
@@ -332,7 +425,6 @@ export default {
               console.log("上传图片后", this.addEdit);
             });
           }
-
           axios({
             // 发起API请求
             url: url,
@@ -389,9 +481,9 @@ export default {
     /*====== baseAPI调用相关 ======*/
     SearchApi(value) {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
-      this.loadingTable = true; // 加载前控制加载状态
+      this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(userManageInterface.select, {
+        .get(libbook, {
           params: value
         })
         .then(res => {
@@ -408,10 +500,10 @@ export default {
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             console.log("过滤后的数据", nomol);
             console.log("保存当前查询", this.paginationForm);
-            this.loadingTable = false;
+            this.tableLoading = false;
           } else {
             this.$message.error(res.data.msg);
-            this.loadingTable = false;
+            this.tableLoading = false;
           }
         })
         .catch(error => {
@@ -419,13 +511,63 @@ export default {
         });
 
     },
-    addApi(data) {}
+    addApi(data) {
+      this.axios.post(libbookadd,data).then((res)=>{
+        console.log(res)
+      })
+    }
   }
 };
 </script>
 
 <style scoped>
 /*====== 0.0 初始化部分 ======*/
+.edit {
+  color: #00d7f0;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.ban {
+  color: #ff5c3c;
+  cursor: pointer;
+}
+#typeMessage{
+  display: none;
+  position: absolute;
+  top: 200px;
+  left:750px;
+  z-index: 30000;
+
+}
+#typeMessage div:nth-child(1){
+  width: 400px;
+  height: 50px;
+  background-color: #0096FF;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:2px 2px 10px #909090;
+}
+#typeMessage div:nth-child(2) {
+  overflow: auto;
+  height: 500px;
+  width: 370px;
+  background-color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color=#909090, direction=120, strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow: 2px 2px 10px #909090;
+}
 
 .box-card {
   background-color: #fff;

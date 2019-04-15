@@ -22,7 +22,6 @@
           <!-- 3.0 表格展示内容 仅提供搜索和分页功能 -->
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              @selection-change="handleSelectionChange"
               class="tableBorder"
               :data="tableData"
               empty-text="无数据"
@@ -31,11 +30,11 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" width="100" prop="id" label="序号"></el-table-column>
-              <el-table-column align="center" prop="username" width label="姓名"></el-table-column>
-              <el-table-column align="center" prop="idCard" width="200" label="身份证号"></el-table-column>
-              <el-table-column align="center" prop="phone" label="手机号码"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
+              <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" prop="name" width label="类型名"></el-table-column>
+              <el-table-column align="center" prop="code" width="200" label="类型标识"></el-table-column>
+              <el-table-column align="center" prop="parentCode" label="上级类型"></el-table-column>
+              <el-table-column align="center" prop="parentName" width="200" label="上级类型标识"></el-table-column>
             </el-table>
 
             <!-- 3.1 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
@@ -45,7 +44,7 @@
                 layout="prev, pager, next,total, jumper, ->"
                 :total="total"
                 :current-page="currentPage"
-                page-size="7"
+                :page-size="pageSize"
                 @current-change="current_change"
               ></el-pagination>
             </section>
@@ -98,7 +97,7 @@ export default {
     searchTimeForm() {
       // 计算属性 真正传递的数据
       let searchForm = {
-        keywords: this.searchForm.keywords
+        fkTypeCode: this.searchForm.keywords
       };
       return searchForm;
     }
@@ -120,9 +119,9 @@ export default {
     /*====== endApi调用区 ======*/
     SearchApi(value) { //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
 
-      this.loadingTable = true; // 加载前控制加载状态
+      this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(userManageInterface.select, {
+        .get(libbooktype, {
           params: value
         })
         .then(res => {
@@ -139,16 +138,16 @@ export default {
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             console.log("过滤后的数据", nomol);
             console.log("保存当前查询", this.paginationForm);
-            this.loadingTable = false;
+            this.tableLoading = false;
           } else {
             this.$message.error(res.data.msg);
-            this.loadingTable = false;
+            this.tableLoading = false;
           }
         })
         .catch(error => {
           console.log(error);
         });
-      
+
     }
   }
 };
@@ -258,7 +257,6 @@ export default {
   justify-content: center;
   margin-top: 30px;
 }
-
 
 </style>
 

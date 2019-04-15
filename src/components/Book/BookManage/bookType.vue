@@ -142,7 +142,7 @@ export default {
           console.log("当前获取的数据", res.data);
           if (res.data.state === true) {
             console.log('123')
-            let nomol = res.data.row.list;
+            let nomol = res.data.row
             let i = 1;
             for (let item of nomol) {
               item.index = i;
@@ -163,15 +163,9 @@ export default {
           console.log(error);
         });
     },
-
   },
   mounted(){
-    this.tableLoading=true
-    this.axios.get(bookurltype).then((res)=>{
-      console.log(res.data)
-      this.tableData=res.data.row.list
-      this.tableLoading=false
-    })
+    this.SearchApi()
   }
 };
 </script>
