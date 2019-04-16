@@ -33,7 +33,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              小猪
+              <span>用户名</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -50,19 +50,27 @@
         <el-aside class="nav" width="260px" style="background-color: #343B4A">
           <!-- 侧边栏主体 -->
           <el-menu
+            @select="routerBox"
             class="content"
             router
-            :default-openeds="['1', '3']"
             background-color="#545c64"
             text-color="#fff"
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
             <el-menu-item index="powerMode">首页</el-menu-item>
-            <NavMenu v-show="Mode==1" :navMenus="leftMenus.childs"></NavMenu>
+            <NavMenu v-show="Mode==1" :navMenus="testMenus[0].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==2" :navMenus="testMenus[1].roleModularMenus"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
+          <div class="routerBox" v-if="navRouter.length">
+            <span class="routerButton circularButton labelActive">
+              用户管理
+              <i class="Iconerror">x</i>
+            </span>
+          </div>
+          <div class="space"></div>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -75,14 +83,15 @@ import NavMenu from "../common/test/NavMenu";
 export default {
   data() {
     return {
-      Mode:1,
+      Mode: 1,
       leftMenus: {
         entity: null,
         childs: [
           {
-            entity: { // index与路由属性的区别
+            entity: {
+              // index与路由属性的区别
               id: 1, // 自身ID用于 与下面的parentId应该是用来形成树结构的
-              parentMenuId: 0, 
+              parentMenuId: 0,
               name: "systemManage", // 用来做index路由跳转
               icon: "el-icon-message\r\n", // 用于自己选项的图标
               alias: "系统管理", // 名字
@@ -309,12 +318,99 @@ export default {
           }
         ]
       },
+      testMenus: [
+        {
+          menuCode: "privilegeSystem",
+          menuName: "权限系统",
+          roleModularMenus: [
+            {
+              menuCode: "menuInformation", // 菜单路由地址
+              menuName: "菜单管理", // 菜单名字
+              roleModularMenus: null // 是否有子菜单
+            },
+            {
+              menuCode: "roleMenuElement",
+              menuName: "权限管理",
+              roleModularMenus: null
+            },
+            {
+              menuCode: "roleInformation",
+              menuName: "角色管理",
+              roleModularMenus: null
+            },
+            {
+              menuCode: "managerInformation",
+              menuName: "用户管理",
+              roleModularMenus: null
+            },
+            {
+              menuCode: "authTbManagerLoginLog",
+              menuName: "登陆记录",
+              roleModularMenus: null
+            }
+          ]
+        },
+        {
+          menuCode: "privilegeSystem",
+          menuName: "图书系统",
+          roleModularMenus: [
+            {
+              menuCode: "menuInformation",
+              menuName: "图书管理",
+              roleModularMenus: [
+                {
+                  menuCode: "/bookType",
+                  menuName: "图书类型",
+                  roleModularMenus: null
+                },
+                {
+                  menuCode: "/bookInfo",
+                  menuName: "图书信息",
+                  roleModularMenus: null
+                },
+                {
+                  menuCode: "/bookpublishhouse",
+                  menuName: "图书出版社",
+                  roleModularMenus: null
+                },
+              ]
+            },
+            {
+              menuCode: "roleMenuElement",
+              menuName: "藏馆管理管理",
+              roleModularMenus: [
+                {
+                  menuCode: "/libBookInfo",
+                  menuName: "藏馆信息",
+                  roleModularMenus: null
+                },
+                {
+                  menuCode: "/libBookType",
+                  menuName: "馆内图书信息",
+                  roleModularMenus: null
+                },
+                {
+                  menuCode: "/libInfo",
+                  menuName: "馆内图书类型",
+                  roleModularMenus: null
+                }
+                
+              ]
+            }
+          ]
+        }
+      ],
+      navRouter: []
     };
   },
   methods: {
     handleSelect(key, keyPath) {
-      this.Mode = key
+      this.Mode = key;
       console.log(key, keyPath);
+    },
+    routerBox(index, indexPath) {
+      console.log(index);
+      console.log(indexPath);
     }
   },
   components: {

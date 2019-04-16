@@ -19,6 +19,20 @@ const mutations={
     logOut: (state) => {
         removeToken() // 清除token
         state.token = null
+    },
+
+    setUserInfo:(state,data) => {
+        state.user = data
+    },
+    deleteUserInfo:(state,data) => {
+        state.user = {} // 清空数组
+    },
+
+    setMenu:(state,data) =>{
+        state.menu = data
+    },
+    deleteMenu:(state,data) => {
+        state.menu = {}
     }
 }
 

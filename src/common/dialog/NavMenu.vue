@@ -1,37 +1,32 @@
 <template>
   <div class="navMenu">
-  <!-- -->
     <label v-for="(navMenu,index) in navMenus" :key="index">
       <!-- 第一个出口 出口条件 没有子数据的时候 判定渲染 -->
        <!-- data传递意义不明 -->
       <el-menu-item
-        v-if="navMenu.roleModularMenus ==null"
-        :key="index"
+        v-if="navMenu.childs ==null &&navMenu.entity && navMenu.entity.state==='ENABLE'"
+        :key="navMenu.entity.id"
         :data="navMenu"
-        :index="navMenu.menuCode"
-        :route="navMenu.menuCode"
+        :index="navMenu.entity.name"
+        :route="navMenu.entity.value"
       >
-      <!-- 
         <i :class="navMenu.entity.icon"></i>
-      -->
-        <span slot="title" class="item_title">{{navMenu.menuName}}</span>
+        <span slot="title" class="item_title">{{navMenu.entity.alias}}</span>
       </el-menu-item>
 
       <!-- 多级递归菜单的入口 -->
       <el-submenu
-        v-if="navMenu.roleModularMenus"
-        :key="index"
+        v-if="navMenu.childs&&navMenu.entity&&navMenu.entity.state==='ENABLE'"
+        :key="navMenu.entity.id"
         :data="navMenu"
-        :index="navMenu.menuCode"
+        :index="navMenu.entity.name"
       >
         <template slot="title">
-          <!--
           <i :class="navMenu.entity.icon"></i>
-          -->
-          <span class="item_title"> {{navMenu.menuName}}</span>
+          <span class="item_title"> {{navMenu.entity.alias}}</span>
         </template>
         <!-- 入口条件 只要有子数据就进行递归  同时子数据没有也是出口条件-->
-        <NavMenu :navMenus="navMenu.roleModularMenus"></NavMenu>
+        <NavMenu :navMenus="navMenu.childs"></NavMenu>
       </el-submenu>
      
     </label>

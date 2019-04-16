@@ -96,7 +96,11 @@
 .userManage .searchBox .el-form{
   display: flex;
 }
+
 body{
   overflow: inherit!important;
   padding-right: 0!important;
 }
+
+/*elementUi弹框问题*/
+

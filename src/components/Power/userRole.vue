@@ -58,10 +58,10 @@
               <el-table-column align="center" prop="fkParentRoleCode" width="200" label="上級"></el-table-column>
               <el-table-column align="center" prop="createTime" width="250" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="isDefault" width="200" label="状态">
-              <template slot-scope="scope">
-                <span>{{scope.row.isDefault ===0?'否':'是'}}</span>
-              </template>
-            </el-table-column>
+                <template slot-scope="scope">
+                  <span>{{scope.row.isDefault ===0 ? '否':'是'}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="disabled" width="200" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
@@ -122,7 +122,7 @@
             </el-form-item>
             <el-form-item label="状态" prop="status" style="margin-left: 50px">
               <el-radio-group v-model="addForm.disabled">
-                <el-radio label="禁用" ></el-radio>
+                <el-radio label="禁用"></el-radio>
                 <el-radio label="启用"></el-radio>
               </el-radio-group>
             </el-form-item>
@@ -386,87 +386,87 @@
           this.addApi(this.newaddForm)
           this.dialogFormVisible=false
         }
-        if(this.i===2){
+        if (this.i === 2) {
           //alert(222)
           this.editApi(this.neweditForm)
 
         }
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.dialogFormVisible = true; // 关闭弹框
+            this.dialogFormVisible = true // 关闭弹框
           } else {
             //console.log("error submit!!");
             //console.log(this.addForm);
-            return false;
+            return false
           }
-        });
+        })
       },
       //修改
-      editApi(value){
-        this.axios.put(userroleedit,value).then((respones)=>{
+      editApi (value) {
+        this.axios.put(userroleedit, value).then((respones) => {
           //console.log(respones)
-          if(respones.data.state==true){
+          if (respones.data.state == true) {
             this.$message({
               message: respones.data.msg,
               type: 'success'
-            });
+            })
             this.selectApi(this.searchTimeForm)
-            this.dialogFormVisible=false
+            this.dialogFormVisible = false
             this.closeForm()
-          }else{
+          } else {
             this.$message({
               message: respones.data.msg,
               type: 'error'
-            });
+            })
           }
         })
       },
       // 添加
-      addApi(value){
-        this.axios.post(userroleadd,value).then((respones)=>{
+      addApi (value) {
+        this.axios.post(userroleadd, value).then((respones) => {
           //console.log(respones)
-          if(respones.data.state==true){
+          if (respones.data.state == true) {
             this.$message({
               message: respones.data.msg,
               type: 'success'
-            });
+            })
             this.selectApi(this.searchTimeForm)
-            this.dialogFormVisible=false
+            this.dialogFormVisible = false
             this.closeForm()
-          }else{
+          } else {
             this.$message({
               message: respones.data.msg,
               type: 'error'
-            });
+            })
           }
         })
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      resetForm (formName) {
+        this.$refs[formName].resetFields()
       },
-      pointer() {
-        this.$refs.file.click();
+      pointer () {
+        this.$refs.file.click()
       },
-      closeForm() {
+      closeForm () {
         // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
-        let obj = this.addForm;
+        let obj = this.addForm
         for (var i in obj) {
-          obj[i] = "";
+          obj[i] = ''
         }
       }
     },
-    mounted(){
+    mounted () {
       console.log(this.searchTimeForm)
       //this.select(this.searchTimeForm)
       this.selectApi(this.searchTimeForm)
       //表单中下拉框上级的初始化数据
-      this.axios.get(userrole).then((response)=>{
-        console.log('下拉框数据',response)
-        if(response.data.state==true){
-          for(var item of response.data.row){
+      this.axios.get(userrole).then((response) => {
+        console.log('下拉框数据', response)
+        if (response.data.state == true) {
+          for (var item of response.data.row) {
             console.log(item.roleName)
-            this.optionsData.push({roleName:item.roleName,roleCode:item.roleCode})
+            this.optionsData.push({roleName: item.roleName, roleCode: item.roleCode})
           }
         }
       })
@@ -474,43 +474,43 @@
     },
     computed: {
       //模糊查询参数
-      searchTimeForm(){ // 计算属性 真正传递的数据
+      searchTimeForm () { // 计算属性 真正传递的数据
         let searchForm = {
           pageSize: this.pageSize,
-          currentPage:1,
-          roleName:this.formInline.parent,
-          beginTime: this.formInline.startTime === ""? null : moment(this.formInline.startTime).format("YYYY-MM-DD"), //开始时间
-          endTime: this.formInline.endTime === ""? null : moment(this.formInline.endTime).format("YYYY-MM-DD"), //结束时间
+          currentPage: 1,
+          roleName: this.formInline.parent,
+          beginTime: !this.formInline.startTime ? null : moment(this.formInline.startTime).format('YYYY-MM-DD'), //开始时间
+          endTime: !this.formInline.endTime ? null : moment(this.formInline.endTime).format('YYYY-MM-DD'), //结束时间
         }
         //console.log(searchForm)
         return searchForm
       },
       //添加参数
-      newaddForm(){
-        let newForm={
-          roleName:this.addForm.userType,
-          isDefault:this.addForm.isDefault==='是'?1:0,
-          disabled:this.addForm.disabled==='禁用'?1:0,
-          fkParentRoleCode:this.addForm.parent
+      newaddForm () {
+        let newForm = {
+          roleName: this.addForm.userType,
+          isDefault: this.addForm.isDefault === '是' ? 1 : 0,
+          disabled: this.addForm.disabled === '禁用' ? 1 : 0,
+          fkParentRoleCode: this.addForm.parent
         }
         //console.log(newForm)
         return newForm
       },
       //修改参数
-      neweditForm(){
-        let newForm={
-          id:this.id,
-          roleCode:this.roleCode,
-          roleName:this.addForm.userType,
-          isDefault:this.addForm.isDefault==='是'?1:0,
-          disabled:this.addForm.disabled==='禁用'?1:0,
-          fkParentRoleCode:this.addForm.parent
+      neweditForm () {
+        let newForm = {
+          id: this.id,
+          roleCode: this.roleCode,
+          roleName: this.addForm.userType,
+          isDefault: this.addForm.isDefault === '是' ? 1 : 0,
+          disabled: this.addForm.disabled === '禁用' ? 1 : 0,
+          fkParentRoleCode: this.addForm.parent
         }
         console.log(newForm)
         return newForm
       }
     },
-  };
+  }
 </script>
 
 <style scoped>
@@ -519,6 +519,7 @@
     display: flex;
     justify-content: center;
   }
+
   .routerBox {
     background-color: #fff;
     min-height: 70px;
@@ -528,23 +529,29 @@
     display: flex;
     box-sizing: border-box;
   }
+
   .routerButton {
     margin-right: 30px;
   }
+
   .space {
     background-color: #ebf7ff;
     height: 30px;
   }
+
   .box-card {
     background-color: #fff;
     box-sizing: border-box;
   }
+
   .important {
     padding: 30px;
   }
+
   /* 1.0标题 通用部分 */
   .sonTitle {
   }
+
   .sonTitle .titleName {
     border-left: 4px solid #0096ff;
     padding-left: 10px;
@@ -555,55 +562,70 @@
     display: inline-block;
     margin-bottom: 33px;
   }
+
   .useradd {
   }
+
   .useradd .box-card {
     width: 100%;
   }
+
   .text {
     font-size: 14px;
   }
+
   /* 清楚浮动 */
   .clearfix:before,
   .clearfix:after {
     display: table;
     content: "";
   }
+
   .clearfix:after {
     clear: both;
   }
+
   /*====== 2.0表单区域 ======*/
   /* 可以通过size属性添加一个classname */
 
   .el-form--inline .el-form-item {
     margin-right: 25px;
   }
+
   .el-form--inline .el-form-item:last-child {
     margin-right: 0;
   }
+
   .el-input.el-input--120 {
     width: 160px;
   }
+
   .el-input.el-input--120 input {
     height: 36px;
     line-height: 36px;
   }
+
   .el-input.el-input--160 {
     width: 160px;
   }
+
   .el-range-editor--130 {
     width: 300px;
   }
+
   .el-select.el-select--160 {
     width: 160px;
   }
+
   .el-button--15 {
     padding: 12px 29px;
   }
+
   /* 按钮 */
   .buttonBox {
     margin-bottom: 30px;
   }
+
   .buttonBox button {
     padding-left: 18px;
     padding-right: 18px;
@@ -626,30 +648,37 @@
     transition: 0.1s;
     font-weight: 500;
   }
+
   .buttonBox .add {
     background: rgba(255, 146, 49, 1);
     border-radius: 10px;
     margin-right: 30px;
   }
+
   .buttonBox .add .addIcon {
     margin-right: 6px;
   }
+
   .buttonBox .delete {
     background: rgba(255, 92, 60, 1);
     border-radius: 10px;
   }
+
   .buttonBox .delete .deleteIcon {
     margin-right: 6px;
   }
+
   /*====== 3.0表格区域 ======*/
   .item {
     margin-bottom: 50px;
   }
+
   .tablebox .tableBorder {
     border: 1px solid #ebeef5;
     border-bottom: none;
     font-size: 16px;
   }
+
   /* 操作表格区 表格列添加样式名是无效的 */
   .imgDefault {
     width: 30px;
@@ -658,17 +687,21 @@
     border-radius: 50%;
     background-color: #333;
   }
+
   .operator {
   }
+
   .edit {
     color: #00d7f0;
     cursor: pointer;
     margin-right: 20px;
   }
+
   .ban {
     color: #ff5c3c;
     cursor: pointer;
   }
+
   /*====== 4.0 分页器区域 ======*/
   .pagination .el-pagination {
     display: flex;
@@ -681,6 +714,7 @@
     text-align: left;
     padding-left: 20px;
   }
+
   .Iconerror {
     position: absolute;
     width: 12px;
@@ -689,11 +723,13 @@
     color: #fff;
     right: 20px;
   }
+
   .labelActive {
     background-color: #0096ff;
     color: #fff;
     border: none;
   }
+
   /*====== 弹框相关部分 后期可能更新为全局通用样式 ======*/
   .mask {
     width: 100vw;
@@ -703,6 +739,7 @@
     background: rgba(0, 0, 0, 1);
     opacity: 0.5;
   }
+
   .addDialog {
     width: 685px;
     position: absolute;
@@ -716,6 +753,7 @@
     overflow: hidden;
     box-shadow: none;
   }
+
   .addDialog .dialogTitle {
     height: 80px;
     background-color: #0096ff;
@@ -725,6 +763,7 @@
     font-size: 26px;
     position: relative;
   }
+
   .addDialog .close {
     position: absolute;
     color: #fff;
@@ -737,52 +776,67 @@
     font-size: 16px;
     cursor: pointer;
   }
+
   .addDialog .dialogBody {
     background: #fff;
     padding-top: 30px;
   }
+
   .addDialog .dialog-footer {
     padding-bottom: 46px;
   }
+
   /*Vue过渡动画*/
   /*遮罩过渡*/
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.2s;
   }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
     opacity: 0;
   }
+
   /*过渡的状态 即过渡的关键帧打那些*/
   .dialog-enter-active,
   .dialog-leave-active {
     transition: all 0.3s;
   }
-  .dialog-enter, .dialog-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+  .dialog-enter, .dialog-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
     opacity: 0;
     top: 47%;
   }
+
   /*row排列*/
   .row1 {
     display: flex;
     padding: 0 30px;
   }
+
   .row1 .el-form-item {
     margin-bottom: 30px;
   }
+
   .row1.el-input .el-input__inner {
     width: 200px;
   }
+
   .upload {
     display: flex;
     justify-content: center;
   }
+
   .upload .defultHead {
     position: relative;
   }
+
   .defultHead:hover .bgload {
     display: block;
   }
+
   .bgload {
     background-color: rgba(0, 0, 0);
     position: absolute;
@@ -795,10 +849,12 @@
     display: none;
     color: #fff;
   }
+
   .defultImg {
     position: absolute;
     z-index: 1;
   }
+
   .preloadImg {
     position: absolute;
     top: 0;

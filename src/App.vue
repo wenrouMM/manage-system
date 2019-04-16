@@ -6,6 +6,7 @@
 </template>
 
 <script>
+ var vm
 export default {
   name: 'App'
 }

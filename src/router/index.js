@@ -15,7 +15,7 @@ import Test from '../common/test/test.vue'
 import Test2 from '../common/test/test2.vue'
 import TestBook from '../common/test/testBook.vue'
 import BookType from '../components/Book/BookManage/bookType.vue'
-import BookInfo  from '../components/Book/BookManage/bookInfo.vue'
+import BookInfo from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibInfo from '../components/Book/libInfo.vue'
 
@@ -23,7 +23,6 @@ import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
 import ShelfBind from '../components/Area/areaManage/shelfBind'
 import TestReader from '../common/test/testReader.vue'
-
 import ReaderAdmin from '../components/Reader/ReaderManagement/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
 
@@ -34,24 +33,20 @@ import BookRegistration from '../components/Reader/libraryManage/bookRegistratio
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
-
 import LoanRecorde from '../components/Reader/LoanManagement/loanRecords.vue'
 import LoanHistory from '../components/Reader/LoanManagement/loanHistory.vue'
 import BorrowingBooks from '../components/Reader/LoanManagement/borrowingBooks.vue'
 import BorrowingStatus from '../components/Reader/LoanManagement/borrowingStatus.vue'
 import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
 import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
-
 import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
 import DepositRecord from '../components/Reader/RechargeManagement/depositRecord.vue'
 import PaymentRecord from '../components/Reader/RechargeManagement/paymentRecord.vue'
 import DepositDetails from '../components/Reader/RechargeManagement/depositDetails.vue'
 import PaymentDetails from '../components/Reader/RechargeManagement/paymentDetails.vue'
-
 import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
 import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
 import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
-
 import IncreditRecord from '../components/Reader/IncreditManagement/increditRecord.vue'
 import IncreditHistory from '../components/Reader/IncreditManagement/incredithistory.vue'
 import IncreditSetting from '../components/Reader/IncreditManagement/increditsettings.vue'
@@ -66,82 +61,106 @@ Vue.use(Router)
 
 export default new Router({
   //mode:history,
-  routes: [
-    {
+  routes: [{
       path: '/',
       redirect: '/home'
     },
     {
-      path:'/login',
-      component:Login
+      path: '/login',
+      component: Login
     },
 
     {
-      path:'/home',
-      name:'index',
+      path: '/home',
+      name: 'index',
       component: Index,
-      children:[
-        {
-          path:'home',
+      children: [{
+          path: '/home',
           name: 'home',
           component: Home
         },
+        /*
         {
+
           path: 'useradd',
           name: 'useradd',
           component: UserAdd
         },
+        {
+          path: '/bookType',
+          component: BookType,
+        },
+        {
+          path: '/bookInfo',
+          component: BookInfo
+        },
+        {
+          path: '/bookInfo/:id',
+          component: Detail
+        },
+        {
+          path: '/bookpublishhouse',
+          component: BookPublishHouse
+        },
+        {
+          path: '/libBookInfo',
+          component: LibBookInfo
+        },
+        {
+          path: '/libInfo',
+          component: LibInfo
+        }*/
       ]
     },
     {
-      path:'*',
-      component:Not
+      path: '*',
+      component: Not
     },
     {
-      path:'/test', // 一级路由 管理横条
-      component:Test,
-      children:[
-        {
-          path:'/powerMode',// 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
+      path: '/test', // 一级路由 管理横条
+      component: Test,
+      children: [{
+          path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
           component: Test2,
-          children:[
-            {
-              path:'/powerMode', // 三级路由 真正的内容
-              component:Home,
+          children: [{
+              path: '/powerMode', // 三级路由 真正的内容
+              component: Home,
             },
             {
-              path:'/userManage',
-              component:UserManage,
+              path: '/userManage',
+              component: UserManage,
+              meta:{
+                menuName:'权限管理'
+              }
             },
             {
-              path:'/userRole',
-              component:UserRole,
+              path: '/userRole',
+              component: UserRole,
             },
             {
-              path:'/powerControl',
-              component:PowerControl,
+              path: '/powerControl',
+              component: PowerControl,
             },
             {
-              path:'/menu',
-              component:Menu,
+              path: '/menu',
+              component: Menu,
             },
             {
-              path:'/loginRecord',
-              component:LoginRecord
+              path: '/loginRecord',
+              component: LoginRecord
             }
           ]
         },
         {
-          path:'/areaMode',
-          component:TestArea,
-          children:[
-            {
-              path:'/stoneroomInfo',
-              component:StoneRoomInfo
+          path: '/areaMode',
+          component: TestArea,
+          children: [{
+              path: '/stoneroomInfo',
+              component: StoneRoomInfo
             },
             {
-              path:'/shelfBind',
-              component:ShelfBind
+              path: '/shelfBind',
+              component: ShelfBind
             }
           ]
         },
@@ -156,30 +175,43 @@ export default new Router({
             {
               path:'/bookType',
               component:BookType,
+          path: '/bookMode',
+          component: TestBook,
+          children: [{
+              path: '/bookType',
+              component: BookType,
             },
             {
-              path:'/bookInfo',
-              component:BookInfo
+              path: '/bookInfo',
+              component: BookInfo
             },
             {
               path: '/bookInfo/:id',
-              component:Detail
+              component: Detail
             },
             {
-              path:'/bookpublishhouse',
-              component:BookPublishHouse
+              path: '/bookpublishhouse',
+              component: BookPublishHouse
             },
+            {
+              path: '/libBookInfo',
+              component: LibBookInfo
+            },
+            {
+              path: '/libInfo',
+              component: LibInfo
+            }
           ]
         },
         {
-          path:'/readerMode',
-          component:TestReader,
-          children:[
-            {
-              path:'/readeradmin',
-              component:ReaderAdmin,
+          path: '/readerMode',
+          component: TestReader,
+          children: [{
+              path: '/readeradmin',
+              component: ReaderAdmin,
             },
             {
+
               path:'/getcard',
               name:"GetCard",
               component:GetCard,
@@ -203,12 +235,15 @@ export default new Router({
             {
               path:'/readercardmanagement',
               component:ReaderCardManagement,
+              path: '/readercardmanagement',
+              component: ReaderCardManagement,
             },
             {
-              path:'/readercardtype',
-              component:ReaderCardType,
+              path: '/readercardtype',
+              component: ReaderCardType,
             },
             {
+
               path:'/readercardgrade',
               component:ReaderCardGrade,
             },
@@ -276,10 +311,7 @@ export default new Router({
               path:'/incredithistory',
               component:IncreditHistory
             },
-            {
-              path:'/increditsetting',
-              component:IncreditSetting
-            }
+
           ]
         }
       ]

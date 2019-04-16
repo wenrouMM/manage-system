@@ -10,15 +10,18 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
+            <div>
+              
+            </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
                 <el-input size="120" v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
               </el-form-item>
               <el-form-item label="角色名称:" size="160">
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
-                <el-select v-model="searchForm.userType" value-key="roleCode" placeholder="请选择角色">
+                <el-select clearable v-model="searchForm.userType" value-key="roleCode" placeholder="请选择角色">
                   <el-option
-                    v-for="(option) of selectData"
+                    v-for="(option) of optionsData"
                     :key="option.roleCode"
                     :label="option.roleName"
                     :value="option"
@@ -35,8 +38,7 @@
                 <el-date-picker
                   v-model="searchForm.date"
                   type="daterange"
-                  align="right"
-
+                  align="right" 
                   range-separator="至"
                   :picker-options="pickerOptions"
                   start-placeholder="开始日期"
@@ -68,7 +70,9 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
+              
               <el-table-column align="center" type="selection" width="100"></el-table-column>
+              <el-table-column align="center" type="index" width="100" label="序号"></el-table-column>
               <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
               <el-table-column align="center" width="100" prop="src" label="头像">
                 <template slot-scope="scope">
@@ -123,6 +127,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <el-button></el-button>
             </section>
           </section>
         </div>
@@ -157,11 +162,13 @@
           :title="Dialogtitle[i]"
           :visible.sync="dialogFormVisible"
         >
+          <!-- 白屏问题所在 -->
           <el-form
             v-loading="editLoading"
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
+            
             :model="addForm"
             :rules="addRules"
           >
@@ -218,7 +225,7 @@
                 value-key="roleCode"
               >
                 <el-option
-                  v-for="(option) of selectData"
+                  v-for="(option) of optionsData"
                   :key="option.roleCode"
                   :label="option.roleName"
                   :value="option"
@@ -260,15 +267,16 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg,
-  selectRoleType
+  headimg
 } from "../../request/api/base.js";
 import moment from "moment";
 import axios from "../../request/http.js";
 export default {
   created() {
+    let route = this.$route.path
+    console.log(this.$route.path)
+    console.log(this.$route.meta.menuName)
     this.roleType(); // 获取角色类型
-    this.selectRoleType() // 获取添加角色类型
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
@@ -318,7 +326,7 @@ export default {
       /*====== 2.0表单提交数据项 ======*/
       pickerOptions: {
         disabledDate(time) {
-         return time.getTime() > Date.now()
+         return time.getTime() > Date.now() 
         }
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
@@ -340,7 +348,6 @@ export default {
       /*====== 5.0 分页相关 搜索相关设置项 ======*/
       loading: true,
       optionsData: [],
-      selectData:[],
       total: 0,
       pageSize: 7,
       currentPage: 1,
@@ -366,7 +373,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1,
         name: this.searchForm.userName,
-        fkRoleCode: this.searchForm.userType.roleCode, // 只是给了一个code
+        roleCode: this.searchForm.userType.roleCode, // 只是给了一个code
         loginSource:
           this.searchForm.loginSource === "全部"
             ? null
@@ -374,7 +381,7 @@ export default {
         beginTime: null,
         endTime: null
       };
-      if (date != '') {
+      if (date != null && date!= '') {
         searchForm.beginTime = moment(this.searchForm.date[0]).format(
           "YYYY-MM-DD"
         ); //开始时间
@@ -395,10 +402,10 @@ export default {
         address: this.addForm.address,
         phone: this.addForm.phone,
         sex: sexNumber,
+        email:this.addForm.email,
         headerAddress: this.addForm.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
-        isLock: lock,
-        email:this.addForm.email
+        isLock: lock
       };
       if (i === 2) {
         data.id = this.addForm.id;
@@ -429,12 +436,16 @@ export default {
     },
     batchDelete() {
       // 批量删除按钮
-
+     
+      
       if (this.deleteArr.length) {
         this.i = 1;
         this.centerDialogVisible = true;
+      }else{
+        this.$message.error("请先选择删除对象");
       }
-      this.$message.error("请先选择删除对象");
+      
+      
     },
     deleteApi(arr) {
       // 批量删除API调用 deleteArr 确认按钮就是执行相应的API
@@ -451,10 +462,9 @@ export default {
           if (res.data.state === true) {
             console.log(res.data);
             this.SearchApi(this.paginationForm); // 删除成功就重新加载一次数据
-             // 提示删除成功 是否需要提示信息
+            this.centerDialogVisible = false; // 提示删除成功 是否需要提示信息
             this.$message.success("删除成功");
             this.banDeleteLoading = false;
-            this.centerDialogVisible = false;
           } else {
             this.$message.error(res.data.msg);
             this.banDeleteLoading = false;
@@ -463,18 +473,23 @@ export default {
     },
     /*====== 4.0表格操作相关 ======*/
     handleBan(index, row) {
+      this.i = 0;
+        this.banArr.id = row.id;
+        console.log(index, row, this.banArr); // 当前选中表格的索引和对
+        this.centerDialogVisible = true;
       // 禁用按钮 按钮的作用就是获取一切初始化信息
+      /*
       if (row.isLock == 1) {
         this.$message.error("该用户已被禁用");
-
+        
       } else{
         this.i = 0;
         this.banArr.id = row.id;
         console.log(index, row, this.banArr); // 当前选中表格的索引和对
         this.centerDialogVisible = true;
       }
-
-
+      */
+      
     },
     banApi(arr) {
       this.banDeleteLoading = true;
@@ -483,10 +498,11 @@ export default {
         console.log(res.data);
         if (res.data.state === true) {
           console.log(res.data);
+          
+          this.banDeleteLoading = false;
+          this.centerDialogVisible = false
           this.SearchApi(this.paginationForm); // 禁用成功就重新加载一次数据
           this.$message.success("禁用成功");
-          this.centerDialogVisible=false;
-          this.banDeleteLoading = false;
         } else {
           this.$message.error(res.data.msg); // 提示删除成功
           this.banDeleteLoading = false;
@@ -501,7 +517,7 @@ export default {
       this.addForm.idCard = row.idCard;
       this.addForm.address = row.address;
       this.addForm.phone = row.phone;
-      this.addForm.email = row.email;
+
       this.addForm.sex = row.sex.toString(); // 要转化为字符串格式才行
       this.addForm.headerAddress = row.headerAddress;
       this.addForm.isLock = row.isLock.toString();
@@ -517,7 +533,7 @@ export default {
         // 没有数据怎么办
         if (res.data.state === true) {
           let data = res.data.row;
-          let optionsData = [];
+          let optionsData = [{roleCode:'',roleName:'全部角色'}];
           for (let item of data) {
             let obj = {};
             obj.roleCode = item.roleCode;
@@ -525,22 +541,6 @@ export default {
             optionsData.push(obj);
           }
           this.optionsData = optionsData;
-        }
-      });
-    },
-    selectRoleType() {
-      axios.get(selectRoleType).then(res => {
-        // 没有数据怎么办
-        if (res.data.state === true) {
-          let data = res.data.row;
-          let optionsData = [];
-          for (let item of data) {
-            let obj = {};
-            obj.roleCode = item.roleCode;
-            obj.roleName = item.roleName;
-            optionsData.push(obj);
-          }
-          this.selectData = optionsData;
         }
       });
     },
@@ -562,10 +562,14 @@ export default {
           console.log("当前获取的数据", res);
           if (res.data.state === true) {
             let nomol = res.data.row;
-            let i = 1;
+            let i = (this.currentPage-1)*7 + 1;
             for (let item of nomol) {
+             // let idValue = item.id
+             // let phoneValue = item.phone
               item.src = headimg + "?id=" + item.id;
               item.index = i;
+              //item.idFade = idValue.substr(0,3) + '****' + idValue.substr(-1,-3)
+              //item.phoneValue = phoneValue.substr(0,5) + '********' + phoneValue.substr(-1,-3)
               i++;
             }
             this.tableData = nomol; //获取返回数据
@@ -603,7 +607,6 @@ export default {
       let i = this.i;
       if (i == 1) {
         this.deleteApi(this.deleteArr);
-
       } else {
         this.banApi(this.banArr);
       }
@@ -756,8 +759,7 @@ export default {
   display: inline-block;
   margin-bottom: 33px;
 }
- {
-}
+
 .box-card {
   width: 100%;
 }
@@ -979,6 +981,22 @@ export default {
 6.拦截器的配置
 遇到的bug
 0.0 bug其一 nav选中状态的处理 :default-active="this.$route.path" 使得当前路由处于选中状态
+4/15
+1.日期按钮消除bug 完成1 moment插件在传递空字符串的时候会返回一个非法字符 传递null的时候会返回当前日期
+2.下拉框清除当前按钮或者选中全部 完成1 添加 clearable属性即可
+
+4.序号累加 完成 为何elementUI的未生效 若生效则使用 未生效则更改index的值
+5.按钮节点限制点击 完成 :loading="true"添加限制即可
+6.默认图片的替换 完成  table表格显示图像 用户头像自定义
+7.邮箱绑定 addForm的获取和传递
+8.分页器确定按钮的增加 完成 10条数据 el-button或者自己手动添加 根据current 根据个鬼= = 按钮没任何功能 就是模糊特效
+9.三级联动
+10.text文本框禁止拉伸
+11.echarts数字显示
+12.日期显示统一规格
+13.角色管理 是否默认 删除 选项删除 默认全传否、
+14.用户管理 身份证 性别 姓名禁用 字段修改 3.手机号码 身份证号码 的正则替换 不写 字符串裁剪完成 正则表达式匹配完成 待定
+ 
 */
 </style>
 
