@@ -35,7 +35,11 @@
                     :row-style="rowStyle"
                     :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
                   >
-                  <el-table-column align="center" prop="index" width="220" label="序号"></el-table-column>
+                  <el-table-column align="center" prop="index" width="220" label="序号">
+                    <template slot-scope="scope">
+                      <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column align="center" prop="name" width="250" label="出版社名称"></el-table-column>
                   <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
                   <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
@@ -261,11 +265,11 @@
             console.log("当前获取的数据", res.data);
             if (res.data.state === true) {
               let nomol = res.data.row;
-              let i = 1;
-              for (let item of nomol) {
-                item.index = i;
-                i++;
-              }
+              // let i = 1;
+              // for (let item of nomol) {
+              //   item.index = i;
+              //   i++;
+              // }
               this.tableData = nomol; //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果

@@ -40,13 +40,13 @@ import axios from 'axios'
     methods:{
       submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
         console.log('???执行了没')
-        axios.post( 'http://192.168.2.31:8088/authmodule/index/login' ,({account:this.form.name,
+        axios.post( 'http://192.168.2.121:8088/authmodule/index/login' ,({account:this.form.name,
           password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
           console.log(res)
           if(res.data.state==true){ // 获取数据后进行存取操作
             var token=res.data.row.authorization // 获取token
             console.log(token)
-            
+
             //localStorage.setItem('token',token) // 存入本地 字符串形式存取
             this.$store.commit('login', token)// 存入Vuex
             // 获取路由信息

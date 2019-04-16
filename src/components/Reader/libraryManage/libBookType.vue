@@ -30,7 +30,11 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" width="100" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" width="100" prop="index" label="序号">
+                <template slot-scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="name" width label="类型名"></el-table-column>
               <el-table-column align="center" prop="code" width="200" label="类型标识"></el-table-column>
               <el-table-column align="center" prop="parentCode" label="上级类型"></el-table-column>

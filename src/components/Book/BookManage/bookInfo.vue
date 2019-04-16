@@ -45,7 +45,11 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             >
-              <el-table-column align="center" width="80" prop="index" label="序号"></el-table-column>
+              <el-table-column align="center" width="80" prop="index" label="序号">
+                <template slot-scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" width="180" prop="name" label="书籍名称"></el-table-column>
               <el-table-column align="center" :show-overflow-tooltip="true" prop="searchNumber" width="110" label="索书号"></el-table-column>
               <el-table-column align="center" prop="author" width="150" label="作者"></el-table-column>
@@ -98,35 +102,10 @@
               <section class="upload mr_30" @click="pointer">
                 <!-- 背景图片做改动 -->
                 <div class="defultHead">
-                  <img
-                    class="defaultimage"
-                    style="width:150px; height:200px;"
-                    alt="user image"
-                    :src="defaultImg"
-                    v-if="!addForm.headIcon||!addForm.headerAddress"
-                  >
-                  <img
-                    style="width:150px; height:200px ;"
-                    v-if="!addForm.headIcon"
-                    :src="addForm.headerAddress"
-                    alt="传递照片"
-                    class="preloadImg"
-                  >
-                  <img
-                    style="width:150px; height:200px ;"
-                    v-if="addForm.headIcon"
-                    :src="addForm.headIcon"
-                    alt="预览照片"
-                    class="preloadImg"
-                  >
-                  <input
-                    type="file"
-                    accept="jpg/png"
-                    style="display:none;"
-                    ref="file"
-                    id="file"
-                    @change="getFile"
-                  >
+                  <img class="defaultimage" style="width:150px; height:200px;" alt="user image" :src="defaultImg" v-if="!addForm.headIcon||!addForm.headerAddress">
+                  <img style="width:150px; height:200px ;" v-if="!addForm.headIcon" :src="addForm.headerAddress" alt="传递照片" class="preloadImg">
+                  <img style="width:150px; height:200px ;" v-if="addForm.headIcon" :src="addForm.headIcon" alt="预览照片" class="preloadImg">
+                  <input type="file" accept="jpg/png" style="display:none;" ref="file" id="file" @change="getFile">
                   <div class="bgload" style="width:150px; height:200px; ">上传封面</div>
                 </div>
               </section>
@@ -160,7 +139,7 @@
             </div>
             <el-form-item label="类型名称" prop="typeName" :label-width="formLabelWidth" style="position: relative" >
               <el-input v-model="addForm.typeName" autocomplete="off"></el-input>
-              <img src="../../../../src/base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 160px" @click="typeMessage">
+              <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 160px" @click="typeMessage">
             </el-form-item>
             <div class="row1">
               <el-form-item label="书籍简介" prop="bookContent" :label-width="formLabelWidth">
@@ -515,11 +494,6 @@ export default {
           console.log("当前获取的数据", res.data);
           if (res.data.state === true) {
             let nomol = res.data.row;
-            let i = 1;
-            for (let item of nomol) {
-              item.index = i;
-              i++;
-            }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果

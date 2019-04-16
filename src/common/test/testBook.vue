@@ -15,26 +15,16 @@
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
           <el-menu-item index="powerMode">首页</el-menu-item>
+          <el-menu-item index="/libInfo">藏馆信息</el-menu-item>
           <el-submenu index="4" >
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>图书管理</span>
             </template>
 
-              <el-menu-item index="/bookType">图书类型</el-menu-item>
-              <el-menu-item index="/bookInfo">图书信息</el-menu-item>
-              <el-menu-item index="/bookpublishhouse">图书出版社</el-menu-item>
-
-          </el-submenu>
-          <el-submenu background-color="#545c64" index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>藏馆管理</span>
-            </template>
-
-              <el-menu-item index="/libInfo">藏馆信息</el-menu-item>
-              <el-menu-item index="/libBookInfo">馆内图书信息</el-menu-item>
-              <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
+            <el-menu-item index="/bookType">图书类型</el-menu-item>
+            <el-menu-item index="/bookInfo">图书信息</el-menu-item>
+            <el-menu-item index="/bookpublishhouse">图书出版社</el-menu-item>
 
           </el-submenu>
         </el-menu>

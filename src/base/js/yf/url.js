@@ -37,3 +37,5 @@ url='http://192.168.2.121:8088/';
   libbookadd=url+'tibetmuseummodule/bookTbInfo/add' //馆内图书信息添加
   libbookedit=url+'tibetmuseummodule/bookTbInfo/edit' //馆内图书信息修改下架状态
   libbooktype=url+'tibetmuseummodule/bookTbType/select' //馆内图书类型查询
+/*图书登记*/
+  bookRegist=url+'tibetmuseummodule/bookTbInfo/selectOne' //图书登记ISBN接口查详情

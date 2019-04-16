@@ -36,10 +36,10 @@
               <!-- 下拉框 -->
               <el-form-item label="类型:" size="160"  style="position: relative">
                 <el-input v-model="searchForm.type" placeholder="请输入类型"></el-input>
-                <img src="../../../../src/base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 120px" @click="typeMessage">
+                <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 120px" @click="typeMessage">
               </el-form-item>
               <el-form-item label="状态:" size="160">
-                <el-select v-model="searchForm.status" placeholder="请选择状态">
+                <el-select v-model="searchForm.status"  clearable  placeholder="请选择状态">
                   <el-option
                     v-for="(option,index) of optionsStatus"
                     :key="index"
@@ -63,8 +63,12 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column align="center" width="80" prop="index" label="序号"></el-table-column>
-              <el-table-column align="center" width="120" prop="name" label="书名"></el-table-column>
+              <el-table-column align="center" width="90" prop="index" label="序号">
+                <template slot-scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" width="130" prop="name" label="书名"></el-table-column>
               <el-table-column
                 align="center"
                 :show-overflow-tooltip="true"
@@ -72,15 +76,14 @@
                 width="150"
                 label="索书号"
               ></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="120" label="馆藏码"></el-table-column>
-              <el-table-column align="center" prop="barcode" width="150" :show-overflow-tooltip="true" label="条码"></el-table-column>
-              <el-table-column align="center" prop="lend" width="80" label="借出数量"></el-table-column>
-              <el-table-column align="center" prop="total" width="150" :show-overflow-tooltip="true" label="馆藏数量"></el-table-column>
-              <el-table-column align="center" prop="person" width="80" :show-overflow-tooltip="true" label="录入员"></el-table-column>
-              <el-table-column align="center" prop="entryTime" width="150" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="150" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="100" label="类型"></el-table-column>
-              <el-table-column align="center" prop="state" width="100" label="状态">
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="130" label="馆藏码"></el-table-column>
+              <el-table-column align="center" prop="barcode" width="130" :show-overflow-tooltip="true" label="条码"></el-table-column>
+              <el-table-column align="center" prop="lend" width="130" label="借出数量"></el-table-column>
+              <el-table-column align="center" prop="total" width="130" :show-overflow-tooltip="true" label="录入员"></el-table-column>
+              <el-table-column align="center" prop="entryTime" width="140" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="140" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
+              <el-table-column align="center" prop="fkTypeCode" width="140" label="类型"></el-table-column>
+              <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
                 </template>
