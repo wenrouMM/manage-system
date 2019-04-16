@@ -10,12 +10,6 @@
           </div>
           <!-- 2.0 表单填写 查询添加 内容需做调整  -->
           <section class="searchBox Posleft">
-            <div class="buttonBox">
-              <button class="add" @click="addDialogOpen">
-                <i class="addIcon el-icon-plus"></i>添加
-              </button>
-            </div>
-
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="书籍名称:">
                 <el-input size="120" v-model="searchForm.bookName" placeholder="请输入书籍名称"></el-input>
@@ -80,80 +74,6 @@
           </section>
         </div>
       </div>
-      <!-- end弹框组 添加弹框 -->
-      <!-- 添加弹框 -->
-      <div class="addEditDialog">
-        <!-- Form -->
-        <el-dialog
-          @close="closeForm"
-          width="685px"
-          :title="Dialogtitle[0]"
-          :visible.sync="dialogFormVisible"
-        >
-          <el-form
-            v-loading="editLoading"
-            element-loading-text="正在执行中"
-            id="addFormBI"
-            ref="addForm"
-            :model="addForm"
-            :rules="addRules"
-          >
-            <div class="row1 mb_20">
-              <section class="upload mr_30" @click="pointer">
-                <!-- 背景图片做改动 -->
-                <div class="defultHead">
-                  <img class="defaultimage" style="width:150px; height:200px;" alt="user image" :src="defaultImg" v-if="!addForm.headIcon||!addForm.headerAddress">
-                  <img style="width:150px; height:200px ;" v-if="!addForm.headIcon" :src="addForm.headerAddress" alt="传递照片" class="preloadImg">
-                  <img style="width:150px; height:200px ;" v-if="addForm.headIcon" :src="addForm.headIcon" alt="预览照片" class="preloadImg">
-                  <input type="file" accept="jpg/png" style="display:none;" ref="file" id="file" @change="getFile">
-                  <div class="bgload" style="width:150px; height:200px; ">上传封面</div>
-                </div>
-              </section>
-              <section class="infoGroup">
-                <el-form-item label="书籍名称" prop="bookName" :label-width="formLabelWidth">
-                  <el-input v-model="addForm.bookName" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="索书号码" prop="bookIndex" :label-width="formLabelWidth">
-                  <el-input v-model="addForm.bookIndex" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="作　　者" prop="author" :label-width="formLabelWidth">
-                  <el-input v-model="addForm.author" autocomplete="off"></el-input>
-                </el-form-item>
-              </section>
-            </div>
-            <div class="row1">
-              <el-form-item label="出版社团" class="mr_30" prop="lib" :label-width="formLabelWidth">
-                <el-input v-model="addForm.lib" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="页　　码" prop="page" :label-width="formLabelWidth">
-                <el-input v-model="addForm.page" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row1">
-              <el-form-item label="价　　格" class="mr_30" prop="value" :label-width="formLabelWidth">
-                <el-input v-model="addForm.value" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="条　　码" prop="barcode" :label-width="formLabelWidth">
-                <el-input v-model="addForm.barcode" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <el-form-item label="类型名称" prop="typeName" :label-width="formLabelWidth" style="position: relative" >
-              <el-input v-model="addForm.typeName" autocomplete="off"></el-input>
-              <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 160px" @click="typeMessage">
-            </el-form-item>
-            <div class="row1">
-              <el-form-item label="书籍简介" prop="bookContent" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="addForm.bookcontent" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <!-- 弹框表单按钮  验证失效-->
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
-      </div>
     </el-container>
     <!-- 类型名称弹框-->
     <div id="typeMessage">
@@ -201,46 +121,6 @@ export default {
       /*===== end 弹框初始化数据 ======*/
       dialogFormVisible: false, // // 添加弹框的展示和消失
       editLoading: false,
-      files: null, // 传递给后台的请求
-      defaultImg:'', // 默认图片地址
-      Dialogtitle: ["添加"],
-      addForm: {
-        // 添加的数据表单 共8个参数
-        addDialog: false,
-        headerAddress: "", // 传递来的图片
-        headIcon: "", // 预览的图片
-        files: "", // 用于上传
-
-        bookName: "", // 书籍名称
-        bookIndex: "", // 书籍索引
-        author: null, // 作者
-        lib: "", // 出版社
-        page: "", // 页码
-        barcode: "", // 条码
-        value: "", // 价格
-        typeName: "", // 类型名称
-        bookcontent: "" // 书籍简介
-      },
-      addRules: {
-        // 添加的参数验证
-        bookName: [
-          { required: true, message: "请输入书籍名称", trigger: "blur" }
-        ],
-        bookIndex: [
-          { required: true, message: "请输入索书号", trigger: "change" }
-        ],
-        author: [{ required: true, message: "请输入作者", trigger: "change" }],
-        lib: [{ required: true, message: "请输入出版社", trigger: "blur" }],
-        page: [{ required: true, message: "请输入页码", trigger: "blur" }],
-        barcode: [{ required: true, message: "请输入条码", trigger: "blur" }],
-        typeName: [
-          { required: true, message: "请选择类型名称", trigger: "blur" }
-        ],
-        bookcontent: [
-          { required: true, message: "请输入书籍简介", trigger: "change" }
-        ]
-      },
-      formLabelWidth: "90px",
       /*====== 1.0类型名称ztree树 ======*/
       setting: {
         edit: {
@@ -275,12 +155,6 @@ export default {
   computed: {
     searchTimeForm() {
       // 搜索所需数据 过滤数据 传递给后端的数据
-      /*searchForm: {
-        bookName: "",
-        bookIndex: "",
-        author: "",
-        lib: ""
-      },*/
       let searchForm = {
         pageSize: this.pageSize,
         currentPage:1,
@@ -291,43 +165,6 @@ export default {
       };
       return searchForm;
     },
-    addEdit() {
-      // 添加传递数据
-    /*addForm: {
-        // 添加的数据表单 共8个参数
-        addDialog: false,
-        headerAddress: "", // 传递来的图片
-        headIcon: "", // 预览的图片
-        files: "", // 用于上传
-
-        bookName: "", // 书籍名称
-        bookIndex: "", // 书籍索引
-        author: null, // 作者
-        lib: "", // 出版社
-        page: "", // 页码
-        barcode: "", // 条码
-        value: "", // 价格
-        typeName: "", // 类型名称
-        bookcontent: "" // 书籍简介
-      },*/
-      let data = {
-        /*id:
-        searchNumber
-        name
-        author
-        price
-        fkTypeCode
-        fkTypeName
-        pageNumber
-        fkPressCode
-        fkPressName
-        creatTime
-        updateTime
-        introduction*/
-      };
-
-      return data;
-    }
   },
   methods: {
     closeCheck(){
@@ -384,104 +221,6 @@ export default {
       console.log("保存当前查询", this.paginationForm);
       this.SearchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
-
-    /*====== end 弹框内相关函数 ======*/
-    submitForm(formName) {
-      // 提交弹框按钮执行函数
-      let url = "";
-      let method = "";
-      let data = this.addEdit;
-      let files = this.files; // 头像上传的文件 在编辑框中保存
-
-      if (i == 2) {
-        url = userManageInterface.edit;
-        method = "put";
-        console.log("调用编辑API", url, method, this.addEdit);
-      } else {
-        url = userManageInterface.add;
-        method = "post";
-        console.log("调用添加API", url, method, data);
-      }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.editLoading = true; // 进入执行状态 锁定表单
-          if (files != null) {
-            // 检测是否有文件 有就意味着被更改了
-            var formdatas = new FormData();
-            formdatas.append("file", files);
-            //console.log(formdatas.get('file'))
-            this.axios({
-              method: "post",
-              url: bookurlimg,
-              data: formdatas,
-              //cache: false,//上传文件无需缓存
-              processData: false, //用于对data参数进行序列化处理 这里必须false
-              contentType: false, //
-              dataType: "JSON",
-              ContentType: "multipart/form-data"
-            }).then(request => {
-              // 如果是编辑 更换图片失败后
-              if (request.data.row != "") {
-                this.addForm.headerAddress = request.data.row;
-              }
-              console.log("上传图片后", this.addEdit);
-            });
-          }
-
-          axios({
-            // 发起API请求
-            url: url,
-            method: method,
-            data: data
-          }).then(res => {
-            console.log(res.data);
-            if (res.data.state) {
-              this.SearchApi(this.searchTimeForm);
-              this.$message.success("执行成功"); // 提示成功信息
-              this.dialogFormVisible = false; // 关闭弹框
-            } else {
-              this.$message.error(res.data.msg); // 提示失败信息
-            }
-          });
-
-          this.editLoading = false; // 执行结束后 解开锁屏
-        } else {
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      // 重置按钮
-      this.dialogFormVisible = false;
-      this.$refs[formName].resetFields();
-    },
-    closeForm() { // 关闭按钮 弹框关闭的时候执行 清空数据
-      $('#typeMessage').fadeOut()
-      console.log("关闭测试");
-      let obj = this.addForm;
-      this.addForm.headIcon = "";
-      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态
-    },
-
-    pointer() {
-      // 图片上传
-      this.$refs.file.click();
-    },
-    getFile(e) {
-      // 图片预览
-      let _this = this; // 缓存this
-      let value = _this.$refs.file.value;
-      var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-      _this.files = files;
-      console.log(_this.files);
-      if (!e || !window.FileReader) return; // 看支持不支持FileReader
-      let reader = new FileReader(); // 定义 fileReader对象
-      reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-      reader.onloadend = function() {
-        _this.addForm.headIcon = this.result; // 此时this指向的fileReader对象
-        _this.$refs.file.value = "";
-      };
-    },
     /*====== baseAPI调用相关 ======*/
     SearchApi(value) {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
@@ -509,17 +248,11 @@ export default {
           console.log(error);
         });
     },
-    addApi(data) {
-      this.axios.post(bookurladd,data).then((res)=>{
-        console.log(res)
-      })
-    }
   },
   mounted(){
     console.log(this.dialogFormVisible)
     this.freshArea()
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
-
     $('#typeMessage').fadeOut()
     this.tableLoading=true
   }

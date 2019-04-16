@@ -63,7 +63,7 @@
           <div class="addEditDialog">
             <!-- Form -->
             <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
-              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" style="display: flex;flex-direction: column">
+              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" ref="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
@@ -155,9 +155,9 @@
         addRules: {
           // 添加的参数验证
           publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
-          componentAddress: [{ required: true, message: "请输入公司地址", trigger: "change" }],
-          contacts: [{ required: true, message: "请输入联系人", trigger: "change" }],
-          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "change" }],
+          componentAddress: [{ required: true, message: "请输入公司地址", trigger: "blur" }],
+          contacts: [{ required: true, message: "请输入联系人", trigger: "blur" }],
+          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "blur" }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -178,6 +178,7 @@
     methods: {
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
+        //this.dialogFormVisible = true;
         this.$alert('请选择您要添加图书出版社的所在地区', {
           confirmButtonText: '确定',
           callback: action => {
@@ -229,20 +230,23 @@
               message: res.data.msg,
               type: 'success'
             });
+            this.closeForm()
             this.dialogFormVisible=false
             this.table()
-            this.closeForm()
           }else{
             this.$message({
               message: res.data.msg,
               type: 'error'
             });
+            this.closeForm()
             this.dialogFormVisible=false
           }
         })
+        this.$refs[formName].resetFields();
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        this.dialogFormVisible=false
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
@@ -250,10 +254,6 @@
         for (var i in obj) {
           obj[i] = "";
         }
-      },
-      handleCurrentChange: function(currentPage){
-        this.currentPage = currentPage;
-        //console.log(this.currentPage)  //点击第几页
       },
       table(value){
         this.tableLoading= true; // 加载前控制加载状态

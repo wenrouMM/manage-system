@@ -20,12 +20,6 @@
           </div>
           <!-- 2.0 表单填写 查询添加 内容需做调整  -->
           <section class="searchBox Posleft">
-            <div class="buttonBox">
-              <button class="add" @click="addDialogOpen">
-                <i class="addIcon el-icon-plus"></i>添加
-              </button>
-            </div>
-
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="书名:">
                 <el-input size="120" v-model="searchForm.bookName" placeholder="请输入书籍名称"></el-input>
@@ -79,10 +73,10 @@
               <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="130" label="馆藏码"></el-table-column>
               <el-table-column align="center" prop="barcode" width="130" :show-overflow-tooltip="true" label="条码"></el-table-column>
               <el-table-column align="center" prop="lend" width="130" label="借出数量"></el-table-column>
-              <el-table-column align="center" prop="total" width="130" :show-overflow-tooltip="true" label="录入员"></el-table-column>
-              <el-table-column align="center" prop="entryTime" width="140" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="140" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="140" label="类型"></el-table-column>
+              <el-table-column align="center" prop="total" width="120" :show-overflow-tooltip="true" label="录入员"></el-table-column>
+              <el-table-column align="center" prop="entryTime" width="130" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="130" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
+              <el-table-column align="center" prop="fkTypeCode" width="130" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
@@ -119,53 +113,6 @@
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
           </div>
-        </el-dialog>
-      </div>
-      <!-- 添加弹框 -->
-      <div class="addEditDialog">
-        <!-- Form -->
-        <el-dialog
-          @close="closeForm"
-          width="685px"
-          :title="Dialogtitle[0]"
-          :visible.sync="dialogFormVisible"
-        >
-          <el-form
-            v-loading="editLoading"
-            element-loading-text="正在执行中"
-            id="addFormBI"
-            ref="addForm"
-            :model="addForm"
-            :rules="addRules"
-          >
-            <!-- 初始化未完成 -->
-            <div class="row1">
-              <el-form-item label="索书号码" class="mr_30" prop="indexNum" :label-width="formLabelWidth">
-                <el-input v-model="addForm.indexNum" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="藏馆号码" prop="Num" :label-width="formLabelWidth">
-                <el-input v-model="addForm.Num" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row1">
-              <el-form-item label="藏馆数量" class="mr_30" prop="libNum" :label-width="formLabelWidth">
-                <el-input v-model="addForm.libNum" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="借出数量" prop="returnNum" :label-width="formLabelWidth">
-                <el-input v-model="addForm.returnNum" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row1">
-              <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="addForm.status" autocomplete="off"></el-input>
-              </el-form-item>
-            </div>
-            <!-- 弹框表单按钮  验证失效-->
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
-            </el-form-item>
-          </el-form>
         </el-dialog>
       </div>
     </el-container>
@@ -244,24 +191,6 @@ export default {
       defaultImg:'', // 默认图片地址
       i:0,
       Dialogtitle: ["添加",'下架'],
-      addForm: {
-        // 添加的数据表单 共8个参数
-        addDialog: false,
-        indexNum:"",
-        Num:"",
-        libNum:"",
-        returnNum:"",
-        status:""
-      },
-      addRules: {
-        // 添加的参数验证
-        indexNum: [{ required: true, message: "请输入索书号码", trigger: "blur" }],
-        Num: [{ required: true, message: "请输入藏馆号码", trigger: "blur" }],
-        libNum: [{ required: true, message: "请输入藏馆数量", trigger: "blur" }],
-        returnNum: [{ required: true, message: "请输入借出数量", trigger: "blur" }],
-        status: [{ required: true, message: "请输入状态", trigger: "blur" }],
-      },
-      formLabelWidth: "90px",
       undercarriage:null, //下架所需参数
     };
   },
@@ -286,14 +215,6 @@ export default {
       };
       return searchForm;
     },
-    addEdit() {
-      // 添加传递数据
-
-      let data = {
-
-      };
-      return data;
-    }
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
@@ -369,10 +290,6 @@ export default {
       this.dialogFormVisible = true
       console.log(index, row);
     },
-    addDialogOpen() {
-      // 添加按钮
-      this.dialogFormVisible = true;
-    },
     /*====== 3.0表格操作相关 ======*/
     // 打开详情页
 
@@ -383,103 +300,6 @@ export default {
       this.paginationForm.currentPage = currentPage;
       console.log("保存当前查询", this.paginationForm);
       this.SearchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
-    },
-
-    /*====== end 弹框内相关函数 ======*/
-    submitForm(formName) {
-      // 提交弹框按钮执行函数
-      this.addApi(this.addEdit)
-      let url = "";
-      let method = "";
-      let data = this.addEdit;
-      let files = this.files; // 头像上传的文件 在编辑框中保存
-
-      if (i == 2) {
-        url = userManageInterface.edit;
-        method = "put";
-        console.log("调用编辑API", url, method, this.addEdit);
-      } else {
-        url = userManageInterface.add;
-        method = "post";
-        console.log("调用添加API", url, method, data);
-      }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.editLoading = true; // 进入执行状态 锁定表单
-          if (files != null) {
-            // 检测是否有文件 有就意味着被更改了
-            var formdatas = new FormData();
-            formdatas.append("file", files);
-            //console.log(formdatas.get('file'))
-            this.axios({
-              method: "post",
-              url: headUpload,
-              data: formdatas,
-              //cache: false,//上传文件无需缓存
-              processData: false, //用于对data参数进行序列化处理 这里必须false
-              contentType: false, //
-              dataType: "JSON",
-              ContentType: "multipart/form-data"
-            }).then(request => {
-              // 如果是编辑 更换图片失败后
-              if (request.data.row != "") {
-                this.addForm.headerAddress = request.data.row;
-              }
-              console.log("上传图片后", this.addEdit);
-            });
-          }
-          axios({
-            // 发起API请求
-            url: url,
-            method: method,
-            data: data
-          }).then(res => {
-            console.log(res.data);
-            if (res.data.state) {
-              this.SearchApi(this.searchTimeForm);
-              this.$message.success("执行成功"); // 提示成功信息
-              this.dialogFormVisible = false; // 关闭弹框
-            } else {
-              this.$message.error(res.data.msg); // 提示失败信息
-            }
-          });
-
-          this.editLoading = false; // 执行结束后 解开锁屏
-        } else {
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      // 重置按钮
-      this.dialogFormVisible = false;
-      this.$refs[formName].resetFields();
-    },
-    closeForm() { // 关闭按钮 弹框关闭的时候执行 清空数据
-      console.log("关闭测试");
-      let obj = this.addForm;
-      this.addForm.headIcon = "";
-      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态
-    },
-
-    pointer() {
-      // 图片上传
-      this.$refs.file.click();
-    },
-    getFile(e) {
-      // 图片预览
-      let _this = this; // 缓存this
-      let value = _this.$refs.file.value;
-      var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-      _this.files = files;
-      console.log(_this.files);
-      if (!e || !window.FileReader) return; // 看支持不支持FileReader
-      let reader = new FileReader(); // 定义 fileReader对象
-      reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-      reader.onloadend = function() {
-        _this.addForm.headIcon = this.result; // 此时this指向的fileReader对象
-        _this.$refs.file.value = "";
-      };
     },
     /*====== baseAPI调用相关 ======*/
     SearchApi(value) {
@@ -514,11 +334,6 @@ export default {
         });
 
     },
-    addApi(data) {
-      this.axios.post(libbookadd,data).then((res)=>{
-        console.log(res)
-      })
-    }
   }
 };
 </script>

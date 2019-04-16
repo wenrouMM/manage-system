@@ -120,7 +120,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="状态" prop="status" style="margin-left: 50px">
+            <el-form-item label="状态" prop="disabled" style="margin-left: 50px">
               <el-radio-group v-model="addForm.disabled">
                 <el-radio label="禁用"></el-radio>
                 <el-radio label="启用"></el-radio>
@@ -188,8 +188,8 @@
         },
         rules: {
           // 添加的参数验证
-          userType: [{ required: true, message: "请选择角色类型", trigger: "change" }],
-          parent: [{ required: true, message: "选择角色名称", trigger: "blur" }],
+          userType: [{ required: true, message: "请输入名称", trigger: "blur" }],
+          parent: [{ required: true, message: "请选择角色名称", trigger: "change" }],
           disabled: [{ required: true, message: "请选择状态", trigger: "change" }],
           isDefault: [{ required: true, message: "请选择是否默认", trigger: "change" }],
         },
@@ -400,6 +400,7 @@
             return false
           }
         })
+        this.$refs[formName].resetFields()
       },
       //修改
       editApi (value) {
@@ -423,6 +424,7 @@
       },
       // 添加
       addApi (value) {
+        this.closeForm()
         this.axios.post(userroleadd, value).then((respones) => {
           //console.log(respones)
           if (respones.data.state == true) {
@@ -440,9 +442,11 @@
             })
           }
         })
+        this.dialogFormVisible = false
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+        this.dialogFormVisible=false
       },
       pointer () {
         this.$refs.file.click()

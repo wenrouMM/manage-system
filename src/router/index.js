@@ -27,7 +27,7 @@ import ReaderAdmin from '../components/Reader/ReaderManagement/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
 
 import LibBookType from '../components/Reader/libraryManage/libBookType'
-import LibBookInfo from '../components/Reader/libraryManage/libBookInfo.vue'
+import LibBookInfo from '../components/Reader/libraryManage/libBookInfo'
 import BookRegistration from '../components/Reader/libraryManage/bookRegistration'
 
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
@@ -103,10 +103,6 @@ export default new Router({
           component: BookPublishHouse
         },
         {
-          path: '/libBookInfo',
-          component: LibBookInfo
-        },
-        {
           path: '/libInfo',
           component: LibInfo
         }*/
@@ -173,11 +169,6 @@ export default new Router({
               component:LibInfo
             },
             {
-              path:'/bookType',
-              component:BookType,
-          path: '/bookMode',
-          component: TestBook,
-          children: [{
               path: '/bookType',
               component: BookType,
             },
@@ -193,31 +184,23 @@ export default new Router({
               path: '/bookpublishhouse',
               component: BookPublishHouse
             },
-            {
-              path: '/libBookInfo',
-              component: LibBookInfo
-            },
-            {
-              path: '/libInfo',
-              component: LibInfo
-            }
           ]
         },
         {
           path: '/readerMode',
           component: TestReader,
-          children: [{
+          children: [
+            {
               path: '/readeradmin',
               component: ReaderAdmin,
             },
             {
-
               path:'/getcard',
               name:"GetCard",
               component:GetCard,
             },
             {
-              path:'/libBookInfo',
+              path:'/LibBookInfo',
               component:LibBookInfo
             },
             {
@@ -235,15 +218,12 @@ export default new Router({
             {
               path:'/readercardmanagement',
               component:ReaderCardManagement,
-              path: '/readercardmanagement',
-              component: ReaderCardManagement,
             },
             {
               path: '/readercardtype',
               component: ReaderCardType,
             },
             {
-
               path:'/readercardgrade',
               component:ReaderCardGrade,
             },
@@ -311,12 +291,13 @@ export default new Router({
               path:'/incredithistory',
               component:IncreditHistory
             },
-
+            {
+              path:'/IncreditSetting',
+              component:IncreditSetting
+            }
           ]
         }
       ]
     }
-
-
   ]
 })

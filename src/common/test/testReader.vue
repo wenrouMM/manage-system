@@ -20,9 +20,9 @@
               <i class="el-icon-location"></i>
               <span>馆藏图书</span>
             </template>
-            <el-menu-item index="/libBookInfo">馆内图书信息</el-menu-item>
+            <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
             <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
-            <el-menu-item index="/publishhouse">图书出版社</el-menu-item>
+            <el-menu-item index="/publishhouse">馆内图书出版社</el-menu-item>
             <el-menu-item index="/bookregistration">图书登记</el-menu-item>
           </el-submenu>
           <el-submenu index="readerCard">
