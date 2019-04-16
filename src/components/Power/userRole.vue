@@ -45,10 +45,10 @@
             </section>
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox">
+          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               class="tableBorder"
-              v-loading="tableLoading"
+              
               @selection-change="handleSelectionChange"
               :data="tableData"
               style="width: 100%;
@@ -89,6 +89,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -177,7 +178,7 @@ export default {
         parent: "", // 上级
         roleName: "",
         isDefault: "", // 是否默认
-        disabled: "启用" // 状态
+        disabled: "" // 状态
       },
       rules: {
         // 添加的参数验证
@@ -211,7 +212,7 @@ export default {
         }
       },
       /*======4.0分页器相关数据 ======*/
-      tableLoading: false,
+      tableLoading: true,
       /*初始化 */
       total: 0,
       pageSize: 10,
@@ -266,11 +267,13 @@ export default {
           this.total = res.data.total; //总条目数
           this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
           //console.log("保存当前查询", this.paginationForm);
+          this.tableLoading = false;
         } else {
           this.$message.error(res.data.msg);
+          this.tableLoading = false;
         }
       });
-      this.tableLoading = false;
+      
     },
     current_change: function(currentPage) {
       //分页查询
@@ -406,15 +409,14 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.i === 3) {
-            //alert(111)
             this.addApi(this.newaddForm);
-            this.dialogFormVisible = false;
+            
           }
           if (this.i === 2) {
-            //alert(222)
             this.editApi(this.neweditForm);
+             
           }
-          this.dialogFormVisible = true; // 关闭弹框
+         
         } else {
           //console.log("error submit!!");
           //console.log(this.addForm);
@@ -432,6 +434,7 @@ export default {
             type: "success"
           });
           this.selectApi(this.searchTimeForm);
+          this.addForm.disabled = ''
           this.dialogFormVisible = false;
           this.closeForm();
         } else {
@@ -452,6 +455,7 @@ export default {
             type: "success"
           });
           this.selectApi(this.searchTimeForm);
+          this.addForm.disabled = ''
           this.dialogFormVisible = false;
           this.closeForm();
         } else {
@@ -464,6 +468,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.addForm.disabled = ''
       this.dialogFormVisible = false
     },
     pointer() {
@@ -476,6 +481,9 @@ export default {
       for (var i in obj) {
         obj[i] = "";
       }
+      //this.addForm.disabled = ''
+      console.log('这个disabled',this.addForm.disabled)
+      this.$refs.addForm.resetFields();
     }
   },
   mounted() {

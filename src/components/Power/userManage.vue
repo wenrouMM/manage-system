@@ -145,7 +145,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
-              <button class="pagaButton">确定</button>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -895,11 +895,28 @@ export default {
   cursor: pointer;
 }
 /*====== 4.0 分页器区域 ======*/
+
 .pagination .el-pagination {
   display: flex;
   justify-content: center;
 }
-
+.pagination{
+  display: flex;
+  justify-content: center;
+  
+}
+.pagaButton {
+  width: 70px;
+  height: 34px;
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  border: solid 1px #d5d5d5;
+  border-radius: 5px;
+  margin-left: 15px;
+  text-align: center;
+  line-height: 34px;
+}
 /*====== 后期频繁更改部分 ======*/
 .routerButton {
   position: relative;

@@ -39,10 +39,10 @@
           </el-form>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tableBox">
+        <section class="tableBox" v-loading="tableLoading"
+            element-loading-text="拼命加载中">
           <el-table
-            v-loading="tableLoading"
-            element-loading-text="拼命加载中"
+            
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             empty-text="无数据"
             :data="tableData"
@@ -67,7 +67,7 @@
             </el-table-column>
           </el-table>
           <!-- 4.0 分页 -->
-          <section class="page_div">
+          <section class="pagination mt_30">
             <el-pagination
               style="display: inline-block"
               background
@@ -77,6 +77,7 @@
               :current-page="currentPage"
               @current-change="current_change"
             ></el-pagination>
+            <span class="pagaButton">确定</span>
           </section>
         </section>
       </div>
@@ -145,7 +146,12 @@ export default {
           );
         }
 
-      }
+      },
+      tableLoading:true,
+      currentPage:1,
+      pageSize:10,
+      total:0,
+      tableData:[]
     }
     
   },
@@ -192,14 +198,16 @@ export default {
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             //console.log("保存当前查询", this.paginationForm);
+            this.tableLoading = false;
           } else {
             this.$message.error(res.data.msg);
+            this.tableLoading = false;
           }
         })
         .catch(error => {
           console.log(error);
         });
-      this.tableLoading = false;
+      
     },
     current_change: function(currentPage) {
       //分页查询

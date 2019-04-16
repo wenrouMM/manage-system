@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
 })
 */
  //判定依据token起手
-
+/*
 router.beforeEach((to, from, next) => {
   let token = getToken()
   if(token == null){
@@ -86,7 +86,7 @@ router.beforeEach((to, from, next) => {
   }
   
 })
-
+*/
 Vue.use(ElementUI) // 注册插件
 // vuerouter会自动调用 这就是可以直接this.$router.push的根本？
 Vue.prototype.axios = axios // 挂载到vue实例 注册到vue实例中

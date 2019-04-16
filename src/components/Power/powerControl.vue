@@ -60,7 +60,7 @@
             </section>
           </div>
           <!-- 4.0 表格展示内容 -->
-          <section class="text item tablebox">
+          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               class="tableBorder"
               v-loading="tableLoading"
@@ -104,6 +104,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -123,7 +124,7 @@
       <div class="addEditDialog">
         <!-- Form -->
         <el-dialog
-          @close="closeForm"
+          @close="closeFormBtn"
           width="586px"
           :title="dialogTitle[i]"
           :visible.sync="changeDialog"
@@ -277,7 +278,10 @@ export default {
       /*------ 删除禁用弹框 ------*/
       refuseDialog: false,
       refuseLoading:false,
-      banArr:[] // 禁用传递数据
+      banArr: {  // 禁用传递数据
+        id: "",
+        disabled: 1
+      }
     };
   },
   computed: {
@@ -366,7 +370,8 @@ export default {
         this.refuseDialog = false
       }
       if(this.i==3){
-        this.banApi(banArr)
+        this.banApi(this.banArr)
+        console.log(this.banArr)
       }
     },
     closeFormBtn() { // 表单弹框关闭执行事件
