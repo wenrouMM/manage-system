@@ -15,6 +15,16 @@
           <!-- 选中之后的样式 -->
           <el-menu-item index="powerMode">首页</el-menu-item>
           <el-menu-item index="/readeradmin">读者管理</el-menu-item>
+          <el-submenu background-color="#545c64" index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>馆藏图书</span>
+            </template>
+            <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
+            <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
+            <el-menu-item index="/publishhouse">馆内图书出版社</el-menu-item>
+            <el-menu-item index="/bookregistration">图书登记</el-menu-item>
+          </el-submenu>
           <el-submenu index="readerCard">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -69,6 +79,26 @@
               <el-menu-item index="/increditrecord">失信记录</el-menu-item>
               <el-menu-item index="/increditsetting">失信设置</el-menu-item>
               <el-menu-item index="/incredithistory">失信历史记录</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="lose">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>遗失管理</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/increditrecord">暂定</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="interview">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>采访管理</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/increditrecord">图书订购</el-menu-item>
+              <el-menu-item index="/increditsetting">订购记录</el-menu-item>
+              <el-menu-item index="/incredithistory">订购统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

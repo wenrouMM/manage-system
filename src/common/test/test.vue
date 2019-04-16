@@ -19,7 +19,7 @@
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="readerMode">读者模块</el-menu-item>
+              <el-menu-item index="readerMode">藏馆系统</el-menu-item>
               <el-menu-item index="bookMode">图书管理</el-menu-item>
               <el-menu-item index="areaMode">区域管理</el-menu-item>
               <el-menu-item index="powerMode">权限管理</el-menu-item>

@@ -35,7 +35,11 @@
                     :row-style="rowStyle"
                     :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
                   >
-                  <el-table-column align="center" prop="index" width="220" label="序号"></el-table-column>
+                  <el-table-column align="center" prop="index" width="220" label="序号">
+                    <template slot-scope="scope">
+                      <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column align="center" prop="name" width="250" label="出版社名称"></el-table-column>
                   <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
                   <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
@@ -59,7 +63,7 @@
           <div class="addEditDialog">
             <!-- Form -->
             <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
-              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" style="display: flex;flex-direction: column">
+              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" ref="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
@@ -151,9 +155,9 @@
         addRules: {
           // 添加的参数验证
           publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
-          componentAddress: [{ required: true, message: "请输入公司地址", trigger: "change" }],
-          contacts: [{ required: true, message: "请输入联系人", trigger: "change" }],
-          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "change" }],
+          componentAddress: [{ required: true, message: "请输入公司地址", trigger: "blur" }],
+          contacts: [{ required: true, message: "请输入联系人", trigger: "blur" }],
+          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "blur" }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -174,6 +178,7 @@
     methods: {
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
+        //this.dialogFormVisible = true;
         this.$alert('请选择您要添加图书出版社的所在地区', {
           confirmButtonText: '确定',
           callback: action => {
@@ -225,20 +230,23 @@
               message: res.data.msg,
               type: 'success'
             });
+            this.closeForm()
             this.dialogFormVisible=false
             this.table()
-            this.closeForm()
           }else{
             this.$message({
               message: res.data.msg,
               type: 'error'
             });
+            this.closeForm()
             this.dialogFormVisible=false
           }
         })
+        this.$refs[formName].resetFields();
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+        this.dialogFormVisible=false
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
@@ -246,10 +254,6 @@
         for (var i in obj) {
           obj[i] = "";
         }
-      },
-      handleCurrentChange: function(currentPage){
-        this.currentPage = currentPage;
-        //console.log(this.currentPage)  //点击第几页
       },
       table(value){
         this.tableLoading= true; // 加载前控制加载状态
@@ -261,11 +265,11 @@
             console.log("当前获取的数据", res.data);
             if (res.data.state === true) {
               let nomol = res.data.row;
-              let i = 1;
-              for (let item of nomol) {
-                item.index = i;
-                i++;
-              }
+              // let i = 1;
+              // for (let item of nomol) {
+              //   item.index = i;
+              //   i++;
+              // }
               this.tableData = nomol; //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果

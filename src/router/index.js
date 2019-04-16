@@ -17,15 +17,19 @@ import TestBook from '../common/test/testBook.vue'
 import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
-import LibBookInfo from '../components/Book/libraryManage/libBookInfo.vue'
-import LibInfo from '../components/Book/libraryManage/libInfo.vue'
-import LibBookType from '../components/Book/libraryManage/libBookType'
+import LibInfo from '../components/Book/libInfo.vue'
+
 import TestArea from '../common/test/testArea.vue'
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
 import ShelfBind from '../components/Area/areaManage/shelfBind'
 import TestReader from '../common/test/testReader.vue'
 import ReaderAdmin from '../components/Reader/ReaderManagement/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
+
+import LibBookType from '../components/Reader/libraryManage/libBookType'
+import LibBookInfo from '../components/Reader/libraryManage/libBookInfo'
+import BookRegistration from '../components/Reader/libraryManage/bookRegistration'
+
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
@@ -99,10 +103,6 @@ export default new Router({
           component: BookPublishHouse
         },
         {
-          path: '/libBookInfo',
-          component: LibBookInfo
-        },
-        {
           path: '/libInfo',
           component: LibInfo
         }*/
@@ -161,9 +161,14 @@ export default new Router({
           ]
         },
         {
-          path: '/bookMode',
-          component: TestBook,
-          children: [{
+          path:'/bookMode',
+          component:TestBook,
+          children:[
+            {
+              path:'/libInfo',
+              component:LibInfo
+            },
+            {
               path: '/bookType',
               component: BookType,
             },
@@ -179,39 +184,46 @@ export default new Router({
               path: '/bookpublishhouse',
               component: BookPublishHouse
             },
-            {
-              path: '/libBookInfo',
-              component: LibBookInfo
-            },
-            {
-              path: '/libInfo',
-              component: LibInfo
-            }
           ]
         },
         {
           path: '/readerMode',
           component: TestReader,
-          children: [{
+          children: [
+            {
               path: '/readeradmin',
               component: ReaderAdmin,
             },
             {
-
               path:'/getcard',
               name:"GetCard",
               component:GetCard,
             },
             {
-              path: '/readercardmanagement',
-              component: ReaderCardManagement,
+              path:'/LibBookInfo',
+              component:LibBookInfo
+            },
+            {
+              path:'/libBookType',
+              component:LibBookType
+            },
+            {
+              path:"/bookregistration",
+              component:BookRegistration
+            },
+            {
+              path:'/publishhouse',
+              component:BookPublishHouse
+            },
+            {
+              path:'/readercardmanagement',
+              component:ReaderCardManagement,
             },
             {
               path: '/readercardtype',
               component: ReaderCardType,
             },
             {
-
               path:'/readercardgrade',
               component:ReaderCardGrade,
             },
@@ -279,12 +291,13 @@ export default new Router({
               path:'/incredithistory',
               component:IncreditHistory
             },
-            
+            {
+              path:'/IncreditSetting',
+              component:IncreditSetting
+            }
           ]
         }
       ]
     }
-
-
   ]
 })

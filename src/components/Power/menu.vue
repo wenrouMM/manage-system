@@ -10,7 +10,7 @@
           <table>
             <p id="#msg"></p>
             <p class="myfont">名称 :&nbsp;&nbsp;&nbsp;
-              <input type="text" class="myinput" name="menuName" id="name" autocomplete="off" chinese info="名称" maxlength="10">
+              <input type="text" class="myinput" name="menuName" id="name" autocomplete="off" info="名称" maxlength="10">
             </p>
             <p class="myfont">
               U R L :&nbsp;&nbsp;
@@ -48,7 +48,7 @@
             </p>
             <p class="myfont">
               菜单编码 :&nbsp;&nbsp;&nbsp;
-              <input type="text" class="myinput" name="menuCode" id="menuCode" url info="菜单编码" autocomplete="off" style="width: 580px">
+              <input type="text" class="myinput" name="menuCode" id="menuCode" info="菜单编码" autocomplete="off" style="width: 580px">
             </p>
             <p class="myfont">
               菜单描述:&nbsp;&nbsp;&nbsp;&nbsp;(选填)&nbsp;&nbsp;&nbsp;&nbsp;

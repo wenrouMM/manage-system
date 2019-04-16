@@ -141,21 +141,25 @@
               </section>
             </el-form-item>
             <!-- 表单域 -->
-            <el-form-item label="用户名" prop="name" :label-width="formLabelWidth">
-              <el-input v-model="addForm.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item class="select" label="性　　别" prop="sex">
-              <el-radio-group v-model="addForm.sex">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
-              <el-input v-model="addForm.id" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
-              <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
-            </el-form-item>
+            <div style="display: flex;flex-direction: row">
+              <el-form-item label="用户名" prop="name" :label-width="formLabelWidth">
+                <el-input v-model="addForm.name" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item class="select" label="性　　别" prop="sex">
+                <el-radio-group v-model="addForm.sex">
+                  <el-radio label="男"></el-radio>
+                  <el-radio label="女"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </div>
+            <div style="display: flex;flex-direction: row;">
+              <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
+                <el-input v-model="addForm.id" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
+                <el-input v-model="addForm.phoneNumber" autocomplete="off"></el-input>
+              </el-form-item>
+            </div>
             <el-form-item class="select" prop="status" label="状　　态">
               <el-radio-group v-model="addForm.status">
                 <el-radio label="禁用"></el-radio>

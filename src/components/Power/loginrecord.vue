@@ -135,6 +135,7 @@ export default {
             return time.getTime() > Date.now();
           }
         }
+
       },
       pickerOptions1: {
         disabledDate: time => {
@@ -143,19 +144,10 @@ export default {
             time.getTime() > Date.now()
           );
         }
-      },
-      loading: true, // 加载状态
-      /*======3.0表格相关数据 ======*/
-      tableData: [],
-      tableLoading: true,
-      /*======4.0分页器相关数据 ======*/
-      /*初始化 */
-      total: 0,
-      pageSize: 7,
-      currentPage: 1,
-      // 提交的数据 用于保存查询的结果后查询分页
-      paginationForm: {}
-    };
+
+      }
+    }
+    
   },
   computed: {
     searchTimeForm() {
