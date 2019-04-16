@@ -79,7 +79,7 @@
             >
               <el-table-column align="center" type="selection" width="100"></el-table-column>
               <el-table-column width="100" align="center" prop="index" type="index" label="序号">
-                <template scope="scope">
+                <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
@@ -145,7 +145,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
-              <el-button></el-button>
+              <button class="pagaButton">确定</button>
             </section>
           </section>
         </div>
@@ -238,6 +238,7 @@
               <el-select
                 v-model="addForm.authTbRoles"
                 multiple
+                clearable
                 collapse-tags
                 placeholder="请选择类型"
                 value-key="roleCode"
@@ -287,7 +288,7 @@
 <script>
 import {
   userManageInterface,
-  roleType,
+  selectRoleType,
   headUpload,
   headimg
 } from "../../request/api/base.js";
@@ -298,7 +299,7 @@ export default {
     let route = this.$route.path;
     console.log(this.$route.path);
     console.log(this.$route.meta.menuName);
-    this.roleType(); // 获取角色类型
+    this.selectRoleType(); // 获取角色类型
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
@@ -399,7 +400,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1,
         name: this.searchForm.userName,
-        roleCode: this.searchForm.userType.roleCode, // 只是给了一个code
+        fkRoleCode: this.searchForm.userType.roleCode, // 只是给了一个code
         loginSource:
           this.searchForm.loginSource === "全部"
             ? null
@@ -548,12 +549,12 @@ export default {
     },
 
     /*====== 分页查询和初始化 ======*/
-    roleType() {
-      axios.get(roleType).then(res => {
+    selectRoleType() {
+      axios.get(selectRoleType).then(res => {
         // 没有数据怎么办
         if (res.data.state === true) {
           let data = res.data.row;
-          let optionsData = [{ roleCode: "", roleName: "全部角色" }];
+          let optionsData = [];
           for (let item of data) {
             let obj = {};
             obj.roleCode = item.roleCode;

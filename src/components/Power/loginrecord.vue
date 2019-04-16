@@ -9,7 +9,7 @@
         <section class="searchBox">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="登录来源" size="160">
-              <el-select v-model="searchForm.loginSource" placeholder="请选择">
+              <el-select clearable v-model="searchForm.loginSource" placeholder="请选择">
                 <el-option
                   v-for="item in options"
                   :key="item.value"

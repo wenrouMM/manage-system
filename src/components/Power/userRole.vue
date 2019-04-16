@@ -26,7 +26,7 @@
                 </el-form-item>
                 <el-form-item label="创建时间:" size="130">
                   <el-date-picker
-                    v-model="formInline.startTime"
+                    v-model="formInline.beginTime"
                     type="date"
                     placeholder="开始日期"
                     :picker-options="pickerOptions0"
@@ -128,7 +128,7 @@
               <el-input v-model="addForm.userType"></el-input>
             </el-form-item>
             <el-form-item label="上级" prop="parent" style="margin-left: 50px">
-              <el-select v-model="addForm.parent" placeholder="请选择上级">
+              <el-select clearable v-model="addForm.parent" placeholder="请选择上级">
                 <el-option
                   v-for="(option,index) of optionsData"
                   :key="index"
@@ -157,11 +157,12 @@
 
 <script>
 import moment from "moment";
+import {roleManageInt,roleType } from '../../request/api/base.js'
 export default {
   data() {
     return {
       tableData: [],
-      tableChecked: [],
+      tableChecked: [], // 全选绑定的数据
       ids: [],
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
@@ -181,9 +182,9 @@ export default {
       rules: {
         // 添加的参数验证
         userType: [
-          { required: true, message: "请选择角色类型", trigger: "change" }
+          { required: true, message: "请输入角色名称", trigger: "change" }
         ],
-        parent: [{ required: true, message: "选择角色名称", trigger: "blur" }],
+        parent: [{ required: true, message: "请选择角色类型", trigger: "change" }],
         disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "120px",
@@ -218,7 +219,7 @@ export default {
       formInline: {
         // 搜索需要的表单数据
         parent: "",
-        startTime: "",
+        beginTime: "",
         endTime: "",
         currentPage: 0
       },
@@ -244,7 +245,7 @@ export default {
   methods: {
     /*====== 2.0 表单提交相关函数 ======*/
     handleSelectionChange(val) {
-      console.log(val);
+      console.log('全选按钮之后的数据',val);
       this.tableChecked = val;
     },
     onSubmit() {
@@ -255,7 +256,7 @@ export default {
     },
     selectApi(value) {
       this.tableLoading = true;
-      this.axios.get(userroleselect, { params: value }).then(res => {
+      this.axios.get(roleManageInt.select, { params: value }).then(res => {
         console.log("查询分页的页数", res.data);
         if (res.data.state === true) {
           let nomal = res.data.row;
@@ -287,8 +288,13 @@ export default {
     },
     batchDelete() {
       // 批量删除
-      this.i = 1;
-      this.centerDialogVisible = true;
+      if(this.tableChecked.length){
+        this.i = 1;
+        this.centerDialogVisible = true;
+      } else {
+        this.$message.error('请先选择删除对象')
+      }
+      
     },
 
     /*====== 4.0表格操作相关 ======*/
@@ -335,7 +341,7 @@ export default {
     },
 
     /*====== 弹框相关函数 ======*/
-    submitDialog() {
+    submitDialog() { // 提交删除和禁用按钮
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
       let i = this.i;
       console.log(this.i);
@@ -343,7 +349,7 @@ export default {
         console.log(this.roleCode);
         var roleCode = this.roleCode;
         this.axios
-          .put(userroleedit, { id: this.id, disabled: 1, roleCode: roleCode })
+          .put(roleManageInt.edit, { id: this.id, disabled: 1, roleCode: roleCode })
           .then(respones => {
             console.log(respones);
             if (respones.data.state == true) {
@@ -371,7 +377,7 @@ export default {
         };
         console.log(deleteParam);
         this.axios
-          .delete(userroledelete, { data: deleteStr })
+          .delete(roleManageInt.delete, { data: deleteStr })
           .then(response => {
             console.log(response);
             if (response.data.state == true) {
@@ -418,7 +424,7 @@ export default {
     },
     //修改
     editApi(value) {
-      this.axios.put(userroleedit, value).then(respones => {
+      this.axios.put(roleManageInt.edit, value).then(respones => {
         //console.log(respones)
         if (respones.data.state == true) {
           this.$message({
@@ -438,7 +444,7 @@ export default {
     },
     // 添加
     addApi(value) {
-      this.axios.post(userroleadd, value).then(respones => {
+      this.axios.post(roleManageInt.add, value).then(respones => {
         //console.log(respones)
         if (respones.data.state == true) {
           this.$message({
@@ -477,7 +483,7 @@ export default {
     //this.select(this.searchTimeForm)
     this.selectApi(this.searchTimeForm);
     //表单中下拉框上级的初始化数据
-    this.axios.get(userrole).then(response => {
+    this.axios.get(roleType).then(response => {
       console.log("下拉框数据", response);
       if (response.data.state == true) {
         for (var item of response.data.row) {
@@ -494,17 +500,17 @@ export default {
   computed: {
     //模糊查询参数
     searchTimeForm() {
-      // 计算属性 真正传递的数据
-      let searchForm = {
+      // 计算属性 真正传递的数据 
+      let searchForm = { // 非空判断的各个值
         pageSize: this.pageSize,
         currentPage: 1,
         roleName: this.formInline.parent,
         beginTime:
-          this.formInline.startTime === ""
+          !this.formInline.beginTime 
             ? null
-            : moment(this.formInline.startTime).format("YYYY-MM-DD"), //开始时间
+            : moment(this.formInline.beginTime).format("YYYY-MM-DD"), //开始时间
         endTime:
-          this.formInline.endTime === ""
+          !this.formInline.endTime 
             ? null
             : moment(this.formInline.endTime).format("YYYY-MM-DD") //结束时间
       };

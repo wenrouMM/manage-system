@@ -1,695 +1,757 @@
 <template>
-  <div class="useradd">
+  <div class="userRole">
     <el-container>
-      <div class="box-card">
-        <div class="space"></div>
+      <div class="box-card" style="width: 100%">
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">权限管理列表</span>
+            <span class="titleName">角色管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
+          <div style="display:flex;flex-direction:row">
+            <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
             <div class="buttonBox">
-              <button class="delete" @click="batchDelete">
-                <i class="deleteIcon el-icon-delete"></i>批量禁用
+              <!--
+              <button class="add" @click="addButton('addForm')">
+                <i class="addIcon el-icon-plus"></i>添加
+              </button>
+              -->
+              <button class="delete" @click="deleteBtn(allSeclet)">
+                <i class="deleteIcon el-icon-delete"></i>批量删除
               </button>
             </div>
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="角色名称:" size="160">
-                <el-select v-model="formInline.userType" placeholder="请选择角色" clearable
-                >
-                  <el-option
-                    v-for="item in optionsData"
-                    :key="item.roleCode"
-                    :label="item.roleName"
-                    :value="item.roleCode"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="创建时间:" size="130">
-                <el-date-picker
-                  v-model="formInline.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                ></el-date-picker>
-              </el-form-item>
-              <el-form-item>
-                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
-              </el-form-item>
-            </el-form>
-          </section>
-          <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
-
-          <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
+            <section class="searchBox" style="margin-left:320px">
+              <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-form-item label="角色名称:" size="160">
+                  <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
+                  <el-select
+                    clearable
+                    v-model="formInline.userType"
+                    value-key="roleCode"
+                    placeholder="请选择角色"
+                  >
+                    <el-option
+                      v-for="(option) of optionsData"
+                      :key="option.roleCode"
+                      :label="option.roleName"
+                      :value="option.roleCode"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="创建时间:" size="130">
+                  <el-date-picker
+                    v-model="formInline.beginTime"
+                    type="date"
+                    placeholder="开始日期"
+                    :picker-options="pickerOptions0"
+                  ></el-date-picker>
+                  <el-date-picker
+                    v-model="formInline.endTime"
+                    type="date"
+                    placeholder="结束日期"
+                    :picker-options="pickerOptions1"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                  <el-button size="15" type="primary" @click="searchBtn">搜索</el-button>
+                </el-form-item>
+              </el-form>
+            </section>
+          </div>
+          <!-- 4.0 表格展示内容 -->
           <section class="text item tablebox">
             <el-table
-              @selection-change="changeFun"
-              v-loading="loading"
               class="tableBorder"
-              style="width: 100%; text-align:center;"
-              :row-style="rowStyle"
+              v-loading="tableLoading"
+              @selection-change="selectAllBtn"
               :data="tableData"
+              style="width: 100%;
+                      text-align:center;"
+              :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
               <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column align="center" prop="id" label="序号"></el-table-column>
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+                <template slot-scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="fkRoleName" label="角色名称"></el-table-column>
-              <el-table-column align="center" prop="fkMenuName" label="菜单名称"></el-table-column>
-              <el-table-column align="center" prop="fkMenuElementName" label="元素名称"></el-table-column>
-              <el-table-column align="center" prop="createTime" :formatter="dateFormat" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="updateTime" :formatter="dateFormat" label="修改时间"></el-table-column>
-              <el-table-column align="center" label="操作">
+
+              <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
+              <el-table-column align="center" prop="disabled" width="200" label="状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="edit" @click="handleEmpower(scope.$index, scope.row)">授权</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span>
+                  <span class="edit" @click="editButton(scope.$index, scope.row)">授权</span>
+                  <span class="ban" @click="banButton(scope.$index, scope.row)">禁用</span>
                 </template>
               </el-table-column>
             </el-table>
-          </section>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination">
-            <el-pagination
-              background
-              layout="prev, pager, next,total, jumper"
-              :total="total"
-              :page-size="pageSize"
-              :current-page="currentPage"
-              @current-change="current_change">
-            </el-pagination>
+            <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
+            <section class="pagination mt_30">
+              <el-pagination
+                background
+                layout="prev, pager, next,total, jumper, ->"
+                :total="total"
+                :page-size="pageSize"
+                :current-page="currentPage"
+                @current-change="current_change"
+              ></el-pagination>
+            </section>
           </section>
         </div>
       </div>
       <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
       <!-- 禁用弹框/批量删除弹框 -->
       <div class="forbid">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-          <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
+        <el-dialog :title="dialogTitle[i]" :visible.sync="refuseDialog" width="500px" center>
+          <div class="dialogBody">是否{{dialogTitle[i]}}?</div> 
           <div slot="footer" class="dialog-footer">
-            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton true mr_40" @click="refuseBtn">确 定</span>
+            <span class="dialogButton cancel" @click="refuseDialog = false">取消</span>
           </div>
         </el-dialog>
       </div>
-      <!-- 批量删除弹框 -->
+      <!-- 添加 编辑弹框 -->
+      <div class="addEditDialog">
+        <!-- Form -->
+        <el-dialog
+          @close="closeForm"
+          width="586px"
+          :title="dialogTitle[i]"
+          :visible.sync="changeDialog"
+        >
+          <el-form
+            id="addFormYf"
+            :model="addForm"
+            :rules="addrules"
+            ref="addForm"
+            label-width="100px"
+            class="demo-ruleForm"
+            style="display: flex;flex-direction: column"
+          >
+            <el-form-item label="角色名称" prop="userType" style="margin-left: 50px">
+              <el-select clearable v-model="addForm.userType" placeholder="请选择角色名称">
+                <el-option
+                  v-for="(option,index) of optionsData"
+                  :key="index"
+                  :label="option.roleName"
+                  :value="option.roleCode"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="模块授权" prop="mode" style="margin-left: 50px">
+              <el-select multiple collapse-tags v-model="addForm.mode" placeholder="请选择模块">
+                <el-option
+                  v-for="(option,index) of modeName"
+                  :key="index"
+                  :label="option"
+                  :value="option"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="页面授权" prop="pageMode" style="margin-left: 50px">
+              <el-select multiple collapse-tags v-model="addForm.pageMode" placeholder="请选择模块">
+                <el-option
+                  v-for="(option,index) of modeName"
+                  :key="index"
+                  :label="option"
+                  :value="option"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="按钮授权" prop="buttonMode" style="margin-left: 50px">
+              <el-select multiple collapse-tags v-model="addForm.buttonMode" placeholder="请选择模块">
+                <el-option
+                  v-for="(option,index) of modeName"
+                  :key="index"
+                  :label="option"
+                  :value="option"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 弹框表单按钮  验证失效-->
+            <el-form-item>
+              <el-button type="primary" @click="changeSub('addForm')">确定</el-button>
+              <el-button type="info" @click="cancelForm('addForm')">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
     </el-container>
   </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import moment from 'moment'
-  import {role_name} from '../../request/api/base.js'
-  import {prohibit, batch_Prohibit, command_list} from '../../request/api/base.js'
-
-  export default {
-    data () {
-      return {
-        setting: {
-          edit: {
-            enable: true,
-            showRemoveBtn: false,
-            addHoverBtn: false,
-            showRenameBtn: false,
-            editNameSelectAll: true
-          },
-          data: {
-            simpleData: {
-              enable: true,
-              idKey: "id",
-              pIdKey: "pId",
-              rootPId: 0
-            }
-          },
-          view: {
-            showLine: false,
-            showIcon: true,
-            dblClickExpand: false,
-            selectedMulti: true,
-          },
-          callback: {
-            onClick: this.zTreeOnClick, //节点点击事件
-          }
-        },
-        zNodes: [],
-        loading: true, // 加载状态
-        /*====== 0.0初始化弹框数据 ======*/
-        multipleSelection: [],
-        deleteparams: {},
-        disabled_va: -1,
-        centerDialogVisible: false, // 禁用授权弹框
-        Dialogtitle: ['禁用', '批量删除', '授权'],
-        i: 0, // 切换弹框标题
-        editObj: null,
-        dialogFormVisible: false, // // 添加弹框的展示和消失
-        /*====== 2.0表单提交数据项 ======*/
-        optionsData: [],
-        formInline: {
-          // 搜索需要的表单数据
-          userName: '',
-          userType: '',
-          userId: '',
-          userPhone: '',
-          date: '' // 选择日期
-        },
-        search: '', // 存储搜索完成后的2.0表单数据 用于调用分页接口
-
-        /*====== 3.0添加 批量删除所需数据 ======*/
-        Allseclet: [], // 存储全选框 单选框的数据/索引 用于传递给后台同时 前端用索引号去删除表格内的内容
-
-        /*====== 4.0表格设置项 ======*/
-        rowStyle: {
-          height: '60px'
-        },
-        // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-        tableData: [],
-        /*====== 5.0 分页相关设置项 ======*/
-        /*初始化 */
-        total: 0,
-        pageSize: 7,
-        currentPage: 1,
-        // 提交的数据 用于保存查询的结果后查询分页
-        paginationForm: {}
-      }
-    },
-    computed: {
-      searchTimeForm () {
-        let searchForm = {
-          pageSize: this.pageSize,
-          currentPage: 1,
-          roleName: this.formInline.userType === '全部' ? null : this.formInline.userType,
-          beginTime: this.formInline.date === '' ? null : moment(this.formInline.date[0]).format('YYYY-MM-DD'), //开始时间
-          endTime: this.formInline.date === '' ? null : moment(this.formInline.date[1]).format('YYYY-MM-DD'), //结束时间
-        }
-        return searchForm
+import moment from "moment";
+import axios from "axios";
+import { powerMangaeInt, selectRoleType } from "../../request/api/base.js";
+export default {
+  created() {
+    let route = this.$route.path;
+    console.log(this.$route.path);
+    console.log(this.$route.meta.menuName);
+    this.selectRoleType(); // 获取角色类型
+    this.searchApi(this.searchTimeForm);
+  },
+  data() {
+    return {
+      /*====== 2.0表单提交数据项 ======*/
+      optionsData: [], // 下拉框数据
+      formInline: {
+        // 搜索需要的表单数据
+        userType: "",
+        beginTime: "",
+        endTime: "",
+        currentPage: 0
       },
-      prohibit () {
-        let prohibit = {
-          disabled: this.disabled_va,
-          id: this.editObj.id
-        }
-        return prohibit
-      }
-    },
-    methods: {
-      /*====== 2.0 表单提交相关函数 ======*/
-      onSubmit () {
-        // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-        console.log(this.formInline)
-        this.currentPage = 1
-        this.command_list(this.searchTimeForm)
-      },
-      /*====== 3.0添加删除相关操作 ======*/
-      addDialogOpen () {
-        this.i = 3
-        this.dialogFormVisible = true
-      },
-      batchDelete () {
-        // 批量删除
-        this.i = 1
-        this.centerDialogVisible = true
-        this.editObj = this.multipleSelection
-        let batch_list = []
-        let jsonObj = {}
-        for (let j = 0; j < this.editObj.length; j++) {
-          jsonObj = {}
-          jsonObj.id = this.editObj[j].id
-          batch_list.push(jsonObj)
-        }
-        console.log(batch_list,"batch_list")
-        this.deleteparams = {
-          deleteParams: batch_list
-        }
-      },
-      /*====== 4.0表格操作相关 ======*/
-      handleBan (index, row) {
-        // 禁用
-        console.log(index, row) // 当前选中表格的索引和对象
-        this.i = 0
-        this.editObj = row
-        this.centerDialogVisible = true
-      },
-      handleEmpower (index, row) {
-        this.i = 2
-        this.editObj = row
-        this.centerDialogVisible = true
-      },
-      changeFun (val) {
-        this.multipleSelection = val // 返回的是选中的列的数组集合
-        console.log(this.multipleSelection, '>>>>>>>>>>>')
-      },
-      /*====== 弹框相关函数 ======*/
-      submitDialog () {
-        // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-        let i = this.i
-//        let tips = this.Dialogtitle[i]
-        //  alert(`${tips}成功`) // 成功之后映射到数组的操作
-        this.centerDialogVisible = false
-
-        if (0 === i) {
-          //0启用 1禁用
-          this.disabled_va = 1
-          this.prohibit_sb(this.prohibit)
-        } else if (1 === i) {
-          console.log(this.deleteparams, 'onsole.log(this.deleteparams')
-          this.batch_Prohibit(this.deleteparams)//批量禁用
-        } else if (2 === i) {
-          this.disabled_va = 0
-          this.prohibit_sb(this.prohibit)
-        }
-        // console.log(this.editObj.id, '|||')
-      },
-      //时间格式化
-      dateFormat: function (row, column) {
-        var date = row[column.property]
-        if (date == undefined) {
-          return ''
-        }
-        return moment(date).format('YYYY-MM-DD HH:mm')
-      },
-      role_name () {//查询角色名称
-        axios.get(role_name, {}
-        ).then(res => {
-          console.log(res.data)
-          if (res.data) {
-            if (res.data.state) {
-              this.optionsData = res.data.row //获取角色名称
-            }
-          }
-        }).catch(error => {
-          this.$message.error(error)
-        })
-      },
-      batch_Prohibit (value) {//批量禁用
-        axios.delete(batch_Prohibit, value).then(res => {
-          console.log(res)
-        }).catch(error => {
-          this.$message.error(error)
-        })
-      },
-      command_list (value) {//查询权限列表
-        console.log(value, 1111)
-        axios.get(command_list, {
-          params: value
-        }).then(res => {
-          console.log(res.data)
-          if (res.data.state === true) {
-            this.tableData = res.data.row
-            this.total = res.data.total //总条目数
-            this.paginationForm = Object.assign({}, value) // 保存上次的查询结果
-            console.log('保存当前查询', this.paginationForm)
+      pickerOptions0: {
+        disabledDate: time => {
+          if (this.formInline.endTime) {
+            return (
+              time.getTime() > Date.now() ||
+              time.getTime() > this.formInline.endTime
+            );
           } else {
-            this.$message.error(res.data.msg)
+            return time.getTime() > Date.now();
           }
-        }).catch(error => {
-          this.$message.error(error)
-        })
-        this.loading = false // 加载状态
+        }
       },
-      prohibit_sb (value) {//禁用用户管理权限
-        console.log(value)
-        axios.put(prohibit, value).then(res => {
-          if (res.data.state === true) {
-            this.$message.success(res.data.msg)
-            this.command_list(this.searchTimeForm)
-          }
-        }).catch(error => {
-          this.$message.error(error)
-        })
+      pickerOptions1: {
+        disabledDate: time => {
+          return (
+            time.getTime() < this.formInline.beginTime ||
+            time.getTime() > Date.now()
+          );
+        }
       },
-      current_change: function (currentPage) {
-        //分页查询
-        this.currentPage = currentPage //点击第几页
-        this.paginationForm.currentPage = currentPage
-        console.log('保存当前查询', this.paginationForm, '>>>>')
-        this.command_list(this.paginationForm) // 这里的分页应该默认提交上次查询的条件
+      /*====== 3.0表格设置项 ======*/
+      tableLoading: false,
+      tableData: [],
+      rowStyle: {
+        height: "60px"
+      },
+      allSeclet: [], // 全选的对象
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
+      paginationForm: {}, // 提交的数据 保存查询的结果后查询分页
+      /*====== 弹框表单配置项 ======*/
+      dialogTitle: ["添加", "删除", "授权", "禁用"],
+      i: 0,
+      formLabelWidth: "120px",
+      /*------ 添加编辑弹框  ------*/
+      changeDialog: false,
+      changeLoading:false,
+      modeName: ["藏馆系统", "图书系统", "区域系统", "权限系统"],
+      pageName: [],
+      buttonName: [],
+      addForm: {
+        userType: "",
+        mode: [],
+        pageMode: [],
+        buttonMode: []
+      },
+      addrules: {
+        // 添加的参数验证
+        userType: [
+          { required: true, message: "请输入角色名称", trigger: "change" }
+        ],
+        mode: [
+          { required: true, message: "请选择模块权限", trigger: "change" }
+        ],
+        pageMode: [
+          { required: true, message: "请选择菜单权限", trigger: "change" }
+        ],
+        buttonMode: [
+          { required: true, message: "请选择按钮权限", trigger: "change" }
+        ]
+      },
+      /*------ 删除禁用弹框 ------*/
+      refuseDialog: false,
+      refuseLoading:false,
+      banArr:[] // 禁用传递数据
+    };
+  },
+  computed: {
+    searchTimeForm() {
+      // 传递给后端的搜索数据
+      let searchForm = {
+        // 非空判断的各个值
+        pageSize: this.pageSize,
+        currentPage: this.currentPage,
+        fkRoleCode: this.formInline.userType,
+        beginTime: !this.formInline.beginTime
+          ? null
+          : moment(this.formInline.beginTime).format("YYYY-MM-DD"), //开始时间
+        endTime: !this.formInline.endTime
+          ? null
+          : moment(this.formInline.endTime).format("YYYY-MM-DD") //结束时间
+      };
+      //console.log(searchForm)
+      return searchForm;
+    },
+    
+  },
+  methods: {
+    /*====== 2.0-3.0按钮组 ======*/
+    searchBtn() {
+      // 函数节流
+      this.searchApi(this.searchTimeForm);
+      this.currentPage = 1;
+    },
+    addButton(formName) {
+      //this.$refs[formName].resetFields(); 这个时候弹框表单还未生成抓取不到 验证状态也重置
+      this.i = 0;
+      this.changeDialog = true;
+    },
+    deleteBtn() {
+      if (this.allSeclet.length) {
+        this.i = 1;
+        this.refuseDialog = true;
+        console.log(this.allSeclet)
+      } else {
+        this.$message.error("请先选择删除对象");
       }
     },
-    mounted () {
-      console.log(this.formInline.date, 212)
-      this.role_name()
-      console.log(this.searchTimeForm)
-      this.command_list(this.searchTimeForm)
-    }
+    editButton() {
+
+    },
+    banButton(index,row) {
+      if (row.disabled == 1) {
+        this.$message.error("该用户已被禁用");
+      } else {
+        this.i = 3;
+        this.banArr.id = row.id;
+        console.log('当前选中',index, row, this.banArr); // 当前选中表格的索引和对
+        this.refuseDialog = true;
+      }
+      
+      
+    },
+    selectAllBtn(val) {
+      console.log(val);
+      let arr = [];
+      for (let item of val) {
+        let obj = {};
+        obj.id = item.id;
+        arr.push(obj);
+      }
+      this.allSeclet = arr;
+    },
+
+    /*====== 弹框相关按钮 ======*/
+    changeBtn(formName) {
+      // 改动(添加和编辑弹框的确定)弹框确定按钮
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+        } else {
+          return false;
+        }
+      });  
+    },
+    cancelBtn() { // 改变弹框的取消按钮
+
+    },
+    refuseBtn() { // 禁用确定按钮
+      if(this.i ==1){
+        this.deleteApi()
+        this.refuseDialog = false
+      }
+      if(this.i==3){
+        this.banApi(banArr)
+      }
+    },
+    closeFormBtn() { // 表单弹框关闭执行事件
+      this.$refs[formName].resetFields();
+    },
+    /*====== API相关函数 ======*/
+    // 通用API
+    selectRoleType() {
+      axios.get(selectRoleType).then(res => {
+        if (res.data.state === true) {
+          let data = res.data.row;
+          let optionsData = [];
+          for (let item of data) {
+            let obj = {};
+            obj.roleCode = item.roleCode;
+            obj.roleName = item.roleName;
+            optionsData.push(obj);
+          }
+          this.optionsData = optionsData;
+        }
+      });
+    },
+    searchApi(value) {
+      this.tableLoading = true;
+      this.axios.get(powerMangaeInt.select, { params: value }).then(res => {
+        console.log("查询分页的页数", res.data);
+        if (res.data.state === true) {
+          let nomal = res.data.row;
+          this.tableData = res.data.row; //获取返回数据
+          console.log("获取的表格数据", this.tableData);
+          this.total = res.data.total; //总条目数
+          this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+          console.log("保存当前查询", this.paginationForm);
+          this.tableLoading = false;
+        } else {
+          this.$message.error(res.data.msg);
+          this.tableLoading = false;
+        }
+      });
+    },
+    deleteApi() {
+      //this.banDeleteLoading = true; 
+      let obj = new Object();
+      obj.deleteParams =   this.allSeclet ;
+      console.log(obj.deleteParams)
+      axios
+        .delete(powerMangaeInt.delete, {
+          data: obj
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.state === true) {
+            console.log(res.data);
+            this.searchApi(this.paginationForm); // 删除成功就重新加载一次数据
+            this.$message.success("删除成功");
+            this.refuseDialog = false; // 提示删除成功 是否需要提示信息
+            //this.banDeleteLoading = false;
+          } else {
+            this.$message.error(res.data.msg);
+            //this.banDeleteLoading = false;
+          }
+        });
+    },
+    banApi(arr) {
+      console.log("禁用的数据", arr); // 正在请求的状态 通过按钮还是文本
+      axios.put(powerMangaeInt.edit, arr).then(res => {
+        console.log(res.data);
+        if (res.data.state === true) {
+          console.log(res.data);
+          this.searchApi(this.paginationForm); // 禁用成功就重新加载一次数据
+          this.$message.success("禁用成功");
+          this.refuseDialog = false;
+        } else {
+          this.$message.error(res.data.msg); 
+        }
+      });
+    },
+    current_change: function(currentPage) { //分页查询
+      this.currentPage = currentPage; //点击第几页
+      this.paginationForm.currentPage = currentPage;
+      //console.log('保存当前查询',this.paginationForm);
+      this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+    },
+
+    cancelForm(formName) {
+      this.$refs[formName].resetFields();
+      this.changeDialog = false
+    },
   }
+};
 </script>
 
 <style scoped>
-  /*====== 0.0 初始化部分 ======*/
-  .routerBox {
-    background-color: #fff;
-    min-height: 70px;
-    width: 100%;
-    padding: 0 30px;
-    align-items: center;
-    display: flex;
-    box-sizing: border-box;
-  }
+/*====== 0.0 初始化部分 ======*/
+section.pagination {
+  display: flex;
+  justify-content: center;
+}
+.routerBox {
+  background-color: #fff;
+  min-height: 70px;
+  width: 100%;
+  padding: 0 30px;
+  align-items: center;
+  display: flex;
+  box-sizing: border-box;
+}
+.routerButton {
+  margin-right: 30px;
+}
+.space {
+  background-color: #ebf7ff;
+  height: 30px;
+}
+.box-card {
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.important {
+  padding: 30px;
+}
+/* 1.0标题 通用部分 */
+.sonTitle {
+}
+.sonTitle .titleName {
+  border-left: 4px solid #0096ff;
+  padding-left: 10px;
+  font-size: 16px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(135, 135, 135, 1);
+  display: inline-block;
+  margin-bottom: 33px;
+}
+.useradd {
+}
+.useradd .box-card {
+  width: 100%;
+}
+.text {
+  font-size: 14px;
+}
+/* 清楚浮动 */
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+/*====== 2.0表单区域 ======*/
+/* 可以通过size属性添加一个classname */
 
-  .routerButton {
-    margin-right: 30px;
-  }
+.el-form--inline .el-form-item {
+  margin-right: 25px;
+}
+.el-form--inline .el-form-item:last-child {
+  margin-right: 0;
+}
+.el-input.el-input--120 {
+  width: 160px;
+}
+.el-input.el-input--120 input {
+  height: 36px;
+  line-height: 36px;
+}
+.el-input.el-input--160 {
+  width: 160px;
+}
+.el-range-editor--130 {
+  width: 300px;
+}
+.el-select.el-select--160 {
+  width: 160px;
+}
+.el-button--15 {
+  padding: 12px 29px;
+}
+/* 按钮 */
+.buttonBox {
+  margin-bottom: 30px;
+}
+.buttonBox button {
+  padding-left: 18px;
+  padding-right: 18px;
+  height: 40px;
+  font-size: 16px;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
+}
+.buttonBox .add {
+  background: rgba(255, 146, 49, 1);
+  border-radius: 10px;
+  margin-right: 30px;
+}
+.buttonBox .add .addIcon {
+  margin-right: 6px;
+}
+.buttonBox .delete {
+  background: rgba(255, 92, 60, 1);
+  border-radius: 10px;
+}
+.buttonBox .delete .deleteIcon {
+  margin-right: 6px;
+}
+/*====== 3.0表格区域 ======*/
+.item {
+  margin-bottom: 50px;
+}
+.tablebox .tableBorder {
+  border: 1px solid #ebeef5;
+  border-bottom: none;
+  font-size: 16px;
+}
+/* 操作表格区 表格列添加样式名是无效的 */
+.imgDefault {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: #333;
+}
+.operator {
+}
+.edit {
+  color: #00d7f0;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.ban {
+  color: #ff5c3c;
+  cursor: pointer;
+}
+/*====== 4.0 分页器区域 ======*/
+.pagination .el-pagination {
+  display: flex;
+  justify-content: center;
+}
 
-  .space {
-    background-color: #ebf7ff;
-    height: 30px;
-  }
-
-  .box-card {
-    background-color: #fff;
-    box-sizing: border-box;
-  }
-
-  .important {
-    padding: 30px;
-  }
-
-  /* 1.0标题 通用部分 */
-  .sonTitle {
-  }
-
-  .sonTitle .titleName {
-    border-left: 4px solid #0096ff;
-    padding-left: 10px;
-    font-size: 16px;
-    font-family: MicrosoftYaHei;
-    font-weight: 400;
-    color: rgba(135, 135, 135, 1);
-    display: inline-block;
-    margin-bottom: 33px;
-  }
-
-  .useradd {
-  }
-
-  .useradd .box-card {
-    width: 100%;
-  }
-
-  .text {
-    font-size: 14px;
-  }
-
-  /* 清楚浮动 */
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-
-  .clearfix:after {
-    clear: both;
-  }
-
-  /*====== 2.0表单区域 ======*/
-  /* 可以通过size属性添加一个classname */
-  .searchBox {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .el-form--inline .el-form-item {
-    margin-right: 25px;
-  }
-
-  .el-form--inline .el-form-item:last-child {
-    margin-right: 0;
-  }
-
-  .el-input.el-input--120 {
-    width: 160px;
-  }
-
-  .el-input.el-input--120 input {
-    height: 36px;
-    line-height: 36px;
-  }
-
-  .el-input.el-input--160 {
-    width: 160px;
-  }
-
-  .el-range-editor--130 {
-    width: 300px;
-  }
-
-  .el-select.el-select--160 {
-    width: 160px;
-  }
-
-  .el-button--15 {
-    padding: 12px 29px;
-  }
-
-  /* 按钮 */
-  .buttonBox {
-    margin-bottom: 30px;
-  }
-
-  .buttonBox button {
-    padding-left: 18px;
-    padding-right: 18px;
-    height: 40px;
-    font-size: 16px;
-    color: #fff;
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: none;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    -webkit-transition: 0.1s;
-    transition: 0.1s;
-    font-weight: 500;
-  }
-
-  .buttonBox .add {
-    background: rgba(255, 146, 49, 1);
-    border-radius: 10px;
-    margin-right: 30px;
-  }
-
-  .buttonBox .add .addIcon {
-    margin-right: 6px;
-  }
-
-  .buttonBox .delete {
-    background: rgba(255, 92, 60, 1);
-    border-radius: 10px;
-  }
-
-  .buttonBox .delete .deleteIcon {
-    margin-right: 6px;
-  }
-
-  /*====== 3.0表格区域 ======*/
-  .item {
-    margin-bottom: 50px;
-  }
-
-  .tablebox .tableBorder {
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    border-top: none;
-    font-size: 16px;
-  }
-
-  /* 操作表格区 表格列添加样式名是无效的 */
-  .imgDefault {
-    width: 30px;
-    height: 30px;
-    display: inline-block;
-    border-radius: 50%;
-    background-color: #333;
-  }
-
-  .operator {
-  }
-
-  .edit {
-    color: #00d7f0;
-    cursor: pointer;
-    margin-right: 20px;
-  }
-
-  .ban {
-    color: #ff5c3c;
-    cursor: pointer;
-  }
-
-  /*====== 4.0 分页器区域 ======*/
-  .pagination .el-pagination {
-    display: flex; /*flex块级，inline-flex:行内快*/
-    justify-content: center;
-  }
-
-  /*====== 后期频繁更改部分 ======*/
-  .routerButton {
-    position: relative;
-    text-align: left;
-    padding-left: 20px;
-  }
-
-  .Iconerror {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    font-size: 16px;
-    color: #fff;
-    right: 20px;
-  }
-
-  .labelActive {
-    background-color: #0096ff;
-    color: #fff;
-    border: none;
-  }
-
-  /*====== 弹框相关部分 后期可能更新为全局通用样式 ======*/
-  .mask {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    z-index: 2;
-    background: rgba(0, 0, 0, 1);
-    opacity: 0.5;
-  }
-
-  .addDialog {
-    width: 685px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin-top: 0 !important;
-    border-radius: 20px;
-    z-index: 5;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: none;
-  }
-
-  .addDialog .dialogTitle {
-    height: 80px;
-    background-color: #0096ff;
-    text-align: center;
-    line-height: 80px;
-    color: #fff;
-    font-size: 26px;
-    position: relative;
-  }
-
-  .addDialog .close {
-    position: absolute;
-    color: #fff;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    top: 25px;
-    right: 30px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .addDialog .dialogBody {
-    background: #fff;
-    padding-top: 30px;
-  }
-
-  .addDialog .dialog-footer {
-    padding-bottom: 46px;
-  }
-
-  /*Vue过渡动画*/
-  /*遮罩过渡*/
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.2s;
-  }
-
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
-  {
-    opacity: 0;
-  }
-
-  /*过渡的状态 即过渡的关键帧打那些*/
-  .dialog-enter-active,
-  .dialog-leave-active {
-    transition: all 0.3s;
-  }
-
-  .dialog-enter, .dialog-leave-to /* .fade-leave-active below version 2.1.8 */
-  {
-    opacity: 0;
-    top: 47%;
-  }
-
-  /*row排列*/
-  .row1 {
-    display: flex;
-    padding: 0 30px;
-  }
-
-  .row1 .el-form-item {
-    margin-bottom: 30px;
-  }
-
-  .row1.el-input .el-input__inner {
-    width: 200px;
-  }
-
-  .upload {
-    display: flex;
-    justify-content: center;
-  }
-
-  .upload .defultHead {
-    position: relative;
-  }
-
-  .defultHead:hover .bgload {
-    display: block;
-  }
-
-  .bgload {
-    background-color: rgba(0, 0, 0, 0);
-    position: absolute;
-    top: 0;
-    text-align: center;
-    line-height: 100px;
-    z-index: 3;
-    opacity: 0.7;
-    cursor: pointer;
-    display: none;
-    color: #fff;
-  }
-
-  .defultImg {
-    position: absolute;
-    z-index: 1;
-  }
-
-  .preloadImg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    text-align: center;
-    line-height: 100px;
-  }
+/*====== 后期频繁更改部分 ======*/
+.routerButton {
+  position: relative;
+  text-align: left;
+  padding-left: 20px;
+}
+.Iconerror {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  font-size: 16px;
+  color: #fff;
+  right: 20px;
+}
+.labelActive {
+  background-color: #0096ff;
+  color: #fff;
+  border: none;
+}
+/*====== 弹框相关部分 后期可能更新为全局通用样式 ======*/
+.mask {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  background: rgba(0, 0, 0, 1);
+  opacity: 0.5;
+}
+.addDialog {
+  width: 685px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 0 !important;
+  border-radius: 20px;
+  z-index: 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: none;
+}
+.addDialog .dialogTitle {
+  height: 80px;
+  background-color: #0096ff;
+  text-align: center;
+  line-height: 80px;
+  color: #fff;
+  font-size: 26px;
+  position: relative;
+}
+.addDialog .close {
+  position: absolute;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  top: 25px;
+  right: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.addDialog .dialogBody {
+  background: #fff;
+  padding-top: 30px;
+}
+.addDialog .dialog-footer {
+  padding-bottom: 46px;
+}
+/*Vue过渡动画*/
+/*遮罩过渡*/
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+/*过渡的状态 即过渡的关键帧打那些*/
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: all 0.3s;
+}
+.dialog-enter, .dialog-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  top: 47%;
+}
+/*row排列*/
+.row1 {
+  display: flex;
+  padding: 0 30px;
+}
+.row1 .el-form-item {
+  margin-bottom: 30px;
+}
+.row1.el-input .el-input__inner {
+  width: 200px;
+}
+.upload {
+  display: flex;
+  justify-content: center;
+}
+.upload .defultHead {
+  position: relative;
+}
+.defultHead:hover .bgload {
+  display: block;
+}
+.bgload {
+  background-color: rgba(0, 0, 0);
+  position: absolute;
+  top: 0;
+  text-align: center;
+  line-height: 100px;
+  z-index: 3;
+  opacity: 0.7;
+  cursor: pointer;
+  display: none;
+  color: #fff;
+}
+.defultImg {
+  position: absolute;
+  z-index: 1;
+}
+.preloadImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  text-align: center;
+  line-height: 100px;
+}
 </style>
 
