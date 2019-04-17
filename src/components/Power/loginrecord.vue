@@ -40,9 +40,9 @@
         </section>
         <!-- 3.0表格数据 -->
         <section class="tableBox" v-loading="tableLoading"
-            element-loading-text="拼命加载中">
+                 element-loading-text="拼命加载中">
           <el-table
-            
+
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
             empty-text="无数据"
             :data="tableData"
@@ -86,185 +86,174 @@
 </template>
 
 <script>
-import axios from "axios";
-import moment from "moment";
-import { login_record } from "../../request/api/base.js";
+  import axios from 'axios'
+  import moment from 'moment'
+  import {login_record} from '../../request/api/base.js'
 
-export default {
-  data() {
-    return {
-      /*====== 2.0表单搜索区域 ======*/
-      searchForm: {
-        // 接受搜索表单的数据
-        loginSource: "全部",
-        beginTime: "",
-        endTime: "",
-        currentPage: 0
-      },
-      /*初始化 */
-      options: [
-        {
-          value: "全部",
-          label: "全部"
+  export default {
+    data () {
+      return {
+        /*====== 2.0表单搜索区域 ======*/
+        searchForm: {
+          // 接受搜索表单的数据
+          loginSource: '',
+          beginTime: '',
+          endTime: '',
+          currentPage: 0
         },
-        {
-          value: "0",
-          label: "平台"
+        /*初始化 */
+        options: [
+          {
+            value: '0',
+            label: '平台'
+          },
+          {
+            value: '1',
+            label: '设备'
+          }
+        ],
+        /*日期禁用规则 */
+        pickerOptions: {
+          // 双重绑定限制规则
+          disabledDate (date) {
+            const maxDate = Date.now()
+            const time = date.getTime()
+            return time > maxDate
+          }
         },
-        {
-          value: "1",
-          label: "设备"
-        }
-      ],
-      /*日期禁用规则 */
-      pickerOptions: {
-        // 双重绑定限制规则
-        disabledDate(date) {
-          const maxDate = Date.now();
-          const time = date.getTime();
-          return time > maxDate;
-        }
-      },
-      pickerOptions0: {
-        disabledDate: time => {
-          if (this.searchForm.endTime) {
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              )
+            } else {
+              return time.getTime() > Date.now()
+            }
+          }
+
+        },
+        pickerOptions1: {
+          disabledDate: time => {
             return (
-              time.getTime() > Date.now() ||
-              time.getTime() > this.searchForm.endTime
-            );
-          } else {
-            return time.getTime() > Date.now();
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            )
           }
-        }
 
-      },
-      pickerOptions1: {
-        disabledDate: time => {
-          return (
-            time.getTime() < this.searchForm.beginTime ||
-            time.getTime() > Date.now()
-          );
-        }
-
-      },
-      tableLoading:true,
-      currentPage:1,
-      pageSize:10,
-      total:0,
-      tableData:[]
-    }
-    
-  },
-  computed: {
-    searchTimeForm() {
-      // 计算属性 真正传递的数据
-      let searchForm = {
-        pageSize: this.pageSize,
+        },
+        tableLoading: true,
         currentPage: 1,
-        fkLoginType:
-          this.searchForm.loginSource === "全部"
-            ? null
-            : this.searchForm.loginSource,
-        beginTime: !this.searchForm.beginTime
-          ? null
-          : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
-        endTime: !this.searchForm.endTime
-          ? null
-          : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
-      };
-      return searchForm;
-    }
-  },
-  methods: {
-    submit_tv() {
-      //条件查询
-      this.login_recod(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
-      this.currentPage = 1;
+        pageSize: 10,
+        total: 0,
+        tableData: []
+      }
+
     },
-    login_recod(value) {
-      //获取登录记录
-      console.log(value);
-      this.tableLoading = true;
-      axios
-        .get(login_record, {
-          params: value
-        })
-        .then(res => {
-          console.log("登陆记录", res.data);
-          if (res.data.state === true) {
-            let i = (this.currentPage - 1) * this.pageSize + 1;
-            this.tableData = res.data.row; //获取返回数据
-            //console.log('获取的表格数据',this.tableData)
-            this.total = res.data.total; //总条目数
-            this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            //console.log("保存当前查询", this.paginationForm);
-            this.tableLoading = false;
-          } else {
-            this.$message.error(res.data.msg);
-            this.tableLoading = false;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      
+    computed: {
+      searchTimeForm () {
+        // 计算属性 真正传递的数据
+        let searchForm = {
+          pageSize: this.pageSize,
+          currentPage: 1,
+          fkLoginType: !this.searchForm.loginSource ? null : this.searchForm.loginSource,
+          beginTime: !this.searchForm.beginTime ? null : moment(this.searchForm.beginTime).format('YYYY-MM-DD'), //开始时间
+          endTime: !this.searchForm.endTime ? null : moment(this.searchForm.endTime).format('YYYY-MM-DD') //结束时间
+        }
+        return searchForm
+      }
     },
-    current_change: function(currentPage) {
-      //分页查询
-      this.currentPage = currentPage; //点击第几页
-      this.paginationForm.currentPage = currentPage;
-      console.log("保存当前查询", this.paginationForm);
-      this.login_recod(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+    methods: {
+      submit_tv () {
+        //条件查询
+        this.login_recod(this.searchTimeForm) // 查询后 把新数据保存到分页表单中
+        this.currentPage = 1
+      },
+      login_recod (value) {
+        //获取登录记录
+        console.log(value)
+        this.tableLoading = true
+        axios
+          .get(login_record, {
+            params: value
+          })
+          .then(res => {
+            console.log('登陆记录', res.data)
+            if (res.data.state === true) {
+              let i = (this.currentPage - 1) * this.pageSize + 1
+              this.tableData = res.data.row //获取返回数据
+              //console.log('获取的表格数据',this.tableData)
+              this.total = res.data.total //总条目数
+              this.paginationForm = Object.assign({}, value) // 保存上次的查询结果
+              //console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false
+            } else {
+              this.$message.error(res.data.msg)
+              this.tableLoading = false
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+      },
+      current_change: function (currentPage) {
+        //分页查询
+        this.currentPage = currentPage //点击第几页
+        this.paginationForm.currentPage = currentPage
+        console.log('保存当前查询', this.paginationForm)
+        this.login_recod(this.paginationForm) // 这里的分页应该默认提交上次查询的条件
+      }
+    },
+    mounted () {
+      this.login_recod(this.searchTimeForm) // 调用查询接口获取数据
     }
-  },
-  mounted() {
-    this.login_recod(this.searchTimeForm); // 调用查询接口获取数据
   }
-};
 </script>
 
 <style scoped>
-.page_div {
-  text-align: center;
-  margin-top: 30px;
-}
+  .page_div {
+    text-align: center;
+    margin-top: 30px;
+  }
 
-.confirm_bt {
-  display: inline-block;
-  text-align: center;
-  width: 70px;
-  padding: 8px 8px;
-}
+  .confirm_bt {
+    display: inline-block;
+    text-align: center;
+    width: 70px;
+    padding: 8px 8px;
+  }
 
-.button_s {
-  width: 90px;
-  font-size: 16px;
-  text-align: center;
-  margin-left: 30px;
-}
+  .button_s {
+    width: 90px;
+    font-size: 16px;
+    text-align: center;
+    margin-left: 30px;
+  }
 
-#loginrecord {
-  background: #ffffff;
-}
+  #loginrecord {
+    background: #ffffff;
+  }
 
-.time_p {
-  margin-left: 30px;
-}
+  .time_p {
+    margin-left: 30px;
+  }
 
-/*.el-select-dropdown__item {*/
-/*color: #878787;*/
-/*}*/
+  /*.el-select-dropdown__item {*/
+  /*color: #878787;*/
+  /*}*/
 
-#title {
-  display: inline-block;
-  padding-left: 10px;
-  border-left: 5px solid #1e9eff;
-  color: #878787;
-}
+  #title {
+    display: inline-block;
+    padding-left: 10px;
+    border-left: 5px solid #1e9eff;
+    color: #878787;
+  }
 
-#loginrecord .el-table {
-  border: 1px solid #eaeaea;
-  /*border-width: 0 1px 1px 1px ;*/
-  border-bottom: 0;
-}
+  #loginrecord .el-table {
+    border: 1px solid #eaeaea;
+    /*border-width: 0 1px 1px 1px ;*/
+    border-bottom: 0;
+  }
 </style>
