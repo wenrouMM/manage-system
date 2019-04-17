@@ -48,9 +48,9 @@
             </el-form>
           </section>
           <!-- 3.0 表格展示内容 需做更改部分 -->
-          <section class="text item tablebox">
+          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              v-loading="tableLoading"
+              
               class="tableBorder"
               :data="tableData"
               style="width: 100%; text-align:center;"
@@ -82,10 +82,10 @@
                   <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="110">
+              <el-table-column align="center" label="操作">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">详情</span>
+                  <span class="edit" @click="detailButton(scope.$index, scope.row)">详情</span>
                   <span class="ban" @click="handleBan(scope.$index, scope.row)">下架</span>
                 </template>
               </el-table-column>
@@ -100,6 +100,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -284,15 +285,14 @@ export default {
       })
       this.centerDialogVisible = false;
     },
-    handleEdit(index, row) {
-      // 详情
-      this.i = 2;
-      this.dialogFormVisible = true
-      console.log(index, row);
-    },
+   
     /*====== 3.0表格操作相关 ======*/
     // 打开详情页
-
+     detailButton(index, row) {
+      // 详情
+      let id = row.barcode
+      this.$router.push({path:`/LibBookInfo/${id}`})
+    },
     /*====== 3.1 分页查询和初始化 ======*/
     current_change: function(currentPage) {
       //分页查询

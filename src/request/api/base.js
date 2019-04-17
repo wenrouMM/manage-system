@@ -1,8 +1,9 @@
 // 用来管理接口的域名相关
 // var url = 'http://192.168.2.31:8099/';
-var url = 'http://192.168.2.31:8088/'
-//var url ='http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url ='http://192.168.2.121:8088/'
 // 权限模块的API
+// 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
 var roleManage = url + 'authmodule/roleInformation/'
 var powerMangae = url + 'authmodule/roleMenuElement/'
@@ -31,6 +32,8 @@ export const role_name = url + 'authmodule/roleInformation/currency/select'//角
 export const command_list = url + 'authmodule/roleMenuElement/select'//权限管理列表
 export const prohibit = url + 'authmodule/roleMenuElement/edit'//权限管理禁用
 export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限管理批量禁用
+
+// 图书模块
 
 //通用接口 
 export const loginInter= url + 'authmodule/index/login'

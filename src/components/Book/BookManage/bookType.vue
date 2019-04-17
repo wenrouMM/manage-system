@@ -43,7 +43,7 @@
             </el-table>
 
             <!-- 3.1 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-            <section class="pagination">
+            <section class="pagination mt_30">
               <el-pagination
                 background
                 layout="prev, pager, next,total, jumper, ->"
@@ -51,6 +51,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -276,7 +277,7 @@ export default {
 .pagination .el-pagination {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  
 }
 
 

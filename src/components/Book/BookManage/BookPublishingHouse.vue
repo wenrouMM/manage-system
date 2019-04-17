@@ -55,6 +55,7 @@
                     :current-page="currentPage"
                     @current-change="current_change"
                   ></el-pagination>
+                  <span class="pagaButton">确定</span>
                 </section>
               </section>
             </div>

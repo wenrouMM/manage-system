@@ -107,11 +107,12 @@ body{
 .pagination{
   display: flex;
   justify-content: center;
+  align-items: center;
   
 }
 .pagaButton {
   width: 70px;
-  height: 34px;
+  height: 32px;
   cursor: pointer;
   background-color: #fff;
   border: none;
