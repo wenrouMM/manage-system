@@ -174,7 +174,7 @@
           disable:false,
           messageName:null,
           libCode:null,
-          typeCode:null
+          typeCode:null,
         }
       },
       computed: {
@@ -211,17 +211,21 @@
         },
         /*选择出版社名称的弹框内容*/
         libMessage(){
-          this.messageName='请选择出版社名称'
-          $('#typeMessage').fadeIn()
-          this.zNodes.length=0
-          this.freshArea(bookRegistlib)
+            this.messageName='请选择出版社名称'
+            this.zNodes.length=0
+            this.freshArea(bookRegistlib)
+            if(this.zNodes.length>0){
+              $('#typeMessage').fadeIn()
+            }
         },
         /*选择书籍类型的弹框内容*/
         typeMessage() {
           this.messageName='请选择书籍类型'
-          $('#typeMessage').fadeIn()
           this.zNodes.length=0
-          this.freshArea(bookurltypemes)
+          this.freshArea(bookRegisttype)
+          if(this.zNodes.length>0){
+            $('#typeMessage').fadeIn()
+          }
         },
         /*点击ztree节点时获取*/
         zTreeOnClick(event, treeId, treeNode){
@@ -237,17 +241,19 @@
         async freshArea(value) {
           this.axios.get(value).then((response) => {
             console.log(response)
-            for (var item of response.data.row) {
-              //console.log(item)
-              this.zNodes.push({
-                id: item.id, //节点id
-                pId: item.pid, //节点父id
-                name: item.name, //节点名称
-                code: item.code, //节点编码
-              });
+            if(response.data.state==true){
+              for (var item of response.data.row) {
+                //console.log(item)
+                this.zNodes.push({
+                  id: item.id, //节点id
+                  pId: item.pid, //节点父id
+                  name: item.name, //节点名称
+                  code: item.code, //节点编码
+                });
+              }
+              //将数据渲染到ztree树
+              $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
             }
-            //将数据渲染到ztree树
-            $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
           })
         },
         isbnCheck() {
