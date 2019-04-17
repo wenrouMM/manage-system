@@ -132,7 +132,6 @@
               return time.getTime() > Date.now()
             }
           }
-
         },
         pickerOptions1: {
           disabledDate: time => {
@@ -141,7 +140,6 @@
               time.getTime() > Date.now()
             )
           }
-
         },
         tableLoading: true,
         currentPage: 1,
@@ -181,7 +179,6 @@
           .then(res => {
             console.log('登陆记录', res.data)
             if (res.data.state === true) {
-              let i = (this.currentPage - 1) * this.pageSize + 1
               this.tableData = res.data.row //获取返回数据
               //console.log('获取的表格数据',this.tableData)
               this.total = res.data.total //总条目数
