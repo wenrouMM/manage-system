@@ -2,7 +2,7 @@
   <div class="detail">
     <section class="titleBox">
       <div class="sonTitle">
-        <span class="titleName">图书信息列表</span>
+        <span class="titleName">馆内图书信息列表</span>
       </div>
       <div class="back">
         <span class="page" @click="back">
@@ -84,20 +84,20 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push("/bookInfo");
+      this.$router.push("/LibBookInfo");
     },
     getData(id) {
       // 发送请求
-      console.log(id);
+      console.log('发送的数据',id);
       if (!this.index) {
         this.$router.push("/recommand");
       }
 
       let data = {
-        searchNumber: id
+        barcode: id
       };
       axios
-        .get("http://192.168.2.121:8088/bookmodule/bookTbInfo/select", {
+        .get("http://192.168.2.121:8088/tibetmuseummodule/TbookTbInfo/selectOne", {
           params: data
         })
         .then(res => {
