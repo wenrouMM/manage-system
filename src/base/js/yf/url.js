@@ -49,3 +49,4 @@ url='http://192.168.2.54:8088/';
 /*层架绑定*/
   layerFramezTree=url+'regionmodule/location/selectTree' //层架绑定树
   layerFrameSave=url+'regionmodule/location/edit' //层架绑定修改
+

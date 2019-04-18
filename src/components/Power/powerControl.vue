@@ -274,9 +274,6 @@ export default {
     $('#typeMessage').fadeOut()
   },
   methods: {
-    beforeExpand(){
-
-    },
     /*====== 取消授权弹框 ======*/
     closeCheck() {
       $('#typeMessage').fadeOut()
