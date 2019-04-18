@@ -1,6 +1,6 @@
 // 用来管理接口的域名相关
 // var url = 'http://192.168.2.31:8099/';
-var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.54:8088/'
 //var url ='http://192.168.2.121:8088/'
 // 权限模块的API
 var userManage = url + 'authmodule/managerInformation/'
@@ -32,7 +32,7 @@ export const command_list = url + 'authmodule/roleMenuElement/select'//权限管
 export const prohibit = url + 'authmodule/roleMenuElement/edit'//权限管理禁用
 export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限管理批量禁用
 
-//通用接口 
+//通用接口
 export const loginInter= url + 'authmodule/index/login'
 
 export const headUpload = url + 'filemodule/currency/uploadFile/addHead' //

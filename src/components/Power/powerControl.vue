@@ -9,7 +9,7 @@
             <span class="titleName">角色管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <div style="display:flex;flex-direction:row">
+          <div style="display:flex;flex-direction:row;justify-content: space-between">
             <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
             <div class="buttonBox">
               <!--
@@ -63,7 +63,6 @@
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               class="tableBorder"
-              v-loading="tableLoading"
               @selection-change="selectAllBtn"
               :data="tableData"
               style="width: 100%;
@@ -77,7 +76,7 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkRoleName" label="角色名称"></el-table-column>
+              <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
 
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
@@ -113,7 +112,7 @@
       <!-- 禁用弹框/批量删除弹框 -->
       <div class="forbid">
         <el-dialog :title="dialogTitle[i]" :visible.sync="refuseDialog" width="500px" center>
-          <div class="dialogBody">是否{{dialogTitle[i]}}?</div> 
+          <div class="dialogBody">是否{{dialogTitle[i]}}?</div>
           <div slot="footer" class="dialog-footer">
             <span class="dialogButton true mr_40" @click="refuseBtn">确 定</span>
             <span class="dialogButton cancel" @click="refuseDialog = false">取消</span>
@@ -121,70 +120,15 @@
         </el-dialog>
       </div>
       <!-- 添加 编辑弹框 -->
-      <div class="addEditDialog">
-        <!-- Form -->
-        <el-dialog
-          @close="closeFormBtn"
-          width="586px"
-          :title="dialogTitle[i]"
-          :visible.sync="changeDialog"
-        >
-          <el-form
-            id="addFormYf"
-            :model="addForm"
-            :rules="addrules"
-            ref="addForm"
-            label-width="100px"
-            class="demo-ruleForm"
-            style="display: flex;flex-direction: column"
-          >
-            <el-form-item label="角色名称" prop="userType" style="margin-left: 50px">
-              <el-select clearable v-model="addForm.userType" placeholder="请选择角色名称">
-                <el-option
-                  v-for="(option,index) of optionsData"
-                  :key="index"
-                  :label="option.roleName"
-                  :value="option.roleCode"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="模块授权" prop="mode" style="margin-left: 50px">
-              <el-select multiple collapse-tags v-model="addForm.mode" placeholder="请选择模块">
-                <el-option
-                  v-for="(option,index) of modeName"
-                  :key="index"
-                  :label="option"
-                  :value="option"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="页面授权" prop="pageMode" style="margin-left: 50px">
-              <el-select multiple collapse-tags v-model="addForm.pageMode" placeholder="请选择模块">
-                <el-option
-                  v-for="(option,index) of modeName"
-                  :key="index"
-                  :label="option"
-                  :value="option"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="按钮授权" prop="buttonMode" style="margin-left: 50px">
-              <el-select multiple collapse-tags v-model="addForm.buttonMode" placeholder="请选择模块">
-                <el-option
-                  v-for="(option,index) of modeName"
-                  :key="index"
-                  :label="option"
-                  :value="option"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <!-- 弹框表单按钮  验证失效-->
-            <el-form-item>
-              <el-button type="primary" @click="changeSub('addForm')">确定</el-button>
-              <el-button type="info" @click="cancelForm('addForm')">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
+      <div id="typeMessage" >
+        <div style="position: relative">
+          <p>授权</p>
+          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+        </div>
+        <div>
+          <ul id="treeDemo" class="ztree"></ul>
+          <el-button type="primary" plain style="margin-left: 260px" @click="controlClick">确定</el-button>
+        </div>
       </div>
     </el-container>
   </div>
@@ -194,17 +138,52 @@
 import moment from "moment";
 import axios from "axios";
 import { powerMangaeInt, selectRoleType } from "../../request/api/base.js";
+import * as respones from "echarts";
 export default {
   created() {
     let route = this.$route.path;
-    console.log(this.$route.path);
-    console.log(this.$route.meta.menuName);
+    //console.log(this.$route.path);
+    //console.log(this.$route.meta.menuName);
     this.selectRoleType(); // 获取角色类型
     this.searchApi(this.searchTimeForm);
   },
   data() {
     return {
       /*====== 2.0表单提交数据项 ======*/
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          showRenameBtn: false,
+          editNameSelectAll: true
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: false,
+          selectedMulti: false,
+        },
+        callback: {
+          onCheck: this.zTreeOnCheck, //勾选时事件
+          beforeExpand: this.beforeExpand,
+          onExpand: this.onExpand
+        },
+        check: {
+          enable: true,
+          chkStyle: "checkbox", //选择框的类型
+          chkboxType: { "Y": "ps", "N": "ps" }, //关联父子节点
+        },
+      },//ztree树配置
+      zNodes: [], //ztree树加载的数据
       optionsData: [], // 下拉框数据
       formInline: {
         // 搜索需要的表单数据
@@ -260,28 +239,15 @@ export default {
         pageMode: [],
         buttonMode: []
       },
-      addrules: {
-        // 添加的参数验证
-        userType: [
-          { required: true, message: "请输入角色名称", trigger: "change" }
-        ],
-        mode: [
-          { required: true, message: "请选择模块权限", trigger: "change" }
-        ],
-        pageMode: [
-          { required: true, message: "请选择菜单权限", trigger: "change" }
-        ],
-        buttonMode: [
-          { required: true, message: "请选择按钮权限", trigger: "change" }
-        ]
-      },
       /*------ 删除禁用弹框 ------*/
       refuseDialog: false,
       refuseLoading:false,
       banArr: {  // 禁用传递数据
         id: "",
         disabled: 1
-      }
+      },
+      menuId:[],
+      roleId:null
     };
   },
   computed: {
@@ -302,20 +268,78 @@ export default {
       //console.log(searchForm)
       return searchForm;
     },
-    
+
+  },
+  mounted(){
+    $('#typeMessage').fadeOut()
   },
   methods: {
-    /*====== 2.0-3.0按钮组 ======*/
+    beforeExpand(){
+
+    },
+    /*====== 取消授权弹框 ======*/
+    closeCheck() {
+      $('#typeMessage').fadeOut()
+    },
+    /*====== 点击授权时 ======*/
+    editButton(index,row) {
+      console.log(row.id)
+      this.roleId=row.id
+      this.zNodes.length=0
+      this.axios.get(controlurl,{params:{roleid:row.id}}).then((res)=>{
+        console.log(res)
+        if(res.data.state==true){
+          for (var item of res.data.rows) {
+            //console.log(item)
+            this.zNodes.push({
+              id: item.id, //节点id
+              pId: item.pid, //节点父id
+              name: item.name, //节点名称
+              checked:item.choose,
+              type:item.type
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting,this.zNodes);
+        }
+      })
+      $('#typeMessage').fadeIn()
+    },
+    /*====== 授权加载ztree树，节点被勾选时 ======*/
+    zTreeOnCheck(event,treeId,treeNode){
+      var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+        nodes=treeObj.getCheckedNodes(true);
+      for(var i=0;i<nodes.length;i++){
+        console.log("节点id:"+nodes[i].id); //获取选中节点的值
+        this.menuId.push(nodes[i].id)
+      }
+      //console.log(this.controlData)
+    },
+    controlClick(){
+      console.log(this.roleId,this.menuId)
+      this.axios.post(controladd,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
+        console.log(res)
+        if(res.data.state==true){
+          this.$message({
+            message: res.data.msg,
+            type: "success"
+          });
+        }else{
+          this.$message({
+            message: res.data.msg,
+            type: "error"
+          });
+        }
+      })
+      $('#typeMessage').fadeOut()
+    },
+    /*====== 搜索按钮 ======*/
     searchBtn() {
       // 函数节流
       this.searchApi(this.searchTimeForm);
       this.currentPage = 1;
     },
-    addButton(formName) {
-      //this.$refs[formName].resetFields(); 这个时候弹框表单还未生成抓取不到 验证状态也重置
-      this.i = 0;
-      this.changeDialog = true;
-    },
+    /*====== 批量删除按钮 ======*/
     deleteBtn() {
       if (this.allSeclet.length) {
         this.i = 1;
@@ -325,9 +349,7 @@ export default {
         this.$message.error("请先选择删除对象");
       }
     },
-    editButton() {
-
-    },
+    /*====== 禁用按钮 ======*/
     banButton(index,row) {
       if (row.disabled == 1) {
         this.$message.error("该用户已被禁用");
@@ -337,8 +359,6 @@ export default {
         console.log('当前选中',index, row, this.banArr); // 当前选中表格的索引和对
         this.refuseDialog = true;
       }
-      
-      
     },
     selectAllBtn(val) {
       console.log(val);
@@ -350,20 +370,7 @@ export default {
       }
       this.allSeclet = arr;
     },
-
     /*====== 弹框相关按钮 ======*/
-    changeBtn(formName) {
-      // 改动(添加和编辑弹框的确定)弹框确定按钮
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-        } else {
-          return false;
-        }
-      });  
-    },
-    cancelBtn() { // 改变弹框的取消按钮
-
-    },
     refuseBtn() { // 禁用确定按钮
       if(this.i ==1){
         this.deleteApi()
@@ -373,9 +380,6 @@ export default {
         this.banApi(this.banArr)
         console.log(this.banArr)
       }
-    },
-    closeFormBtn() { // 表单弹框关闭执行事件
-      this.$refs[formName].resetFields();
     },
     /*====== API相关函数 ======*/
     // 通用API
@@ -396,10 +400,9 @@ export default {
     },
     searchApi(value) {
       this.tableLoading = true;
-      this.axios.get(powerMangaeInt.select, { params: value }).then(res => {
+      this.axios.get(userroleselect, { params: value }).then(res => {
         console.log("查询分页的页数", res.data);
         if (res.data.state === true) {
-          let nomal = res.data.row;
           this.tableData = res.data.row; //获取返回数据
           console.log("获取的表格数据", this.tableData);
           this.total = res.data.total; //总条目数
@@ -413,7 +416,7 @@ export default {
       });
     },
     deleteApi() {
-      //this.banDeleteLoading = true; 
+      //this.banDeleteLoading = true;
       let obj = new Object();
       obj.deleteParams =   this.allSeclet ;
       console.log(obj.deleteParams)
@@ -445,7 +448,7 @@ export default {
           this.$message.success("禁用成功");
           this.refuseDialog = false;
         } else {
-          this.$message.error(res.data.msg); 
+          this.$message.error(res.data.msg);
         }
       });
     },
@@ -455,17 +458,49 @@ export default {
       //console.log('保存当前查询',this.paginationForm);
       this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
-
-    cancelForm(formName) {
-      this.$refs[formName].resetFields();
-      this.changeDialog = false
-    },
   }
 };
 </script>
 
 <style scoped>
 /*====== 0.0 初始化部分 ======*/
+#typeMessage{
+  display: none;
+  position: absolute;
+  top: 200px;
+  left:750px;
+  z-index: 30000;
+
+}
+#typeMessage div:nth-child(1){
+  width: 400px;
+  height: 50px;
+  background-color: #0096FF;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:2px 2px 10px #909090;
+}
+#typeMessage div:nth-child(2){
+  overflow: auto;
+  width: 370px;
+  height: 300px;
+  background-color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:2px 2px 10px #909090;
+}
 section.pagination {
   display: flex;
   justify-content: center;

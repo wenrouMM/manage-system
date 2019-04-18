@@ -68,23 +68,23 @@ router.beforeEach((to, from, next) => {
       next('login') // 沒有出口 但是login需要斜杠也不影響結果
       Message.error("请先登录")
     }
-    
+
   } else {
-    
+
     if(store.state.token == null){
       store.commit('login', token)
     }
     if(to.path === '/login'){
       Message.error("您已登录");
-     
-      let Frompath = from.path 
+
+      let Frompath = from.path
       console.log(typeof(Frompath),Frompath) // '不需要加斜杠' 把返回的路径斜杠去掉
       next('powerMode') // 如何返回之前頁面
     }
-    
+
     next()
   }
-  
+
 })
 */
 Vue.use(ElementUI) // 注册插件

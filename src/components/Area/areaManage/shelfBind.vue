@@ -1,16 +1,16 @@
 <template>
   <div id="layerbinding">
     <div style="display: flex;flex-direction: row" id="mybook">
-      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow:auto">
+      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow: paged-y">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
-        <div style="width: 257px" class="inputDiv">
-          <el-form ref="form" :model="form" label-width="80px">
-            <p style="color:#878787;font-size: 15px;padding-left: 4px;margin-bottom: 40px">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;1库房2区3列2节1层A面</p>
-            <el-form-item label="层架标签 : " >
-              <el-input v-model="form.tag"></el-input>
+        <div style="width: 300px" class="inputDiv">
+          <p style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}</p>
+          <el-form ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
+            <el-form-item prop="tag" label="层架标签 : " >
+              <el-input v-model="form.tag" id="tag"></el-input>
             </el-form-item>
             <el-button type="primary" @click="onSubmit" style="width: 252px;margin-left: 5px;margin-top: 20px">保存</el-button>
           </el-form>
@@ -45,7 +45,7 @@
           view: {
             showLine: false,
             showIcon: true,
-            dblClickExpand: false,
+            dblClickExpand: true,
             addDiyDom: this.addDiyDom,
             selectedMulti: true,
             addHoverDom: this.addHoverDom,
@@ -56,36 +56,108 @@
             onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
             beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
             beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
-            onRemove: this.onRemove //删除事件
+            onExpand: this.zTreeOnExpand
           }
         },
+        rules: {
+          // 添加的参数验证
+          tag: [{ required: true, message: "请输入层架标签名", trigger: "blur" }],
+        },
         zNodes: [
-          {
-            id: 1,
-            pId: 0,
-            name: "图书馆管理平台",
-            code: null,
-            msg: null,
-            href: null,
-            disabled: null,
-            icon_default: null,
-            icon_selected: null,
-            menu_code_type: null
-          }
+
         ],
         form:{
           tag:''
-        }
+        },
+        Address:'',
+        i:0,
+        saveString:{},
+        id:'',
       }
     },
-    methods:{
-      onSubmit(){
-
-      }
+    computed: {
+      //模糊查询参数
+      saveData() {
+        // 计算属性 真正传递的数据
+        let saveData = { // 非空判断的各个值
+          fkStoreId: this.saveString.fkStoreId,
+          fkRegionId:this.saveString.fkRegionId,
+          colNum:this.saveString.colNum,
+          divNum:this.saveString.divNum,
+          laysNum:this.saveString.laysNum,
+          rfid:this.form.tag
+        };
+        //console.log(searchForm)
+        return saveData;
+      },
     },
     mounted(){
       $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
-    }
+      this.freshArea()
+    },
+    methods:{
+      async freshArea() {
+        this.axios.get(layerFramezTree).then((response) => {
+          console.log(response)
+          if(response.data.state==true){
+            for (var item of response.data.row) {
+              //console.log(item)
+              this.zNodes.push({
+                id: item.id, //节点id
+                pId: item.pid, //节点父id
+                name: item.name, //节点名称
+                isClick: item.format, //是否是可点击节点
+                fkStoreId:item.fkStoreId, //库房号
+                fkRegionId:item.fkRegionId, //区号
+                colNum:item.colNum, //列
+                divNum:item.divNum, //层
+                laysNum:item.laysNum, //节
+                rfid:item.rfid
+              });
+            }
+            //将数据渲染到ztree树
+            $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+          }else{
+            this.$message.error(response.data.msg);
+          }
+        })
+      },
+      zTreeOnExpand(event, treeId, treeNode){
+        console.log(treeNode)
+        this.Address+=treeNode.name
+      },
+      zTreeOnClick(event, treeId, treeNode){
+        //console.log(treeNode)
+        this.saveString=treeNode
+        this.form.tag=treeNode.rfid
+        if(treeNode.isClick==1){
+          this.id=1
+          this.i++
+          if(this.i==1){
+            this.Address+=treeNode.name
+          }
+          this.$alert('您将修改'+this.Address+'的层架标签', '提示', {
+            confirmButtonText: '确定',
+          }).then(() => {
+            $('#tag').focus()
+          });
+        }
+      },
+      onSubmit(){
+        this.save(this.saveData)
+      },
+      save(value){
+        if(this.id!==''){
+          this.axios.post(layerFrameSave,value).then((res)=>{
+            console.log(res)
+          })
+        }else{
+          this.$alert('请选择您要修改的层架标签', '提示', {
+            confirmButtonText: '确定',
+          })
+        }
+      }
+    },
   }
 </script>
 

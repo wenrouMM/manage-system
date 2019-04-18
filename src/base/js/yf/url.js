@@ -1,5 +1,5 @@
-//  url='http://192.168.2.31:8088/'
-url='http://192.168.2.121:8088/';
+// url='http://192.168.2.31:8088/'
+url='http://192.168.2.54:8088/';
 
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
@@ -13,6 +13,7 @@ url='http://192.168.2.121:8088/';
   menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
   menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
   menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
+  menubutton=url+'authmodule/menuInformation/currency/selectMenuById' //点击节点发请求
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
   userroleadd=url+'authmodule/roleInformation/add' //角色添加接口
@@ -33,11 +34,18 @@ url='http://192.168.2.121:8088/';
   bookurlimg=url+'filemodule/currency/uploadFile/addBackage' //图书封面上传
   bookurladd=url+'bookmodule/bookTbInfo/add' //图书添加接口
 /*馆内图书信息*/
-  libbook=url+'tibetmuseummodule/bookTbInfo/select' //馆内图书信息查询
-  libbookadd=url+'tibetmuseummodule/bookTbInfo/add' //馆内图书信息添加
-  libbookedit=url+'tibetmuseummodule/bookTbInfo/edit' //馆内图书信息修改下架状态
-  libbooktype=url+'tibetmuseummodule/bookTbType/select' //馆内图书类型查询
+  libbook=url+'tibetmuseummodule/TbookTbInfo/select' //馆内图书信息查询
+  libbookadd=url+'tibetmuseummodule/TbookTbInfo/add' //馆内图书信息添加
+  libbookedit=url+'tibetmuseummodule/TbookTbInfo/edit' //馆内图书信息修改下架状态
+  libbooktype=url+'tibetmuseummodule/TbookTbType/select' //馆内图书类型查询
 /*图书登记*/
-  bookRegist=url+'tibetmuseummodule/bookTbInfo/selectOne' //图书登记ISBN接口查详情
-  bookRegistadd=url+'tibetmuseummodule/bookTbInfo/add' //图书登记添加
-  bookRegistlib=url+'tibetmuseummodule/bookTbPress/select' //图书登记出版社
+  bookRegist=url+'tibetmuseummodule/TbookTbInfo/selectOne' //图书登记ISBN接口查详情
+  bookRegistadd=url+'tibetmuseummodule/TbookTbInfo/add' //图书登记添加
+  bookRegistlib=url+'tibetmuseummodule/TbookTbPress/select' //图书登记出版社
+  bookRegisttype=url+'tibetmuseummodule/TbookTbType/select' //图书登记书籍类型
+/*权限页面*/
+  controlurl=url+'authmodule/currency/getAllMenuAndElement'
+  controladd=url+'authmodule/roleMenuElement/edit' //权限添加
+/*层架绑定*/
+  layerFramezTree=url+'regionmodule/location/selectTree' //层架绑定树
+  layerFrameSave=url+'regionmodule/location/edit' //层架绑定修改
