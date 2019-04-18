@@ -51,11 +51,11 @@
               <el-table-column align="center" prop="pageNumber" width="150" label="页码"></el-table-column>
               <el-table-column align="center" prop="price" width="100" label="价格"></el-table-column>
               <el-table-column align="center" prop="barcode" width="220" label="条码"></el-table-column>
-              <el-table-column align="center" prop="fkTypeName" width="150" label="类型"></el-table-column>
+              <el-table-column align="center" prop="fkTypeName" :show-overflow-tooltip="true" width="150" label="类型"></el-table-column>
               <el-table-column align="center" label="操作" width="180">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="detail edit" @click="handleEdit(scope.$index, scope.row)">查看详情</span>
+                  <span class="detail edit" @click="detailButton(scope.$index, scope.row)">查看详情</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -70,6 +70,7 @@
                 :current-page="currentPage"
                 @current-change="current_change"
               ></el-pagination>
+              <span class="pagaButton">确定</span>
             </section>
           </section>
         </div>
@@ -201,7 +202,6 @@ export default {
     /*====== 2.0 搜索与添加按钮触发 ======*/
     searchSubmit() {
       // 条件查询按钮
-
       console.log("此时传给后台的搜索数据", this.searchTimeForm);
       this.SearchApi(this.searchTimeForm);
       this.currentPage = 1;
@@ -212,7 +212,10 @@ export default {
     },
     /*====== 3.0表格操作相关 ======*/
     // 打开详情页
-
+    detailButton(index,row){
+      let id = row.searchNumber
+      this.$router.push({path: `/bookInfo/${id}`})
+    },
     /*====== 3.1 分页查询和初始化 ======*/
     current_change: function(currentPage) {
       //分页查询

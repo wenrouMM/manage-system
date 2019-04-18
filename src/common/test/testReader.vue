@@ -10,6 +10,7 @@
           :default-active="this.$route.path"
           background-color="#343b4a"
           text-color="#fff"
+          :uniqueOpened='true'
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->

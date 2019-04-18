@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
-import UserAdd from '@/components/useradd'
+
 
 import Home from '@/components/home'
 import UserManage from '../components/Power/userManage.vue'
@@ -53,6 +53,7 @@ import IncreditSetting from '../components/Reader/IncreditManagement/increditset
 
 import Login from '@/components/login.vue'
 import Detail from '../components/Book/detail.vue'
+import LibDetail from '../components/Reader/libDetail.vue'
 import Not from '../components/error.vue'
 
 Vue.use(Router)
@@ -202,6 +203,10 @@ export default new Router({
             {
               path:'/LibBookInfo',
               component:LibBookInfo
+            },
+            {
+              path: '/LibBookInfo/:id',
+              component: LibDetail
             },
             {
               path:'/libBookType',
