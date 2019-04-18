@@ -35,6 +35,25 @@ export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限�
 
 // 图书模块
 
+// 区域模块
+// 库房模块
+var store = url + 'regionmodule/store/'
+export const storeInt = {
+    select:`${store}select`,
+    add:`${store}add`,
+    edit:`${store}edit`,
+    delete:`${store}delete`
+}
+//区模块
+var region = url + 'regionmodule/region/'
+export const regionInt = {
+    select:`${region}select`,
+    add:`${region}add`,
+    edit:`${region}edit`,
+    delete:`${region}delete`,
+    selectBind:`${region}selectBind`,
+    bind:`${region}editBind`
+}
 //通用接口 
 export const loginInter= url + 'authmodule/index/login'
 
