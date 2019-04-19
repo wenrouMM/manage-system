@@ -23,7 +23,7 @@
             <el-form-item label="所属地区 :">
               <el-input v-model="form.address"></el-input>
             </el-form-item>
-            <el-button type="primary" style="width:200px;margin-left: 100px;margin-top: 30px">保存</el-button>
+            <el-button @click="submitLib()" type="primary" style="width:200px;margin-left: 100px;margin-top: 30px">保存</el-button>
           </el-form>
         </div>
       </div>
@@ -88,6 +88,11 @@
         labelPosition: 'left',
       }
     },
+    computed:{
+      timeInfo() {
+        
+      }
+    },
     methods:{
       addHoverDom(treeId, treeNode) {
         //this.addZTree=treeNode
@@ -115,6 +120,10 @@
           .unbind()
           .remove();
       },
+      // 提交按钮
+      submitLib(){
+
+      }
     },
     mounted(){
       $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);

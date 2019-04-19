@@ -109,7 +109,6 @@
         </el-dialog>
       </div>
       <!-- 批量删除弹框 -->
-      <!-- 编辑弹框 -->
       <!-- 添加弹框 -->
       <div class="addEditDialog">
         <!-- Form -->
@@ -156,7 +155,7 @@
         </el-dialog>
       </div>
     </el-container>
-  </div>
+  </div>  
 </template>
 
 <script>
@@ -305,14 +304,19 @@ export default {
 
     /*====== 4.0表格操作相关 ======*/
     handleBan(index, row) {
-      // 删除
+      // 删除 做判断 如果已经被禁用则不触发弹框
       console.log(index, row); // 当前选中表格的索引和对象
-      this.i = 0;
+      if(row.disabled ==1){
+        this.$message.error('该用户已被禁用')
+      } else{
+        this.i = 0;
       this.centerDialogVisible = true;
       this.id = row.id;
       this.disable = row.disabled;
       this.roleCode = row.roleCode;
       console.log(row.roleCode);
+      }
+      
     },
     handleEdit(index, row) {
       // 编辑

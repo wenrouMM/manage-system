@@ -11,112 +11,127 @@
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox" style="display: flex;flex-direction: row;justify-content: space-between">
             <div class="buttonBox">
-              <button class="add" @click="addDialogOpen">
+              <button class="add" @click="conductBtn">
                 <i class="addIcon el-icon-plus"></i>办卡
               </button>
+              <button class="add" @click="addCardBtn">
+                <i class="addIcon el-icon-tickets" ></i>登记读者卡
+              </button>
             </div>
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="卡号:">
-                <el-input size="120" v-model="formInline.cardNum" placeholder="请输入卡号"></el-input>
+                <el-input size="120" v-model="searchForm.cardNumber" placeholder="请输入卡号"></el-input>
               </el-form-item>
               <el-form-item label="用户名:" size="160">
-                <el-input v-model="formInline.userName" placeholder="请输入用户名"></el-input>
+                <el-input  v-model="searchForm.name" placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="类型名称:" size="160">
-                <el-select v-model="formInline.userType" placeholder="请选择类型">
+                <el-select clearable v-model="searchForm.type" placeholder="请选择类型">
                   <el-option
-                    v-for="(option,index) of optionsData"
+                    v-for="(option,index) of optionsDataType"
                     :key="index"
-                    :label="option"
-                    :value="option"
+                    :label="option.name"
+                    :value="option.code"
                   ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="状态:" size="160">
-                <el-select v-model="formInline.status" placeholder="请选择状态">
-                  <el-option
-                    v-for="(option,index) of optionsData"
-                    :key="index"
-                    :label="option"
-                    :value="option"
-                  ></el-option>
+                <el-select clearable v-model="searchForm.disabled" placeholder="请选择类型">
+                    <el-option
+                      v-for="(option,index) of optionsData"
+                      :key="index"
+                      :label="option.name"
+                      :value="option.code"
+                    ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
+                <el-button size="15" type="primary" @click="searchBtn">查询</el-button>
               </el-form-item>
             </el-form>
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox">
+         <section class="text item tablebox">
             <el-table
+              @selection-change="selectAllBtn"
               class="tableBorder"
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column align="center" width="100" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" width="100" prop="srcdata" label="头像">
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="name"width="160" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNum" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="typeName" width="160" label="类型名称"></el-table-column>
-              <el-table-column align="center" prop="address" width="170" label="所属地区"></el-table-column>
-              <el-table-column align="center" prop="startTime" width="180" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="editTime" width="180" label="修改时间"></el-table-column>
-              <el-table-column align="center" prop="now" width="120" label="状态"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="cardTypeName" label="类型名称"></el-table-column>
+              <el-table-column align="center" prop="fkFromLibraryName" label="所属地区"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
+              <el-table-column align="center" prop="state" width="70" label="状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.disabled ===0?'在用':'挂失'}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">补卡</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">挂失</span>
+                  <span class="edit" @click="supply(scope.$index, scope.row)">补办</span>
+                  <span class="ban" @click="lostBtn(scope.$index, scope.row)">挂失</span>
                 </template>
               </el-table-column>
             </el-table>
-          </section>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination">
-            <el-pagination background layout="prev, pager, next,total, jumper, ->" :total="1000"></el-pagination>
+            <section class="pagination mt_30">
+              <el-pagination
+                background
+                layout="prev, pager, next,total, jumper, ->"
+                @current-change="current_change"
+                :page-size="pageSize"
+                :current-page="currentPage"
+                :total="total"
+              ></el-pagination>
+            </section>
           </section>
         </div>
       </div>
-      <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
       <!-- 禁用弹框/批量删除弹框 -->
       <div class="forbid">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
           <div slot="footer" class="dialog-footer">
-            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
+            <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
           </div>
         </el-dialog>
       </div>
       <!-- 批量删除弹框 -->
-      <!-- 编辑弹框 -->
       <!-- 添加弹框 -->
-      <div class="addEditDialog">
+      <div class="addEditDialog readerCard">
         <!-- Form -->
-        <el-dialog @close="closeForm" width="685px" :title="Dialogtitle[1]" :visible.sync="dialogFormVisible">
-          <el-form ref="addForm" :model="addForm" :rules="addRules">
-            <el-form-item label="请输入新卡号" prop="name" :label-width="formLabelWidth" id="addFormYf" style="margin-left: 100px">
-              <el-input v-model="addForm.cardNum" autocomplete="off"></el-input>
+        <el-dialog
+          @close="closeForm('changeForm')"
+          width="460px"
+          :title="Dialogtitle[i]"
+          :visible.sync="changeFormDialog"
+        >
+          <el-form ref="changeForm" :model="changeForm" :rules="changeRules">
+            <!-- 表单域 -->
+            <el-form-item :label="labelName[i]" prop="name">
+              <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
             </el-form-item>
+            <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('addForm')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
+              <el-button
+                class="buttonTrueColor"
+                @click="submitForm('changeForm','changeFormDialog')"
+              >确定</el-button>
+              <el-button
+                class="buttonCancelColor"
+                @click="resetForm('changeForm','changeFormDialog')"
+              >取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -126,184 +141,303 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        /*====== 0.0初始化弹框数据 ======*/
-        centerDialogVisible: false, // 禁用弹框
-        Dialogtitle: ["挂失", "补卡"],
-        i: 0, // 切换弹框标题
-        defaultImg: " ", // 上传头像默认头像
-        dialogFormVisible: false, // // 添加弹框的展示和消失
-        optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
-        ],
-        addForm: {
-          // 补卡的新卡号
-          addDialog: false,
-          cardNum:""
-        },
-        addRules: {
-          // 添加的参数验证
-          name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-          sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-          id: [{ required: true, message: "请输入身份证号码", trigger: "blur" }],
-          phoneNumber: [
-            { required: true, message: "请输入手机号码", trigger: "blur" }
-          ],
-          status: [{ required: true, message: "请选择状态", trigger: "change" }]
-        },
-        formLabelWidth: "120px",
-        /*====== 2.0表单提交数据项 ======*/
-        optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
-        ],
-        formInline: {
-          // 搜索需要的表单数据
-          cardNum: "", //卡号
-          userName: "", //用户名
-          userType: "", //类型名称
-          status: "", //状态
-        },
-        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
-
-        /*====== 3.0添加 批量删除所需数据 ======*/
-        Allseclet: [], // 存储全选框 单选框的数据/索引 用于传递给后台同时 前端用索引号去删除表格内的内容
-
-        /*====== 4.0表格设置项 ======*/
-        rowStyle: {
-          height: "60px"
-        },
-        tableData: [
-          // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-          {
-            idType: "1",
-            srcdata:'',//头像地址
-            name:"张三",
-            cardNum:'6226523131655',
-            typeName:'文学',
-            address:'重庆渝北',
-            startTime:'2019',
-            editTime:'2020',
-            now:'启用'
-          },
-          {
-            idType: "1",
-            srcdata:'',//头像地址
-            name:"张三",
-            cardNum:'6226523131655',
-            typeName:'文学',
-            address:'重庆渝北',
-            startTime:'2019',
-            editTime:'2020',
-            now:'启用'
-          },
-        ]
-        /*====== 5.0 分页相关设置项 ======*/
+import axios from "axios";
+import {
+  readerType,
+  
+  cardInfoInt
+} from "../../../request/api/base.js";
+export default {
+  data() {
+    return {
+      /*====== 2.0查询功能配置项 ======*/
+      optionsData: [{name:'正常',code:0},{name:'挂失',code:1}],
+      optionsDataType: [], // 类型下拉框
+      searchForm: {
+        cardNum:'',
+        username:'',
+        uerType:'',
+        disabled:''
+      },
+      /*====== 3.0添加 批量删除所需数据 ======*/
+      Allseclet: [], // 全选
+      deleteParams: [], // 删除所需数据
+      /*====== 4.0表格设置项 ======*/
+      rowStyle: {
+        height: "60px"
+      },
+      tableData: [],
+      // 分页器设置
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
+      paginationForm: {},
+      /*====== 弹框配置项 ======*/
+      Dialogtitle: ["补办", "登记读者卡", "挂失"],
+      labelName:["请输入新卡号","读者卡号",''],
+      deleteDialog: false, // 禁用弹框
+      deleteArr: {},
+      banData: {},
+      // 添加编辑
+      i: 0, // 切换弹框标题
+      changeFormDialog: false, // // 添加弹框的展示和消失
+      formLabelWidth: "100px",
+      changeForm: {
+        idCard:''
+      },
+      changeRules: {
+        idCard: [{ required: true, message: "请输入卡号", trigger: "blur" }],
+      }
+    };
+  },
+  computed: {
+    searchTimeForm() {
+      let obj = {
+        name: this.searchForm.name,
+        cardNumber:this.searchForm.cardNumber,
+        typeCode: this.searchForm.type,
+        disabled:this.disabled,
+        currentPage: this.currentPage,
+        pageSize: this.pageSize
       };
+      return obj;
     },
-
-    methods: {
-      /*====== 2.0 表单提交相关函数 ======*/
-
-      onSubmit() {
-        // 搜索 date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-        console.log(this.formInline);
-      },
-
-      /*====== 3.0添加删除相关操作 ======*/
-      addDialogOpen() {
-        //办卡跳转办卡页面
-        this.$router.push({name:'GetCard'})
-      },
-      /*====== 4.0表格操作相关 ======*/
-      handleBan(index, row) {
-        //挂失
-        console.log(index, row); // 当前选中表格的索引和对象
-        this.i= 0;
-        this.centerDialogVisible = true;
-      },
-      handleEdit(index, row) {
-        // 补卡
-        this.i = 2;
-        this.dialogFormVisible = true
-        console.log(index, row);
-      },
-
-      /*====== 弹框相关函数 ======*/
-      submitDialog() {
-        // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-        let i = this.i;
-        let tips = this.Dialogtitle[i];
-        alert(`${tips}成功`); // 成功之后映射到数组的操作
-        this.centerDialogVisible = false;
-      },
-      // 补卡弹窗点击确定向后端发送数据
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            alert("submit!");
-            this.dialogFormVisible = true // 关闭弹框
-          } else {
-            console.log("error submit!!");
-            console.log(this.addForm);
-            return false;
-          }
-        });
-      },
-      //弹窗取消按钮
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-      pointer() {
-        this.$refs.file.click();
-      },
-      getFile(e) {
-        // 1.判断选择事件是否为空
-        // 2. 获取数据
-        let _this = this; // 缓存this
-        let value = _this.$refs.file.value;
-
-        var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-        _this.addForm.files = files;
-        console.log(_this.addForm.files);
-        // 2.1 防止后台拿不到数据 可能需要提交额外数据时
-        var formdatas = new FormData();
-        var fordata = formdatas.append("file", files);
-        if (!e || !window.FileReader) return; // 看支持不支持FileReader
-        let reader = new FileReader(); // 定义 fileReader对象
-        reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-        reader.onloadend = function() {
-          _this.addForm.preloadImg = this.result; // 此时this指向的fileReader对象
-          _this.$refs.file.value = "";
-          console.log(_this.addForm.preloadImg);
-        };
-      },
-      closeForm() { // 弹框关闭的时候执行 清空数据
-        console.log("关闭测试");
-        let obj = this.addForm;
-        for (var i in obj) {
-          obj[i] = "";
+    addTimeForm() { // 登记卡数据
+      let obj = {
+        cardNumber:this.changeForm.idCard
+      };
+      return obj;
+    },
+    editTimeForm() { // 补卡数据
+      let obj = {
+        name: this.changeForm.name,
+        fkGradeCode: this.changeForm.level,
+        id: this.changeForm.id,
+        disabled: this.changeForm.disabled
+      };
+      return obj;
+    },
+    deleteTimeForm() {}
+  },
+  methods: {
+    /*====== 2.0 启动按钮组 ======*/
+    // 全选按钮
+    selectAllBtn(val) {
+      this.Allseclet = val;
+      console.log("全选后的数据", this.Allseclet);
+    },
+    // 批量删除按钮
+    deleteBtn() {
+      this.deleteParams = [];
+      if (this.Allseclet.length) {
+        this.i = 1;
+        let arr = this.Allseclet;
+        console.log(arr);
+        for (let item of arr) {
+          this.deleteParams.push({ id: item.id });
         }
+        console.log("删除数据", this.deleteParams);
+        this.deleteDialog = true;
+      } else {
+        this.$message.error("请先选择删除对象");
       }
     },
-    mounted(){
+    // 补卡按钮
+    addCardBtn() {
+      this.i = 1;
+      console.log('111')
+      this.changeFormDialog = true;
+    },
+    // 查询按钮
+    searchBtn() {
+      this.searchTable(this.searchTimeForm);
+      console.log("当前查询", this.searchTimeForm);
+    },
+    // 补办读者卡
+    supply(index, row) {
+      this.i = 0;
+      this.changeFormDialog = true;
+      console.log(index, row, this.changeForm);
+    },
+    // 挂失按钮
+    lostBtn(index, row) {
+      console.log(index, row); // 当前选中表格的索引和对象
+      if (row.disabled == 1) {
+        this.$message.error("该卡已挂失");
+      } else {
+        this.i = 2;
+        this.banData.id = row.id;
+        this.banData.disabled = 1;
+        this.deleteDialog = true;
+      }
+    },
+    /*====== 弹框相关按钮 ======*/
 
-      console.log(this.Dialogtitle[1])
+    // 删除禁用弹框的提交按钮
+    subDelete() {
+      let flag = this.i; // 关闭弹框
+      switch (flag) {
+        case 1:
+          console.log("删除Api");
+          this.deleteApi(this.deleteParams);
+          break;
+        case 0:
+          this.banApi(this.banData);
+          console.log("禁用API");
+      }
+    },
+    // 编辑 添加弹框按钮
+    submitForm(formName, dialogName) {
+      let flag = this.i;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          switch (flag) {
+            case 0:
+              this.suppleApi(this.editTimeForm, dialogName);
+              console.log('补办卡API')
+              break;
+            case 1:
+              this.registerApi(this.addTimeForm, dialogName);
+              console.log('登记读者卡API')
+          }
+          this.changeFormDialog = true; // 关闭弹框
+        } else {
+          return false;
+        }
+      });
+    },
+    // 编辑添加取消按钮
+    resetForm(formName, dialogName) {
+      this.$refs[formName].resetFields();
+      this[dialogName] = false;
+    },
+    // 弹框关闭的时候执行 清空数据
+    closeForm(formName) {
+      this.$refs[formName].resetFields();
+      let obj = this.changeForm;
+      for (let i in obj) {
+        obj[i] = "";
+      }
+    },
+    // 分页查询按钮
+    current_change: function(currentPage) {
+      this.currentPage = currentPage; //点击第几页
+      this.paginationForm.currentPage = currentPage;
+      //console.log('保存当前查询',this.paginationForm);
+      this.searchTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+    },
+    // 办卡按钮
+    conductBtn() {
+      this.$router.push({path:'/getCard'})
+    },
+    /*====== API部分 ======*/
+    // 查询功能API 这里区别就是需要table数组接收 可以单独封装
+    searchTable(data) {
+      console.log("初始化查询", this.searchTimeForm);
+      axios
+        .get(cardInfoInt.select, {
+          params: data
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            console.log(res);
+            // 获取数据进行过滤
+            this.tableData = res.data.row;
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, data);
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
+    // 类型API
+    /*
+    searchOptionType() {
+      axios.get(readerType).then(res => {
+        if (res.data.state === true) {
+          this.optionsData = res.data.row;
+          console.log("类型下拉框数据", res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    */
+    // 等级API
+    searchOption() {
+      axios.get(readerType).then(res => {
+        if (res.data.state === true) {
+          this.optionsDataType = res.data.row;
+          console.log("等级下拉框数据", res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 补办API
+    registerApi(data, dialogName) {
+      console.log("提交的数据", data);
+      axios.post(cardInfoInt.cogradient, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+          this[dialogName] = false;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    suppleApi(data, dialogName) {
+      console.log("提交的数据", data);
+      axios.put(cardInfoInt.edit, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+          this[dialogName] = false;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 禁用删除API
+    deleteApi(data) {
+      console.log("提交的删除数据", data);
+      let deleterStr = {
+        deleteParams: data
+      };
+      axios.delete(cardInfoInt.delete, { data: deleterStr }).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("删除成功");
+          this.searchTable();
+          this.deleteDialog = false;
+          console.log(res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    banApi(data) {
+      console.log("禁用的数据", data);
+      axios.put(cardInfoInt.edit, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("禁用成功");
+          this.searchTable();
+          this.deleteDialog = false;
+          console.log(res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     }
-  };
+  },
+  created() {
+    this.searchOption();
+    //this.searchOptionType();
+    this.searchTable(this.searchTimeForm);
+  }
+};
 </script>
-
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
   .routerBox {
@@ -595,5 +729,32 @@
     line-height: 100px;
   }
 </style>
+<style>
+.readerCard{
 
+}
+.readerCard form.el-form{
+  flex-direction: column;
+  
+}
+.readerCard .el-input .el-input__inner {
+    width: 100%;
+}
+.readerCard .el-form-item__content {
+    display: flex;
+}
+.readerCard .el-select {
+    width: 100%;
+}
+.readerCard .el-form-item.select {
+    width: 260px;
+    margin-left: 0;
+}
+.readerCard .selectBan{
+  display: flex;
+}
+.readerCard .selectBan .el-form-item__content{
+  display: block;
+}
+</style>
 
