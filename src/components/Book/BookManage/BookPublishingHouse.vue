@@ -3,7 +3,9 @@
     <div style="display: flex;flex-direction: row;height: 952px" id="mybook">
       <div style="background-color:white;width:250px;height:952px;display: flex;flex-direction:column;overflow-y: auto">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
-        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+        <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
+          <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+        </div>
       </div>
       <div style="width:1288px;margin-left: 30px;background-color:white;height:952px">
         <el-container>

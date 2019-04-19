@@ -50,7 +50,7 @@
           <!-- 3.0 表格展示内容 需做更改部分 -->
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              
+
               class="tableBorder"
               :data="tableData"
               style="width: 100%; text-align:center;"
@@ -70,13 +70,12 @@
                 width="150"
                 label="索书号"
               ></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="130" label="馆藏码"></el-table-column>
               <el-table-column align="center" prop="barcode" width="130" :show-overflow-tooltip="true" label="条码"></el-table-column>
               <el-table-column align="center" prop="lend" width="130" label="借出数量"></el-table-column>
               <el-table-column align="center" prop="total" width="120" :show-overflow-tooltip="true" label="录入员"></el-table-column>
-              <el-table-column align="center" prop="entryTime" width="130" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="130" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="130" label="类型"></el-table-column>
+              <el-table-column align="center" prop="entryTime" width="180" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="180" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
+              <el-table-column align="center" prop="fkTypeCode" width="150" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
@@ -285,7 +284,7 @@ export default {
       })
       this.centerDialogVisible = false;
     },
-   
+
     /*====== 3.0表格操作相关 ======*/
     // 打开详情页
      detailButton(index, row) {

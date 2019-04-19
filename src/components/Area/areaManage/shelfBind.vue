@@ -1,11 +1,13 @@
 <template>
   <div id="layerbinding">
     <div style="display: flex;flex-direction: row" id="mybook">
-      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow: paged-y">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
-        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+      <div style="background-color:white;width:250px;display: flex;flex-direction:column;">
+        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">区信息</div>
+        <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
+          <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+        </div>
       </div>
-      <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
+      <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px" v-loading="formLoading">
         <div style="width: 300px" class="inputDiv">
           <p style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}</p>
           <el-form ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
@@ -73,6 +75,7 @@
         i:0,
         saveString:{},
         id:'',
+        formLoading:false
       }
     },
     computed: {
@@ -145,11 +148,24 @@
       },
       onSubmit(){
         this.save(this.saveData)
+        this.zNodes.length=0
+        this.freshArea()
       },
       save(value){
         if(this.id!==''){
+          this.formLoading=true
           this.axios.post(layerFrameSave,value).then((res)=>{
             console.log(res)
+            if(res.data.state==true){
+              this.$message({
+                message: res.data.row,
+                type: 'success'
+              });
+              this.formLoading=-false
+            }else{
+              this.$message.error(res.data.row);
+              this.formLoading=false
+            }
           })
         }else{
           this.$alert('请选择您要修改的层架标签', '提示', {

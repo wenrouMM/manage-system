@@ -1,6 +1,6 @@
 // url='http://192.168.2.31:8088/'
-url='http://192.168.2.54:8088/';
-
+url='http://192.168.2.121:8088/';
+//
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
   yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
@@ -49,4 +49,10 @@ url='http://192.168.2.54:8088/';
 /*层架绑定*/
   layerFramezTree=url+'regionmodule/location/selectTree' //层架绑定树
   layerFrameSave=url+'regionmodule/location/edit' //层架绑定修改
-
+/*图书位置绑定*/
+  booklocation=url+'tibetmuseummodule/bookRFID/add' //图书位置绑定
+  booklocationNum=url+'tibetmuseummodule/TbookTbInfo/selectOneT'//图书位置条码
+  booklocationztree=url+'regionmodule/location/selectTree' //图书位置树
+/*藏馆信息*/
+  libinfo=url+'bookmodule/booklib/add' //藏馆信息
+  libinfotable=url+'bookmodule/booklib/select' //藏馆表格信息

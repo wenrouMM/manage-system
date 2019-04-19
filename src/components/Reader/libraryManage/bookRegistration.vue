@@ -20,19 +20,19 @@
             <div class="defultHead"></div>
           </section>
           <div style="display: flex;flex-direction: row;width: 1200px;margin-left: 350px;margin-top: -160px">
-            <el-form-item label="条码(ISBN) : "  prop="barcode" style="width: 500px">
-              <el-input v-model="barcode" autocomplete="off" style="width: 400px" @input="isbnCheck" placeholder="请输入条码"></el-input>
+            <el-form-item label="条　　码 : "  prop="barcode" style="width: 500px">
+              <el-input v-model="barcode" autocomplete="off" style="width: 400px" @input="barcodeCheck" placeholder="请输入条码"></el-input>
             </el-form-item>
-            <el-form-item label="书籍名称 : " prop="bookName" :label-width="formLabelWidth" style="margin-left: 100px">
-              <el-input v-model="addForm.bookName" autocomplete="off" style="width: 400px;" :disabled="disable" placeholder="请输入书籍名称"></el-input>
+            <el-form-item label=" I S B N　: "  prop="barcode" style="width: 500px;margin-left: 90px">
+              <el-input v-model="isbn" autocomplete="off" style="width: 400px" placeholder="请输入条码"></el-input>
             </el-form-item>
           </div>
           <div style="display: flex;flex-direction: row;width: 1200px;margin-left: 350px;margin-top: 30px">
             <el-form-item label="索书号码 : " prop="bookIndex" :label-width="formLabelWidth">
               <el-input v-model="addForm.bookIndex" autocomplete="off" style="width: 400px" :disabled="disable" placeholder="请输入索书号码"></el-input>
             </el-form-item>
-            <el-form-item label="作　　者 : " prop="author" :label-width="formLabelWidth" style="margin-left: 110px">
-              <el-input v-model="addForm.author" autocomplete="off" style="width: 400px;" :disabled="disable" placeholder="请输入作者"></el-input>
+            <el-form-item label="书籍名称 : " prop="bookName" :label-width="formLabelWidth" style="margin-left: 100px">
+              <el-input v-model="addForm.bookName" autocomplete="off" style="width: 400px;" :disabled="disable" placeholder="请输入书籍名称"></el-input>
             </el-form-item>
           </div>
           <div style="display: flex;flex-direction: row;width: 1400px;margin-left: 10px;margin-top: 50px">
@@ -40,32 +40,35 @@
               <el-input v-model="addForm.lib" autocomplete="off"  style="width: 500px" :disabled="disable" placeholder="请输入出版社名"></el-input>
               <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 450px" @click="libMessage">
             </el-form-item>
-            <el-form-item label="页　　码 : " prop="page" :label-width="formLabelWidth" style="margin-left: 110px">
-              <el-input v-model="addForm.page" autocomplete="off"  style="width: 500px;" :disabled="disable" placeholder="请输入页码"></el-input>
+            <el-form-item label="作　　者 : " prop="author" :label-width="formLabelWidth" style="margin-left: 110px">
+              <el-input v-model="addForm.author" autocomplete="off" style="width: 500px;" :disabled="disable" placeholder="请输入作者"></el-input>
             </el-form-item>
           </div>
           <div style="display: flex;flex-direction: row;width: 1400px;margin-left: 120px;margin-top: 20px">
             <el-form-item label="价　　格 : " prop="value" class="mr_30" :label-width="formLabelWidth">
               <el-input v-model="addForm.value" autocomplete="off" style="width: 500px" :disabled="disable" placeholder="请输入价格"></el-input>
             </el-form-item>
-            <el-form-item label="书籍类型 : " prop="typeName" :label-width="formLabelWidth" style="position: relative;margin-left: 110px" >
-              <el-input v-model="addForm.typeName" autocomplete="off" style="width: 500px;" :disabled="disable" placeholder="请选择书籍类型"></el-input>
-              <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 450px" @click="typeMessage">
+            <el-form-item label="页　　码 : " prop="page" :label-width="formLabelWidth" style="margin-left: 110px">
+              <el-input v-model="addForm.page" autocomplete="off"  style="width: 500px;" :disabled="disable" placeholder="请输入页码"></el-input>
             </el-form-item>
           </div>
           <div style="display: flex;flex-direction: row;width: 1400px;margin-left: 120px;margin-top: 20px">
             <el-form-item label="借出数量 : " prop="returnNum" :label-width="formLabelWidth">
               <el-input v-model="addForm.returnNum" autocomplete="off" style="width: 500px" :disabled="disable" placeholder="请输入借出数量"></el-input>
             </el-form-item>
-            <el-form-item label="馆藏数量 : " prop="libNum"  :label-width="formLabelWidth" style="margin-left: 140px">
-              <el-input v-model="addForm.libNum" autocomplete="off"  style="width: 500px;" :disabled="disable" placeholder="请输入馆藏数量"></el-input>
+            <el-form-item label="书籍类型 : " prop="typeName" :label-width="formLabelWidth" style="position: relative;margin-left: 140px" >
+              <el-input v-model="addForm.typeName" autocomplete="off" style="width: 500px;" :disabled="disable" placeholder="请选择书籍类型"></el-input>
+              <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 450px" @click="typeMessage">
             </el-form-item>
           </div>
           <div style="display: flex;flex-direction: row;width:1400px;margin-left: 120px;margin-top: 20px">
-            <el-form-item label="总　　数 : " prop="returnNum" :label-width="formLabelWidth">
-              <el-input v-model="addForm.total" autocomplete="off" style="width: 500px" :disabled="disable" placeholder="请输入借出数量"></el-input>
+            <el-form-item label="馆藏数量 : " prop="libNum"  :label-width="formLabelWidth">
+              <el-input v-model="addForm.libNum" autocomplete="off"  style="width: 500px;" :disabled="disable" placeholder="请输入馆藏数量"></el-input>
             </el-form-item>
-            <el-form-item label="状　　态 : " prop="status" style="margin-left: 140px;width: 300px"  placeholder="请选择状态">
+            <el-form-item label="总　　数 : " prop="returnNum" :label-width="formLabelWidth" style="margin-left:140px ">
+              <el-input v-model="addForm.total" autocomplete="off" style="width: 200px" :disabled="disable" placeholder="请输入借出数量"></el-input>
+            </el-form-item>
+            <el-form-item label="状　　态 : " prop="status" style="width: 300px;margin-left:70px "  placeholder="请选择状态">
               <el-radio-group v-model="addForm.status" :disabled="disable">
                 <el-radio label="上架" ></el-radio>
                 <el-radio label="下架"></el-radio>
@@ -124,9 +127,9 @@
             callback: {
               onClick: this.zTreeOnClick, //节点点击事件
             }
-          },
-          zNodes: [],
-          barcode:'',
+          }, //ztree树加载的配置
+          zNodes: [], //ztree树的数据
+          barcode:'', //isbn码
           addForm: {
             // 添加的数据表单 共8个参数
             addDialog: false,
@@ -137,10 +140,12 @@
             bookIndex: "", // 书籍索引
             author: null, // 作者
             lib: "", // 出版社
+            isbn:'',
             page: "", // 页码
             value: "", // 价格
             typeName: "", // 类型名称
             bookcontent: "", // 书籍简介
+            Num:"", //藏馆号码
             libNum:"", //藏馆数量
             returnNum:"", //借出数量
             status:"", //状态
@@ -159,6 +164,7 @@
             value:[{ required: true, message: "请输入价格", trigger: "blur" }],
             typeName: [{ required: true, message: "请选择书籍类型", trigger: "change" }],
             bookcontent: [{ required: true, message: "请输入书籍简介", trigger: "blur" }],
+            Num: [{ required: true, message: "请输入图书编码", trigger: "blur" }],
             libNum: [{ required: true, message: "请输入馆藏数量", trigger: "blur" }],
             returnNum: [{ required: true, message: "请输入借出数量", trigger: "blur" }],
             status: [{ required: true, message: "请选择状态", trigger: "change" }],
@@ -167,16 +173,15 @@
           formLabelWidth: "90px",
           formLoading:false,
           treeLoading:false,
-          disable:false,
-          messageName:null,
+          disable:false, //是否禁用
+          messageName:null, //弹框名称
           libCode:null,
           typeCode:null,
-          isShow:0
         }
       },
       computed: {
         addData() {
-          // 计算属性 真正传递的数据
+          // 计算属性 添加真正传递的数据
           let addData = {
             author: this.addForm.author,
             barcode: this.barcode,
@@ -186,6 +191,7 @@
             fkTypeName: this.addForm.typeName,
             introduction: this.addForm.bookcontent,
             //lend //借出数量
+            libraryBookCode:this.addForm.Num,
             name: this.addForm.bookName,
             //person //录入人
             price: this.addForm.value,
@@ -201,11 +207,11 @@
         $('#typeMessage').fadeOut()
       },
       methods: {
-        /*关闭弹窗*/
+        /*====== 关闭弹窗 ======*/
         closeCheck() {
           $('#typeMessage').fadeOut()
         },
-        /*选择出版社名称的弹框内容*/
+        /*====== 出版社弹窗内容 ======*/
         libMessage(){
             this.messageName='请选择出版社名称'
             this.zNodes.length=0
@@ -216,14 +222,14 @@
               $('#typeMessage').fadeIn()
             }
         },
-        /*选择书籍类型的弹框内容*/
+        /*====== 书籍弹窗内容 ======*/
         typeMessage() {
           this.messageName = '请选择书籍类型'
           this.zNodes.length = 0
           this.freshArea(bookRegisttype)
           $('#typeMessage').fadeIn()
         },
-        /*点击ztree节点时获取*/
+        /*====== ztree节点点击添加节点信息 ======*/
         zTreeOnClick(event, treeId, treeNode){
           $('#typeMessage').fadeOut()
           if(this.messageName=='请选择出版社名称'){
@@ -234,6 +240,7 @@
             this.typeCode=treeNode.code
           }
         },
+        /*====== ztree加载请求 ======*/
         async freshArea(value) {
           this.treeLoading=true
           this.axios.get(value).then((response) => {
@@ -256,7 +263,8 @@
           })
           this.treeLoading=false
         },
-        isbnCheck() {
+        /*====== ISBN条码请求数据操作 ======*/
+        barcodeCheck() {
           console.log(this.barcode)
           if (this.barcode !== '') {
             this.addRules.barcode[0].required=false
@@ -297,6 +305,7 @@
             console.log('isbn为空')
           }
         },
+        /*====== 添加请求操作 ======*/
         addApi(value){
           this.axios.post(bookRegistadd,value).then((res)=>{
             console.log(res)
@@ -310,6 +319,7 @@
             }
           })
         },
+        /*====== 确定按钮发送添加请求 ======*/
         submitForm(formName) {
           // 提交弹框按钮执行函数
           if (this.disable === true) {
@@ -321,6 +331,7 @@
           }
           this.$refs[formName].resetFields();
         },
+        /*====== 重置按钮清空表单内容 ======*/
         resetForm(formName) {
           // 重置按钮
           this.barcode=''
