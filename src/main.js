@@ -28,7 +28,7 @@ import {
   Message
 } from 'element-ui'
 Vue.config.productionTip = false
-
+/*
 router.beforeEach((to, from, next) => {
   let token = getToken()
   if(to.path === '/login'){
@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
 
 
 })
-
+*/
  //判定依据token起手 废弃
 /*
 router.beforeEach((to, from, next) => {

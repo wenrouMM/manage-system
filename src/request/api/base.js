@@ -1,7 +1,7 @@
 // 用来管理接口的域名相关
-// var url = 'http://192.168.2.31:8099/';
+
 var url = 'http://192.168.2.31:8088/'
-//var url ='http://192.168.2.121:8088/'
+// var url ='http://192.168.2.121:8088/'
 // 权限模块的API
 // 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
@@ -63,7 +63,11 @@ export const regionInt = {
 var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/'
 export const cardInfoInt = {
     select:`${cardInfo}select`,
-    cogradient:`${cardInfo}synchronizationReader`
+    cardReport:`${cardInfo}currency/cardReport`, // 挂失/取办
+    cardReissue:`${cardInfo}currency/cardReissue`,// 补办
+    cogradient:`${cardInfo}synchronizationReader`, // 登记读者卡
+    add:`${cardInfo}add`, // 办卡
+    selectUser:`${cardInfo}selectUserInfoByCard`
 }
 //读者卡等级
 var cardLevel = url + 'tibetmuseummodule/readerTbCardGradeinfo/'
@@ -87,6 +91,9 @@ export const loginInter= url + 'authmodule/index/login'
 export const headUpload = url + 'filemodule/currency/uploadFile/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
 export const selectRoleType = url + 'authmodule/roleInformation/currency/selectRole' // 角色管理下拉
+// 读者卡信息
+export const cardReport = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReport' // 挂失
+export const cardReissue = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReissue' // 补办
 // 读者卡等级模块
 export const selectEffect = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBox' // 获取未被禁用的读者卡等级类型下拉框
 export const selectAllDrop = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox' // 获取所有读者卡等级类型列表下拉框

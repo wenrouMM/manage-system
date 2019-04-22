@@ -582,8 +582,8 @@ export default {
       this.changeAreaForm.column = region.gdlType;
       this.changeAreaForm.columnNumber = region.cols;
       this.changeAreaForm.floor = region.lays;
-      (this.changeAreaForm.density = region.width),
-        (this.changeAreaForm.zoneNumber = region.regionNum);
+      this.changeAreaForm.density = region.width,
+      this.changeAreaForm.zoneNumber = region.regionNum;
       this.changeAreaForm.section = region.divs;
       this.changeAreaForm.speed = region.speed;
       this.changeAreaForm.ip = region.reqestIp;

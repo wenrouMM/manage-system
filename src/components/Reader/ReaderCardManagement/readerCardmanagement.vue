@@ -73,14 +73,14 @@
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="state" width="70" label="状态">
                 <template slot-scope="scope">
-                  <span>{{scope.row.disabled ===0?'在用':'挂失'}}</span>
+                  <span>{{scope.row.state ===0?'在用':'挂失'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="supply(scope.$index, scope.row)">补办</span>
-                  <span class="ban" @click="lostBtn(scope.$index, scope.row)">挂失</span>
+                  <span class="ban" @click="lostBtn(scope.$index, scope.row)">{{scope.row.state ===0?'挂失':'取挂'}}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -119,7 +119,7 @@
         >
           <el-form ref="changeForm" :model="changeForm" :rules="changeRules">
             <!-- 表单域 -->
-            <el-form-item :label="labelName[i]" prop="name">
+            <el-form-item :label="labelName[i]" prop="idCard">
               <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -151,7 +151,7 @@ export default {
   data() {
     return {
       /*====== 2.0查询功能配置项 ======*/
-      optionsData: [{name:'正常',code:0},{name:'挂失',code:1}],
+      optionsData: [{name:'在用',code:0},{name:'挂失',code:1}],
       optionsDataType: [], // 类型下拉框
       searchForm: {
         cardNum:'',
@@ -173,17 +173,17 @@ export default {
       currentPage: 1,
       paginationForm: {},
       /*====== 弹框配置项 ======*/
-      Dialogtitle: ["补办", "登记读者卡", "挂失"],
-      labelName:["请输入新卡号","读者卡号",''],
+      Dialogtitle: ["补办", "登记读者卡", "挂失","取消挂失"],
+      labelName:["新卡号","读者卡号",''],
       deleteDialog: false, // 禁用弹框
       deleteArr: {},
-      banData: {},
+      operateData: {}, //
       // 添加编辑
       i: 0, // 切换弹框标题
       changeFormDialog: false, // // 添加弹框的展示和消失
       formLabelWidth: "100px",
       changeForm: {
-        idCard:''
+        idCard:'' // 新卡号
       },
       changeRules: {
         idCard: [{ required: true, message: "请输入卡号", trigger: "blur" }],
@@ -208,16 +208,20 @@ export default {
       };
       return obj;
     },
-    editTimeForm() { // 补卡数据
-      let obj = {
-        name: this.changeForm.name,
-        fkGradeCode: this.changeForm.level,
-        id: this.changeForm.id,
-        disabled: this.changeForm.disabled
+    supplyTimeForm() { // 补卡数据
+      let obj = { // 新卡号 旧卡号
+        newCardNumber: this.changeForm.idCard,
+        cardNumber: this.changeForm.cardNumber,
+        id:this.changeForm.id
       };
       return obj;
     },
-    deleteTimeForm() {}
+    // 挂失和取消挂失
+    lostTimeForm() {
+      let obj = {
+
+      }
+    }
   },
   methods: {
     /*====== 2.0 启动按钮组 ======*/
@@ -242,7 +246,7 @@ export default {
         this.$message.error("请先选择删除对象");
       }
     },
-    // 补卡按钮
+    // 登记读者卡按钮
     addCardBtn() {
       this.i = 1;
       console.log('111')
@@ -256,44 +260,40 @@ export default {
     // 补办读者卡
     supply(index, row) {
       this.i = 0;
+      this.changeForm.cardNumber = row.cardNumber
+      this.changeForm.id = row.id
       this.changeFormDialog = true;
+      
       console.log(index, row, this.changeForm);
     },
     // 挂失按钮
     lostBtn(index, row) {
       console.log(index, row); // 当前选中表格的索引和对象
-      if (row.disabled == 1) {
-        this.$message.error("该卡已挂失");
+      if (row.state == 1) {
+        this.i = 3
       } else {
         this.i = 2;
-        this.banData.id = row.id;
-        this.banData.disabled = 1;
-        this.deleteDialog = true;
       }
+      this.operateData.cardNumber = row.cardNumber;
+      this.operateData.state = row.state;
+      this.deleteDialog = true;
+      console.log('挂失补办的数据',this.operateData,row)
     },
     /*====== 弹框相关按钮 ======*/
 
-    // 删除禁用弹框的提交按钮
+    // g挂失取挂弹框的提交按钮
     subDelete() {
-      let flag = this.i; // 关闭弹框
-      switch (flag) {
-        case 1:
-          console.log("删除Api");
-          this.deleteApi(this.deleteParams);
-          break;
-        case 0:
-          this.banApi(this.banData);
-          console.log("禁用API");
-      }
+        this.operateApi(this.operateData);
+        console.log('挂失补办触发')
     },
-    // 编辑 添加弹框按钮
+    // 登记读者卡 补办卡弹框确定按钮
     submitForm(formName, dialogName) {
       let flag = this.i;
       this.$refs[formName].validate(valid => {
         if (valid) {
           switch (flag) {
             case 0:
-              this.suppleApi(this.editTimeForm, dialogName);
+              this.suppleApi(this.supplyTimeForm, dialogName);
               console.log('补办卡API')
               break;
             case 1:
@@ -306,7 +306,7 @@ export default {
         }
       });
     },
-    // 编辑添加取消按钮
+    // 登记读者卡 补办卡取消按钮
     resetForm(formName, dialogName) {
       this.$refs[formName].resetFields();
       this[dialogName] = false;
@@ -375,7 +375,7 @@ export default {
         }
       });
     },
-    // 补办API
+    // 登记读者卡API
     registerApi(data, dialogName) {
       console.log("提交的数据", data);
       axios.post(cardInfoInt.cogradient, data).then(res => {
@@ -388,9 +388,10 @@ export default {
         }
       });
     },
+    // 补办API
     suppleApi(data, dialogName) {
       console.log("提交的数据", data);
-      axios.put(cardInfoInt.edit, data).then(res => {
+      axios.put(cardInfoInt.cardReissue, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
@@ -400,28 +401,12 @@ export default {
         }
       });
     },
-    // 禁用删除API
-    deleteApi(data) {
-      console.log("提交的删除数据", data);
-      let deleterStr = {
-        deleteParams: data
-      };
-      axios.delete(cardInfoInt.delete, { data: deleterStr }).then(res => {
+    // 取挂与挂失API
+    operateApi(data) {
+      axios.put(cardInfoInt.cardReport, data).then(res => {
+        console.log(res)
         if (res.data.state === true) {
-          this.$message.success("删除成功");
-          this.searchTable();
-          this.deleteDialog = false;
-          console.log(res);
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
-    },
-    banApi(data) {
-      console.log("禁用的数据", data);
-      axios.put(cardInfoInt.edit, data).then(res => {
-        if (res.data.state === true) {
-          this.$message.success("禁用成功");
+          this.$message.success("操作成功");
           this.searchTable();
           this.deleteDialog = false;
           console.log(res);
@@ -742,6 +727,7 @@ export default {
 }
 .readerCard .el-form-item__content {
     display: flex;
+    justify-content: center;
 }
 .readerCard .el-select {
     width: 100%;
@@ -755,6 +741,9 @@ export default {
 }
 .readerCard .selectBan .el-form-item__content{
   display: block;
+}
+.readerCard .el-button:last-child{
+  margin-right: 0px;
 }
 </style>
 
