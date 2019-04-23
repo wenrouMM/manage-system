@@ -55,7 +55,8 @@ export default {
   },
   endLoading() {    //使用Element loading-close 方法
     loading.close()
-  }
+  },
+
 }
 
 

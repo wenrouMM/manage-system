@@ -1,6 +1,6 @@
-//  url='http://192.168.2.31:8088/'
+// url='http://192.168.2.31:8088/'
 url='http://192.168.2.121:8088/';
-
+//
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
   yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
@@ -13,6 +13,7 @@ url='http://192.168.2.121:8088/';
   menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
   menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
   menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
+  menubutton=url+'authmodule/menuInformation/currency/selectMenuById' //点击节点发请求
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
   userroleadd=url+'authmodule/roleInformation/add' //角色添加接口
@@ -41,3 +42,17 @@ url='http://192.168.2.121:8088/';
   bookRegist=url+'tibetmuseummodule/TbookTbInfo/selectOne' //图书登记ISBN接口查详情
   bookRegistadd=url+'tibetmuseummodule/TbookTbInfo/add' //图书登记添加
   bookRegistlib=url+'tibetmuseummodule/TbookTbPress/select' //图书登记出版社
+  bookRegisttype=url+'tibetmuseummodule/TbookTbType/select' //图书登记书籍类型
+/*权限页面*/
+  controlurl=url+'authmodule/currency/getAllMenuAndElement'
+  controladd=url+'authmodule/roleMenuElement/edit' //权限添加
+/*层架绑定*/
+  layerFramezTree=url+'regionmodule/location/selectTree' //层架绑定树
+  layerFrameSave=url+'regionmodule/location/edit' //层架绑定修改
+/*图书位置绑定*/
+  booklocation=url+'tibetmuseummodule/bookRFID/add' //图书位置绑定
+  booklocationNum=url+'tibetmuseummodule/TbookTbInfo/selectOneT'//图书位置条码
+  booklocationztree=url+'regionmodule/location/selectTree' //图书位置树
+/*藏馆信息*/
+  libinfo=url+'bookmodule/booklib/add' //藏馆信息
+  libinfotable=url+'bookmodule/booklib/select' //藏馆表格信息

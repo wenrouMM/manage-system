@@ -9,7 +9,7 @@
             <span class="titleName">角色管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <div style="display:flex;flex-direction:row">
+          <div style="display:flex;flex-direction:row;justify-content: space-between">
             <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
             <div class="buttonBox">
               <button class="add" @click="addDialogOpen">
@@ -19,8 +19,8 @@
                 <i class="deleteIcon el-icon-delete"></i>批量删除
               </button>
             </div>
-            <section class="searchBox" style="margin-left:320px">
-              <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <section class="searchBox">
+              <el-form :inline="true" :model="formInline" class="demo-form-inline" >
                 <el-form-item label="角色名称:" size="160">
                   <el-input size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
@@ -48,7 +48,7 @@
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               class="tableBorder"
-              
+
               @selection-change="handleSelectionChange"
               :data="tableData"
               style="width: 100%;
@@ -262,8 +262,6 @@ export default {
       this.axios.get(roleManageInt.select, { params: value }).then(res => {
         console.log("查询分页的页数", res.data);
         if (res.data.state === true) {
-          let nomal = res.data.row;
-
           this.tableData = res.data.row; //获取返回数据
           //console.log('获取的表格数据',this.tableData)
           this.total = res.data.total; //总条目数
@@ -275,7 +273,7 @@ export default {
           this.tableLoading = false;
         }
       });
-      
+
     },
     current_change: function(currentPage) {
       //分页查询
@@ -299,7 +297,7 @@ export default {
       } else {
         this.$message.error('请先选择删除对象')
       }
-      
+
     },
 
     /*====== 4.0表格操作相关 ======*/
@@ -417,13 +415,13 @@ export default {
         if (valid) {
           if (this.i === 3) {
             this.addApi(this.newaddForm);
-            
+
           }
           if (this.i === 2) {
             this.editApi(this.neweditForm);
-             
+
           }
-         
+
         } else {
           //console.log("error submit!!");
           //console.log(this.addForm);
@@ -515,17 +513,17 @@ export default {
   computed: {
     //模糊查询参数
     searchTimeForm() {
-      // 计算属性 真正传递的数据 
+      // 计算属性 真正传递的数据
       let searchForm = { // 非空判断的各个值
         pageSize: this.pageSize,
         currentPage: 1,
         roleName: this.formInline.parent,
         beginTime:
-          !this.formInline.beginTime 
+          !this.formInline.beginTime
             ? null
             : moment(this.formInline.beginTime).format("YYYY-MM-DD"), //开始时间
         endTime:
-          !this.formInline.endTime 
+          !this.formInline.endTime
             ? null
             : moment(this.formInline.endTime).format("YYYY-MM-DD") //结束时间
       };

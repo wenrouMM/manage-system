@@ -1,29 +1,31 @@
 <template>
-  <div id="menu">
-    <div style="display: flex;flex-direction: row" id="mymenu">
-      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow:auto">
+    <div style="display: flex;flex-direction: row;">
+      <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow: paged-y">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px" v-loading="fullscreenLoading"></ul>
       </div>
-      <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px">
-        <form id="myForm">
-          <table>
-            <p id="#msg"></p>
-            <p class="myfont">名称 :&nbsp;&nbsp;&nbsp;
-              <input type="text" class="myinput" name="menuName" id="name" autocomplete="off" info="名称" maxlength="10">
-            </p>
-            <p class="myfont">
-              U R L :&nbsp;&nbsp;
-              <input type="text" class="myinput" name="href" id="url" info="url" autocomplete="off">
-            </p>
-            <div style="display: flex;flex-direction: row;margin-top: 40px;">
-              <p class="myfont">ICON&nbsp;:&nbsp;&nbsp;&nbsp;</p>
+      <div style="width: 1320px;margin-left: 30px;;height:852px;background-color:white" v-loading="formLoading">
+        <el-form :model="ruleForm"
+                 :rules="rules"
+                 ref="ruleForm"
+                 label-width="100px"
+
+                 style="width: 700px;margin: 100px auto"
+                 :label-position="labelPosition">
+          <el-form-item label="名　　称 : " prop="name">
+            <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="U　R　L :" prop="url">
+            <el-input v-model="ruleForm.url" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="I C O N : " prop="img" style="margin-top: 55px">
+            <div style="display: flex;flex-direction: row;margin-top: -30px">
               <div class="inputBox">
-                <!-- 预览的图片 -->
+              <!-- 预览的图片 -->
                 <div v-if="src" class="preload">
-                  <span class="close" @click="delet">
-                    <img src="../../base/img/menu/x.png" style="width: 15px;height: 15px" alt>
-                  </span>
+                    <span class="close" @click="delet">
+                      <img src="../../base/img/menu/x.png" style="width: 15px;height: 15px" alt>
+                    </span>
                   <img :src="src" style="width:100px; height:100px;" alt="预览照片" id="icon">
                 </div>
                 <div style="width: 90px;height: 90px;margin-left: 4px;margin-top: 4px" @click="point">
@@ -40,90 +42,99 @@
                 </div>
               </div>
             </div>
-            <p class="myfont">
-              菜单类型 :&nbsp;&nbsp;&nbsp;
-              <el-select v-model="value2" clearable placeholder="请选择" id="type" @change="change_select(value2)" style="width: 610px">
-                <el-option v-for="item in selectList" :key="item.value" :label="item.label" :value="item.code" id="xiala"></el-option>
-              </el-select>
-            </p>
-            <p class="myfont">
-              菜单编码 :&nbsp;&nbsp;&nbsp;
-              <input type="text" class="myinput" name="menuCode" id="menuCode" info="菜单编码" autocomplete="off" style="width: 580px">
-            </p>
-            <p class="myfont">
-              菜单描述:&nbsp;&nbsp;&nbsp;&nbsp;(选填)&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="textarea" style="width: 520px;height: 102px" class="myinput" name="menuDescribe" id="menu_msg" autocomplete="off">
-            </p>
-            <p class="myfont">
-              是否禁用:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" value="1" name="disabled" id="yes" checked>
-              <label for="yes">是</label>&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" value="0" name="disabled" id="no">
-              <label for="no">否</label>
-            </p>
-            <div class="myfont" id="btn_select" style="display: flex;flex-direction: row;display: none;position: relative">
-              按钮集&nbsp;&nbsp;:&nbsp;&nbsp;
-              <img src="../../base/img/menu/tianjia.png" style="width: 25px;height: 25px;margin-bottom: -7px;" @click="btn_type" @mouseover="myMessagebox" @mouseleave="myMessagebox1">
-              <img src="../../base/img/menu/messagebox.png" style="position: absolute;top: 20px;left: 49px;width: 330px;height: 60px;display: none" id="messagebox">
-              <p style="font-size: 10px;color: white;position: absolute;top: 40px;left: 75px">如果您有已存在的按钮，则不能添加与之相同的按钮</p>
-              <div style="margin-left: 120px;margin-top: -20px;" id="but_show">
-                <button style="width:70px;height: 26px;border-radius: 10px;border:1px solid lightgray;margin-left:10px;background-color:white" v-for="item of but_type1">{{item.fk_elm_code}}</button>
+          </el-form-item>
+          <el-form-item label="菜单类型 :" prop="menuType">
+            <el-select v-model="ruleForm.menuType" clearable placeholder="请选择" @change="change_select(ruleForm.menuType)" style="width: 600px" autocomplete="off">
+              <el-option v-for="item in selectList" :key="item.value" :label="item.label" :value="item.menuType" id="xiala"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="菜单编码 :" prop="menuCode">
+            <el-input v-model="ruleForm.menuCode" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="菜单描述 : " prop="menuMsg">
+            <el-input type="textarea" v-model="ruleForm.menuMsg" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="状　　态 : " prop="state">
+            <el-radio-group v-model="ruleForm.state" autocomplete="off">
+              <el-radio label="禁用"></el-radio>
+              <el-radio label="启用"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label=" 按 钮 集 : " prop="menuMsg" id="btn_select" style="display: none">
+            <div class="myfont"  style="display: flex;flex-direction: row;position: relative">
+              <img src="../../base/img/menu/tianjia.png" style="width: 25px;height: 25px;margin-top: -32px" @click="btn_type" >
+              <div style="margin-left: 30px;margin-top: -40px;" id="but_show">
+                <button style="width:70px;height: 26px;border-radius: 10px;border:1px solid lightgray;margin-left:10px;background-color:white" v-for="item of buttonNameData">{{item}}</button>
               </div>
             </div>
-            <p style="margin-top: 60px">
-              <input type="button" class="mybut" @click="save" id="save" v-loading.fullscreen.lock="fullscreenLoading" value="保存">
-            </p>
-            <p id="msg" style="text-align: center;color: red;font-size: 15px;"></p>
-            <div class="but_div" id="but_type_div">
-              <div class="but_type_div">
-                <div class="but_top_div">
-                  按钮集
-                  <img src="../../base/img/menu/xx.png" style="position: absolute;top: 25px;left: 440px;width: 30px;height:30px" @click="check_x">
-                </div>
-                <div style="background-color: white;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px">
-                  <p style="font-size: 17px;color: #878787;margin-left: 60px;margin-top: 40px">
-                    元素名&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;
-                    <input type="text" style="width: 235px;" class="myinput" id="btn_msg" autocomplete="off">
-                  </p>
-                  <p style="font-size: 17px;color: #878787;margin-left: 60px;margin-top: 40px">
-                    元素类型&nbsp;:&nbsp;
-                    <el-select v-model="value3" clearable placeholder="查询按钮" id="type" style="width: 267px">
-                      <el-option v-for="item in butList" :key="item.value" :label="item.label" :value="item.code"></el-option>
-                    </el-select>
-                  </p>
-                  <p style="margin-left: 85px;margin-top: 50px;margin-bottom: 50px">
-                    <input type="button" value="确定" class="but_type"style="background-color: #1e9eff" @click="click_ok">
-                    <input type="button" value="取消" class="but_type" style="background-color: #D5D5D5;margin-left: 30px" @click="click_no">
-                  </p>
-                </div>
-              </div>
+          </el-form-item>
+          <el-button type="primary" round @click="save()" style="width: 200px;margin: 20px 250px">保存</el-button>
+        </el-form>
+        <div class="but_div" id="but_type_div">
+          <div class="but_type_div">
+            <div class="but_top_div">
+              按钮集
             </div>
-          </table>
-        </form>
+            <div style="background-color: white;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px">
+              <el-form ref="formButton"  :model="formButton" label-width="80px" :label-position="labelPosition" style="padding-left:80px;padding-bottom: 50px ;margin-top: 50px">
+                <el-form-item label="元素名 : ">
+                  <el-input v-model="formButton.buttonName" style="width: 267px"></el-input>
+                </el-form-item>
+                <el-form-item label="元素类型 :">
+                  <el-select v-model="formButton.buttonTypeCode" clearable placeholder="请选择按钮类型" id="type" style="width: 267px">
+                    <el-option v-for="item in butList" :key="item.value" :label="item.label" :value="item.code"></el-option>
+                  </el-select>
+                </el-form-item>
+                  <el-button type="primary" round @click="click_ok()" style="width: 150px">确定</el-button>
+                  <el-button type="info" round @click="click_no()" style="width: 150px;margin-left: 50px">取消</el-button>
+              </el-form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-  </div>
 </template>
 
 <script>
 var id; //声明id，用来判断保存按钮发的是添加请求还是修改请求
 var praent; //生命的父元素id，用来发添加请求的时候获取上级id
 var click; //生命click，用来判断保存按钮是否向后台发送请求
-var authTbMenuElementsEdit = [];
-var authTbMenuElementsAdd = [];
 import serialize from "../../base/js/yf/serialize";
 export default {
   name: "menu.vue",
   data() {
     return {
+      labelPosition:'left',
+      ruleForm: {
+        name: '',
+        url: '',
+        menuType: '',
+        menuCode: '',
+        menuMsg: '',
+        state: ''
+      },
+      rules: {
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' },],
+        url: [{ required: true, message: '请输入url', trigger: 'blur' }],
+        menuType: [{required: true, message: '请选择菜单类型', trigger: 'change' }],
+        menuCode: [{required: true, message: '请输入菜单编码', trigger: 'blur' }],
+        menuMsg: [{required: true, message: '请输入菜单描述', trigger: 'blur' }],
+        state: [{ required: true, message: '请选择状态', trigger: 'change' }],
+      },
+      formButton:{
+        buttonName:'',
+        buttonTypeCode:''
+      },
+      isShow:false,
+      formLoading:false,
       fullscreenLoading: false,
       zTree: [], //点击节点后节点上对应的值
       addZTreePid: 0, //点击节点添加按钮所对应节点的值
-      but_type: [], //点击按钮集添加的按钮元素
-      but_type1: [], //过滤相同的按钮后渲染在表单上按钮的元素
-      value2: "", //表单下拉列表的code值
-      value3: "", //按钮集下拉列表的code值
+      buttonData: [], //过滤相同的按钮后渲染在表单上按钮的元素
+      buttonNameData:[],
+      //value2: "", //表单下拉列表的code值
+      //value3: "", //按钮集下拉列表的code值
       selectList: [], //渲染表单下拉列表的数组
       butList: [], //渲染按钮集下拉列表的数组
       src: "", //上传图片的地址
@@ -165,74 +176,87 @@ export default {
           beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
           onRemove: this.onRemove //删除事件
         }
-      },
-      zNodes: [],
+      },//ztree加载配置
+      zNodes: [],//ztree加载数据
       treeName:null,
-      pId:null
+      pId:null,
+      addButton:true,
+      authTbMenuElementsEdit:[],//修改的按钮数组
+      authTbMenuElementsAdd:[] //添加的按钮数组
     };
   },
   methods: {
-    //当鼠标移入按钮集图标，出现提示
-    myMessagebox() {
-      $("#messagebox").fadeIn();
-    },
-    //当鼠标移出按钮集图标，隐藏提示
-    myMessagebox1() {
-      $("#messagebox").fadeOut();
-    },
-    //按钮集弹窗的确定按钮传元素名称，元素类型编码
-    click_ok() {
-      if (this.value3 === "") {
-        //当按钮元素为空的时候，给出提示不可为空
-        this.$alert("元素类型不能为空，请您重新添加!", {
-          confirmButtonText: "确定"
-        });
-        return;
-      } else {
-        //当按钮元素不为空的时候，继续向下执行
-        var msg = ""; //申明按钮的名字，当选取按钮元素下拉框的时候根据value3的值为按钮命名相应的值
-        if (this.value3 === "select") {
-          msg = "查询";
-        } else if (this.value3 === "edit") {
-          msg = "编辑";
-        } else if (this.value3 === "delete") {
-          msg = "删除";
-        } else if (this.value3 === "add") {
-          msg = "添加";
-        }
-        authTbMenuElementsEdit.push({
-          elmName: $("#btn_msg").val(),
-          elmCode: this.value3,
-          fkElmCode: this.value3,
-          fkMenuId: this.zTree.id
-        });
-        authTbMenuElementsAdd.push({
-          elmName: $("#btn_msg").val(),
-          elmCode: this.value3,
-          fkElmCode: this.value3
-        });
-        this.but_type.push({ fk_elm_code: msg }); //将选取好的按钮添加到this.but_type
-        var but_arr = serialize.deteleObject(this.but_type); //过滤掉数组中相同的元素
-        // console.log(but_arr)
-        var but_arr1 = serialize.trimSpace(but_arr); //过滤掉数组中的空值
-        //console.log(but_arr1)
-        this.but_type1 = but_arr1; //将过滤完成的数组付给but_type1,but_type1将是最后展示在表单页面按钮的数组
-        $("#but_type_div").hide();
+    /*====== 菜单类型判断是否显示按钮集 ======*/
+    change_select(num){
+      console.log(num)
+      if(num==='list_menu'||num===''){
+        $('#btn_select').fadeOut()
+
+      }else if(num==='page_menu'){
+        $('#btn_select').fadeIn()
       }
     },
-    //按钮集弹窗的取消按钮隐藏失去文档流
+    /*====== 判断数组中是否有相同元素，有则给出提示 ======*/
+    findSame(arr) {
+      arr.sort();
+      for (var i = 0; i < arr.length - 1; i++) {
+        if (arr[i] == arr[i + 1]) {
+          //alert("包含相同元素，相同值为：" + arr[i]);
+          this.$alert('您已存在相同的按钮类型', '提示', {
+            confirmButtonText: '确定',
+          })
+          this.addButton=false //提示后不能添加
+          return true;
+        }
+      };
+      return false;
+    },
+    /*====== 按钮弹框的确定按钮 ======*/
+    click_ok() {
+      console.log('按钮名称与类型',this.formButton.buttonTypeCode)
+      if (this.formButton.buttonTypeCode ===undefined||this.formButton.buttonName===undefined) {
+        //当按钮元素为空的时候，给出提示不可为空
+        //alert('22222')
+        this.$alert("元素类型或名称不能为空，请您重新添加!", {
+          confirmButtonText: "确定"
+        });
+      }else if (this.formButton.buttonTypeCode ===''||this.formButton.buttonName==='') {
+        //当按钮元素为空的时候，给出提示不可为空
+        //alert('22222')
+        this.$alert("元素类型或名称不能为空，请您重新添加!", {
+          confirmButtonText: "确定"
+        });
+      }else if (this.formButton.buttonTypeCode!== undefined&&this.formButton.buttonName!==undefined){
+        this.buttonData.push(this.formButton.buttonTypeCode) //当元素名称和类型不为空时将元类型添加buttonData
+        this.findSame(this.buttonData) //当buttonData中有相同的类型时给出提示
+        this.buttonData = serialize.deteleObject(this.buttonData) //过滤buttonData相同的值
+        if(this.addButton==true){  //元素不为空能添加
+          this.buttonNameData.push(this.formButton.buttonName) //将按钮名字添加进buttonNameData中用来展示添加的按钮
+          this.authTbMenuElementsEdit.push({ //发送修改保存时添加的按钮
+            elmName: this.formButton.buttonName,
+            elmCode: this.formButton.buttonTypeCode,
+            fkElmCode: this.formButton.buttonTypeCode,
+            fkMenuId: this.zTree.id
+          });
+          this.authTbMenuElementsAdd.push({ //发送添加保存时添加的按钮
+            elmName: this.formButton.buttonName,
+            elmCode: this.formButton.buttonTypeCode,
+            fkElmCode: this.formButton.buttonTypeCode
+          });
+          $("#but_type_div").fadeOut();//添加完成后按钮弹框消失
+        }
+        //console.log(this.buttonData)
+        this.addButton=true //按钮添加完成后使其可继续添加
+        this.formButton={} //清空添加按钮的数组
+      }
+    },
+    /*====== 按钮弹框的取消按钮 ======*/
     click_no() {
-      $("#but_type_div").fadeOut();
+      $("#but_type_div").fadeOut(); //添加完成后按钮弹框消失
+      this.formButton={} //按钮白哦单清空
     },
-    //按钮集点错图标隐藏失去文档流
-    check_x() {
-      $("#but_type_div").fadeOut();
-    },
-    //按钮集点击按钮出现弹框可选择按钮元素
+    /*====== 点击按钮集添加按钮出现元素集弹框发送请求加载按钮类型下拉框数据 ======*/
     btn_type() {
-      /*this.$alert('如果您有已存在的按钮，则不能添加与之相同的按钮',{
-          confirmButtonText: '确定',
-        });*/
       $("#but_type_div").fadeIn();
       var list = [];
       this.axios
@@ -253,15 +277,7 @@ export default {
       this.butList = list;
       //console.log(this.butList)
     },
-    //表单下拉选项选择列表菜单和页面菜单用来判断是否显示按钮集
-    change_select(num) {
-      if (num === "list_menu") {
-        $("#btn_select").fadeOut();
-      } else if (num === "page_menu") {
-        $("#btn_select").fadeIn();
-      }
-    },
-    //页面初始加载就请求后台服务器的数据将数据动态渲染在页面的树节点中
+    /*====== 左侧ztree树结构的加载 ======*/
     async freshArea() {
       this.axios.get(menuselecturl).then((response)=>{
         console.log(response)
@@ -285,7 +301,7 @@ export default {
         $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       })
     },
-    //删除节点向后台发请求可删除页面节点与后台数据库的节点
+    /*====== ztree节点删除按钮做删除操作 ======*/
     zTreeBeforeRemove(treeId, treeNode) {
       //onsole.log(treeNode.id)
       if (treeNode.id === undefined) {
@@ -311,26 +327,48 @@ export default {
         });
       }
     },
-    //修改时点击节点将该节点的数据展示在表单内
-    zTreeOnClick(event, treeId, treeNode) {
-      id = treeNode.id; //点击节点时节点自己的id
-      click = "click"; //是否点击的赋值
-      $("#name").val(treeNode.name); //展示节点名称
-      $("#url").val(treeNode.href); //展示节点url
-      $("#menu_msg").val(treeNode.msg); //展示节点菜单描述
-      $("#menuCode").val(treeNode.code); //展示节点菜单编码
-      this.value2 = treeNode.menu_code_type; //展示节点菜单类型编码
-      $("input[name='disabled'][value='" + treeNode.disabled + "']").prop(
-        "checked",
-        "checked"
-      ); //展示节点是否禁用
-      this.src1 = menugetimg + treeNode.id; //展示节点图片
-      this.photo=treeNode.icon_default
-      console.log(this.photo)
-      $("#icon1").show(); //点击节点是显示,否则隐藏
-      this.zTree = treeNode; //将点击节点后的节点信息给treeNode
+    /*====== ztree点击节点将节点信息放入表单显示 ======*/
+    zTreeOnClick(e, treeId, treeNode) {
+      //console.log(treeNode.menu_code_type)
+      //console.log(treeNode.id)
+      this.ruleForm={}
+      this.buttonNameData.length=0
+      $("#btn_select").fadeOut()
+      if(treeNode.menu_code_type=='page_menu') {
+        this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
+          console.log('查询节点的信息',res)
+          if (res.data.state == true) {
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+            id = treeNode.id; //点击节点时节点自己的id
+            click = 'click' //是否点击的赋值
+            this.src1 = 'http://192.168.2.121:8088/authmodule/menuInformation/getImg?id=' + treeNode.id //展示节点图片
+            $('#icon1').show() //点击节点是显示,否则隐藏
+            this.zTree = treeNode //将点击节点后的节点信息给treeNode
+            this.ruleForm.name = res.data.row.authTbMenu.menuName;
+            this.ruleForm.url = res.data.row.authTbMenu.menuHref;
+            this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
+            this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
+            this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
+            this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
+            $('#btn_select').fadeIn()
+            this.buttonData.length=0
+            console.log('已存在的按钮1',res.data.row.authTbMenuElements)
+            for (let item of res.data.row.authTbMenuElements) {
+              console.log('已存在的按钮',item)
+              this.buttonData.push(item.elmCode)
+              this.buttonNameData.push(item.elmName)
+            }
+            //console.log(this.buttonData)
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+      }
     },
-    //鼠标移入节点时添加按钮
+    /*====== ztree节点添加按钮做添加操作 ======*/
     addHoverDom(treeId, treeNode) {
       //this.addZTree=treeNode
       //console.log(treeNode.menu_code_type);
@@ -362,13 +400,13 @@ export default {
           });
       }
     },
-    //移除节点时隐藏添加按钮
+    /*====== ztree移除节点添加按钮消失 ======*/
     removeHoverDom(treeId, treeNode) {
       $("#addBtn_" + treeNode.tId)
         .unbind()
         .remove();
     },
-    //修改或添加时点击保存按钮向后台发送修改或保存后的数据（根据节点id判断发送请求为修改或添加）
+    /*====== 点击保存按钮发送修改或添加的请求 ======*/
     save() {
       console.log(this.zNodes)
       this.pId=praent
@@ -385,33 +423,34 @@ export default {
         return;
       } else {
         var add = {
-          menuName: $("#name").val(),
-          menuCode: $("#menuCode").val(),
-          menuDescribe: $("#menu_msg").val(),
-          menuHref: $("#url").val(),
-          disabled: $('input:radio[name="disabled"]:checked').val(),
+          menuName: this.ruleForm.name,
+          menuCode: this.ruleForm.menuCode,
+          menuDescribe: this.ruleForm.menuMsg,
+          menuHref: this.ruleForm.url,
+          disabled:this.ruleForm.state=='禁用'?1:0,
           iconDefault:this.photo ,
           iconSelected:'' ,
-          fkMenuTypeCode: this.value2,
+          fkMenuTypeCode: this.ruleForm.menuType,
           fkParentMenuId: this.pId,
-          authTbMenuElements: authTbMenuElementsAdd
+          authTbMenuElements: this.authTbMenuElementsAdd
         };
         var edit = {
           id: this.zTree.id,
           fkParentMenuId: this.zTree.pId,
           fkMenuId: this.zTree.id,
-          menuName: $("#name").val(),
-          menuCode: $("#menuCode").val(),
-          menuDescribe: $("#menu_msg").val(),
-          menuHref: $("#url").val(),
-          disabled: $('input:radio[name="disabled"]:checked').val(),
+          menuName: this.ruleForm.name,
+          menuCode: this.ruleForm.menuCode,
+          menuDescribe: this.ruleForm.menuMsg,
+          menuHref: this.ruleForm.url,
+          disabled: this.ruleForm.state=='禁用'?1:0,
           iconDefault: this.photo,
           iconSelected: "",
-          fkMenuTypeCode: this.value2,
-          authTbMenuElements: authTbMenuElementsEdit
+          fkMenuTypeCode: this.ruleForm.menuType,
+          authTbMenuElements: this.authTbMenuElementsEdit
         };
         if (id === undefined) {
           this.zNodes.length=0
+          this.formLoading=true
           this.axios.post(menuaddurl, add).then((request) => {
             console.log(request);
             if (request.data.state == true) {
@@ -419,12 +458,18 @@ export default {
                 message: request.data.msg+',可展开查看！',
                 type: "success"
               });
+              this.formLoading=false
+              this.buttonData.length=0
               this.freshArea()
             } else {
               this.$message.error(request.data.msg);
+              this.formLoading=false
+              this.buttonData.length=0
             }
           });
         } else {
+          this.formLoading=true
+          console.log(edit)
           this.axios.post(menuaddurl, edit).then((request) => {
             this.zNodes.length=0
             console.log(request);
@@ -433,13 +478,20 @@ export default {
                 message: request.data.msg+',可展开查看！',
                 type: "success"
               });
+              this.formLoading=false
+              this.buttonData.length=0
               this.freshArea()
             } else {
               this.$message.error(request.data.msg);
+              this.formLoading=false
+              this.buttonData.length=0
             }
           });
         }
       }
+      this.ruleForm={}
+      this.formButton.length=0
+      $("#btn_select").fadeOut()
     },
     //图片上传
     point() {
@@ -486,7 +538,7 @@ export default {
   mounted() {
     //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
     this.freshArea();
-    //当菜单页面一加载,就请求后台数据，动态渲染在菜单页面的表单下拉框上
+    /*====== 菜单类型下拉框数据 ======*/
     var list = [];
     this.axios
       .get(menutypeurl, { params: { type: "menu" } })
@@ -494,7 +546,7 @@ export default {
         //console.log(request)
           for (var item of request.data.row) {
             //console.log(item)
-            list.push({ value: item.id, label: item.name, code: item.code });
+            list.push({ value: item.id, label: item.name, menuType: item.code });
           }
       });
     this.selectList = list;
@@ -507,7 +559,7 @@ button:hover {
 }
 .but_div {
   width: 100%;
-  height: 972px;
+  height: 1073px;
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid lightgray;
   position: absolute;
@@ -546,17 +598,6 @@ button:hover {
   line-height: 80px;
   text-align: center;
   position: relative;
-}
-.mybut {
-  width: 300px;
-  height: 40px;
-  font-size: 16px;
-  color: white;
-  background-color: #1e9eff;
-  border: none;
-  outline: none;
-  border-radius: 3px;
-  margin-left: 220px;
 }
 input[type="button"]:hover {
   background-color: rgba(30, 158, 255, 0.7);
@@ -597,14 +638,6 @@ input[type="radio"] {
   border-radius: 5px;
   border: 1px solid #d2d2d2;
   padding-left: 30px;
-}
-#mymenu {
-  width: 100%;
-  height: 852px;
-}
-#myForm{
-  margin-left: 300px;
-  margin-top: 20px
 }
 .inputBox {
   width: 100px;

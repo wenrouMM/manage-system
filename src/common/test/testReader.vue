@@ -25,6 +25,7 @@
             <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
             <el-menu-item index="/publishhouse">馆内图书出版社</el-menu-item>
             <el-menu-item index="/bookregistration">图书登记</el-menu-item>
+            <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
           </el-submenu>
           <el-submenu index="readerCard">
             <template slot="title">

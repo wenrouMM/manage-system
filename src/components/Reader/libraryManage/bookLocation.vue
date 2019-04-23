@@ -1,0 +1,279 @@
+<template>
+  <div class="borrowbook" v-loading="formLoading">
+    <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
+      <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">图书位置绑定</div>
+    </div>
+    <div style="margin:100px auto;width:1100px">
+      <div style="background-color: #ededed;width: 250px;height: 200px"></div>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
+        <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
+          <el-form-item label="条　　码 :　" prop="num">
+            <el-input v-model="ruleForm.num" style="width:250px;" @input="numClick"></el-input>
+          </el-form-item>
+          <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
+            <span>{{ruleForm.bookName}}</span>
+          </el-form-item>
+          <el-form-item label="索 书 号 :　" prop="bookindex" style="margin-top: 25px">
+            <span>{{ruleForm.bookIndex}}</span>
+          </el-form-item>
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 30px">
+          <el-form-item label="图书类型 :　" prop="bookType" style="width: 330px">
+            <span>{{ruleForm.bookType}}</span>
+          </el-form-item>
+          <el-form-item label="馆内图书编码 :" prop="bookCode">
+            <el-input v-model="ruleForm.bookCode" ></el-input>
+          </el-form-item>
+          <el-form-item style="width: 150px">
+            <el-button type="primary" round>生成条形码</el-button>
+          </el-form-item>
+          <el-form-item>
+            <div style="width: 160px;border: 1px solid lightgray;height: 40px;border-radius: 10px"></div>
+          </el-form-item>
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 30px">
+          <el-form-item label="rfid :" prop="rfid" label-width="60px">
+            <el-input v-model="ruleForm.rfid" ></el-input>
+          </el-form-item>
+          <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
+            <span>{{ruleForm.bookLocation}}</span>
+          </el-form-item>
+          <a href="#" style="color: #0096FF;margin-top: 13px" @click="locationMessage">位置选择</a>
+        </div>
+        <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
+      </el-form>
+    </div>
+    <div id="typeMessage" >
+      <div style="position: relative">
+        <p>请选择位置信息</p>
+        <img src="../../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+      </div>
+      <div v-loading="treeLoading">
+        <ul id="treeDemo" class="ztree"></ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data(){
+      return{
+        treeLoading:false,
+        formLoading:false,
+        setting: {
+          edit: {
+            enable: true,
+            showRemoveBtn: false,
+            addHoverBtn: false,
+            removeTitle: "删除节点",
+            showRenameBtn: false,
+            editNameSelectAll: false
+          },
+          data: {
+            simpleData: {
+              enable: true,
+              idKey: "id",
+              pIdKey: "pId",
+              rootPId: 0
+            }
+          },
+          view: {
+            showLine: false,
+            showIcon: true,
+            dblClickExpand: true,
+            addDiyDom: this.addDiyDom,
+            selectedMulti: true,
+            addHoverDom: this.addHoverDom,
+            removeHoverDom: this.removeHoverDom
+          },
+          callback: {
+            onClick: this.zTreeOnClick, //节点点击事件
+            onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
+            beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
+            beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
+            onExpand: this.zTreeOnExpand
+          }
+        }, //ztree树加载的配置
+        zNodes: [], //ztree树加载的数据
+        labelPosition:'left',
+        ruleForm:{
+          num:'',
+          bookName:'',
+          bookIndex:'',
+          bookType:'',
+          bookTypeCode:'',
+          bookCode:'',
+          rfid:'',
+          bookLocation:'',
+          code:''
+        },//添加的数据
+        rules:{
+          num: [{ required: true, message: '请输入活动名称', trigger: 'blur' },],
+          bookName: [{ required: true,}],
+          bookindex: [{required: true}],
+          bookType: [{required: true}],
+          bookCode: [{required: true, message: '请输入图书编码', trigger: 'blur' }],
+          rfid: [{ required: true, message: '请输入rfid', trigger: 'blur' }],
+          bookLocation: [{ required: true}]
+        },//添加的验证
+      }
+    },
+    methods:{
+      /*====== 取消位置信息的弹框 ======*/
+      closeCheck(){
+        $('#typeMessage').fadeOut()
+      },
+      /*====== 输入条码发送请求加载数据 ======*/
+      numClick(){
+        console.log(this.ruleForm.num)
+        this.axios.get(booklocationNum, {params: {barcode: this.ruleForm.num}}).then((res) => {
+          //console.log(res.data)
+          if (res.data.state == true) {
+            console.log('isbn的数据', res.data)
+            if (res.data.row.length == 0) {
+              console.log('row为空')
+              for (let key in this.ruleForm) {
+                this.ruleForm[key] = ''
+              }
+            } else {
+              console.log('row不为空')
+              for (let item of res.data.row) {
+                console.log('为表单元素赋值',item)
+                this.ruleForm.bookName=item.name
+                this.ruleForm.bookIndex=item.searchNumber
+                this.ruleForm.bookType=item.fkTypeName
+                this.ruleForm.bookTypeCode=item.fkTypeCode
+              }
+            }
+          }
+        })
+      },
+      /*====== 展开节点的操作 ======*/
+      zTreeOnExpand(event, treeId, treeNode){
+        console.log(treeNode)
+        this.ruleForm.bookLocation+=treeNode.name
+      },
+      /*====== 点击节点的操作 ======*/
+      zTreeOnClick(event, treeId, treeNode){
+        console.log(treeNode)
+        if(treeNode.laysNum!==null){
+          this.ruleForm.bookLocation+=treeNode.name
+          this.ruleForm.code=treeNode.code
+          $('#typeMessage').fadeOut()
+        }
+      },
+      /*====== 位置信息他边框出现的操作 ======*/
+      locationMessage(){
+        this.zNodes.length=0
+        this.ruleForm.bookLocation=''
+        this.freshArea()
+        $('#typeMessage').fadeIn()
+      },
+      /*====== 加载位置信息ztree树的内容 ======*/
+      async freshArea() {
+        this.treeLoading=true
+        this.axios.get(layerFramezTree).then((response) => {
+          console.log(response)
+          if(response.data.state==true){
+            for (var item of response.data.row) {
+              //console.log(item)
+              this.zNodes.push({
+                id: item.id, //节点id
+                pId: item.pid, //节点父id
+                name: item.name, //节点名称
+                isClick: item.format, //是否是可点击节点
+                fkStoreId:item.fkStoreId, //库房号
+                fkRegionId:item.fkRegionId, //区号
+                colNum:item.colNum, //列
+                divNum:item.divNum, //层
+                laysNum:item.laysNum, //节
+                rfid:item.rfid,
+                code:item.code
+              });
+            }
+            //将数据渲染到ztree树
+            $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+            this.treeLoading=false
+          }else{
+            this.$message.error(response.data.msg);
+            this.treeLoading=false
+          }
+        })
+      },
+      /*====== 添加的表单数据 ======*/
+      saveApi(){
+        this.formLoading=true
+        this.axios.post(booklocation,{
+          libraryBookCode:this.ruleForm.bookCode,
+          searchNumber:this.ruleForm.bookIndex,
+          bookName:this.ruleForm.bookName,
+          barcode:this.ruleForm.num,
+          fkTypeCode:this.ruleForm.bookType,
+          fkTypeName:this.ruleForm.bookType,
+          rfid:this.ruleForm.rfid,
+          fkLocationId:this.ruleForm.code,
+          locationName:this.ruleForm.bookLocation
+        }).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.row,
+              type: 'success'
+            });
+            this.formLoading=false
+          }else{
+            this.$message.error(res.data.row);
+            this.formLoading=false
+          }
+        })
+      }
+    },
+  }
+</script>
+
+<style scoped>
+  .borrowbook{
+    width: 100%;
+    background-color: white;
+    height: 852px;
+  }
+  #typeMessage{
+    display: none;
+    position: absolute;
+    top: 200px;
+    left:750px;
+    z-index: 30000;
+
+  }
+  #typeMessage div:nth-child(1){
+    width: 400px;
+    height: 50px;
+    background-color: #0096FF;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:2px 2px 10px #909090;
+  }
+  #typeMessage div:nth-child(2){
+    overflow: auto;
+    height:500px ;
+    width: 370px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:2px 2px 10px #909090;
+  }
+</style>
