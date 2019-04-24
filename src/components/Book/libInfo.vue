@@ -135,7 +135,7 @@
         //total: 0,
         labelPosition:'left',
         total: 0,
-        pageSize: 7,
+        pageSize: 10,
         currentPage: 1,
         paginationForm: {},
         centerDialogVisible: false, // 禁用弹框
@@ -172,7 +172,7 @@
     },
     computed:{
       timeInfo() {
-        
+
       }
     },
     methods: {

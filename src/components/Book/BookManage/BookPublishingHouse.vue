@@ -140,7 +140,7 @@
         /*初始化 */
         //total: 0,
         total: 0,
-        pageSize: 7,
+        pageSize: 10,
         currentPage: 1,
         paginationForm: {},
         centerDialogVisible: false, // 禁用弹框
@@ -175,13 +175,15 @@
         },
         /*====== 5.0 分页相关设置项 ======*/
         zTree:{},
-        tableData:[]
+        tableData:[],
+        addmessage:''
       };
     },
     methods: {
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
         //this.dialogFormVisible = true;
+        this.addmessage='show'
         this.$alert('请选择您要添加图书出版社的所在地区', {
           confirmButtonText: '确定',
           callback: action => {
@@ -211,7 +213,11 @@
           code:treeNode.code
         }
         this.zTree=list
-        this.dialogFormVisible = true
+        if(this.addmessage!=''){
+          this.dialogFormVisible=true
+        }else{
+
+        }
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框

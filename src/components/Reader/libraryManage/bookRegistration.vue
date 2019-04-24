@@ -157,10 +157,10 @@
             bookName: [{ required: true, message: "请输入书籍名称", trigger: "blur" }],
             bookIndex: [{ required: true, message: "请输入索书号", trigger: "blur" }],
             author: [{ required: true, message: "请输入作者", trigger: "blur" }],
-            lib: [{ required: true, message: "请选择出版社", trigger: "blur" }],
+            lib: [{ required: true, message: "请选择出版社", trigger: "change" }],
             page: [{ required: true, message: "请输入页码", trigger: "blur" }],
             value:[{ required: true, message: "请输入价格", trigger: "blur" }],
-            typeName: [{ required: true, message: "请选择书籍类型", trigger: "blur" }],
+            typeName: [{ required: true, message: "请选择书籍类型", trigger: "change" }],
             bookcontent: [{ required: true, message: "请输入书籍简介", trigger: "blur" }],
             status: [{ required: true, message: "请选择状态", trigger: "change" }],
             total:[{ required: true, message: "请输入总数", trigger: "blur" }]
@@ -180,15 +180,14 @@
           // 计算属性 添加真正传递的数据
           let addData = {
             author: this.addForm.author,
-            barcode: this.barcode,
+            barcode: this.numberValidateForm.barcode,
             fkPressCode: this.libCode,
             fkPressName: this.addForm.lib,
             fkTypeCode:this.typeCode,
             fkTypeName: this.addForm.typeName,
             introduction: this.addForm.bookcontent,
-            //lend //借出数量
-            libraryBookCode:this.addForm.Num,
             name: this.addForm.bookName,
+            isbn:this.addForm.isbn,
             //person //录入人
             price: this.addForm.value,
             searchNumber: this.addForm.bookIndex,
@@ -212,6 +211,7 @@
             this.messageName='请选择出版社名称'
             this.zNodes.length=0
             this.freshArea(bookRegistlib)
+
             $('#typeMessage').fadeIn()
         },
         /*====== 书籍弹窗内容 ======*/
@@ -219,12 +219,14 @@
           this.messageName = '请选择书籍类型'
           this.zNodes.length = 0
           this.freshArea(bookRegisttype)
+          console.log(this.zNodes)
           $('#typeMessage').fadeIn()
         },
         /*====== ztree节点点击添加节点信息 ======*/
         zTreeOnClick(event, treeId, treeNode){
           $('#typeMessage').fadeOut()
           if(this.messageName=='请选择出版社名称'){
+            if(treeNode.code!=null)
             this.addForm.lib=treeNode.name
             this.libCode=treeNode.code
           }else{

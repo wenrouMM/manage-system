@@ -185,6 +185,44 @@ export default {
       authTbMenuElementsAdd:[] //添加的按钮数组
     };
   },
+  computed:{
+    addForm() {
+      // 传递给后端的搜索数据
+      let addData = {
+        menuName: this.ruleForm.name,
+        menuCode: this.ruleForm.menuCode,
+        menuDescribe: this.ruleForm.menuMsg,
+        menuHref: this.ruleForm.url,
+        disabled:this.ruleForm.state=='禁用'?1:0,
+        iconDefault:this.photo ,
+        iconSelected:'' ,
+        fkMenuTypeCode: this.ruleForm.menuType,
+        fkParentMenuId: this.pId,
+        authTbMenuElements: this.authTbMenuElementsAdd
+      };
+      //console.log(searchForm)
+      return addData;
+    },
+    editForm() {
+      // 传递给后端的搜索数据
+      let editData = {
+        id: this.zTree.id,
+        fkParentMenuId: this.zTree.pId,
+        fkMenuId: this.zTree.id,
+        menuName: this.ruleForm.name,
+        menuCode: this.ruleForm.menuCode,
+        menuDescribe: this.ruleForm.menuMsg,
+        menuHref: this.ruleForm.url,
+        disabled: this.ruleForm.state=='禁用'?1:0,
+        iconDefault: this.photo,
+        iconSelected: "",
+        fkMenuTypeCode: this.ruleForm.menuType,
+        authTbMenuElements: this.authTbMenuElementsEdit
+      };
+      //console.log(searchForm)
+      return editData;
+    },
+  },
   methods: {
     /*====== 菜单类型判断是否显示按钮集 ======*/
     change_select(num){
@@ -303,7 +341,9 @@ export default {
     },
     /*====== ztree节点删除按钮做删除操作 ======*/
     zTreeBeforeRemove(treeId, treeNode) {
-      //onsole.log(treeNode.id)
+      console.log(treeNode.id)
+      console.log(treeNode.pId)
+
       if (treeNode.id === undefined) {
         this.$message({
           message: "删除成功",
@@ -321,8 +361,10 @@ export default {
           } else {
             this.$message({
               message: response.data.msg,
-              type: "warning"
+              type: "error"
             });
+            this.zNodes.length=0
+            this.freshArea()
           }
         });
       }
@@ -364,8 +406,8 @@ export default {
           }
         })
       }else if(treeNode.menu_code_type=='list_menu'){
+          console.log(111)
           this.$refs[this.ruleForm].resetFields();
-
       }
     },
     /*====== ztree节点添加按钮做添加操作 ======*/
@@ -422,76 +464,77 @@ export default {
         });
         return;
       } else {
-        var add = {
-          menuName: this.ruleForm.name,
-          menuCode: this.ruleForm.menuCode,
-          menuDescribe: this.ruleForm.menuMsg,
-          menuHref: this.ruleForm.url,
-          disabled:this.ruleForm.state=='禁用'?1:0,
-          iconDefault:this.photo ,
-          iconSelected:'' ,
-          fkMenuTypeCode: this.ruleForm.menuType,
-          fkParentMenuId: this.pId,
-          authTbMenuElements: this.authTbMenuElementsAdd
-        };
-        var edit = {
-          id: this.zTree.id,
-          fkParentMenuId: this.zTree.pId,
-          fkMenuId: this.zTree.id,
-          menuName: this.ruleForm.name,
-          menuCode: this.ruleForm.menuCode,
-          menuDescribe: this.ruleForm.menuMsg,
-          menuHref: this.ruleForm.url,
-          disabled: this.ruleForm.state=='禁用'?1:0,
-          iconDefault: this.photo,
-          iconSelected: "",
-          fkMenuTypeCode: this.ruleForm.menuType,
-          authTbMenuElements: this.authTbMenuElementsEdit
-        };
         if (id === undefined) {
-          this.zNodes.length=0
-          this.formLoading=true
-          this.axios.post(menuaddurl, add).then((request) => {
-            console.log(request);
-            if (request.data.state == true) {
-              this.$message({
-                message: request.data.msg+',可展开查看！',
-                type: "success"
-              });
-              this.formLoading=false
-              this.buttonData.length=0
+          this.$refs[this.ruleForm].validate((valid) => {
+            if (valid) {
+              console.log('submit!');
+              this.addApi(this.addForm)
+              this.zNodes.length=0
               this.freshArea()
             } else {
-              this.$message.error(request.data.msg);
-              this.formLoading=false
-              this.buttonData.length=0
+              console.log('error submit!!');
+              return false;
             }
           });
         } else {
-          this.formLoading=true
-          console.log(edit)
-          this.axios.post(menuaddurl, edit).then((request) => {
-            this.zNodes.length=0
-            console.log(request);
-            if (request.data.state == true) {
-              this.$message({
-                message: request.data.msg+',可展开查看！',
-                type: "success"
-              });
-              this.formLoading=false
-              this.buttonData.length=0
+          this.$refs[this.ruleForm].validate((valid) => {
+            if (valid) {
+              console.log('submit!');
+              this.editApi(this.editForm)
+              this.zNodes.length=0
               this.freshArea()
             } else {
-              this.$message.error(request.data.msg);
-              this.formLoading=false
-              this.buttonData.length=0
+              console.log('error submit!!');
+              return false;
             }
           });
         }
       }
-      this.ruleForm={}
-      this.formButton.length=0
-      $("#btn_select").fadeOut()
+    },
+    addApi(value){
+      this.formLoading=true
+      this.axios.post(menuaddurl, value).then((request) => {
+        console.log(request);
+        if (request.data.state == true) {
+          this.$message({
+            message: request.data.msg+',可展开查看！',
+            type: "success"
+          });
+          this.$refs[this.ruleForm].validate()
+          this.formButton.length=0
+          $("#btn_select").fadeOut()
+          this.formLoading=false
+          this.buttonData.length=0
+          this.freshArea()
+        } else {
+          this.$message.error(request.data.msg);
+          this.formLoading=false
+          this.buttonData.length=0
+        }
+      });
+    },
+    editApi(value){
+      this.formLoading=true
+      this.axios.post(menuaddurl, value).then((request) => {
+        this.zNodes.length=0
+        console.log(request);
+        if (request.data.state == true) {
+          this.$message({
+            message: request.data.msg+',可展开查看！',
+            type: "success"
+          });
+          this.$refs[this.ruleForm].validate()
+          this.formButton.length=0
+          $("#btn_select").fadeOut()
+          this.formLoading=false
+          this.buttonData.length=0
+          this.freshArea()
+        } else {
+          this.$message.error(request.data.msg);
+          this.formLoading=false
+          this.buttonData.length=0
+        }
+      });
     },
     //图片上传
     point() {

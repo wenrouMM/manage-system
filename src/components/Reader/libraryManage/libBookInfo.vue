@@ -181,7 +181,7 @@ export default {
       ],
       /*====== 3.1 分页设置项 ======*/
       total: 0,
-      pageSize: 7,
+      pageSize: 10,
       currentPage: 1,
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/
