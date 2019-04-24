@@ -71,13 +71,24 @@
             <el-pagination
               style="display: inline-block"
               background
-              layout="prev, pager, next,total,jumper"
+              layout="prev, pager, next,total,slot"
               :total="total"
               :page-size="pageSize"
               :current-page="currentPage"
               @current-change="current_change"
-            ></el-pagination>
-            <span class="pagaButton">确定</span>
+            >
+            <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+            </slot>
+            </el-pagination>
+            
+            <span class="pagaButton" @click="jumpBtn">确定</span>
           </section>
         </section>
       </div>
@@ -141,8 +152,10 @@
             )
           }
         },
+        
         tableLoading: true,
         currentPage: 1,
+        pageInput: 1,
         pageSize: 10,
         total: 0,
         tableData: []
@@ -195,12 +208,22 @@
           })
 
       },
-      current_change: function (currentPage) {
+      current_change (currentPage) {
         //分页查询
         this.currentPage = currentPage //点击第几页
         this.paginationForm.currentPage = currentPage
-        console.log('保存当前查询', this.paginationForm)
+        console.log('保存当前查询', this.paginationForm,this.currentPage)
         this.login_recod(this.paginationForm) // 这里的分页应该默认提交上次查询的条件
+      },
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+        }
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
       }
     },
     mounted () {

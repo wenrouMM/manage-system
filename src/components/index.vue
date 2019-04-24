@@ -53,23 +53,19 @@
             @select="routerBox"
             class="content"
             router
+            :default-active="onRoutes"
             background-color="#545c64"
             text-color="#fff"
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
-            <el-menu-item index="powerMode">首页</el-menu-item>
+            <el-menu-item index="/">首页</el-menu-item>
             <NavMenu v-show="Mode==1" :navMenus="testMenus[0].roleModularMenus"></NavMenu>
             <NavMenu v-show="Mode==2" :navMenus="testMenus[1].roleModularMenus"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
-          <div class="routerBox" v-if="navRouter.length">
-            <span class="routerButton circularButton labelActive">
-              用户管理
-              <i class="Iconerror">x</i>
-            </span>
-          </div>
+          <Tags></Tags>
           <div class="space"></div>
           <router-view></router-view>
         </el-main>
@@ -80,6 +76,7 @@
 
 <script>
 import NavMenu from "../common/test/NavMenu";
+import Tags from "../common/test/tags";
 export default {
   data() {
     return {
@@ -372,7 +369,7 @@ export default {
                   menuCode: "/bookpublishhouse",
                   menuName: "图书出版社",
                   roleModularMenus: null
-                },
+                }
               ]
             },
             {
@@ -394,7 +391,6 @@ export default {
                   menuName: "馆内图书类型",
                   roleModularMenus: null
                 }
-                
               ]
             }
           ]
@@ -413,8 +409,14 @@ export default {
       console.log(indexPath);
     }
   },
+  computed: {
+    onRoutes() {
+      return this.$route.path.replace("/", ""); // ???
+    }
+  },
   components: {
-    NavMenu
+    NavMenu,
+    Tags
   }
 };
 </script>
@@ -658,5 +660,9 @@ body,
   width: 28px;
   height: 22px;
   display: inline-block;
+}
+.space {
+  background-color: #ebf7ff;
+  height: 30px;
 }
 </style>
