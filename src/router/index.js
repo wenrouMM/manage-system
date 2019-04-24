@@ -56,6 +56,7 @@ import Login from '@/components/login.vue'
 import Detail from '../components/Book/detail.vue'
 import LibDetail from '../components/Reader/libDetail.vue'
 import Not from '../components/error.vue'
+import { resolve } from 'path';
 
 Vue.use(Router)
 // 暴露一个router对象
@@ -77,38 +78,95 @@ export default new Router({
       name: 'index',
       component: Index,
       children: [{
+        path: '/home',
+        name: 'home',
+        meta:{
+          title:'首页'
+        },
+        component: Home
+      },
+      {
+        path:'/menuInformation',
+        meta:{
+          title:'菜单管理'
+        },
+        component: Menu
+      },
+      {
+        path:'/roleMenuElement',
+        meta:{
+          title:'权限管理'
+        },
+        component: PowerControl
+      },
+      {
+        path:'/roleInformation',
+        meta:{
+          title:'角色管理'
+        },
+        component: UserRole
+      },
+      {
+        path:'/managerInformation',
+        meta:{
+          title:'用户管理'
+        },
+        component: UserManage
+      },
+      {
+        path:'/authTbManagerLoginLog',
+        meta:{
+          title:'登录记录'
+        },
+        component: LoginRecord
+      }
+    ]
+      /*
+      children: [{
           path: '/home',
           name: 'home',
-          component: Home
-        },
-        /*
-        {
-
-          path: 'useradd',
-          name: 'useradd',
-          component: UserAdd
+          meta:{
+            title:'首页'
+          },
+          component: resolve => require(['../components/home.vue'],resolve)
         },
         {
-          path: '/bookType',
-          component: BookType,
+          path:'/menuInformation',
+          meta:{
+            title:'菜单管理'
+          },
+          component: resolve => require(['../components/Power/menu.vue'],resolve)
         },
         {
-          path: '/bookInfo',
-          component: BookInfo
+          path:'/roleMenuElement',
+          meta:{
+            title:'权限管理'
+          },
+          component: resolve => require(['../components/Power/powerControl.vue',resolve])
         },
         {
-          path: '/bookInfo/:id',
-          component: Detail
+          path:'/roleInformation',
+          meta:{
+            title:'角色管理'
+          },
+          component: resolve => require(['../components/Power/userRole.vue'],resolve)
         },
         {
-          path: '/bookpublishhouse',
-          component: BookPublishHouse
+          path:'/managerInformation',
+          meta:{
+            title:'用户管理'
+          },
+          component: resolve => require(['../components/Power/userManage.vue'],resolve)
         },
         {
-          path: '/libInfo',
-          component: LibInfo
-        }*/
+          path:'/authTbManagerLoginLog',
+          meta:{
+            title:'登录记录'
+          },
+          component: resolve => require(['../components/Power/loginrecord.vue'],resolve)
+        }
       ]
+      */
     },
     {
       path: '*',
