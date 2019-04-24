@@ -430,6 +430,7 @@ export default {
         var btn = $("#addBtn_" + treeNode.tId);
         console.log('btn',btn)
         if (btn)
+          this.$refs[this.ruleForm].resetFields()
           btn.bind("click", { paramName: treeNode }, function(e) {
             //console.log(this.zNodes)
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -469,8 +470,6 @@ export default {
             if (valid) {
               console.log('submit!');
               this.addApi(this.addForm)
-              this.zNodes.length=0
-              this.freshArea()
             } else {
               console.log('error submit!!');
               return false;
@@ -481,8 +480,6 @@ export default {
             if (valid) {
               console.log('submit!');
               this.editApi(this.editForm)
-              this.zNodes.length=0
-              this.freshArea()
             } else {
               console.log('error submit!!');
               return false;
@@ -500,11 +497,12 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].validate()
-          this.formButton.length=0
+          this.$refs[this.ruleForm].resetFields()
           $("#btn_select").fadeOut()
           this.formLoading=false
+          this.formButton.length=0
           this.buttonData.length=0
+          this.zNodes.length=0
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
@@ -523,11 +521,12 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].validate()
-          this.formButton.length=0
+          this.$refs[this.ruleForm].resetFields()
           $("#btn_select").fadeOut()
           this.formLoading=false
+          this.formButton.length=0
           this.buttonData.length=0
+          this.zNodes.length=0
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
