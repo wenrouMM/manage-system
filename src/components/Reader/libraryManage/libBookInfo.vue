@@ -30,7 +30,7 @@
               <!-- 下拉框 -->
               <el-form-item label="类型:" size="160"  style="position: relative">
                 <el-input v-model="searchForm.type" placeholder="请输入类型"></el-input>
-                <img src="../../../base/img/currency/sousuo.png" style="width: 40px;height: 40px;position: absolute;top: 0;left: 120px" @click="typeMessage">
+                <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 135px" @click="typeMessage">
               </el-form-item>
               <el-form-item label="状态:" size="160">
                 <el-select v-model="searchForm.status"  clearable  placeholder="请选择状态">
@@ -71,11 +71,12 @@
                 label="索书号"
               ></el-table-column>
               <el-table-column align="center" prop="barcode" width="130" :show-overflow-tooltip="true" label="条码"></el-table-column>
+              <el-table-column align="center" prop="isbn" width="130" :show-overflow-tooltip="true" label="ISBN"></el-table-column>
               <el-table-column align="center" prop="lend" width="130" label="借出数量"></el-table-column>
               <el-table-column align="center" prop="total" width="120" :show-overflow-tooltip="true" label="录入员"></el-table-column>
-              <el-table-column align="center" prop="entryTime" width="180" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="180" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="150" label="类型"></el-table-column>
+              <el-table-column align="center" prop="entryTime" width="130" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="130" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
+              <el-table-column align="center" prop="fkTypeCode" width="120" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
@@ -109,9 +110,9 @@
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -242,7 +243,10 @@ export default {
       })
     },
     typeMessage(){
-      $('#typeMessage').fadeIn()
+      console.log(this.zNodes.length)
+      if(this.zNodes.length!=0){
+        $('#typeMessage').fadeIn()
+      }
     },
     closeCheck(){
       $('#typeMessage').fadeOut()

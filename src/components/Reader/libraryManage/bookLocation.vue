@@ -6,10 +6,10 @@
     </div>
     <div style="margin:100px auto;width:1100px">
       <div style="background-color: #ededed;width: 250px;height: 200px"></div>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
+      <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
-          <el-form-item label="条　　码 :　" prop="num">
-            <el-input v-model="ruleForm.num" style="width:250px;" @input="numClick"></el-input>
+          <el-form-item label="条　　码 :　" prop="barcode">
+            <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入条码"></el-input>
           </el-form-item>
           <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
             <span>{{ruleForm.bookName}}</span>
@@ -23,7 +23,7 @@
             <span>{{ruleForm.bookType}}</span>
           </el-form-item>
           <el-form-item label="馆内图书编码 :" prop="bookCode">
-            <el-input v-model="ruleForm.bookCode" ></el-input>
+            <el-input v-model="ruleForm.bookCode" placeholder="请输入馆内图书编码"></el-input>
           </el-form-item>
           <el-form-item style="width: 150px">
             <el-button type="primary" round>生成条形码</el-button>
@@ -34,12 +34,12 @@
         </div>
         <div style="display: flex;flex-direction: row;margin-top: 30px">
           <el-form-item label="rfid :" prop="rfid" label-width="60px">
-            <el-input v-model="ruleForm.rfid" ></el-input>
+            <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
           <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
             <span>{{ruleForm.bookLocation}}</span>
           </el-form-item>
-          <a href="#" style="color: #0096FF;margin-top: 13px" @click="locationMessage">位置选择</a>
+          <a  style="color: #0096FF;margin-top: 13px;cursor: default" @click="locationMessage">位置选择</a>
         </div>
         <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
       </el-form>
@@ -99,7 +99,7 @@
         zNodes: [], //ztree树加载的数据
         labelPosition:'left',
         ruleForm:{
-          num:'',
+          barcode:'',
           bookName:'',
           bookIndex:'',
           bookType:'',
@@ -110,36 +110,40 @@
           code:''
         },//添加的数据
         rules:{
-          num: [{ required: true, message: '请输入活动名称', trigger: 'blur' },],
-          bookName: [{ required: true,}],
-          bookindex: [{required: true}],
-          bookType: [{required: true}],
+          barcode: [{ required: true, message: '请输入活动名称', trigger: 'blur' },],
           bookCode: [{required: true, message: '请输入图书编码', trigger: 'blur' }],
           rfid: [{ required: true, message: '请输入rfid', trigger: 'blur' }],
-          bookLocation: [{ required: true}]
         },//添加的验证
+        ztreeShow:''
       }
+    },
+    mounted(){
+      this.freshArea()
     },
     methods:{
       /*====== 取消位置信息的弹框 ======*/
       closeCheck(){
         $('#typeMessage').fadeOut()
+        this.zNodes.length=0
+        this.freshArea()
       },
       /*====== 输入条码发送请求加载数据 ======*/
-      numClick(){
-        console.log(this.ruleForm.num)
-        this.axios.get(booklocationNum, {params: {barcode: this.ruleForm.num}}).then((res) => {
+      barcodeClick:function(){
+        console.log('input框值的变化')
+        console.log(this.ruleForm.barcode)
+        this.axios.get(booklocationbarcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
           //console.log(res.data)
           if (res.data.state == true) {
             console.log('isbn的数据', res.data)
             if (res.data.row.length == 0) {
               console.log('row为空')
-              for (let key in this.ruleForm) {
-                this.ruleForm[key] = ''
-              }
+              this.ruleForm.bookName=''
+              this.ruleForm.bookIndex=''
+              this.ruleForm.bookType=''
+              this.ruleForm.bookTypeCode=''
             } else {
               console.log('row不为空')
-              for (let item of res.data.row) {
+              for (let item of res.data.row){
                 console.log('为表单元素赋值',item)
                 this.ruleForm.bookName=item.name
                 this.ruleForm.bookIndex=item.searchNumber
@@ -166,14 +170,13 @@
       },
       /*====== 位置信息他边框出现的操作 ======*/
       locationMessage(){
-        this.zNodes.length=0
         this.ruleForm.bookLocation=''
-        this.freshArea()
-        $('#typeMessage').fadeIn()
+        if(this.zNodes.length!=0){
+          $('#typeMessage').fadeIn()
+        }
       },
       /*====== 加载位置信息ztree树的内容 ======*/
       async freshArea() {
-        this.treeLoading=true
         this.axios.get(layerFramezTree).then((response) => {
           console.log(response)
           if(response.data.state==true){
@@ -195,39 +198,45 @@
             }
             //将数据渲染到ztree树
             $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
-            this.treeLoading=false
           }else{
             this.$message.error(response.data.msg);
-            this.treeLoading=false
           }
         })
       },
       /*====== 添加的表单数据 ======*/
       saveApi(){
-        this.formLoading=true
-        this.axios.post(booklocation,{
-          libraryBookCode:this.ruleForm.bookCode,
-          searchNumber:this.ruleForm.bookIndex,
-          bookName:this.ruleForm.bookName,
-          barcode:this.ruleForm.num,
-          fkTypeCode:this.ruleForm.bookType,
-          fkTypeName:this.ruleForm.bookType,
-          rfid:this.ruleForm.rfid,
-          fkLocationId:this.ruleForm.code,
-          locationName:this.ruleForm.bookLocation
-        }).then((res)=>{
-          console.log(res)
-          if(res.data.state==true){
-            this.$message({
-              message: res.data.row,
-              type: 'success'
-            });
-            this.formLoading=false
-          }else{
-            this.$message.error(res.data.row);
-            this.formLoading=false
+        this.$refs[this.ruleForm].validate((valid) => {
+          if (valid) {
+            console.log('submit!');
+            this.formLoading=true
+            this.axios.post(booklocation,{
+              libraryBookCode:this.ruleForm.bookCode,
+              searchNumber:this.ruleForm.bookIndex,
+              bookName:this.ruleForm.bookName,
+              barcode:this.ruleForm.barcode,
+              fkTypeCode:this.ruleForm.bookType,
+              fkTypeName:this.ruleForm.bookType,
+              rfid:this.ruleForm.rfid,
+              fkLocationId:this.ruleForm.code,
+              locationName:this.ruleForm.bookLocation
+            }).then((res)=>{
+              console.log(res)
+              if(res.data.state==true){
+                this.$message({
+                  message: res.data.row,
+                  type: 'success'
+                });
+                this.formLoading=false
+              }else{
+                this.$message.error(res.data.row);
+                this.formLoading=false
+              }
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
           }
-        })
+        });
       }
     },
   }

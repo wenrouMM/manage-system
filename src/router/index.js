@@ -29,6 +29,7 @@ import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
 import LibBookType from '../components/Reader/libraryManage/libBookType'
 import LibBookInfo from '../components/Reader/libraryManage/libBookInfo'
 import BookRegistration from '../components/Reader/libraryManage/bookRegistration'
+import bookLocation from '../components/Reader/libraryManage/bookLocation'
 
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
@@ -207,6 +208,10 @@ export default new Router({
             {
               path: '/LibBookInfo/:id',
               component: LibDetail
+            },
+            {
+              path:'/bookLocation',
+              component:bookLocation
             },
             {
               path:'/libBookType',

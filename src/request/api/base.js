@@ -1,7 +1,7 @@
 // 用来管理接口的域名相关
 
-var url = 'http://192.168.2.31:8088/'
-// var url ='http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+ var url ='http://192.168.2.121:8088/'
 // 权限模块的API
 // 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
@@ -32,12 +32,12 @@ export const role_name = url + 'authmodule/roleInformation/currency/select'//角
 export const command_list = url + 'authmodule/roleMenuElement/select'//权限管理列表
 export const prohibit = url + 'authmodule/roleMenuElement/edit'//权限管理禁用
 export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限管理批量禁用
-export const  storeInt=url+'regionmodule/store/'
+
 
 // 图书模块
 
 /*------ 区域模块 ------*/
-//库房模块 
+//库房模块
 var store = url + 'regionmodule/store/'
 export const storeInt = {
     select:`${store}select`,
@@ -78,7 +78,7 @@ export const cardLevelInt = {
     edit:`${cardLevel}edit`,
     delete:`${cardLevel}delete`
 }
-// 读者卡类型   
+// 读者卡类型
 var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
 export const cardTypeInt = {
     select:`${cardType}select`,
@@ -86,7 +86,7 @@ export const cardTypeInt = {
     edit:`${cardType}edit`,
     delete:`${cardType}delete`
 }
-/*------ 通用接口 ------*/ 
+/*------ 通用接口 ------*/
 export const loginInter= url + 'authmodule/index/login'
 export const headUpload = url + 'filemodule/currency/uploadFile/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉

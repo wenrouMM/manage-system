@@ -66,7 +66,7 @@
           <div class="addEditDialog">
             <!-- Form -->
             <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
-              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" ref="addForm" style="display: flex;flex-direction: column">
+              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
@@ -81,8 +81,8 @@
                 </el-form-item>
                 <!-- 弹框表单按钮  验证失效-->
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm('addForm')" >确定</el-button>
-                  <el-button type="info" @click="resetForm('addForm')" >取消</el-button>
+                  <el-button type="primary" @click="submitForm()" >确定</el-button>
+                  <el-button type="info" @click="resetForm()" >取消</el-button>
                 </el-form-item>
               </el-form>
             </el-dialog>
@@ -215,7 +215,7 @@
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
-      submitForm(formName) {
+      submitForm() {
         var addStr=[{
           id: null,
           code: "",
@@ -245,14 +245,16 @@
             this.dialogFormVisible=false
           }
         })
-        this.$refs[formName].resetFields();
+        this.$refs[this.addForm].resetFields();
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      resetForm() {
+        this.$refs[this.addForm].resetFields();
         this.dialogFormVisible=false
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
+        console.log(111)
+        this.$refs[this.addForm].resetFields();
         let obj = this.addForm;
         for (var i in obj) {
           obj[i] = "";

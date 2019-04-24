@@ -113,9 +113,9 @@
       <div class="forbid">
         <el-dialog :title="dialogTitle[i]" :visible.sync="refuseDialog" width="500px" center>
           <div class="dialogBody">是否{{dialogTitle[i]}}?</div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer">
             <span class="dialogButton true mr_40" @click="refuseBtn">确 定</span>
-            <span class="dialogButton cancel" @click="refuseDialog = false">取消</span>
+            <span class="dialogButton cancel" @click="refuseDialog = false">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -127,7 +127,7 @@
         </div>
         <div>
           <ul id="treeDemo" class="ztree"></ul>
-          <el-button type="primary" plain style="margin-left: 260px" @click="controlClick">确定</el-button>
+          <el-button type="primary" plain style="margin-left: 70px;width: 200px;margin-top: 10px" @click="controlClick">确定</el-button>
         </div>
       </div>
     </el-container>
@@ -487,7 +487,7 @@ export default {
 #typeMessage div:nth-child(2){
   overflow: auto;
   width: 370px;
-  height: 300px;
+  height: 500px;
   background-color: white;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;

@@ -7,16 +7,16 @@
       <div style="width: 1320px;margin-left: 30px;;height:852px;background-color:white" v-loading="formLoading">
         <el-form :model="ruleForm"
                  :rules="rules"
-                 ref="ruleForm"
+                 :ref="ruleForm"
                  label-width="100px"
-
+                 class="demo-ruleForm"
                  style="width: 700px;margin: 100px auto"
                  :label-position="labelPosition">
-          <el-form-item label="名　　称 : " prop="name">
-            <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
+          <el-form-item label="名　　称 :　" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
           </el-form-item>
           <el-form-item label="U　R　L :" prop="url">
-            <el-input v-model="ruleForm.url" autocomplete="off"></el-input>
+            <el-input v-model="ruleForm.url" placeholder="请输入url"></el-input>
           </el-form-item>
           <el-form-item label="I C O N : " prop="img" style="margin-top: 55px">
             <div style="display: flex;flex-direction: row;margin-top: -30px">
@@ -44,18 +44,18 @@
             </div>
           </el-form-item>
           <el-form-item label="菜单类型 :" prop="menuType">
-            <el-select v-model="ruleForm.menuType" clearable placeholder="请选择" @change="change_select(ruleForm.menuType)" style="width: 600px" autocomplete="off">
+            <el-select v-model="ruleForm.menuType" clearable placeholder="请选择菜单类型" @change="change_select(ruleForm.menuType)" style="width: 600px">
               <el-option v-for="item in selectList" :key="item.value" :label="item.label" :value="item.menuType" id="xiala"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="菜单编码 :" prop="menuCode">
-            <el-input v-model="ruleForm.menuCode" autocomplete="off"></el-input>
+            <el-input v-model="ruleForm.menuCode" placeholder="请输入菜单编码"></el-input>
           </el-form-item>
           <el-form-item label="菜单描述 : " prop="menuMsg">
-            <el-input type="textarea" v-model="ruleForm.menuMsg" autocomplete="off"></el-input>
+            <el-input type="textarea" v-model="ruleForm.menuMsg" placeholder="请输入菜单描述"></el-input>
           </el-form-item>
           <el-form-item label="状　　态 : " prop="state">
-            <el-radio-group v-model="ruleForm.state" autocomplete="off">
+            <el-radio-group v-model="ruleForm.state">
               <el-radio label="禁用"></el-radio>
               <el-radio label="启用"></el-radio>
             </el-radio-group>
@@ -329,9 +329,8 @@ export default {
     },
     /*====== ztree点击节点将节点信息放入表单显示 ======*/
     zTreeOnClick(e, treeId, treeNode) {
-      //console.log(treeNode.menu_code_type)
-      //console.log(treeNode.id)
-      this.ruleForm={}
+      id = treeNode.id; //点击节点时节点自己的id
+      click = 'click' //是否点击的赋值
       this.buttonNameData.length=0
       $("#btn_select").fadeOut()
       if(treeNode.menu_code_type=='page_menu') {
@@ -342,17 +341,15 @@ export default {
               message: res.data.msg,
               type: "success"
             });
-            id = treeNode.id; //点击节点时节点自己的id
-            click = 'click' //是否点击的赋值
-            this.src1 = 'http://192.168.2.121:8088/authmodule/menuInformation/getImg?id=' + treeNode.id //展示节点图片
-            $('#icon1').show() //点击节点是显示,否则隐藏
-            this.zTree = treeNode //将点击节点后的节点信息给treeNode
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
             this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
+            this.src1 = 'http://192.168.2.121:8088/authmodule/menuInformation/getImg?id=' + treeNode.id //展示节点图片
+            $('#icon1').show() //点击节点是显示,否则隐藏
+            this.zTree = treeNode //将点击节点后的节点信息给treeNode
             $('#btn_select').fadeIn()
             this.buttonData.length=0
             console.log('已存在的按钮1',res.data.row.authTbMenuElements)
@@ -366,6 +363,9 @@ export default {
             this.$message.error(res.data.msg);
           }
         })
+      }else if(treeNode.menu_code_type=='list_menu'){
+          this.$refs[this.ruleForm].resetFields();
+
       }
     },
     /*====== ztree节点添加按钮做添加操作 ======*/
@@ -554,6 +554,19 @@ export default {
 };
 </script>
 <style scoped>
+  input[type="text"]{
+    border: 1px solid #dcdfe6;
+    width: 598px;
+    height: 34px;
+    border-radius: 8px;
+    padding-left: 30px;
+    outline: none;
+
+  }
+  input::-webkit-input-placeholder{
+    color:lightgray;
+    font-size: 15px;
+  }
 button:hover {
   background-color: rgba(30, 158, 255, 0.8);
 }
