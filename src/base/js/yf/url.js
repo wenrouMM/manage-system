@@ -1,5 +1,5 @@
-// url='http://192.168.2.31:8088/'
-url='http://192.168.2.121:8088/';
+//url='http://192.168.2.31:8088/'
+ url='http://192.168.2.121:8088/';
 //
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
@@ -66,3 +66,6 @@ url='http://192.168.2.121:8088/';
   overdueHistory=url+'tibetmuseummodule/currency/expectHistoryLog/select' //逾期历史记录查询表格
 /*借阅记录*/
   loanrecord=url+'borrowmodule/log/select' //借阅记录表格查询
+  loanHistory=url+'borrowmodule/history/select' //借阅历史记录
+/*借书*/
+  borrowBook=url+'borrowmodule/InAndOut/out'//借书
