@@ -67,7 +67,10 @@
         <el-main>
           <Tags></Tags>
           <div class="space"></div>
-          <router-view></router-view>
+          <transition name="fade-transform" mode="out-in">
+            <router-view></router-view>
+          </transition>
+          
         </el-main>
       </el-container>
     </el-container>
@@ -665,4 +668,30 @@ body,
   background-color: #ebf7ff;
   height: 30px;
 }
+
+.move-enter-active,
+.move-leave-active {
+    transition: opacity .5s;
+}
+
+.move-enter,
+.move-leave {
+    opacity: 0;
+}
+
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all .5s;
+}
+
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
 </style>
+

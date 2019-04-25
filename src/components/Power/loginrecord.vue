@@ -81,7 +81,7 @@
               <span>
                 前往
                 <div class="el-input el-pagination__editor is-in-pagination">
-                  <input type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
                 </div>
                 页
               </span>
@@ -221,9 +221,15 @@
         page ==0?1:page;
         if(this.pageInput>page){
           this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
-        let num = parseInt(this.pageInput)
-        this.current_change(num)
+        
       }
     },
     mounted () {

@@ -67,7 +67,7 @@ export const cardInfoInt = {
     cardReport:`${cardInfo}currency/cardReport`, // 挂失/取办
     cardReissue:`${cardInfo}currency/cardReissue`,// 补办
     cogradient:`${cardInfo}synchronizationReader`, // 登记读者卡
-    add:`${cardInfo}add`, // 办卡
+    add:`${cardInfo}currency/add`, // 办卡
     selectUser:`${cardInfo}selectUserInfoByCard`
 }
 //读者卡等级

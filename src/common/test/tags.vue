@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tagsBox">
     <ul class="routerBox" v-if="showTags">
       <li
         class="routerButton circularButton"
@@ -12,6 +12,18 @@
           <i class="el-icon-close point"></i>
         </span>
       </li>
+      <div class="tags-close">
+        <el-dropdown @command="handleTags">
+          <el-button size="mini" type="primary">
+            关闭选项
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu size="small" slot="dropdown">
+            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+            <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </ul>
   </div>
 </template>
@@ -22,7 +34,7 @@ export default {
   data() {
     return {
       tagsList: [],
-      taro:true
+      taro: true
     };
   },
   methods: {
@@ -62,8 +74,27 @@ export default {
       } else {
         // 都删完的话首页判定该...
         this.$router.push("/");
-        
       }
+    },
+    // 标签控制按钮
+    handleTags(command) {
+      command === "other" ? this.closeOther() : this.closeAll(); // 这个是下拉后选择哪个框把
+    },
+    // 关闭其他
+    closeOther() {
+      console.log('关闭前的',this.tagsList)
+      console.log(this.$route.fullPath)
+      const curItem = this.tagsList.filter(item => {
+        return item.path === this.$route.fullPath;
+      });
+      console.log('匹配到的',curItem)
+      this.tagsList = curItem;
+      console.log('关闭后的',this.tagsList)
+    },
+    // 关闭全部
+    closeAll() {
+      this.tagsList = [];
+      this.$router.push("/");
     },
     // 样式绑定
     isActive(path) {
@@ -77,6 +108,10 @@ export default {
   },
   watch: {
     $route(newValue, oldValue) {
+      if (newValue.fullPath == "/home") {
+        this.tagsList = [];
+        return;
+      }
       this.setTags(newValue);
     }
   }
@@ -100,11 +135,11 @@ export default {
   align-items: center;
   position: relative;
 }
-.tags-li-title{
+.tags-li-title {
   font-size: 16px;
-	font-weight: normal;
-	font-stretch: normal;
-	letter-spacing: 0px;
+  font-weight: normal;
+  font-stretch: normal;
+  letter-spacing: 0px;
   color: #878787;
   line-height: 36px;
 }
@@ -112,9 +147,9 @@ export default {
   font-size: 14px;
   position: absolute;
   right: 13px;
-  top:0px;
+  top: 0px;
 }
-.point{
+.point {
   cursor: pointer;
 }
 .labelActive {
@@ -122,7 +157,8 @@ export default {
   color: #fff;
   border: none;
 }
-.labelActive .tags-li-title{
+.labelActive .tags-li-title {
   color: #fff;
 }
+
 </style>
