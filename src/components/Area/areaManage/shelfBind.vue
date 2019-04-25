@@ -7,9 +7,10 @@
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
       </div>
-      <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px" v-loading="formLoading">
-        <div style="width: 300px" class="inputDiv">
-          <p style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}</p>
+      <div style="width: 1320px;margin-left: 30px;background-color:white;height:952px" v-loading="formLoading">
+        <div style="width: 350px" class="inputDiv">
+          <span style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}{{direction}}</span>
+          <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;" @click="closeCheck"></span>
           <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
               <el-input v-model="form.tag" id="tag"></el-input>
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+  import serialize from "../../../base/js/yf/serialize";
   export default {
     name: "LayerBinding",
     data(){
@@ -73,6 +75,7 @@
           tag:''
         },
         Address:'',
+        direction:'',
         i:0,
         saveString:{},
         id:'',
@@ -89,7 +92,8 @@
           colNum:this.saveString.colNum,
           divNum:this.saveString.divNum,
           laysNum:this.saveString.laysNum,
-          rfid:this.form.tag
+          rfid:this.form.tag,
+          direction:this.saveString.direction
         };
         //console.log(searchForm)
         return saveData;
@@ -100,6 +104,12 @@
       this.freshArea()
     },
     methods:{
+      closeCheck(){
+        this.Address=''
+        this.direction=''
+        this.zNodes.length=0
+        this.freshArea()
+      },
       async freshArea() {
         this.axios.get(layerFramezTree).then((response) => {
           console.log(response)
@@ -116,6 +126,7 @@
                 colNum:item.colNum, //列
                 divNum:item.divNum, //层
                 laysNum:item.laysNum, //节
+                direction:item.direction,//面
                 rfid:item.rfid
               });
             }
@@ -128,29 +139,19 @@
       },
       zTreeOnExpand(event, treeId, treeNode){
         console.log(treeNode)
-        this.Address+=treeNode.name
+        let name=treeNode.name.toString()
+        if(this.Address.search(name) == -1 ){
+          this.Address+=name
+        }
       },
-      onCollapse(event, treeId, treeNode){
-        console.log(treeNode)
-        this.Address-=treeNode.name
-        console.log(this.Address)
 
-      },
       zTreeOnClick(event, treeId, treeNode){
-        //console.log(treeNode)
+        console.log(treeNode.direction)
         this.saveString=treeNode
         this.form.tag=treeNode.rfid
-        if(treeNode.isClick==1){
-          this.id=1
-          this.i++
-          if(this.i==1){
-            this.Address+=treeNode.name
-          }
-          this.$alert('您将修改'+this.Address+'的层架标签', '提示', {
-            confirmButtonText: '确定',
-          }).then(() => {
-            $('#tag').focus()
-          });
+        if(treeNode.direction!==null){
+          this.direction=treeNode.name
+
         }
       },
       onSubmit(){
@@ -158,8 +159,6 @@
           if (valid) {
             //alert('submit!');
             this.save(this.saveData)
-            this.zNodes.length=0
-            this.freshArea()
           } else {
             console.log('error submit!!');
             return false;
@@ -167,23 +166,31 @@
         });
       },
       save(value){
-        if(this.id!==''){
+        if(this.direction){
           this.formLoading=true
           this.axios.post(layerFrameSave,value).then((res)=>{
             console.log(res)
             if(res.data.state==true){
               this.$message({
-                message: res.data.row,
+                message: res.data.msg,
                 type: 'success'
               });
-              this.formLoading=-false
+              this.formLoading=false
+              this.$refs[this.form].resetFields()
+              this.Address=''
+              this.direction=''
+              this.zNodes.length=0
+              this.freshArea()
             }else{
-              this.$message.error(res.data.row);
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
               this.formLoading=false
             }
           })
         }else{
-          this.$alert('请选择您要修改的层架标签', '提示', {
+          this.$alert('请选择您要修改的层架标签面', '提示', {
             confirmButtonText: '确定',
           })
         }

@@ -43,14 +43,14 @@
             align="center"
             prop="bookName"
             width="200"
-            label="书籍名称"  
+            label="书籍名称"
           ></el-table-column>
           <el-table-column align="center" prop="bookCode"  label="书籍编码"></el-table-column>
           <el-table-column
             align="center"
             prop="bookType"
             width="200"
-            label="书籍类型"  
+            label="书籍类型"
           ></el-table-column>
           <el-table-column
             align="center"
@@ -64,7 +64,7 @@
         <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">借书</el-button>
         <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -81,10 +81,9 @@ export default {
       },
       rules: {
         // 添加的参数验证
-        userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
-        ],
-        cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }],
+        userName: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        cardNum: [{ required: true, message: "请输入卡号", trigger: "blur" }],
+        bookCode:[{ required: true, message: "请输入书籍编码", trigger: "blur" }]
       },
       tableData: [
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
