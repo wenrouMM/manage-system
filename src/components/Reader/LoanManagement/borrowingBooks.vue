@@ -88,11 +88,11 @@ export default {
     },
     submitTimeForm() {
       let obj = {
-        name:this.searchForm.userName,
+        name: this.searchForm.userName,
         cardNum: this.searchForm.cardNum,
-        list:this.tableData
-      }
-      return obj
+        list: this.tableData
+      };
+      return obj;
     }
   },
   methods: {
@@ -105,7 +105,7 @@ export default {
     },
     // 借书按钮
     sellBtn() {
-      this.operateApi(this.submitTimeForm)
+      this.operateApi(this.submitTimeForm);
     },
 
     // 重新扫描
@@ -144,8 +144,13 @@ export default {
           console.log(res);
           if (res.data.state === true) {
             let obj = res.data.row;
-            this.tableData.push(obj);
-            console.log("现在的数据", this.tableData);
+            const isExist = this.tableData.some(item => {
+              return item.libraryBookCode === obj.libraryBookCode;
+            });
+            if(!isExist){
+              this.tableData.push(obj);
+              console.log("现在的数据", this.tableData);
+            }
           } else {
             this.$message.error(res.data.msg);
           }
@@ -153,23 +158,22 @@ export default {
     },
     // 借书数据API
     operateApi(data) {
-      
-      console.log('传递的数据',this.submitTimeForm)
+      console.log("传递的数据", this.submitTimeForm);
       axios.post(bookOperateInt.borrow, data).then(res => {
         if (res.data.state === true) {
-          console.log('返回的数据',res.data.row)
-          let obj = JSON.stringify(res.data.row)
-          localStorage.setItem('borrow',obj)
-          console.log('我路由跳转呢？')
-          let cardNum = this.searchForm.cardNum
-          this.$router.push({path:'/borrowingstatus'})
+          console.log("返回的数据", res.data.row);
+          let obj = JSON.stringify(res.data.row);
+          localStorage.setItem("borrow", obj);
+          console.log("我路由跳转呢？");
+          let cardNum = this.searchForm.cardNum;
+          this.$router.push({ path: `/borrowingstatus`, query: { Num: cardNum} });
         } else {
           this.$message.error(res.data.msg);
         }
       });
     }
-  },
-  mounted() {}
+    // 数组去重其一
+  }
 };
 </script>
 

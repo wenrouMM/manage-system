@@ -70,11 +70,18 @@ export default {
   },
   created() {
     // 需要做一次判定 看这个人是不是从其他页面直接过来的 传读者卡吧
-  
     let obj = localStorage.getItem("borrow");
     this.detail = JSON.parse(obj);
-    this.tableData = this.detail.list;
-    this.fail = this.detail.fail
+    let Num = this.detail.cardNum
+    let cardNum = this.$route.query
+    console.log(this.$route.query)
+    if(Num=== cardNum.Num){
+      this.tableData = this.detail.list;
+      this.fail = this.detail.fail
+      console.log('Num',Num,'cardNum',cardNum.Num)
+    } else{
+      this.$router.push({path:'/borrowingbooks'})
+    }
     console.log(this.detail);
     console.log(this.tableData);
   }
