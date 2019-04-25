@@ -216,7 +216,8 @@
         if(this.addmessage!=''){
           this.dialogFormVisible=true
         }else{
-
+          let cityCode={cityCode:this.zTree.code}
+          this.table(cityCode)
         }
       },
       /*====== 弹框相关函数 ======*/
@@ -252,14 +253,16 @@
           }
         })
         this.$refs[this.addForm].resetFields();
+        this.addmessage=''
       },
       resetForm() {
         this.$refs[this.addForm].resetFields();
         this.dialogFormVisible=false
+        this.addmessage=''
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
-        console.log(111)
+        this.addmessage=''
         this.$refs[this.addForm].resetFields();
         let obj = this.addForm;
         for (var i in obj) {

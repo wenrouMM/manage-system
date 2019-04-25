@@ -113,6 +113,7 @@ import {loginInter} from '../request/api/base.js'
   }
   input::-webkit-input-placeholder{
     color: lightgray;
+    font-size: 18px;
   }
   button{
     width: 300px;

@@ -11,15 +11,15 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="用户名:" size="160">
-                <el-input v-model="formInline.userName" placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="卡号:">
-                <el-input size="120" v-model="formInline.cardNum" placeholder="请输入卡号"></el-input>
+                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
               </el-form-item>
               <el-form-item label="书名:" size="160">
-                <el-input v-model="formInline.bookName" placeholder="请输入书名"></el-input>
+                <el-input v-model="searchForm.bookName" placeholder="请输入书名"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
@@ -28,9 +28,13 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" :data="tableData"style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column align="center" width="140" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" width="140" prop="srcdata" label="头像">
+            <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+              <el-table-column width="120" align="center" prop="index" type="index" label="序号">
+                <template slot-scope="scope">
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" width="180" prop="srcdata" label="头像">
                 <template slot-scope="scope">
                   <span class="imgDefault">
                     <img
@@ -44,34 +48,39 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="name"width="140" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNum" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="renewTime" width="170" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="returnTime" width="170" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="170" label="书名"></el-table-column>
-              <el-table-column align="center" prop="yqts" width="140" label="逾期天数"></el-table-column>
-              <el-table-column align="center" prop="phone" width="160" label="手机号码"></el-table-column>
-              <el-table-column align="center" label="操作" width="140">
+              <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" width="180" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
+              <el-table-column align="center" prop="overdueAlreadyDay" width="150" label="逾期天数"></el-table-column>
+              <el-table-column align="center" label="操作" width="150">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
                 </template>
               </el-table-column>
             </el-table>
+            <section class="pagination mt_30">
+              <el-pagination
+                background
+                layout="prev, pager, next,total, jumper, ->"
+                :total="total"
+                :current-page="currentPage"
+                @current-change="current_change"
+              ></el-pagination>
+              <span class="pagaButton">确定</span>
+            </section>
           </section>
           <div class="forbid">
             <el-dialog :title="Dialogtitle" :visible.sync="centerDialogVisible" width="500px" center>
-              <div class="dialogBody">电话 : &nbsp; &nbsp;12343212341</div>
-              <div slot="footer" class="dialog-footer">
+              <div class="dialogBody">电话 : &nbsp; &nbsp;{{phone}}</div>
+              <div slot="footer">
                 <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
                 <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
               </div>
             </el-dialog>
           </div>
-          <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-          <section class="pagination">
-            <el-pagination background layout="prev, pager, next,total, jumper, ->" :total="1000"></el-pagination>
-          </section>
         </div>
       </div>
     </el-container>
@@ -83,74 +92,104 @@
     data() {
       return {
         /*====== 0.0初始化弹框数据 ======*/
-        Dialogtitle:'催还',
-        defaultImg: " ", // 上传头像默认头像
-        centerDialogVisible: false, // // 添加弹框的展示和消失
-        optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
-        ],
-        formLabelWidth: "120px",
-        pickerOptions: {
-          disabledDate(date) {
-            const maxDate = Date.now();
-            const time = date.getTime();
-            return time > maxDate;
-          }
+        rowStyle: {
+          height: "60px"
         },
+        Dialogtitle:'催还',
+        centerDialogVisible:false,
+        defaultImg: " ", // 上传头像默认头像
+        formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
-        optionsData: [
-          "出纳",
-          "前台",
-          "图书盘点员",
-          "采购员",
-          "仓库管理员",
-          "系统管理员"
-        ],
-        formInline: {
+        /*====== 4.0表格设置项 ======*/
+        total: 0,
+        pageSize: 10,
+        currentPage: 1,
+        searchForm: {
           // 搜索需要的表单数据
           userName: "",
           cardNum: "",
           bookName:""
         },
-        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
-        /*====== 4.0表格设置项 ======*/
-        rowStyle: {
-          height: "60px"
-        },
+        tableLoading:false,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-          {
-            idType: "1",
-            img:"",//头像
-            name:"张三",
-            cardNum:"2222",
-            renewTime:"2018-3-3",
-            returnTime:"2019-1-1",
-            bookName:"红楼梦",
-            yqts:"3个月",
-            phone:"13222211234"
-          },
-        ]
-        /*====== 5.0 分页相关设置项 ======*/
+        ],
+        phone:''
       };
     },
-
+    mounted() {
+      this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
+    },
+    computed:{
+      searchTimeForm() {
+        // 计算属性 真正传递的数据
+        let searchForm = {
+          pageSize: this.pageSize,
+          currentPage: 1,
+          cardNumber:this.searchForm.cardNum,
+          name:this.searchForm.userName,
+          bookName:this.searchForm.bookName
+        };
+        return searchForm;
+      },
+    },
     methods: {
+      submitDialog(){
+
+      },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
-        console.log(this.formInline);
+        console.log("此时传给后台的搜索数据", this.searchTimeForm);
+        this.SearchApi(this.searchTimeForm);
+        this.currentPage = 1;
       },
-      handleEdit(){
-        //点击催还出现催还弹框
-        this.centerDialogVisible=true
+      /*====== 3.1 分页查询和初始化 ======*/
+      current_change: function(currentPage) {
+        //分页查询
+        this.currentPage = currentPage; //点击第几页
+        this.paginationForm.currentPage = currentPage;
+        console.log("保存当前查询", this.paginationForm);
+        this.SearchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
-      submitDialog(){
-        //催还弹窗下的确定按钮
+      /*====== baseAPI调用相关 ======*/
+      SearchApi(value) {
+        //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
+        this.tableLoading= true; // 加载前控制加载状态
+        this.axios
+          .get(overdueRecords, {
+            params: value
+          })
+          .then(res => {
+            console.log("当前获取的数据", res.data);
+            if (res.data.state === true) {
+              let nomol = res.data.row;
+              this.tableData = nomol; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              console.log("过滤后的数据", nomol);
+              console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      handleEdit(index, row){
+        this.phone=''
+        console.log(row)
+        this.axios.get(overduePhone,{params:{id:row.id}}).then((res)=>{
+          console.log(res)
+          if(res.data.state=true){
+            this.phone=res.data.row.phone
+            if(this.phone!=''){
+              this.centerDialogVisible=true
+            }
+          }
+        })
       }
     }
   };

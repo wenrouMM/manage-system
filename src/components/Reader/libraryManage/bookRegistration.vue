@@ -89,7 +89,7 @@
         <p>{{messageName}}</p>
         <img src="../../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
       </div>
-      <div v-loading="treeLoading">
+      <div>
         <ul id="treeDemo" class="ztree"></ul>
       </div>
     </div>
@@ -172,7 +172,7 @@
           messageName:null, //弹框名称
           libCode:null,
           typeCode:null,
-          add:false
+          isShowMessage:''
         }
       },
       computed: {
@@ -211,16 +211,12 @@
             this.messageName='请选择出版社名称'
             this.zNodes.length=0
             this.freshArea(bookRegistlib)
-
-            $('#typeMessage').fadeIn()
         },
         /*====== 书籍弹窗内容 ======*/
         typeMessage() {
           this.messageName = '请选择书籍类型'
           this.zNodes.length = 0
           this.freshArea(bookRegisttype)
-          console.log(this.zNodes)
-          $('#typeMessage').fadeIn()
         },
         /*====== ztree节点点击添加节点信息 ======*/
         zTreeOnClick(event, treeId, treeNode){
@@ -236,13 +232,13 @@
         },
         /*====== ztree加载请求 ======*/
         async freshArea(value) {
-          this.treeLoading=true
+          var list=[]
           this.axios.get(value).then((response) => {
             console.log(response)
             if(response.data.state==true){
               for (var item of response.data.row) {
-                //console.log(item)
-                this.zNodes.push({
+                console.log('ztree树',item)
+                list.push({
                   id: item.id, //节点id
                   pId: item.pid, //节点父id
                   name: item.name, //节点名称
@@ -250,12 +246,16 @@
                 });
               }
               //将数据渲染到ztree树
-              $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+              $.fn.zTree.init($("#treeDemo"), this.setting, list);
+              if(list.length>0){
+                $('#typeMessage').fadeIn()
+                this.zNodes=list
+              }
+
             }else{
               this.$message.error(response.data.msg);
             }
           })
-          this.treeLoading=false
         },
         /*====== ISBN条码请求数据操作 ======*/
         barcodeCheck() {
@@ -335,15 +335,21 @@
             console.log('不执行添加')
             return
           } else {
-            this.$refs[this.addForm].validate((valid) => {
-              if (valid) {
-                console.log('submit!');
-                this.addApi(this.addData)
-              } else {
-                console.log('error submit!!');
-                return false;
-              }
-            });
+           if(this.numberValidateForm.barcode){
+             this.$alert('条码不能为空', '提示', {
+               confirmButtonText: '确定',
+             });
+           }else{
+             this.$refs[this.addForm].validate((valid) => {
+               if (valid) {
+                 console.log('submit!');
+                 this.addApi(this.addData)
+               } else {
+                 console.log('error submit!!');
+                 return false;
+               }
+             });
+           }
           }
         },
         /*====== 重置按钮清空表单内容 ======*/

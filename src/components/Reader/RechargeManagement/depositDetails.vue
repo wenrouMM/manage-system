@@ -15,18 +15,15 @@
         </div>
         <div id="details" style="display: flex;flex-direction: row;font-size: 16px;color: #878787;margin-top: 50px">
           <div>
-            <p>用户名称 :&nbsp;&nbsp;干脆面</p>
-            <p>充值金额 :&nbsp;&nbsp;20元</p>
-            <p>充值时间 :&nbsp;&nbsp;2019-04-02&nbsp;&nbsp;11:24</p>
-            <p>充值地点 :&nbsp;&nbsp;重庆大学图书馆</p>
-            <p>处理方式 :&nbsp;&nbsp;设备</p>
-            <p>充值状态 :&nbsp;&nbsp;充值失败</p>
-            <p style="color: red">失败原因 :&nbsp;&nbsp;设备卡纸，未识别成功</p>
+            <p>用户名称 :&nbsp;&nbsp;{{detailsData.userName}}</p>
+            <p>充值金额 :&nbsp;&nbsp;{{detailsData.depositMoney}}</p>
+            <p>充值时间 :&nbsp;&nbsp;{{detailsData.depositTime}}</p>
+            <p>充值地点 :&nbsp;&nbsp;{{detailsData.depositAddress}}</p>
+            <p>处理方式 :&nbsp;&nbsp;{{detailsData.type}}</p>
           </div>
           <div>
-            <p>读者卡号 :&nbsp;&nbsp;234434322</p>
-            <p>充值方式 :&nbsp;&nbsp;现金</p>
-            <p style="margin-top: 130px">设备编号 :&nbsp;&nbsp;05号</p>
+            <p>读者卡号 :&nbsp;&nbsp;{{detailsData.userCard}}</p>
+            <p>充值方式 :&nbsp;&nbsp;{{detailsData.depositType}}</p>
           </div>
         </div>
     </div>
@@ -35,17 +32,50 @@
 
 <script>
   export default {
-    name: "getAcard",
     data(){
       return{
-
+        userId:'',
+        detailsData:{
+          userName:'',
+          depositMoney:'',
+          depositTime:'',
+          depositAddress:'',
+          type:'',
+          status:'',
+          userCard:'',
+          depositType:'',
+        }
       }
     },
     methods:{
+      selectApi(){
+        this.userId = Number(this.$route.query.id);
+        console.log(this.userId)
+        this.axios.get(depositDetails,{params: {id:this.userId}}).then((res)=>{
+          console.log(res)
+          /*detailsData:{
+          userName:'',
+          depositMoney:'',
+          depositTime:'',
+          depositAddress:'',
+          type:'',
+          userCard:'',
+          depositType:'',
+          code:''
+        }*/
+          this.detailsData.userName=res.data.row.fkReaderName
+          this.detailsData.depositMoney=res.data.row.deposit
+          this.detailsData.depositTime=res.data.row.createTime
+          this.detailsData.depositAddress=res.data.row.fkLibraryName
+          this.detailsData.type=res.data.row.fkHandleModeName
+          this.detailsData.userCard=res.data.row.cardNumber
+          this.detailsData.depositType=res.data.row.rechargeType===0?'现金':'其他'
 
+        })
+      }
     },
     mounted(){
-
+      this.selectApi()
     }
   }
 </script>
@@ -60,7 +90,7 @@
     width: 300px;
   }
   #details div p{
-    margin-top: 30px;
+    margin-top: 35px;
   }
   form div:nth-child(2){
     margin-left: 20px;

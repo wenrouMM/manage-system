@@ -10,7 +10,7 @@
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:852px" v-loading="formLoading">
         <div style="width: 300px" class="inputDiv">
           <p style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}</p>
-          <el-form ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
+          <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
               <el-input v-model="form.tag" id="tag"></el-input>
             </el-form-item>
@@ -58,7 +58,8 @@
             onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
             beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
             beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
-            onExpand: this.zTreeOnExpand
+            onExpand: this.zTreeOnExpand,
+            onCollapse: this.onCollapse,
           }
         },
         rules: {
@@ -129,6 +130,12 @@
         console.log(treeNode)
         this.Address+=treeNode.name
       },
+      onCollapse(event, treeId, treeNode){
+        console.log(treeNode)
+        this.Address-=treeNode.name
+        console.log(this.Address)
+
+      },
       zTreeOnClick(event, treeId, treeNode){
         //console.log(treeNode)
         this.saveString=treeNode
@@ -147,9 +154,17 @@
         }
       },
       onSubmit(){
-        this.save(this.saveData)
-        this.zNodes.length=0
-        this.freshArea()
+        this.$refs[this.form].validate((valid) => {
+          if (valid) {
+            //alert('submit!');
+            this.save(this.saveData)
+            this.zNodes.length=0
+            this.freshArea()
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       save(value){
         if(this.id!==''){

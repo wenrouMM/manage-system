@@ -26,6 +26,7 @@ url='http://192.168.2.121:8088/';
   bookurlselect=url+'bookmodule/bookTbPress/select'//图书出版社初始化查询接口
   bookurlcity=url+'bookmodule/bookTbPress/selectCity ' //图书出版社城市信息
   bookpublishhouse=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
+  cityselect=url+'bookmodule/bookTbPress/select' //城市信息查询表格
 /*图书类型接口*/
   bookurltype=url+'bookmodule/bookTbType/select' //图书类型表格接口
 /*图书信息页面接口*/
@@ -56,3 +57,12 @@ url='http://192.168.2.121:8088/';
 /*藏馆信息*/
   libinfo=url+'bookmodule/booklib/add' //藏馆信息
   libinfotable=url+'bookmodule/booklib/select' //藏馆表格信息
+/*押金记录*/
+  depositRecord=url+'tibetmuseummodule/currency/depositRecord/select'//查询表格
+  depositDetails=url+'tibetmuseummodule/currency/depositRecord/selectDetails'//押金记录详情
+/*逾期记录*/
+  overdueRecords=url+'tibetmuseummodule/currency/expectLog/select' //逾期查询表格
+  overduePhone=url+'tibetmuseummodule/currency/expectLog/selectUserPhone' //逾期催还电话
+  overdueHistory=url+'tibetmuseummodule/currency/expectHistoryLog/select' //逾期历史记录查询表格
+/*借阅记录*/
+  loanrecord=url+'borrowmodule/log/select' //借阅记录表格查询

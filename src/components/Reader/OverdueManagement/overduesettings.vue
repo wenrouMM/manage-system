@@ -7,19 +7,19 @@
       </div>
     </div>
     <div style="width: 350px;height: 350px;margin:200px auto">
-      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="逾期天数">
+      <el-form :label-position="labelPosition" label-width="80px" :ref="formLabelAlign" :model="formLabelAlign" :rules="rules" ref="formLabelAlign">
+        <el-form-item label="逾期天数" prop="dataNum">
           <el-input v-model="formLabelAlign.dataNum"></el-input>
         </el-form-item>
-        <el-form-item label="逾期金额">
+        <el-form-item label="逾期金额" prop="money">
           <el-input v-model="formLabelAlign.money"></el-input>
         </el-form-item>
-        <el-form-item label="催还间隔">
+        <el-form-item label="催还间隔" prop="space">
           <el-input v-model="formLabelAlign.space"></el-input>
         </el-form-item>
         <div style="margin-left: 17px;margin-top: 50px">
           <el-button type="primary" style="border-radius: 10px;width: 150px" @click="saveClick">保存</el-button>
-          <el-button type="info"  style="border-radius: 10px;width: 150px">重置</el-button>
+          <el-button type="info"  style="border-radius: 10px;width: 150px" @click="clearClick">重置</el-button>
         </div>
       </el-form>
     </div>
@@ -36,12 +36,29 @@
           dataNum: '',
           money: '',
           space: ''
+        },
+        rules: {
+          dataNum: [{required: true, message: '请输入逾期天数', trigger: 'blur'}],
+          money: [{required: true, message: '请输入逾期金额', trigger: 'blur'}],
+          space: [{required: true, message: '请输入催还间隔', trigger: 'blur'}],
         }
       }
     },
     methods:{
       saveClick(){
         this.centerDialogVisible=true
+        this.$refs[this.formLabelAlign].validate((valid) => {
+          if (valid) {
+            //alert('submit!');
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      clearClick(){
+        this.$refs[this.formLabelAlign].resetFields();
       }
     },
     mounted(){

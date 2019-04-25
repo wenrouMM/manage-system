@@ -66,7 +66,7 @@
           <!-- 添加弹框 -->
           <div class="addEditDialog">
             <!-- Form -->
-            <el-dialog  width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
+            <el-dialog  width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible" @close="closeForm">
               <el-form :label-position="labelPosition" label-width="80px" :model="addForm" :rules="addRules" style="width: 400px;margin: 0px auto" id="addFormYf">
                 <el-form-item label="藏馆名称" prop="name">
                   <el-input v-model="addForm.name"></el-input>
@@ -167,18 +167,17 @@
         },
         /*====== 5.0 分页相关设置项 ======*/
         zTree:{},
-        tableData:[]
+        tableData:[],
+        addmessage:''
       };
     },
-    computed:{
-      timeInfo() {
-
-      }
-    },
     methods: {
+      closeForm(){
+        this.addmessage=''
+      },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
-        //this.dialogFormVisible = true;
+        this.addmessage='show'
         this.$alert('请选择您要添加图书出版社的所在地区', {
           confirmButtonText: '确定',
           callback: action => {
@@ -208,7 +207,12 @@
           code:treeNode.code
         }
         this.zTree=list
-        this.dialogFormVisible = true
+        if(this.addmessage!=''){
+          this.dialogFormVisible=true
+        }else{
+          let cityCode={cityCode:this.zTree.code}
+          this.table(cityCode)
+        }
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
@@ -238,6 +242,7 @@
             this.dialogFormVisible=false
           }
         })
+        this.addmessage=''
       },
       table(value){
         this.tableLoading= true; // 加载前控制加载状态
