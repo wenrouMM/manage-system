@@ -9,18 +9,18 @@
         <el-form
           :label-position="labelPosition"
           label-width="80px"
-          :model="searchFormn"
-          ref="searchFormn"
+          :model="searchForm"
+          ref="searchForm"
           :rules="rules"
         >
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="searchFormn.userName" placeholder="请输入用户名"></el-input>
+            <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="卡号" prop="cardNum">
-            <el-input v-model="searchFormn.cardNum" placeholder="请输入卡号"></el-input>
+            <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
           </el-form-item>
           <el-form-item label="书籍编码" prop="bookCode">
-            <el-input v-model="searchFormn.bookCode" style="width: 200px" placeholder="请输入书籍编码"></el-input>
+            <el-input v-model="searchForm.bookCode" style="width: 200px" placeholder="请输入书籍编码"></el-input>
             <el-button
               type="primary"
               style="height: 36px;width: 100px;padding-top:10px;margin-left: 15px"
@@ -38,43 +38,28 @@
           :row-style="rowStyle"
           :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
         >
-          <el-table-column align="center" prop="id" width="150" label="序号"></el-table-column>
-          <el-table-column
-            align="center"
-            prop="bookName"
-            width="200"
-            label="书籍名称"  
-          ></el-table-column>
-          <el-table-column align="center" prop="bookCode"  label="书籍编码"></el-table-column>
-          <el-table-column
-            align="center"
-            prop="bookType"
-            width="200"
-            label="书籍类型"  
-          ></el-table-column>
-          <el-table-column
-            align="center"
-            prop="writer"
-            width="200"
-            label="作者"
-          ></el-table-column>
+          <el-table-column width="100" align="center" type="index" label="序号"></el-table-column>
+          <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
+          <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
+          <el-table-column align="center" prop="fkTypeName" width="200" label="书籍类型"></el-table-column>
         </el-table>
       </section>
       <div class="buttonBox">
         <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">借书</el-button>
         <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { bookOperateInt, borrowInt } from "../../../request/api/base.js";
 export default {
   data() {
     return {
       labelPosition: "right",
-      searchFormn: {
+      searchForm: {
         userName: "",
         cardNum: "",
         bookCode: ""
@@ -84,64 +69,105 @@ export default {
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
-        cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }],
+        cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
       },
-      tableData: [
-        // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-        {
-          id: "1",
-          bookName: "红楼梦",
-          bookCode: "234",
-          bookType: "名著",
-          writer: "曹雪芹"
-        },
-        {
-          id: "2",
-          bookName: "小妖的金色城堡",
-          bookCode: "432",
-          bookType: "青春言情",
-          writer: "饶雪漫"
-        },
-        {
-          id: "3",
-          bookName: "小时代",
-          bookCode: "865",
-          bookType: "青春友情",
-          writer: "郭敬明"
-        }
-      ],
+      tableData: [],
+      codeData: [],
       rowStyle: {
         height: "60px"
-      }
+      },
+      wsValue: null
     };
+  },
+  computed: {
+    searchTimeForm() {
+      let obj = {
+        libraryBookCode: this.searchForm.bookCode
+      };
+      return obj;
+    },
+    submitTimeForm() {
+      let obj = {
+        name:this.searchForm.userName,
+        cardNum: this.searchForm.cardNum,
+        list:this.tableData
+      }
+      return obj
+    }
   },
   methods: {
     // 搜索功能
     selectBtn() {
-
+      this.codeSearchApi(this.searchTimeForm);
     },
     allSelect(val) {
       console.log("被选择的数据", val);
     },
     // 借书按钮
     sellBtn() {
-
+      this.operateApi(this.submitTimeForm)
     },
 
     // 重新扫描
     reset() {
-
-    }
+      this.tableData = [];
+    },
     /*------ API区 ------*/
-
+    // 建立websocket连接
+    init(url) {
+      let ws = new WebSocket(url);
+      ws.onopen = e => {
+        console.log("连接成功");
+      };
+      ws.onmessage = e => {
+        console.log("接收数据", data);
+      };
+      ws.onclose = e => {
+        console.log("页面关闭");
+      };
+      ws.onerror = e => {
+        console.log("出错情况");
+      };
+      return ws;
+    },
     // websocker获取RFID
 
     // 通过RFID换取数据
 
     // 通过编号换取数据
-
+    codeSearchApi(data) {
+      axios
+        .get(borrowInt.selectCode, {
+          params: data
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.state === true) {
+            let obj = res.data.row;
+            this.tableData.push(obj);
+            console.log("现在的数据", this.tableData);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
     // 借书数据API
-
+    operateApi(data) {
+      
+      console.log('传递的数据',this.submitTimeForm)
+      axios.post(bookOperateInt.borrow, data).then(res => {
+        if (res.data.state === true) {
+          console.log('返回的数据',res.data.row)
+          let obj = JSON.stringify(res.data.row)
+          localStorage.setItem('borrow',obj)
+          console.log('我路由跳转呢？')
+          let cardNum = this.searchForm.cardNum
+          this.$router.push({path:'/borrowingstatus'})
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    }
   },
   mounted() {}
 };
@@ -151,21 +177,20 @@ export default {
 .borrowbook {
   width: 100%;
   background-color: white;
-  height: 852px;
+  min-height: 852px;
 }
-.tablebox{
-
+.tablebox {
 }
 .tablebox .tableBorder {
   border: 1px solid #ebeef5;
   border-bottom: none;
   font-size: 16px;
 }
-.el-button--120{
+.el-button--120 {
   width: 120px;
   border-radius: 6px;
 }
-.buttonBox{
+.buttonBox {
   text-align: center;
 }
 </style>

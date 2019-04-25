@@ -86,6 +86,18 @@ export const cardTypeInt = {
     edit:`${cardType}edit`,
     delete:`${cardType}delete`
 }
+/*------ 借阅管理 ------*/
+var borrow = url + 'tibetmuseummodule/bookRFID/'
+export const borrowInt = {
+    selectCode:`${borrow}selectOneByCode`,
+    selectRfid:`${borrow}selectOneByRFID`
+}
+var  bookOperate= url + 'borrowmodule/InAndOut/'
+export const bookOperateInt = {
+    borrow:`${bookOperate}out`,
+    sell:`${bookOperate}in`
+
+}
 /*------ 通用接口 ------*/
 export const loginInter= url + 'authmodule/index/login'
 export const headUpload = url + 'filemodule/currency/uploadFile/addHead' //
