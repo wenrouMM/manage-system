@@ -35,7 +35,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              <span>{{userInfo.username}}</span>
+              <span>{{localUser.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -61,7 +61,8 @@ export default {
   data() {
     return {
       activeIndex: "1",
-      activeIndex2: "1"
+      activeIndex2: "1",
+      localUser:null,
     };
   },
   methods: {
@@ -73,6 +74,8 @@ export default {
     },
     loginOut() {
       this.$store.commit("logOut");
+      this.$store.commit('deleteUserInfo')
+      this.$store.commit('deleteMenu')
       this.$router.push("/login");
     }
   },
@@ -81,6 +84,11 @@ export default {
       return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
     },
     ...mapGetters(["userInfo"])
+  },
+  created(){
+    let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.localUser = userInfo
+    console.log('用户信息呢', this.localUser)
   }
 };
 </script>

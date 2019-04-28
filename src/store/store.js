@@ -32,6 +32,7 @@ const mutations={
         state.user = data
     },
     deleteUserInfo:(state) => {
+        localStorage.removeItem('userInfo')
         state.user = {} // 清空数组
     },
 
@@ -39,8 +40,12 @@ const mutations={
         state.menu = data
     },
     deleteMenu:(state) => {
+        localStorage.removeItem('menu')
         state.menu = {}
     }
+}
+const actions= {
+    
 }
 
 export default new Vuex.Store({
