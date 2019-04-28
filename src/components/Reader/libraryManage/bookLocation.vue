@@ -262,6 +262,7 @@
     height: 852px;
   }
   #typeMessage{
+    display: none;
     position: absolute;
     top: 200px;
     left:750px;

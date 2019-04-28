@@ -56,10 +56,13 @@ import {loginInter} from '../request/api/base.js'
           console.log(res)
           if(res.data.state==true){ // 获取数据后进行存取操作
             var token=res.data.row.authorization // 获取token
+            var userInfo = JSON.stringify(res.data.row.authTbManager)
+            var menu = JSON.stringify(res.data.row.roleModularMenus)
             console.log(token)
-
-            //localStorage.setItem('token',token) // 存入本地 字符串形式存取
-            this.$store.commit('login', token)// 存入Vuex
+            localStorage.setItem('token',token)
+            this.$store.commit('login', token) // 存入本地 字符串形式存取
+            this.$store.commit('setUserInfo',userInfo)
+            this.$store.commit('setMenu',menu)
             // 获取路由信息
             // 过滤生成动态路由
             // 过滤生成权限菜单信息

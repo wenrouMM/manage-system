@@ -1,7 +1,7 @@
 // 用来管理接口的域名相关
 
-var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
 // 权限模块的API
 // 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
@@ -24,7 +24,8 @@ export const powerMangaeInt = {
   select: `${powerMangae}select`,
   add: `${powerMangae}add`,
   edit: `${powerMangae}edit`,
-  delete: `${powerMangae}delete`
+  delete: `${powerMangae}delete`,
+  prohibit:`${powerMangae}prohibit`
 
 }
 export const login_record = url + "authmodule/authTbManagerLoginLog/select" //登录记录接口
