@@ -17,9 +17,11 @@
                 <i class="addIcon el-icon-plus"></i>添加
               </button>
               -->
+              <!--
               <button class="delete" @click="deleteBtn(allSeclet)">
                 <i class="deleteIcon el-icon-delete"></i>批量删除
               </button>
+              -->
             </div>
             <section class="searchBox" style="margin-left:320px">
               <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -70,7 +72,9 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
+              <!--
               <el-table-column align="center" type="selection" width="100"></el-table-column>
+              -->
               <el-table-column width="100" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -89,7 +93,9 @@
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="editButton(scope.$index, scope.row)">授权</span>
+                  <!--
                   <span class="ban" @click="banButton(scope.$index, scope.row)">禁用</span>
+                  -->
                 </template>
               </el-table-column>
             </el-table>
@@ -243,8 +249,8 @@ export default {
       refuseDialog: false,
       refuseLoading:false,
       banArr: {  // 禁用传递数据
-        id: "",
-        disabled: 1
+        fkRoleCode: ""
+        
       },
       menuId:[],
       roleId:null
@@ -352,7 +358,7 @@ export default {
         this.$message.error("该用户已被禁用");
       } else {
         this.i = 3;
-        this.banArr.id = row.id;
+        this.banArr.fkRoleCode = row.roleCode;
         console.log('当前选中',index, row, this.banArr); // 当前选中表格的索引和对
         this.refuseDialog = true;
       }
@@ -437,7 +443,7 @@ export default {
     },
     banApi(arr) {
       console.log("禁用的数据", arr); // 正在请求的状态 通过按钮还是文本
-      axios.put(powerMangaeInt.edit, arr).then(res => {
+      axios.put(powerMangaeInt.prohibit, arr).then(res => {
         console.log(res.data);
         if (res.data.state === true) {
           console.log(res.data);

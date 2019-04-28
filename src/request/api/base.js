@@ -24,7 +24,8 @@ export const powerMangaeInt = {
   select: `${powerMangae}select`,
   add: `${powerMangae}add`,
   edit: `${powerMangae}edit`,
-  delete: `${powerMangae}delete`
+  delete: `${powerMangae}delete`,
+  prohibit:`${powerMangae}prohibit`
 
 }
 export const login_record = url + "authmodule/authTbManagerLoginLog/select" //登录记录接口
