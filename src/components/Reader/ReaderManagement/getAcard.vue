@@ -60,7 +60,7 @@
           <i v-if="loading" class="el-icon-loading"></i>
         </el-form-item>
 
-        
+
           <el-form-item label="用户名" prop="name" :label-width="formLabelWidth">
             <el-input
               v-model="addForm.name"
@@ -250,7 +250,7 @@ export default {
                 this.addForm.sex = data.readerSex.toString() // 应该是初始设置 非要字符串格式才行
                 console.log('此时的addform',this.addForm)
               }
-              
+
               this.loading = false
             } else {
               this.$message.error(res.data.msg);
@@ -334,7 +334,7 @@ export default {
           }else{
             this.$message.error('图片上传失败')
           }
-          
+
         });
       }
     }

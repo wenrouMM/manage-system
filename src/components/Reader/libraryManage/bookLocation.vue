@@ -37,14 +37,16 @@
             <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
           <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
-            <span>{{ruleForm.bookLocation}}</span>
+            <span>{{ruleForm.bookLocation}}{{ruleForm.direction}}</span>
           </el-form-item>
-          <a  style="color: #0096FF;margin-top: 13px;cursor: default" @click="locationMessage">位置选择</a>
+          <span style="width:80px;height:20px;padding-top:4px;padding-left:14px;color: #0096FF;margin-top:8px;cursor: default;" @click="locationMessage" id="locaTion">
+            位置选择
+          </span>
         </div>
         <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
       </el-form>
     </div>
-    <div id="typeMessage" >
+    <div id="typeMessage">
       <div style="position: relative">
         <p>请选择位置信息</p>
         <img src="../../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
@@ -107,10 +109,11 @@
           bookCode:'',
           rfid:'',
           bookLocation:'',
+          direction:'',
           code:''
         },//添加的数据
         rules:{
-          barcode: [{ required: true, message: '请输入活动名称', trigger: 'blur' },],
+          barcode: [{ required: true, message: '请输入活动名称', trigger: 'blur' }],
           bookCode: [{required: true, message: '请输入图书编码', trigger: 'blur' }],
           rfid: [{ required: true, message: '请输入rfid', trigger: 'blur' }],
         },//添加的验证
@@ -118,14 +121,12 @@
       }
     },
     mounted(){
-      this.freshArea()
+      $('#typeMessage').fadeOut()
     },
     methods:{
       /*====== 取消位置信息的弹框 ======*/
       closeCheck(){
         $('#typeMessage').fadeOut()
-        this.zNodes.length=0
-        this.freshArea()
       },
       /*====== 输入条码发送请求加载数据 ======*/
       barcodeClick:function(){
@@ -157,13 +158,16 @@
       /*====== 展开节点的操作 ======*/
       zTreeOnExpand(event, treeId, treeNode){
         console.log(treeNode)
-        this.ruleForm.bookLocation+=treeNode.name
+        let name=treeNode.name.toString()
+        if(this.ruleForm.bookLocation.search(name) == -1 ){
+          this.ruleForm.bookLocation+=name
+        }
       },
       /*====== 点击节点的操作 ======*/
       zTreeOnClick(event, treeId, treeNode){
         console.log(treeNode)
-        if(treeNode.laysNum!==null){
-          this.ruleForm.bookLocation+=treeNode.name
+        if(treeNode.direction!==null){
+          this.ruleForm.direction=treeNode.name
           this.ruleForm.code=treeNode.code
           $('#typeMessage').fadeOut()
         }
@@ -171,18 +175,19 @@
       /*====== 位置信息他边框出现的操作 ======*/
       locationMessage(){
         this.ruleForm.bookLocation=''
-        if(this.zNodes.length!=0){
-          $('#typeMessage').fadeIn()
-        }
+        this.ruleForm.direction=''
+        this.zNodes.length = 0
+        this.freshArea()
       },
       /*====== 加载位置信息ztree树的内容 ======*/
       async freshArea() {
+        let list=[]
         this.axios.get(layerFramezTree).then((response) => {
           console.log(response)
           if(response.data.state==true){
             for (var item of response.data.row) {
               //console.log(item)
-              this.zNodes.push({
+              list.push({
                 id: item.id, //节点id
                 pId: item.pid, //节点父id
                 name: item.name, //节点名称
@@ -192,12 +197,17 @@
                 colNum:item.colNum, //列
                 divNum:item.divNum, //层
                 laysNum:item.laysNum, //节
+                direction:item.direction,//面
                 rfid:item.rfid,
                 code:item.code
               });
             }
             //将数据渲染到ztree树
-            $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+            $.fn.zTree.init($("#treeDemo"), this.setting, list);
+            if(list.length>0){
+              $('#typeMessage').fadeIn()
+              this.zNodes=list
+            }
           }else{
             this.$message.error(response.data.msg);
           }
@@ -243,13 +253,15 @@
 </script>
 
 <style scoped>
+  #locaTion:hover{
+    font-size: 18px;
+  }
   .borrowbook{
     width: 100%;
     background-color: white;
     height: 852px;
   }
   #typeMessage{
-    display: none;
     position: absolute;
     top: 200px;
     left:750px;

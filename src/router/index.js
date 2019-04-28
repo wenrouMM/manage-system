@@ -183,7 +183,7 @@ export default new Router({
               component: Home,
             },
             {
-              
+
               path: '/userManage',
               component: UserManage,
               meta:{

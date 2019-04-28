@@ -72,7 +72,7 @@ website:	http://code.google.com/p/jquerytree/
 
 .ztree li span.button.ico_open{margin-right:2px; background-position:-110px -16px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.ico_close{margin-right:2px; background-position:-110px 0; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.ico_docu{margin-right:2px; background-position:-27px -55px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.ico_docu{margin-right:2px; background-position:-110px -49px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.edit {margin-right:2px; background-position:-110px -48px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.remove {margin-right:2px; background-position:-110px -64px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.add {margin-right:2px; background-position:-145px 0px; vertical-align:top; *vertical-align:middle}

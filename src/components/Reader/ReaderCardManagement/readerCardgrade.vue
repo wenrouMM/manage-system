@@ -74,8 +74,8 @@
               </el-table-column>
             </el-table>
             <section class="pagination mt_30">
-              <el-pagination 
-              background layout="prev, pager, next,total, jumper, ->" 
+              <el-pagination
+              background layout="prev, pager, next,total, jumper, ->"
               @current-change="current_change"
               :page-size="pageSize"
               :current-page="currentPage"
@@ -91,7 +91,7 @@
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer" >
             <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
             <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
           </div>
@@ -215,23 +215,23 @@ export default {
     },
     addTimeForm() {
       let obj = {
-        name: this.changeForm.name, 
-        renewNumber:this.changeForm.renewNum, 
-        borrowTime: this.changeForm.readerTime, 
-        borrowNumber:this.changeForm.bookNum, 
+        name: this.changeForm.name,
+        renewNumber:this.changeForm.renewNum,
+        borrowTime: this.changeForm.readerTime,
+        borrowNumber:this.changeForm.bookNum,
         deposit:this.changeForm.deposit,
-        disabled:this.changeForm.disabled 
+        disabled:this.changeForm.disabled
       }
       return obj
     },
     editTimeForm() {
       let obj = {
-        name: this.changeForm.name, 
-        renewNumber:this.changeForm.renewNum, 
-        borrowTime: this.changeForm.readerTime, 
-        borrowNumber:this.changeForm.bookNum, 
+        name: this.changeForm.name,
+        renewNumber:this.changeForm.renewNum,
+        borrowTime: this.changeForm.readerTime,
+        borrowNumber:this.changeForm.bookNum,
         deposit:this.changeForm.deposit,
-        id:this.changeForm.id, 
+        id:this.changeForm.id,
         disabled:this.changeForm.disabled
       }
       return obj
@@ -258,7 +258,7 @@ export default {
           this.deleteParams.push({id:item.id})
         }
         console.log('删除数据', this.deleteParams)
-        this.deleteDialog = true;    
+        this.deleteDialog = true;
       } else {
         this.$message.error('请先选择删除对象')
       }
@@ -292,16 +292,16 @@ export default {
       if(row.disabled ==1){
         this.$message.error('该用户已被禁用')
       } else{
-        this.i = 0; 
+        this.i = 0;
         this.banData.id = row.id
         this.banData.disabled = 1
         this.deleteDialog = true;
       }
-      
+
     },
     /*====== 弹框相关按钮 ======*/
-    
-    // 删除禁用弹框的提交按钮 
+
+    // 删除禁用弹框的提交按钮
     subDelete() {
       let flag = this.i; // 关闭弹框
       switch (flag) {
@@ -363,7 +363,7 @@ export default {
         if (res.data.state === true){
           console.log(res)
           // 获取数据进行过滤
-          this.tableData = res.data.row 
+          this.tableData = res.data.row
           this.total = res.data.total; //总条目数
           this.paginationForm = Object.assign({}, data);
           console.log("保存当前查询", this.paginationForm);

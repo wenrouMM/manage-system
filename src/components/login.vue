@@ -9,7 +9,8 @@
         </div>
         <div class="divHeight">
           <img src="../base/img/login/icon_2.png" class="imgHeight">
-          <input type="password" placeholder="请输入密码" id="pwd" notnull info="密码" maxlength="30" class="inputHeight" v-model="form.password">
+          <input type="password" placeholder="请输入密码" id="pwd"  notnull info="密码" maxlength="30" class="inputHeight" v-model="form.password" style="position: relative">
+          <img src="../base/img/currency/yanjing.png"  id="show" style="width: 25px;height: 25px;position: absolute;top: 33px;left: 270px" @click="isShowCheck">
         </div>
         <div class="divHeight" id="yzm">
           <input type="text" placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
@@ -39,6 +40,15 @@ import {loginInter} from '../request/api/base.js'
       }
     },
     methods:{
+      isShowCheck(){
+        console.log($('#pwd').attr('type'))
+        if($('#pwd').attr('type')=='password'){
+          $('#pwd').attr('type','text')
+        }else if($('#pwd').attr('type')=='text'){
+          $('#pwd').attr('type','password')
+
+        }
+      },
       submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
         console.log('???执行了没')
         axios.post(loginInter ,({account:this.form.name,
@@ -46,16 +56,10 @@ import {loginInter} from '../request/api/base.js'
           console.log(res)
           if(res.data.state==true){ // 获取数据后进行存取操作
             var token=res.data.row.authorization // 获取token
-            var userInfo = JSON.stringify(res.data.row.authTbManager)
-            var menu = JSON.stringify(res.data.row.roleModularMenus)
             console.log(token)
 
-            localStorage.setItem('userInfo',userInfo) // 存入本地 字符串形式存取
-            localStorage.setItem('menu',menu)
-
+            //localStorage.setItem('token',token) // 存入本地 字符串形式存取
             this.$store.commit('login', token)// 存入Vuex
-            this.$store.commit('setUserInfo',res.data.row.authTbManager)
-            this.$store.commit('setMenu',res.data.row.roleModularMenus)
             // 获取路由信息
             // 过滤生成动态路由
             // 过滤生成权限菜单信息

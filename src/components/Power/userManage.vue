@@ -228,12 +228,6 @@
             <el-form-item label="姓　　名" prop="username" :label-width="formLabelWidth">
               <el-input :disabled="addForm.username && i==2?true:false" v-model="addForm.username" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item class="select" label="性　　别" prop="sex">
-              <el-radio-group :disabled="addForm.sex && i==2?true:false" v-model="addForm.sex">
-                <el-radio label="1">男</el-radio>
-                <el-radio label="0">女</el-radio>
-              </el-radio-group>
-            </el-form-item>
             <el-form-item label="角色类型" prop="authTbRoles" :label-width="formLabelWidth">
               <el-select
                 v-model="addForm.authTbRoles"
@@ -320,7 +314,6 @@ export default {
         headIcon: "",
         files: "", // 用于上传
         username: "", // 姓名
-        sex: "", // 性别
         authTbRoles: [], // 角色类型 不明参数 初始化为数组 否则多选失效
         idCard: "", // 身份证
         phone: "", // 电话号码
@@ -331,7 +324,6 @@ export default {
       addRules: {
         // 添加的参数验证
         username: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        sex: [{ required: true, message: "请选择性别", trigger: "change" }],
         authTbRoles: [
           { required: true, message: "请选择用户类型", trigger: "change" }
         ],
@@ -422,13 +414,11 @@ export default {
     addEdit() {
       let i = this.i;
       let lock = parseInt(this.addForm.isLock);
-      let sexNumber = parseInt(this.addForm.sex);
       let data = {
         username: this.addForm.username,
         idCard: this.addForm.idCard,
         address: this.addForm.address,
         phone: this.addForm.phone,
-        sex: sexNumber,
         email: this.addForm.email,
         headerAddress: this.addForm.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
@@ -441,7 +431,7 @@ export default {
     },
     banForm(){
       let ban = null
-      
+
     }
   },
   methods: {
@@ -538,8 +528,7 @@ export default {
       this.addForm.idCard = row.idCard;
       this.addForm.address = row.address;
       this.addForm.phone = row.phone;
-      // this.addForm.fkRoleNames = row.fkRoleNames
-      this.addForm.sex = row.sex.toString(); // 要转化为字符串格式才行
+       this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
       this.addForm.isLock = row.isLock.toString();
       this.dialogFormVisible = true;
@@ -589,7 +578,7 @@ export default {
                let tel = item.phone
                item.idShow = id.substr(0,5) + "********" + id.substr(13)
                item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-              
+
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -903,7 +892,7 @@ export default {
 .pagination{
   display: flex;
   justify-content: center;
-  
+
 }
 .pagaButton {
   width: 70px;
@@ -1028,7 +1017,7 @@ export default {
 
 4.序号累加 完成1 为何elementUI的未生效 若生效则使用 未生效则更改index的值
 5.按钮节点限制点击 完成 :loading="true"添加限制即可
-6.默认图片的替换 完成  table表格显示图像 
+6.默认图片的替换 完成  table表格显示图像
 7.邮箱绑定1 addForm的获取和传递
 8.分页器确定按钮的增加1 完成 10条数据 el-button或者自己手动添加 根据current 根据个鬼= = 按钮没任何功能 就是模糊特效
 9.三级联动 2

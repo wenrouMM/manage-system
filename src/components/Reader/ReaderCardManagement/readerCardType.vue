@@ -99,7 +99,7 @@
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer" >
             <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
             <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
           </div>
@@ -750,7 +750,7 @@ export default {
 }
 .readerCard form.el-form{
   flex-direction: column;
-  
+
 }
 .readerCard .el-input .el-input__inner {
     width: 100%;
