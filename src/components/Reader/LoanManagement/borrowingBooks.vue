@@ -48,6 +48,7 @@
         <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">借书</el-button>
         <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
       </div>
+      <div>{{message}}</div>
     </div>
   </div>
 </template>
@@ -58,6 +59,7 @@ import { bookOperateInt, borrowInt } from "../../../request/api/base.js";
 export default {
   data() {
     return {
+      message: "",
       labelPosition: "right",
       searchForm: {
         userName: "",
@@ -76,7 +78,14 @@ export default {
       rowStyle: {
         height: "60px"
       },
-      wsValue: null
+      /*------ websocket配置 ------*/
+      wsValue: null,
+      reconnectStatus:false, // 是否重连
+      timeout:5*1000, // 心跳检测间隔
+      timeoutObj:null, // 心跳间隔定时器
+      serverTimeOutObj:null, // 服务器超时关闭定时器
+      timeoutNum:null, // 重连定时器
+
     };
   },
   computed: {
@@ -110,30 +119,35 @@ export default {
 
     // 重新扫描
     reset() {
+      this.wsValue.send("reset");
       this.tableData = [];
+      console.log(this.wsValue);
     },
     /*------ API区 ------*/
-    // 建立websocket连接
-    init(url) {
-      let ws = new WebSocket(url);
-      ws.onopen = e => {
-        console.log("连接成功");
-      };
-      ws.onmessage = e => {
-        console.log("接收数据", data);
-      };
-      ws.onclose = e => {
-        console.log("页面关闭");
-      };
-      ws.onerror = e => {
-        console.log("出错情况");
-      };
-      return ws;
-    },
     // websocker获取RFID
 
     // 通过RFID换取数据
-
+    RfidApi(data) {
+      axios
+        .get(borrowInt.selectRfid, {
+          params: data
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.state === true) {
+            let obj = res.data.row;
+            const isExist = this.tableData.some(item => {
+              return item.libraryBookCode === obj.libraryBookCode;
+            });
+            if (!isExist) {
+              this.tableData.push(obj);
+              console.log("现在的数据", this.tableData);
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
     // 通过编号换取数据
     codeSearchApi(data) {
       axios
@@ -147,7 +161,7 @@ export default {
             const isExist = this.tableData.some(item => {
               return item.libraryBookCode === obj.libraryBookCode;
             });
-            if(!isExist){
+            if (!isExist) {
               this.tableData.push(obj);
               console.log("现在的数据", this.tableData);
             }
@@ -166,13 +180,94 @@ export default {
           localStorage.setItem("borrow", obj);
           console.log("我路由跳转呢？");
           let cardNum = this.searchForm.cardNum;
-          this.$router.push({ path: `/borrowingstatus`, query: { Num: cardNum} });
+          this.$router.push({
+            path: `/borrowingstatus`,
+            query: { Num: cardNum }
+          });
         } else {
           this.$message.error(res.data.msg);
         }
       });
+    },
+
+
+    
+    /*------ websocket区域 ------*/
+    // 建立websocket连接
+    init(url) {
+      var ws = new WebSocket(url);
+      let that = this
+      ws.onopen = e => {
+        ws.send("connect");
+        console.log("连接成功");
+      };
+      ws.onmessage = e => {
+        this.message = e.data;
+        // IC卡匹配过滤
+        let obj = {}
+        obj.rfid = e.data.replace(/\s+/g,"")
+        this.RfidApi(obj)
+        console.log("接收数据", e.data);
+      };
+      ws.onclose = e => {
+        console.log("连接关闭");
+      };
+      ws.onerror = e => {
+        console.log("出错情况");
+      };
+      return ws;
+    },
+
+    /*------ 多余的函数 ------*/
+    // 重新连接
+    reconnect() {
+      var that = this
+      if(this.reconnectStatus){
+        return
+      }
+      that.reconnectStatus = true
+      if(that.timeoutnum){
+        clearTimeout(that.timeoutnum);
+      }
+      that.timeoutNum = setTimeout(()=>{
+        that.wsValue = that.init("ws://192.168.2.145:7181")
+        that.reconnectStatus = false
+      },5000)
+      //that.timeoutnum && clearTimeout(that.timeoutnum);可读性极差
+    },
+    // 心跳开始
+    webstart() {
+      var self = this
+      // 检测定时器是否存在 清除定时器
+      self.timeoutObj && clearTimeout(self.timeoutObj)
+      self.serverTimeOutObj && clearTimeout(self.serverTimeOutObj)
+      self.timeoutObj = setTimeout(res =>{
+        if(self.wsValue.readyState == 1){
+          self.wsValue.send('heartcheck')
+        }else{
+          self.reconnect()
+        }
+        // 超时关闭
+        self.serverTimeOutObj = setTimeout(res =>{
+          self.wsValue.close()
+        },self.timeout)
+      },self.timeout)
+    },
+    // 心跳重置
+    webreset(){
+      var that = this
+      clearTimeout(that.timeoutObj)
+      clearTimeout(that.serverTimeOutObj)
+      that.start()
     }
     // 数组去重其一
+    // 函数过滤
+  },
+  created() {
+    this.wsValue = this.init("ws://192.168.2.145:7181");
+  },
+  destroyed () {
+    this.wsValue.close()
   }
 };
 </script>

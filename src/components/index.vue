@@ -18,10 +18,9 @@
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="1">读者模块</el-menu-item>
-              <el-menu-item index="2">图书管理</el-menu-item>
-              <el-menu-item index="3">区域管理</el-menu-item>
-              <el-menu-item index="4">权限管理</el-menu-item>
+              <el-menu-item index="/">首页</el-menu-item>
+              <el-menu-item :index="num" v-for="(item,num) of menu" :key="num">{{item.menuName}}</el-menu-item>
+              
             </el-menu>
           </div>
         </div>
@@ -33,7 +32,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              <span>用户名</span>
+              <span>{{userInfo.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -59,9 +58,10 @@
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
-            <el-menu-item index="/">首页</el-menu-item>
-            <NavMenu v-show="Mode==1" :navMenus="testMenus[0].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==2" :navMenus="testMenus[1].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==0" :navMenus="menu[0].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==1" :navMenus="menu[1].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==2" :navMenus="menu[2].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==3" :navMenus="menu[3].roleModularMenus"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
@@ -80,6 +80,7 @@
 <script>
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
+import {mapGetters} from "vuex"
 export default {
   data() {
     return {
@@ -414,8 +415,13 @@ export default {
   },
   computed: {
     onRoutes() {
-      return this.$route.path.replace("/", ""); // ???
-    }
+      return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
+    },
+    ...mapGetters([
+      'userInfo',
+      'menu'
+    ])
+
   },
   components: {
     NavMenu,

@@ -31,6 +31,8 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   let token = getToken()
+  let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  let menu = JSON.parse(localStorage.getItem('menu'))
   if(to.path === '/login'){
     console.log(token)
     if(token){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
@@ -44,7 +46,8 @@ router.beforeEach((to, from, next) => {
     if(token) {
       if(store.state.token == null) {
         store.commit('login', token) // 刷新后再次给予token
-                                     // 刷新后拉取用户信息
+        store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息
+        store.commit('setMenu', menu)
       }
       next()
     }else{

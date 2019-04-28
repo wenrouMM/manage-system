@@ -362,7 +362,7 @@ export default {
       let arr = [];
       for (let item of val) {
         let obj = {};
-        obj.id = item.id;
+        obj.roleCode = item.roleCode;
         arr.push(obj);
       }
       this.allSeclet = arr;

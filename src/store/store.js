@@ -9,7 +9,14 @@ const state= {
     user:{},
     menu:{}
 }
-
+const getters={
+    userInfo: state =>{
+        return state.user
+    },
+    menu: state => {
+        return state.menu
+    }
+}
 const mutations={
     login:(state, data) => {
         setToken(data) // 设置token
@@ -24,14 +31,14 @@ const mutations={
     setUserInfo:(state,data) => {
         state.user = data
     },
-    deleteUserInfo:(state,data) => {
+    deleteUserInfo:(state) => {
         state.user = {} // 清空数组
     },
 
     setMenu:(state,data) =>{
         state.menu = data
     },
-    deleteMenu:(state,data) => {
+    deleteMenu:(state) => {
         state.menu = {}
     }
 }
@@ -39,6 +46,7 @@ const mutations={
 export default new Vuex.Store({
     state,
     mutations,
+    getters,
     strict: debug,
     plugins: debug ? [createLogger()] : []
 })
