@@ -10,7 +10,7 @@
       </div>
     </div>
     <div style="margin:100px auto;width:600px;height: 500px">
-  `     <div style="width: 100px;height: 100px;border-radius: 50%;border:1px solid lightgray;margin: 0 auto">
+  `     <div style="width: 100px;height: 100px;border-radius: 50%;margin: 0 auto;background-color: lightgray">
           <img src="../../../../src/base/img/menu/tbls.png" style="width:100px;height: 100px;border-radius: 50%;">
         </div>
         <div id="details" style="display: flex;flex-direction: row;font-size: 16px;color: #878787;margin-top: 50px">
@@ -53,16 +53,6 @@
         console.log(this.userId)
         this.axios.get(depositDetails,{params: {id:this.userId}}).then((res)=>{
           console.log(res)
-          /*detailsData:{
-          userName:'',
-          depositMoney:'',
-          depositTime:'',
-          depositAddress:'',
-          type:'',
-          userCard:'',
-          depositType:'',
-          code:''
-        }*/
           this.detailsData.userName=res.data.row.fkReaderName
           this.detailsData.depositMoney=res.data.row.deposit
           this.detailsData.depositTime=res.data.row.createTime
@@ -70,7 +60,6 @@
           this.detailsData.type=res.data.row.fkHandleModeName
           this.detailsData.userCard=res.data.row.cardNumber
           this.detailsData.depositType=res.data.row.rechargeType===0?'现金':'其他'
-
         })
       }
     },

@@ -6,7 +6,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">角色管理列表</span>
+            <span class="titleName">权限管理列表</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <div style="display:flex;flex-direction:row;justify-content: space-between">

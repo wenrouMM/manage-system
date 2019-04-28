@@ -76,17 +76,19 @@
               按钮集
             </div>
             <div style="background-color: white;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px">
-              <el-form ref="formButton"  :model="formButton" label-width="80px" :label-position="labelPosition" style="padding-left:80px;padding-bottom: 50px ;margin-top: 50px">
-                <el-form-item label="元素名 : ">
-                  <el-input v-model="formButton.buttonName" style="width: 267px"></el-input>
+              <el-form ref="formButton"  :model="formButton" :rules="rulesButton" :ref="formButton" label-width="90px" :label-position="labelPosition" style="padding-left:70px;padding-bottom: 50px ;margin-top: 50px">
+                <el-form-item label="元素名 : " prop="buttonName">
+                  <el-input v-model="formButton.buttonName" placeholder="请输入按钮名称" style="width: 267px"></el-input>
                 </el-form-item>
-                <el-form-item label="元素类型 :">
-                  <el-select v-model="formButton.buttonTypeCode" clearable placeholder="请选择按钮类型" id="type" style="width: 267px">
+                <el-form-item label="元素类型 :" prop="buttonTypeCode">
+                  <el-select v-model="formButton.buttonTypeCode" clearable placeholder="请选择按钮类型" id="type" style="width: 267px;">
                     <el-option v-for="item in butList" :key="item.value" :label="item.label" :value="item.code"></el-option>
                   </el-select>
                 </el-form-item>
-                  <el-button type="primary" round @click="click_ok()" style="width: 150px">确定</el-button>
+                <div style="margin-top: 30px">
+                  <el-button type="primary" round @click="click_ok()" style="width: 150px;">确定</el-button>
                   <el-button type="info" round @click="click_no()" style="width: 150px;margin-left: 50px">取消</el-button>
+                </div>
               </el-form>
             </div>
           </div>
@@ -125,6 +127,10 @@ export default {
       formButton:{
         buttonName:'',
         buttonTypeCode:''
+      },
+      rulesButton:{
+        buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' },],
+        buttonTypeCode: [{ required: true, message: '请选择按钮类型', trigger: 'change' }],
       },
       isShow:false,
       formLoading:false,
@@ -252,46 +258,40 @@ export default {
     /*====== 按钮弹框的确定按钮 ======*/
     click_ok() {
       console.log('按钮名称与类型',this.formButton.buttonTypeCode)
-      if (this.formButton.buttonTypeCode ===undefined||this.formButton.buttonName===undefined) {
-        //当按钮元素为空的时候，给出提示不可为空
-        //alert('22222')
-        this.$alert("元素类型或名称不能为空，请您重新添加!", {
-          confirmButtonText: "确定"
-        });
-      }else if (this.formButton.buttonTypeCode ===''||this.formButton.buttonName==='') {
-        //当按钮元素为空的时候，给出提示不可为空
-        //alert('22222')
-        this.$alert("元素类型或名称不能为空，请您重新添加!", {
-          confirmButtonText: "确定"
-        });
-      }else if (this.formButton.buttonTypeCode!== undefined&&this.formButton.buttonName!==undefined){
-        this.buttonData.push(this.formButton.buttonTypeCode) //当元素名称和类型不为空时将元类型添加buttonData
-        this.findSame(this.buttonData) //当buttonData中有相同的类型时给出提示
-        this.buttonData = serialize.deteleObject(this.buttonData) //过滤buttonData相同的值
-        if(this.addButton==true){  //元素不为空能添加
-          this.buttonNameData.push(this.formButton.buttonName) //将按钮名字添加进buttonNameData中用来展示添加的按钮
-          this.authTbMenuElementsEdit.push({ //发送修改保存时添加的按钮
-            elmName: this.formButton.buttonName,
-            elmCode: this.formButton.buttonTypeCode,
-            fkElmCode: this.formButton.buttonTypeCode,
-            fkMenuId: this.zTree.id
-          });
-          this.authTbMenuElementsAdd.push({ //发送添加保存时添加的按钮
-            elmName: this.formButton.buttonName,
-            elmCode: this.formButton.buttonTypeCode,
-            fkElmCode: this.formButton.buttonTypeCode
-          });
-          $("#but_type_div").fadeOut();//添加完成后按钮弹框消失
+      this.$refs[this.formButton].validate((valid) => {
+        if (valid) {
+          //alert('submit!');
+          this.buttonData.push(this.formButton.buttonTypeCode) //当元素名称和类型不为空时将元类型添加buttonData
+          this.findSame(this.buttonData) //当buttonData中有相同的类型时给出提示
+          this.buttonData = serialize.deteleObject(this.buttonData) //过滤buttonData相同的值
+          if(this.addButton==true){  //元素不为空能添加
+            this.buttonNameData.push(this.formButton.buttonName) //将按钮名字添加进buttonNameData中用来展示添加的按钮
+            this.authTbMenuElementsEdit.push({ //发送修改保存时添加的按钮
+              elmName: this.formButton.buttonName,
+              elmCode: this.formButton.buttonTypeCode,
+              fkElmCode: this.formButton.buttonTypeCode,
+              fkMenuId: this.zTree.id
+            });
+            this.authTbMenuElementsAdd.push({ //发送添加保存时添加的按钮
+              elmName: this.formButton.buttonName,
+              elmCode: this.formButton.buttonTypeCode,
+              fkElmCode: this.formButton.buttonTypeCode
+            });
+            $("#but_type_div").fadeOut();//添加完成后按钮弹框消失
+          }
+          //console.log(this.buttonData)
+          this.addButton=true //按钮添加完成后使其可继续添加
+          this.formButton={} //清空添加按钮的数组
+        } else {
+          console.log('error submit!!');
+          return false;
         }
-        //console.log(this.buttonData)
-        this.addButton=true //按钮添加完成后使其可继续添加
-        this.formButton={} //清空添加按钮的数组
-      }
+      });
     },
     /*====== 按钮弹框的取消按钮 ======*/
     click_no() {
       $("#but_type_div").fadeOut(); //添加完成后按钮弹框消失
-      this.formButton={} //按钮白哦单清空
+      this.$refs[this.formButton].resetFields();
     },
     /*====== 点击按钮集添加按钮出现元素集弹框发送请求加载按钮类型下拉框数据 ======*/
     btn_type() {

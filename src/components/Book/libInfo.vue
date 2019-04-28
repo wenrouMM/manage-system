@@ -7,7 +7,7 @@
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
       </div>
-      <div style="width:1288px;margin-left: 30px;background-color:white;height:952px">
+      <div style="width:1320px;margin-left: 30px;background-color:white;height:952px">
         <el-container>
           <div class="box-card">
             <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
@@ -43,8 +43,8 @@
                     </template>
                   </el-table-column>
                   <el-table-column align="center" prop="name" width="200" label="藏馆名称"></el-table-column>
-                  <el-table-column align="center" prop="fkCityName" width="190" label="城市名字"></el-table-column>
-                  <el-table-column align="center" prop="libraryKey" width="180" label="密钥"></el-table-column>
+                  <el-table-column align="center" prop="fkCityName" width="200" label="城市名字"></el-table-column>
+                  <el-table-column align="center" prop="libraryKey" width="200" label="密钥"></el-table-column>
                   <el-table-column align="center" prop="creatTime" width="230" label="创建时间"></el-table-column>
                   <el-table-column align="center" prop="updateTime" width="230" label="更新时间"></el-table-column>
                 </el-table>

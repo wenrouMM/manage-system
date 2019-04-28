@@ -10,7 +10,7 @@
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:952px" v-loading="formLoading">
         <div style="width: 350px" class="inputDiv">
           <span style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}{{direction}}</span>
-          <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;" @click="closeCheck"></span>
+          <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;display: none" @click="closeCheck"></span>
           <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
               <el-input v-model="form.tag" id="tag"></el-input>
@@ -109,6 +109,7 @@
         this.direction=''
         this.zNodes.length=0
         this.freshArea()
+        this.form.tag=''
         $('#imgX').fadeOut()
       },
       async freshArea() {
