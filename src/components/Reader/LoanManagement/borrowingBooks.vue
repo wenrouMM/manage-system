@@ -264,7 +264,7 @@ export default {
     // 函数过滤
   },
   created() {
-    this.wsValue = this.init("ws://192.168.2.145:7181");
+    this.wsValue = this.init("ws://127.0.0.1:7181");
   },
   destroyed () {
     this.wsValue.close()
