@@ -100,9 +100,9 @@
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
-            
+
           </div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
           </div>
@@ -140,10 +140,10 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="状态" prop="disabled" style="margin-left: 50px">
+            <el-form-item class="select" prop="disabled" label="状态" style="margin-left: 50px">
               <el-radio-group v-model="addForm.disabled">
-                <el-radio label="禁用"></el-radio>
-                <el-radio label="启用"></el-radio>
+                <el-radio label="禁用">禁用</el-radio>
+                <el-radio label="启用">启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -155,7 +155,7 @@
         </el-dialog>
       </div>
     </el-container>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -285,8 +285,6 @@ export default {
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       this.i = 3;
-      this.addForm.disabled = "启用";
-
       this.dialogFormVisible = true;
     },
     batchDelete() {
@@ -314,7 +312,7 @@ export default {
       this.roleCode = row.roleCode;
       console.log(row.roleCode);
       }
-      
+
     },
     handleEdit(index, row) {
       // 编辑

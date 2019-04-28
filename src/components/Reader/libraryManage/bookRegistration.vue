@@ -251,7 +251,6 @@
                 $('#typeMessage').fadeIn()
                 this.zNodes=list
               }
-
             }else{
               this.$message.error(response.data.msg);
             }

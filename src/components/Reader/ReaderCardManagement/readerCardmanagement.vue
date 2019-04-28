@@ -14,6 +14,9 @@
               <button class="add" @click="conductBtn">
                 <i class="addIcon el-icon-plus"></i>办卡
               </button>
+              <button class="add" @click="depositBtn">
+                <i class="addIcon el-icon-plus"></i>押金充值
+              </button>
               <button class="add" @click="addCardBtn">
                 <i class="addIcon el-icon-tickets" ></i>登记读者卡
               </button>
@@ -101,7 +104,7 @@
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer">
             <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
             <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
           </div>
@@ -119,9 +122,19 @@
         >
           <el-form ref="changeForm" :model="changeForm" :rules="changeRules">
             <!-- 表单域 -->
-            <el-form-item :label="labelName[i]" prop="idCard">
-              <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
-            </el-form-item>
+            <div v-if="i==0">
+              <el-form-item :label="labelName[i]" prop="idCard">
+                <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
+              </el-form-item>
+            </div>
+            <div v-else-if="i==4">
+              <el-form-item label="卡号" prop="cardNumber">
+                <el-input v-model="changeForm.cardNumber" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="押金" prop="deposit">
+                <el-input v-model="changeForm.deposit" autocomplete="off"></el-input>
+              </el-form-item>
+            </div>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
               <el-button
@@ -144,7 +157,7 @@
 import axios from "axios";
 import {
   readerType,
-  
+
   cardInfoInt
 } from "../../../request/api/base.js";
 export default {
@@ -173,7 +186,7 @@ export default {
       currentPage: 1,
       paginationForm: {},
       /*====== 弹框配置项 ======*/
-      Dialogtitle: ["补办", "登记读者卡", "挂失","取消挂失"],
+      Dialogtitle: ["补办", "登记读者卡", "挂失","取消挂失",'押金充值'],
       labelName:["新卡号","读者卡号",''],
       deleteDialog: false, // 禁用弹框
       deleteArr: {},
@@ -183,10 +196,14 @@ export default {
       changeFormDialog: false, // // 添加弹框的展示和消失
       formLabelWidth: "100px",
       changeForm: {
-        idCard:'' // 新卡号
+        idCard:'',// 新卡号
+        cardNumber:'',
+        deposit:''
       },
       changeRules: {
         idCard: [{ required: true, message: "请输入卡号", trigger: "blur" }],
+        cardNumber:[{ required: true, message: "请输入卡号", trigger: "blur" }],
+        deposit: [{ required: true, message: "请输入押金", trigger: "blur" }],
       }
     };
   },
@@ -225,6 +242,10 @@ export default {
   },
   methods: {
     /*====== 2.0 启动按钮组 ======*/
+    depositBtn(){
+      this.i=4
+      this.changeFormDialog=true
+    },
     // 全选按钮
     selectAllBtn(val) {
       this.Allseclet = val;
@@ -263,7 +284,7 @@ export default {
       this.changeForm.cardNumber = row.cardNumber
       this.changeForm.id = row.id
       this.changeFormDialog = true;
-      
+
       console.log(index, row, this.changeForm);
     },
     // 挂失按钮
@@ -289,6 +310,7 @@ export default {
     // 登记读者卡 补办卡弹框确定按钮
     submitForm(formName, dialogName) {
       let flag = this.i;
+      console.log(flag)
       this.$refs[formName].validate(valid => {
         if (valid) {
           switch (flag) {
@@ -299,6 +321,9 @@ export default {
             case 1:
               this.registerApi(this.addTimeForm, dialogName);
               console.log('登记读者卡API')
+            case 4:
+              this.depositApi(dialogName)
+              console.log('押金充值API')
           }
           this.changeFormDialog = true; // 关闭弹框
         } else {
@@ -387,6 +412,22 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    //押金充值
+    depositApi(dialogName){
+      this.axios.post(depositMoney,{
+        deposit:this.changeForm.deposit,
+        cardNumber:this.changeForm.cardNumber
+      }).then((res)=>{
+        console.log(res)
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+          this[dialogName] = false;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
     },
     // 补办API
     suppleApi(data, dialogName) {
@@ -720,7 +761,7 @@ export default {
 }
 .readerCard form.el-form{
   flex-direction: column;
-  
+
 }
 .readerCard .el-input .el-input__inner {
     width: 100%;

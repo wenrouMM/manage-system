@@ -60,6 +60,7 @@ url='http://192.168.2.121:8088/';
 /*押金记录*/
   depositRecord=url+'tibetmuseummodule/currency/depositRecord/select'//查询表格
   depositDetails=url+'tibetmuseummodule/currency/depositRecord/selectDetails'//押金记录详情
+  depositMoney=url+'tibetmuseummodule/currency/depositRecord/add' //押金充值
 /*逾期记录*/
   overdueRecords=url+'tibetmuseummodule/currency/expectLog/select' //逾期查询表格
   overduePhone=url+'tibetmuseummodule/currency/expectLog/selectUserPhone' //逾期催还电话

@@ -179,15 +179,22 @@
           });
       },
       handleEdit(index, row){
+        //this.centerDialogVisible=true
         this.phone=''
         console.log(row)
         this.axios.get(overduePhone,{params:{id:row.id}}).then((res)=>{
           console.log(res)
           if(res.data.state=true){
             this.phone=res.data.row.phone
+            console.log(this.phone)
             if(this.phone!=''){
               this.centerDialogVisible=true
             }
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: 'warning'
+            });
           }
         })
       }

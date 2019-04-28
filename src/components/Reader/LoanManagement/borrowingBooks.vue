@@ -191,7 +191,7 @@ export default {
     },
 
 
-    
+
     /*------ websocket区域 ------*/
     // 建立websocket连接
     init(url) {
@@ -230,7 +230,7 @@ export default {
         clearTimeout(that.timeoutnum);
       }
       that.timeoutNum = setTimeout(()=>{
-        that.wsValue = that.init("ws://192.168.2.145:7181")
+        that.wsValue = that.init("ws://127.0.0.0:7181")
         that.reconnectStatus = false
       },5000)
       //that.timeoutnum && clearTimeout(that.timeoutnum);可读性极差
@@ -264,7 +264,7 @@ export default {
     // 函数过滤
   },
   created() {
-    this.wsValue = this.init("ws://192.168.2.145:7181");
+    this.wsValue = this.init("ws://127.0.0.1:7181");
   },
   destroyed () {
     this.wsValue.close()

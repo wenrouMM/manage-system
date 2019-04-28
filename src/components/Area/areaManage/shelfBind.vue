@@ -3,7 +3,7 @@
     <div style="display: flex;flex-direction: row" id="mybook">
       <div style="background-color:white;width:250px;display: flex;flex-direction:column;">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">区信息</div>
-        <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
+        <div style="width: 250px;height: 892px;background-color: white;overflow: auto;">
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
       </div>
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  import serialize from "../../../base/js/yf/serialize";
   export default {
     name: "LayerBinding",
     data(){
@@ -100,6 +99,7 @@
       },
     },
     mounted(){
+      $('#imgX').fadeOut()
       $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       this.freshArea()
     },
@@ -109,6 +109,7 @@
         this.direction=''
         this.zNodes.length=0
         this.freshArea()
+        $('#imgX').fadeOut()
       },
       async freshArea() {
         this.axios.get(layerFramezTree).then((response) => {
@@ -142,16 +143,17 @@
         let name=treeNode.name.toString()
         if(this.Address.search(name) == -1 ){
           this.Address+=name
+          $('#imgX').fadeIn()
         }
       },
 
       zTreeOnClick(event, treeId, treeNode){
+        console.log(treeNode)
         console.log(treeNode.direction)
         this.saveString=treeNode
         this.form.tag=treeNode.rfid
         if(treeNode.direction!==null){
           this.direction=treeNode.name
-
         }
       },
       onSubmit(){

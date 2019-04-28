@@ -16,7 +16,7 @@
             <div class="important">
               <!-- 1.0 标题 -->
               <div class="sonTitle">
-                <span class="titleName">图书出版社</span>
+                <span class="titleName">藏馆信息</span>
               </div>
               <div style="display: flex;flex-direction: row">
                 <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
