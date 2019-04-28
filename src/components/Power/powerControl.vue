@@ -250,7 +250,7 @@ export default {
       refuseLoading:false,
       banArr: {  // 禁用传递数据
         fkRoleCode: ""
-        
+
       },
       menuId:[],
       roleId:null
@@ -289,12 +289,13 @@ export default {
       console.log(row.id)
       this.roleId=row.id
       this.zNodes.length=0
+      let list=[]
       this.axios.get(controlurl,{params:{roleid:row.id}}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           for (var item of res.data.rows) {
             //console.log(item)
-            this.zNodes.push({
+            list.push({
               id: item.id, //节点id
               pId: item.pid, //节点父id
               name: item.name, //节点名称
@@ -303,10 +304,13 @@ export default {
             });
           }
           //将数据渲染到ztree树
-          $.fn.zTree.init($("#treeDemo"), this.setting,this.zNodes);
+          $.fn.zTree.init($("#treeDemo"), this.setting,list);
+          if(list.length>0){
+            $('#typeMessage').fadeIn()
+            this.zNodes=list
+          }
         }
       })
-      $('#typeMessage').fadeIn()
     },
     /*====== 授权加载ztree树，节点被勾选时 ======*/
     zTreeOnCheck(event,treeId,treeNode){
