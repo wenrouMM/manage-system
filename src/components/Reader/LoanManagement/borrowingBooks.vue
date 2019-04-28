@@ -80,12 +80,12 @@ export default {
       },
       /*------ websocket配置 ------*/
       wsValue: null,
-      reconnectStatus:false, // 是否重连
-      timeout:5*1000, // 心跳检测间隔
-      timeoutObj:null, // 心跳间隔定时器
-      serverTimeOutObj:null, // 服务器超时关闭定时器
-      timeoutNum:null, // 重连定时器
-
+      reconnectStatus: false, // 是否重连
+      timeout: 5 * 1000, // 心跳检测间隔
+      timeoutObj: null, // 心跳间隔定时器
+      serverTimeOutObj: null, // 服务器超时关闭定时器
+      timeoutNum: null, // 重连定时器
+      last:0
     };
   },
   computed: {
@@ -116,12 +116,18 @@ export default {
     sellBtn() {
       this.operateApi(this.submitTimeForm);
     },
-
-    // 重新扫描
+    //
+    // 重新扫描 已节流 关键在于函数的自运行和 var的作用域
     reset() {
-      this.wsValue.send("reset");
-      this.tableData = [];
-      console.log(this.wsValue);
+      var now = +new Date();
+      console.log("相差的时间", now - this.last);
+      if (now - this.last > 10000) {
+        console.log('函数节流')
+        this.wsValue.send("reset");
+        this.tableData = [];
+        this.last = now;
+      }
+      //console.log(this.wsValue);
     },
     /*------ API区 ------*/
     // websocker获取RFID
@@ -190,13 +196,11 @@ export default {
       });
     },
 
-
-
     /*------ websocket区域 ------*/
     // 建立websocket连接
     init(url) {
       var ws = new WebSocket(url);
-      let that = this
+      let that = this;
       ws.onopen = e => {
         ws.send("connect");
         console.log("连接成功");
@@ -204,9 +208,15 @@ export default {
       ws.onmessage = e => {
         this.message = e.data;
         // IC卡匹配过滤
-        let obj = {}
-        obj.rfid = e.data.replace(/\s+/g,"")
-        this.RfidApi(obj)
+        let result = /^IC/.test(e.data)
+        if(result){
+          this.searchForm.username = e.data.replace(/^IC/,"")
+        } else{
+          let obj = {};
+          obj.rfid = e.data.replace(/\s+/g, "");
+          this.RfidApi(obj);
+        }
+        
         console.log("接收数据", e.data);
       };
       ws.onclose = e => {
@@ -218,56 +228,60 @@ export default {
       return ws;
     },
 
+    // 数据过滤
+
+
+
     /*------ 多余的函数 ------*/
     // 重新连接
     reconnect() {
-      var that = this
-      if(this.reconnectStatus){
-        return
+      var that = this;
+      if (this.reconnectStatus) {
+        return;
       }
-      that.reconnectStatus = true
-      if(that.timeoutnum){
+      that.reconnectStatus = true;
+      if (that.timeoutnum) {
         clearTimeout(that.timeoutnum);
       }
-      that.timeoutNum = setTimeout(()=>{
-        that.wsValue = that.init("ws://127.0.0.0:7181")
-        that.reconnectStatus = false
-      },5000)
+      that.timeoutNum = setTimeout(() => {
+        that.wsValue = that.init("ws://127.0.0.0:7181");
+        that.reconnectStatus = false;
+      }, 5000);
       //that.timeoutnum && clearTimeout(that.timeoutnum);可读性极差
     },
     // 心跳开始
     webstart() {
-      var self = this
+      var self = this;
       // 检测定时器是否存在 清除定时器
-      self.timeoutObj && clearTimeout(self.timeoutObj)
-      self.serverTimeOutObj && clearTimeout(self.serverTimeOutObj)
-      self.timeoutObj = setTimeout(res =>{
-        if(self.wsValue.readyState == 1){
-          self.wsValue.send('heartcheck')
-        }else{
-          self.reconnect()
+      self.timeoutObj && clearTimeout(self.timeoutObj);
+      self.serverTimeOutObj && clearTimeout(self.serverTimeOutObj);
+      self.timeoutObj = setTimeout(res => {
+        if (self.wsValue.readyState == 1) {
+          self.wsValue.send("heartcheck");
+        } else {
+          self.reconnect();
         }
         // 超时关闭
-        self.serverTimeOutObj = setTimeout(res =>{
-          self.wsValue.close()
-        },self.timeout)
-      },self.timeout)
+        self.serverTimeOutObj = setTimeout(res => {
+          self.wsValue.close();
+        }, self.timeout);
+      }, self.timeout);
     },
     // 心跳重置
-    webreset(){
-      var that = this
-      clearTimeout(that.timeoutObj)
-      clearTimeout(that.serverTimeOutObj)
-      that.start()
+    webreset() {
+      var that = this;
+      clearTimeout(that.timeoutObj);
+      clearTimeout(that.serverTimeOutObj);
+      that.start();
     }
     // 数组去重其一
-    // 函数过滤
+    
   },
   created() {
     this.wsValue = this.init("ws://127.0.0.1:7181");
   },
-  destroyed () {
-    this.wsValue.close()
+  destroyed() {
+    this.wsValue.close();
   }
 };
 </script>

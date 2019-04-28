@@ -14,10 +14,8 @@
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
-          <el-menu-item index="powerMode">首页</el-menu-item>
           <el-submenu index="area">
             <template slot="title">
-              <i class="el-icon-location"></i>
               <span>库房管理</span>
             </template>
             <el-menu-item-group >
@@ -29,13 +27,6 @@
       </el-aside>
       <el-main>
         <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
-        <div class="routerBox" v-if="navRouter">
-          <span class="routerButton circularButton labelActive">
-            用户管理
-            <i class="Iconerror">x</i>
-          </span>
-        </div>
-        <div class="space"></div>
         <router-view></router-view>
       </el-main>
     </el-container>

@@ -31,7 +31,7 @@
           <el-table-column align="center" prop="libraryBookCode" width="220" label="书籍编码"></el-table-column>
           <el-table-column align="center" prop="start" width="250" label="借书开始时间"></el-table-column>
           <el-table-column align="center" prop="end" width="250" label="预计书籍归还时间"></el-table-column>
-          <el-table-column align="center" prop="state" width="200" label="借书状态">
+          <el-table-column align="center" prop="state"  label="借书状态">
             <template slot-scope="scope">
               <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
             </template>
@@ -43,12 +43,13 @@
             <p style="margin-left: 40px">原因 :&nbsp;&nbsp;{{item.reason}}</p>
           </div>
         </section>
-
+        <!--
         <el-button
           @click="stampBtn"
           type="primary"
           style="margin-left: 550px;margin-top: 150px"
         >完成并打印凭条</el-button>
+        -->
       </section>
     </div>
   </div>
@@ -115,5 +116,6 @@ export default {
 .stateBox{
   width: 100%;
   padding : 0 150px;
+  box-sizing: border-box;
 }
 </style>

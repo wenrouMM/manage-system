@@ -24,7 +24,7 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-/*
+
 axios.interceptors.response.use(
   response => { // 回复信息配置 code！=200 
     // 还要其他的方法获得权限吗 这样是否有一些缺陷
@@ -50,6 +50,6 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-*/
+
 
 export default axios

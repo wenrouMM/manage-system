@@ -7,16 +7,14 @@
         <el-menu
           class="content"
           router
-          :default-openeds="['1', '3']"
+          :default-active="onRoutes"
           background-color="#545c64"
           text-color="#fff"
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
-
-          <el-menu-item index="powerMode">首页</el-menu-item>
           <el-menu-item class="activeMenu" index="userManage">
-            <i class="el-icon-message iconpath"></i>用户管理
+            用户管理
           </el-menu-item>
           <el-menu-item class="activeMenu" index="userRole">角色管理</el-menu-item>
           <el-menu-item class="activeMenu" index="powerControl">权限管理</el-menu-item>
@@ -26,13 +24,6 @@
       </el-aside>
       <el-main>
         <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
-        <div class="routerBox" v-if="navRouter">
-          <span class="routerButton circularButton labelActive">
-            用户管理
-            <i class="Iconerror">x</i>
-          </span>
-        </div>
-        <div class="space"></div>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -52,6 +43,11 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
+  },
+   computed: {
+    onRoutes() {
+      return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
+    },
   }
 };
 </script>
