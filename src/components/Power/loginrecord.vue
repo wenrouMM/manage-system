@@ -87,7 +87,6 @@
               </span>
             </slot>
             </el-pagination>
-
             <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>

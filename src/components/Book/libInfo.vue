@@ -67,7 +67,7 @@
           <div class="addEditDialog">
             <!-- Form -->
             <el-dialog  width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible" @close="closeForm">
-              <el-form :label-position="labelPosition" label-width="80px" :model="addForm" :rules="addRules" style="width: 400px;margin: 0px auto" id="addFormYf">
+              <el-form :label-position="labelPosition" :ref="addForm" label-width="80px" :model="addForm" :rules="addRules" style="width: 400px;margin: 0px auto" id="addFormYf">
                 <el-form-item label="藏馆名称" prop="name">
                   <el-input v-model="addForm.name"></el-input>
                 </el-form-item>
@@ -77,7 +77,7 @@
                 <el-form-item label="藏馆密匙" prop="key">
                   <el-input v-model="addForm.key"></el-input>
                 </el-form-item>
-                <el-button type="primary" @click="saveApi('addForm')" style="width: 200px;margin-left: 100px">保存</el-button>
+                <el-button type="primary" @click="submitForm('addForm')" style="width: 200px;margin-left: 100px">保存</el-button>
               </el-form>
             </el-dialog>
           </div>
@@ -96,10 +96,10 @@
           edit: {
             enable: true,
             showRemoveBtn: false,
-            addHoverBtn:true,
+            addHoverBtn: false,
             removeTitle: "删除节点",
             showRenameBtn: false,
-            editNameSelectAll: true
+            editNameSelectAll: false
           },
           data: {
             simpleData: {
@@ -112,7 +112,7 @@
           view: {
             showLine: false,
             showIcon: true,
-            dblClickExpand: false,
+            dblClickExpand: true,
             addDiyDom: this.addDiyDom,
             selectedMulti: true,
             addHoverDom: this.addHoverDom,
@@ -120,16 +120,16 @@
           },
           callback: {
             onClick: this.zTreeOnClick, //节点点击事件
-            onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
-            beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
-            beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
-            onRemove: this.onRemove //删除事件
+            onCheck: this.zTreeOnCheck, //勾选时事件
+          },
+          check: {
+            enable: true,
+            chkStyle: "radio",
+            radioType: "all"
           }
         },
+        zNodes: [],
         tableLoading:false,
-        zNodes: [
-
-        ],
         /*====== 0.0初始化弹框数据 ======*/
         /*初始化 */
         //total: 0,
@@ -177,22 +177,19 @@
       },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
+        console.log(this.zTree.code)
+        this.dialogFormVisible = true;
         this.addmessage='show'
-        this.$alert('请选择您要添加图书出版社的所在地区', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //this.dialogFormVisible = true
-          }
-        });
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
         this.axios.get(bookurlcity).then((response)=>{
-          console.log(response)
+          console.log('ztree树',response)
           for (var item of response.data.row) {
             this.zNodes.push({
               name:item.name,
               code: item.code, //节点菜单编码
+              checked:item.checked
             });
           }
           //将数据渲染到ztree树
@@ -201,6 +198,8 @@
       },
       /*====== 3.1点击ztree节点获取节点信息======*/
       zTreeOnClick(event, treeId, treeNode){
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        treeObj.checkNode(treeNode, !treeNode.checked, true);
         console.log(treeNode.name,treeNode.code)
         var list={
           name:treeNode.name,
@@ -211,40 +210,50 @@
           this.dialogFormVisible=true
         }else{
           let cityCode={cityCode:this.zTree.code}
-          this.table(cityCode)
+          this.tableApi(cityCode)
         }
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
-      saveApi() {
-        var addStr=[{
-          fkCityCode:this.zTree.code,
-          fkCityName:this.zTree.name,
+      submitForm() {
+        console.log('ztree树节点信息',this.zTree.code)
+        if(this.zTree.code==undefined){
+          this.formApi('北京市','bj_jing')
+        }else{
+          this.formApi(this.zTree.name,this.zTree.code)
+        }
+      },
+      formApi(ztreeName,ztreeCode){
+        this.axios.post(libinfo,{
+          fkCityCode:ztreeCode,
+          fkCityName:ztreeName,
           code:this.addForm.code,
           name:this.addForm.name,
           libraryKey:this.addForm.key
-        }]
-        this.axios.post(libinfo,addStr).then((res)=>{
+        }).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
               message: res.data.msg,
               type: 'success'
             });
+            this.closeForm()
             this.dialogFormVisible=false
-            this.table()
+            let cityName={cityCode:this.zTree.code}
+            this.tableApi(cityName)
           }else{
             this.$message({
               message: res.data.msg,
               type: 'error'
             });
-            this.addForm={}
+            this.closeForm()
             this.dialogFormVisible=false
           }
         })
+        this.$refs[this.addForm].resetFields();
         this.addmessage=''
       },
-      table(value){
+      tableApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
           .get(libinfotable, {
@@ -254,11 +263,6 @@
             console.log("当前获取的数据", res.data);
             if (res.data.state === true) {
               let nomol = res.data.row;
-              // let i = 1;
-              // for (let item of nomol) {
-              //   item.index = i;
-              //   i++;
-              // }
               this.tableData = nomol; //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
@@ -278,13 +282,10 @@
         console.log("保存当前查询", this.paginationForm);
         this.table(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
-      // 提交按钮
-      submitLib(){
-
-      }
     },
     mounted(){
-      this.table()
+      let defaultBJ={cityCode:'bj_jing'}
+      this.tableApi(defaultBJ)
       this.freshArea()
     }
   };
