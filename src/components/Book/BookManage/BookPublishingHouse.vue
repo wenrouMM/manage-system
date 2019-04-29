@@ -226,12 +226,16 @@
         console.log('ztree树节点信息',this.zTree.code)
         if(this.zTree.code==undefined){
           this.formApi('北京市','bj_jing')
+          let defaultBJ={cityCode:'bj_jing'}
+          this.tableApi(defaultBJ)
         }else{
           this.formApi(this.zTree.name,this.zTree.code)
+          let cityName={cityCode:this.zTree.code}
+          this.tableApi(cityName)
         }
       },
       formApi(ztreeName,ztreeCode){
-        this.axios.post(bookpublishhouse,{
+        var addStr=[{
           id: null,
           code: "",
           name:this.addForm.publishName,
@@ -240,7 +244,8 @@
           address:this.addForm.componentAddress,
           contacts:this.addForm.contacts,
           telephone:this.addForm.contactPhone
-        }).then((res)=>{
+        }]
+        this.axios.post(bookpublishhouse,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -249,8 +254,6 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
-            let cityName={cityCode:this.zTree.code}
-            this.tableApi(cityName)
           }else{
             this.$message({
               message: res.data.msg,

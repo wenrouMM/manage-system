@@ -239,7 +239,10 @@
               this.zNodes=list
             }
           }else{
-            this.$message.error(response.data.msg);
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            });
           }
         })
       },
@@ -262,12 +265,17 @@
               console.log(res)
               if(res.data.state==true){
                 this.$message({
-                  message: res.data.row,
+                  message: res.data.msg,
                   type: 'success'
                 });
+                this.$refs[this.ruleForm].resetFields();
+                this.ruleForm={}
                 this.formLoading=false
               }else{
-                this.$message.error(res.data.row);
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                });
                 this.formLoading=false
               }
             })

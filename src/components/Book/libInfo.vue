@@ -219,18 +219,23 @@
         console.log('ztree树节点信息',this.zTree.code)
         if(this.zTree.code==undefined){
           this.formApi('北京市','bj_jing')
+          let defaultBJ={cityCode:'bj_jing'}
+          this.tableApi(defaultBJ)
         }else{
           this.formApi(this.zTree.name,this.zTree.code)
+          let cityName={cityCode:this.zTree.code}
+          this.tableApi(cityName)
         }
       },
       formApi(ztreeName,ztreeCode){
-        this.axios.post(libinfo,{
+        var addStr=[{
           fkCityCode:ztreeCode,
           fkCityName:ztreeName,
           code:this.addForm.code,
           name:this.addForm.name,
           libraryKey:this.addForm.key
-        }).then((res)=>{
+        }]
+        this.axios.post(libinfo,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -239,8 +244,6 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
-            let cityName={cityCode:this.zTree.code}
-            this.tableApi(cityName)
           }else{
             this.$message({
               message: res.data.msg,
@@ -280,7 +283,7 @@
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm);
-        this.table(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.tableApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
     },
     mounted(){

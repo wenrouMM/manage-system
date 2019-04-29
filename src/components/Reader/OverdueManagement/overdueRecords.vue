@@ -49,7 +49,7 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" width="180" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" width="180" label="卡号"></el-table-column>
               <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
               <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
@@ -58,6 +58,7 @@
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
+                  <span class="edit" @click="handleBan(scope.$index, scope.row)">处理</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -73,8 +74,13 @@
             </section>
           </section>
           <div class="forbid">
-            <el-dialog :title="Dialogtitle" :visible.sync="centerDialogVisible" width="500px" center>
-              <div class="dialogBody">电话 : &nbsp; &nbsp;{{phone}}</div>
+            <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+              <div v-if="i!=1" style="text-align: center">
+                <div style="font-size: 20px;color: grey">电话 : &nbsp; &nbsp;{{phone}}</div>
+              </div>
+              <div v-if="i==1">
+                <div style="font-size: 20px;color: grey">该用户逾期金额为{{overdueMoney}}元，是否处理？</div>
+              </div>
               <div slot="footer">
                 <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
                 <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
@@ -95,7 +101,8 @@
         rowStyle: {
           height: "60px"
         },
-        Dialogtitle:'催还',
+        Dialogtitle:['催还','处理'],
+        i: null, // 切换弹框标题
         centerDialogVisible:false,
         defaultImg: " ", // 上传头像默认头像
         formLabelWidth: "120px",
@@ -114,7 +121,9 @@
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
         ],
-        phone:''
+        phone:'',//催还用户电话号码
+        overdueMoney:'',//处理用户逾期金额
+        id:''
       };
     },
     mounted() {
@@ -135,7 +144,23 @@
     },
     methods: {
       submitDialog(){
-
+        console.log(this.id)
+        this.axios.post(overduemake,{id:this.id}).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            });
+            this.centerDialogVisible=false
+            this.SearchApi(this.searchTimeForm)
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
+          }
+        })
       },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
@@ -180,6 +205,7 @@
       },
       handleEdit(index, row){
         //this.centerDialogVisible=true
+        this.i=0
         this.phone=''
         console.log(row)
         this.axios.get(overduePhone,{params:{id:row.id}}).then((res)=>{
@@ -188,6 +214,25 @@
             this.phone=res.data.row.phone
             console.log(this.phone)
             if(this.phone!=''){
+              this.centerDialogVisible=true
+            }
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        })
+      },
+      handleBan(index, row){
+        this.id=row.id
+        this.i=1
+        this.overdueMoney=''
+        this.axios.get(overdueMoney,{params:{id:row.id}}).then((res)=>{
+          console.log(res)
+          if(res.data.state=true){
+            this.overdueMoney=res.data.row
+            if(this.overdueMoney!=''){
               this.centerDialogVisible=true
             }
           }else{

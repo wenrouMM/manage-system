@@ -321,9 +321,11 @@ export default {
             case 1:
               this.registerApi(this.addTimeForm, dialogName);
               console.log('登记读者卡API')
+              break;
             case 4:
               this.depositApi(dialogName)
               console.log('押金充值API')
+              break
           }
           this.changeFormDialog = true; // 关闭弹框
         } else {

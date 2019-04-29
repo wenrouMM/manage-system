@@ -175,6 +175,7 @@
           $('#imgX').fadeIn()
         }
       },
+
       zTreeOnClick(event, treeId, treeNode){
         console.log(treeNode)
         console.log(treeNode.direction)
