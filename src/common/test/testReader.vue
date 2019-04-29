@@ -14,8 +14,6 @@
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
-          <el-menu-item index="powerMode">首页</el-menu-item>
-          <el-menu-item index="/readeradmin">读者管理</el-menu-item>
           <el-submenu background-color="#545c64" index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -78,9 +76,9 @@
               <span>失信管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/increditrecord">失信记录</el-menu-item>
-              <el-menu-item index="/increditsetting">失信设置</el-menu-item>
-              <el-menu-item index="/incredithistory">失信历史记录</el-menu-item>
+              <el-menu-item >失信记录</el-menu-item>
+              <el-menu-item >失信设置</el-menu-item>
+              <el-menu-item >失信历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="lose">
@@ -89,7 +87,7 @@
               <span>遗失管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/increditrecord">暂定</el-menu-item>
+              <el-menu-item>暂定</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="interview">
@@ -107,13 +105,6 @@
       </el-aside>
       <el-main>
         <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
-        <div class="routerBox" v-if="navRouter">
-          <span class="routerButton circularButton labelActive">
-            用户管理
-            <i class="Iconerror">x</i>
-          </span>
-        </div>
-        <div class="space"></div>
         <router-view></router-view>
       </el-main>
     </el-container>

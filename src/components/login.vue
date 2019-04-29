@@ -58,8 +58,11 @@ import {loginInter} from '../request/api/base.js'
             var token=res.data.row.authorization // 获取token
             var userInfo = JSON.stringify(res.data.row.authTbManager)
             var menu = JSON.stringify(res.data.row.roleModularMenus)
+            
             console.log(token)
             localStorage.setItem('token',token)
+            localStorage.setItem('userInfo',userInfo)
+            localStorage.setItem('menu',menu)
             this.$store.commit('login', token) // 存入本地 字符串形式存取
             this.$store.commit('setUserInfo',userInfo)
             this.$store.commit('setMenu',menu)
@@ -68,7 +71,7 @@ import {loginInter} from '../request/api/base.js'
             // 过滤生成权限菜单信息
             // 存储动态路由
             // 存储权限带单信息
-            this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
+            this.$router.push('/'); // 跳转至首页 首页的渲染应加入loading设置
           }else{
             if($('#name').val()&&$('#pwd').val())
               $('#msg').html(res.data.msg)

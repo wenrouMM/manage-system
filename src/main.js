@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else{
-    if(token) {
+    if(token&&userInfo&&menu) {
       if(store.state.token == null) {
         store.commit('login', token) // 刷新后再次给予token
         store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息

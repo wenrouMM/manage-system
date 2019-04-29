@@ -7,8 +7,8 @@
         <!-- logo模块 logo图片载入 附加路由调转至首页 -->
         <div class="logoNav">
           <div class="logoBox">
-            <i class="logo"></i>
-            <span class="text">图书馆管理平台</span>
+            <i class="logo el-icon-date"></i>
+            <span @click="skip" class="text">图书馆管理平台</span>
           </div>
           <!-- 头部导航模块 路由添加尚未完成 active驻留模块未完成 -->
           <div class="navBar">
@@ -16,6 +16,7 @@
               text-color="#fff"
               mode="horizontal"
               router
+              :default-active="onRoutes"
               @select="handleSelect"
               background-color="#0096ff"
             >
@@ -34,7 +35,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              小猪
+              <span>{{localUser.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -55,21 +56,39 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       activeIndex: "1",
-      activeIndex2: "1"
+      activeIndex2: "1",
+      localUser:null,
     };
   },
   methods: {
+    skip() {
+      this.$router.push({path:'/powerMode'})
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
     loginOut() {
-      this.$store.commit('logOut')
-      this.$router.push('/login')
+      this.$store.commit("logOut");
+      this.$store.commit('deleteUserInfo')
+      this.$store.commit('deleteMenu')
+      this.$router.push("/login");
     }
+  },
+  computed: {
+    onRoutes() {
+      return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
+    },
+    ...mapGetters(["userInfo"])
+  },
+  created(){
+    let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.localUser = userInfo
+    console.log('用户信息呢', this.localUser)
   }
 };
 </script>
@@ -84,7 +103,7 @@ body,
 }
 .index {
   height: 100%;
-  width: 100% ;
+  width: 100%;
 }
 .index .title {
   font-size: 14px;
@@ -126,6 +145,7 @@ body,
   cursor: pointer;
 }
 .headmode .logoBox .logo {
+  margin-right: 10px;
 }
 /*头部nav区域*/
 .headmode .navBar {
@@ -291,5 +311,4 @@ body,
 }
 
 /*====== 图标类 可能后期需要更换 ======*/
-
 </style>

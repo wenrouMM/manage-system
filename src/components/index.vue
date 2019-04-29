@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <el-container style="height:100%">
+    <el-container v-if="menu.length" style="height:100%">
       <!-- 头部组件 -->
       <!-- 1.0头部模块 -->
       <el-header class="headmode" style="font-size: 12px">
@@ -8,7 +8,7 @@
         <div class="logoNav">
           <div class="logoBox">
             <i class="logo"></i>
-            <span class="text">图书馆管理平台</span>
+            <span @click="skip" class="text">图书馆管理平台</span>
           </div>
           <!-- 头部导航模块 路由添加尚未完成 active驻留模块未完成 -->
           <div class="navBar">
@@ -18,8 +18,7 @@
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="/">首页</el-menu-item>
-              <el-menu-item :index="num" v-for="(item,num) of menu" :key="num">{{item.menuName}}</el-menu-item>
+              <el-menu-item :index="num"   v-for="(item,num) of menuLo" :key="num">{{item.menuName}}</el-menu-item>
               
             </el-menu>
           </div>
@@ -32,11 +31,11 @@
           </div>
           <div class="userBox">
             <div class="username">
-              <span>{{userInfo.username}}</span>
+              <span>{{userLo.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
-                <span class="dropItem">切换账户</span>
+                <span @click="loginOut" class="dropItem">切换账户</span>
               </div>
             </div>
             <i class="notice"></i>
@@ -58,10 +57,10 @@
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
-            <NavMenu v-show="Mode==0" :navMenus="menu[0].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==1" :navMenus="menu[1].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==2" :navMenus="menu[2].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==3" :navMenus="menu[3].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==0" :navMenus="menuLo[0].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==1" :navMenus="menuLo[1].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==2" :navMenus="menuLo[2].roleModularMenus"></NavMenu>
+            <NavMenu v-show="Mode==3" :navMenus="menuLo[3].roleModularMenus"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
@@ -84,323 +83,10 @@ import {mapGetters} from "vuex"
 export default {
   data() {
     return {
-      Mode: 1,
-      leftMenus: {
-        entity: null,
-        childs: [
-          {
-            entity: {
-              // index与路由属性的区别
-              id: 1, // 自身ID用于 与下面的parentId应该是用来形成树结构的
-              parentMenuId: 0,
-              name: "systemManage", // 用来做index路由跳转
-              icon: "el-icon-message\r\n", // 用于自己选项的图标
-              alias: "系统管理", // 名字
-              state: "ENABLE", // 是否被渲染
-              sort: 0, // 排序？
-              value: null, // 路由地址
-              type: "NONE", // 类型
-              discription: "用于系统管理的菜单", // 描述
-              createUserId: 1 // 生成用户的ID
-            },
-            childs: [
-              {
-                entity: {
-                  id: 3,
-                  parentMenuId: 1,
-                  name: "authManage",
-                  icon: "el-icon-loading",
-                  alias: "权限管理",
-                  state: "ENABLE",
-                  sort: 0,
-                  value: "/system/auth",
-                  type: "NONE",
-                  discription: "用于权限管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              },
-              {
-                entity: {
-                  id: 4,
-                  parentMenuId: 1,
-                  name: "roleManage",
-                  icon: "el-icon-bell",
-                  alias: "角色管理",
-                  state: "ENABLE",
-                  sort: 1,
-                  value: "/system/role",
-                  type: "LINK",
-                  discription: "用于角色管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              },
-              {
-                entity: {
-                  id: 2,
-                  parentMenuId: 1,
-                  name: "menuManage",
-                  icon: "el-icon-edit",
-                  alias: "菜单管理",
-                  state: "ENABLE",
-                  sort: 2,
-                  value: "/system/menu",
-                  type: "LINK",
-                  discription: "用于菜单管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              },
-              {
-                entity: {
-                  id: 5,
-                  parentMenuId: 1,
-                  name: "groupManage",
-                  icon: "el-icon-mobile-phone\r\n",
-                  alias: "分组管理",
-                  state: "ENABLE",
-                  sort: 3,
-                  value: "/system/group",
-                  type: "LINK",
-                  discription: "用于分组管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              }
-            ]
-          },
-          {
-            entity: {
-              id: 6,
-              parentMenuId: 0,
-              name: "userManage",
-              icon: "el-icon-news",
-              alias: "用户管理",
-              state: "ENABLE",
-              sort: 1,
-              value: null,
-              type: "NONE",
-              discription: "用于用户管理的菜单",
-              createUserId: 1
-            },
-            childs: [
-              {
-                entity: {
-                  id: 7,
-                  parentMenuId: 6,
-                  name: "accountManage",
-                  icon: "el-icon-phone-outline\r\n",
-                  alias: "帐号管理",
-                  state: "ENABLE",
-                  sort: 0,
-                  value: "",
-                  type: "NONE",
-                  discription: "用于帐号管理的菜单",
-                  createUserId: 1
-                },
-                childs: [
-                  {
-                    entity: {
-                      id: 14,
-                      parentMenuId: 7,
-                      name: "emailManage",
-                      icon: "el-icon-sold-out\r\n",
-                      alias: "邮箱管理",
-                      state: "ENABLE",
-                      sort: 0,
-                      value: "/content/email",
-                      type: "LINK",
-                      discription: "用于邮箱管理的菜单",
-                      createUserId: 1
-                    },
-                    childs: null
-                  },
-                  {
-                    entity: {
-                      id: 13,
-                      parentMenuId: 7,
-                      name: "passManage",
-                      icon: "el-icon-service\r\n",
-                      alias: "密码管理",
-                      state: "ENABLE",
-                      sort: 1,
-                      value: "/content/pass",
-                      type: "LINK",
-                      discription: "用于密码管理的菜单",
-                      createUserId: 1
-                    },
-                    childs: null
-                  }
-                ]
-              },
-              {
-                entity: {
-                  id: 8,
-                  parentMenuId: 6,
-                  name: "integralManage",
-                  icon: "el-icon-picture",
-                  alias: "积分管理",
-                  state: "ENABLE",
-                  sort: 1,
-                  value: "/user/integral",
-                  type: "LINK",
-                  discription: "用于积分管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              }
-            ]
-          },
-          {
-            entity: {
-              id: 9,
-              parentMenuId: 0,
-              name: "contentManage",
-              icon: "el-icon-rank",
-              alias: "内容管理",
-              state: "ENABLE",
-              sort: 2,
-              value: null,
-              type: "NONE",
-              discription: "用于内容管理的菜单",
-              createUserId: 1
-            },
-            childs: [
-              {
-                entity: {
-                  id: 10,
-                  parentMenuId: 9,
-                  name: "classifyManage",
-                  icon: "el-icon-printer",
-                  alias: "分类管理",
-                  state: "ENABLE",
-                  sort: 0,
-                  value: "/content/classify",
-                  type: "LINK",
-                  discription: "用于分类管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              },
-              {
-                entity: {
-                  id: 11,
-                  parentMenuId: 9,
-                  name: "articleManage",
-                  icon: "el-icon-star-on",
-                  alias: "文章管理",
-                  state: "ENABLE",
-                  sort: 1,
-                  value: "/content/article",
-                  type: "LINK",
-                  discription: "用于文章管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              },
-              {
-                entity: {
-                  id: 12,
-                  parentMenuId: 9,
-                  name: "commentManage",
-                  icon: "el-icon-share",
-                  alias: "评论管理",
-                  state: "ENABLE",
-                  sort: 2,
-                  value: "/content/comment",
-                  type: "LINK",
-                  discription: "用于评论管理的菜单",
-                  createUserId: 1
-                },
-                childs: null
-              }
-            ]
-          }
-        ]
-      },
-      testMenus: [
-        {
-          menuCode: "privilegeSystem",
-          menuName: "权限系统",
-          roleModularMenus: [
-            {
-              menuCode: "menuInformation", // 菜单路由地址
-              menuName: "菜单管理", // 菜单名字
-              roleModularMenus: null // 是否有子菜单
-            },
-            {
-              menuCode: "roleMenuElement",
-              menuName: "权限管理",
-              roleModularMenus: null
-            },
-            {
-              menuCode: "roleInformation",
-              menuName: "角色管理",
-              roleModularMenus: null
-            },
-            {
-              menuCode: "managerInformation",
-              menuName: "用户管理",
-              roleModularMenus: null
-            },
-            {
-              menuCode: "authTbManagerLoginLog",
-              menuName: "登陆记录",
-              roleModularMenus: null
-            }
-          ]
-        },
-        {
-          menuCode: "privilegeSystem",
-          menuName: "图书系统",
-          roleModularMenus: [
-            {
-              menuCode: "menuInformation",
-              menuName: "图书管理",
-              roleModularMenus: [
-                {
-                  menuCode: "/bookType",
-                  menuName: "图书类型",
-                  roleModularMenus: null
-                },
-                {
-                  menuCode: "/bookInfo",
-                  menuName: "图书信息",
-                  roleModularMenus: null
-                },
-                {
-                  menuCode: "/bookpublishhouse",
-                  menuName: "图书出版社",
-                  roleModularMenus: null
-                }
-              ]
-            },
-            {
-              menuCode: "roleMenuElement",
-              menuName: "藏馆管理管理",
-              roleModularMenus: [
-                {
-                  menuCode: "/libBookInfo",
-                  menuName: "藏馆信息",
-                  roleModularMenus: null
-                },
-                {
-                  menuCode: "/libBookType",
-                  menuName: "馆内图书信息",
-                  roleModularMenus: null
-                },
-                {
-                  menuCode: "/libInfo",
-                  menuName: "馆内图书类型",
-                  roleModularMenus: null
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      navRouter: []
+      Mode: 0,
+      navRouter: [],
+      menuLo:[],
+      userLo:null
     };
   },
   methods: {
@@ -411,6 +97,15 @@ export default {
     routerBox(index, indexPath) {
       console.log(index);
       console.log(indexPath);
+    },
+    skip() {
+      this.$router.push({path:'/'})
+    },
+    loginOut() {
+      this.$store.commit("logOut");
+      this.$store.commit('deleteUserInfo')
+      this.$store.commit('deleteMenu')
+      this.$router.push("/login");
     }
   },
   computed: {
@@ -426,6 +121,13 @@ export default {
   components: {
     NavMenu,
     Tags
+  },
+  created(){
+    let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    let menu = JSON.parse(localStorage.getItem('menu'))
+    this.userLo = userInfo
+    this.menuLo = menu
+    console.log(this.menu)
   }
 };
 </script>
