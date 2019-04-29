@@ -293,9 +293,8 @@
     display: none;
     position: absolute;
     top: 200px;
-    left:750px;
+    left:550px;
     z-index: 30000;
-
   }
   #typeMessage div:nth-child(1){
     width: 400px;

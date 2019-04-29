@@ -54,9 +54,9 @@
               <span>充值管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/chargemoney">余额充值</el-menu-item>
+              <el-menu-item index="/chargemoney">余额充值-</el-menu-item>
               <el-menu-item index="/depositrecord">押金记录</el-menu-item>
-              <el-menu-item index="/paymentrecord">缴费记录</el-menu-item>
+              <el-menu-item index="/paymentrecord">缴费记录*</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="outDate">
@@ -65,15 +65,15 @@
               <span>逾期管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
-              <el-menu-item index="/overduesetting">逾期设置</el-menu-item>
-              <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
+              <el-menu-item index="/overduerecords">逾期记录+</el-menu-item>
+              <el-menu-item index="/overduesetting">逾期设置*</el-menu-item>
+              <el-menu-item index="/overduehistory">逾期历史记录*</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="losttrust">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>失信管理</span>
+              <span>失信管理*</span>
             </template>
             <el-menu-item-group>
               <el-menu-item >失信记录</el-menu-item>
@@ -84,7 +84,7 @@
           <el-submenu index="lose">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>遗失管理</span>
+              <span>遗失管理?</span>
             </template>
             <el-menu-item-group>
               <el-menu-item>暂定</el-menu-item>
@@ -93,7 +93,7 @@
           <el-submenu index="interview">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>采访管理</span>
+              <span>采访管理?</span>
             </template>
             <el-menu-item-group>
               <el-menu-item index="/increditrecord">图书订购</el-menu-item>

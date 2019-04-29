@@ -87,8 +87,8 @@
               </span>
             </slot>
             </el-pagination>
-            
-            <span class="pagaButton" @click="jumpBtn">确定</span>
+
+            <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
       </div>
@@ -152,7 +152,7 @@
             )
           }
         },
-        
+
         tableLoading: true,
         currentPage: 1,
         pageInput: 1,
@@ -229,7 +229,7 @@
           let num = parseInt(this.pageInput)
           this.current_change(num)
         }
-        
+
       }
     },
     mounted () {

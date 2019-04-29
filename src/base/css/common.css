@@ -93,6 +93,9 @@
 .mr_30{
   margin-right: 30px;
 }
+.ml_30{
+  margin-left: 30px;
+}
 .userManage .searchBox .el-form{
   display: flex;
 }
@@ -108,7 +111,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
 }
 .pagaButton {
   width: 70px;

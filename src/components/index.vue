@@ -17,9 +17,10 @@
               mode="horizontal"
               @select="handleSelect"
               background-color="#0096ff"
+              v-if="menuLo.length"
             >
               <el-menu-item :index="num"   v-for="(item,num) of menuLo" :key="num">{{item.menuName}}</el-menu-item>
-              
+
             </el-menu>
           </div>
         </div>
@@ -69,7 +70,7 @@
           <transition name="fade-transform" mode="out-in">
             <router-view></router-view>
           </transition>
-          
+
         </el-main>
       </el-container>
     </el-container>

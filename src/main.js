@@ -49,6 +49,12 @@ router.beforeEach((to, from, next) => {
         store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息
         store.commit('setMenu', menu)
       }
+      if(store.state.user == null) {
+        store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息
+      }
+      if(store.state.menu == null){
+        store.commit('setMenu', menu)
+      }
       next()
     }else{
       Message.error("请先登录");
