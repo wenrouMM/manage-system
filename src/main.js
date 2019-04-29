@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
   let menu = JSON.parse(localStorage.getItem('menu'))
   if(to.path === '/login'){
     console.log(token)
-    if(token){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
+    if(token&&userInfo&&menu){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
       console.log('???')
       Message.error("您已登录");
       next(false)
