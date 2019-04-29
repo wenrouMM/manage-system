@@ -205,7 +205,7 @@ export default {
         // IC卡匹配过滤
         let result = /^IC/.test(e.data)
         if(result){
-          this.searchForm.username = e.data.replace(/^IC/,"")
+          this.searchForm.cardNum = e.data.replace(/^IC/,"")
         } else{
           let obj = {};
           obj.rfid = e.data.replace(/\s+/g, "");
