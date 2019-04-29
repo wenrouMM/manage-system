@@ -33,12 +33,17 @@ router.beforeEach((to, from, next) => {
   let token = getToken()
   let userInfo = JSON.parse(localStorage.getItem('userInfo'))
   let menu = JSON.parse(localStorage.getItem('menu'))
+  
   if(to.path === '/login'){
     console.log(token)
     if(token&&userInfo&&menu){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
-      console.log('???')
-      Message.error("您已登录");
-      next(false)
+      if(store.state.token == null){
+        store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息
+        store.commit('setMenu', menu)
+        console.log('去往',to.path)
+        console.log('来源',from.path)
+      }
+      next(from.path)
     } else { // token不存在
       next()
     }

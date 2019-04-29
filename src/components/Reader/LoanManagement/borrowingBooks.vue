@@ -209,8 +209,17 @@ export default {
         this.message = e.data;
         // IC卡匹配过滤
         let result = /^IC/.test(e.data)
+        let notice = /'error'/.test(e.data)
+        
+        if(notice){
+          this.$message.error('连接串口已断开')
+        }
         if(result){
-          this.searchForm.username = e.data.replace(/^IC/,"")
+          
+          let now = e.data.replace(/^IC/,"")
+          console.log('IC卡',now)
+          this.searchForm.cardNum = e.data.replace(/^IC/,"")
+          console.log()
         } else{
           let obj = {};
           obj.rfid = e.data.replace(/\s+/g, "");

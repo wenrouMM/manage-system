@@ -58,10 +58,10 @@
           >
             <!-- index就是跳转的路由 -->
             <!-- 选中之后的样式 -->
-            <NavMenu v-show="Mode==0" :navMenus="menuLo[0].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==1" :navMenus="menuLo[1].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==2" :navMenus="menuLo[2].roleModularMenus"></NavMenu>
-            <NavMenu v-show="Mode==3" :navMenus="menuLo[3].roleModularMenus"></NavMenu>
+            <NavMenu v-if="menu.length" v-show="Mode==0" :navMenus="menuLo[0].roleModularMenus"></NavMenu>
+            <NavMenu v-if="menu.length" v-show="Mode==1" :navMenus="menuLo[1].roleModularMenus"></NavMenu>
+            <NavMenu v-if="menu.length" v-show="Mode==2" :navMenus="menuLo[2].roleModularMenus"></NavMenu>
+            <NavMenu v-if="menu.length" v-show="Mode==3" :navMenus="menuLo[3].roleModularMenus"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main>
