@@ -27,20 +27,22 @@
           :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
         >
           <el-table-column align="center" type="index" width="150" label="序号"></el-table-column>
-          <el-table-column align="center" prop="bookName" width="220" label="书籍名称"></el-table-column>
-          <el-table-column align="center" prop="libraryBookCode" width="220" label="书籍编码"></el-table-column>
+          <el-table-column align="center" prop="bookName"  width="200"  label="书籍名称"></el-table-column>
+          <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
           <el-table-column align="center" prop="start" width="250" label="借书开始时间"></el-table-column>
           <el-table-column align="center" prop="end" width="250" label="预计书籍归还时间"></el-table-column>
-          <el-table-column align="center" prop="state"  label="借书状态">
+          <el-table-column align="center" prop="state" width="200"  label="借书状态">
             <template slot-scope="scope">
               <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
             </template>
           </el-table-column>
         </el-table>
         <section class="reasonBox">
-          <div class="reason" v-for="(item,index) of fail" :key="index">
-            <p>注释 :&nbsp;&nbsp;{{item.name}}借书失败</p>
-            <p style="margin-left: 40px">原因 :&nbsp;&nbsp;{{item.reason}}</p>
+          <div class="block" v-for="(item,index) of tableData" :key="index">
+            <div class="reason" v-if="item.state == 0">
+              <p>注释 :&nbsp;&nbsp;{{item.bookName}}借书失败</p>
+              <p style="margin-left: 40px">原因 :&nbsp;&nbsp;{{item.reason}}</p>
+            </div>
           </div>
         </section>
         <!--
