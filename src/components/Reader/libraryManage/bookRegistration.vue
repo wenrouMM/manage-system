@@ -1,10 +1,8 @@
 <template>
-    <div style="width: 100%;height: 952px;background-color: white;position: relative" v-loading="formLoading">
-      <div style="display: flex;flex-direction: row;justify-content:space-between;padding-left: 30px;padding-top: 30px;padding-right: 30px">
-        <div>
-          <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-          <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">图书登记</div>
-        </div>
+    <div class="borrowbook" v-loading="formLoading">
+      <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
+        <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
+        <div style="font-size: 16px;color: #878787;margin-left:10px;">图书登记</div>
       </div>
       <el-form
         v-loading="formLoading"
@@ -353,6 +351,11 @@
 </script>
 
 <style scoped>
+  .borrowbook{
+    width: 100%;
+    background-color: white;
+    height: 852px;
+  }
   #typeMessage{
     display: none;
     position: absolute;
