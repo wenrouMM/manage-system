@@ -39,7 +39,7 @@
           <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
             <span>{{ruleForm.bookLocation}}{{ruleForm.direction}}</span>
           </el-form-item>
-          <span style="width:80px;height:20px;padding-top:4px;padding-left:14px;color: #0096FF;margin-top:8px;cursor: default;" @click="locationMessage" id="locaTion">
+          <span @click="locationMessage" id="locaTion">
             位置选择
           </span>
         </div>
@@ -95,9 +95,11 @@
             onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
             beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
             beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
+            onExpand: this.zTreeOnExpand,
+            onCollapse: this.onCollapse,
             beforeExpand: this.zTreeBeforeExpand,
           }
-        }, //ztree树加载的配置
+        },
         zNodes: [], //ztree树加载的数据
         labelPosition:'left',
         ruleForm:{
@@ -252,11 +254,10 @@
               searchNumber:this.ruleForm.bookIndex,
               bookName:this.ruleForm.bookName,
               barcode:this.ruleForm.barcode,
-              fkTypeCode:this.ruleForm.bookType,
+              fkTypeCode:this.ruleForm.bookTypeCode,
               fkTypeName:this.ruleForm.bookType,
               rfid:this.ruleForm.rfid,
               fkLocationId:this.ruleForm.code,
-              locationName:this.ruleForm.bookLocation
             }).then((res)=>{
               console.log(res)
               if(res.data.state==true){
@@ -281,8 +282,19 @@
 </script>
 
 <style scoped>
+  #locaTion{
+    width:80px;
+    height:20px;
+    padding-top:6px;
+    padding-left:18px;
+    color: #0096FF;
+    margin-top:6px;
+    cursor: default;
+    font-size:15px
+  }
   #locaTion:hover{
-    font-size: 18px;
+    background-color:rgba(0,150,255,0.3);
+    border-radius: 10px;
   }
   .borrowbook{
     width: 100%;
@@ -293,7 +305,7 @@
     display: none;
     position: absolute;
     top: 200px;
-    left:550px;
+    left:750px;
     z-index: 30000;
   }
   #typeMessage div:nth-child(1){

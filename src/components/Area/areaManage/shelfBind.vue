@@ -85,8 +85,7 @@
     computed: {
       //模糊查询参数
       saveData() {
-        // 计算属性 真正传递的数据
-        let saveData = { // 非空判断的各个值
+        let saveData = {
           fkStoreId: this.saveString.fkStoreId,
           fkRegionId:this.saveString.fkRegionId,
           colNum:this.saveString.colNum,
@@ -176,7 +175,6 @@
           $('#imgX').fadeIn()
         }
       },
-
       zTreeOnClick(event, treeId, treeNode){
         console.log(treeNode)
         console.log(treeNode.direction)
