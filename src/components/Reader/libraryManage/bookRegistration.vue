@@ -56,10 +56,7 @@
               <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 470px" @click="typeMessage">
             </el-form-item>
           </div>
-          <div style="display: flex;flex-direction: row;width:700px;margin-left: 790px;margin-top: 20px">
-            <el-form-item label="总　　数 : " prop="total" :label-width="formLabelWidth" style="margin-left:60px ">
-              <el-input v-model="addForm.total" autocomplete="off" style="width: 200px"  :disabled="disable" placeholder="请输入借出数量"></el-input>
-            </el-form-item>
+          <div style="display: flex;flex-direction: row;width:700px;margin-left: 780px;margin-top: 20px">
             <el-form-item label="状　　态 : " prop="status" style="width: 300px;margin-left:70px " :label-width="formLabelWidth">
               <el-radio-group v-model="addForm.status" :disabled="disable">
                 <el-radio label="上架"></el-radio>
@@ -139,24 +136,22 @@
             typeName: "", // 类型名称
             bookcontent: "", // 书籍简介
             status:"", //状态
-            total:'',//总数
           },
           files: null, // 传递给后台的请求
           defaultImg:'', // 默认图片地址
           addRules: {
             // 添加的参数验证
-            barcode:[{ required: true, message: '请输入条码',trigger: 'blur'}],
-            isbn:[{ required: true, message: "请输入ISBN", trigger: "blur" }],
-            bookName: [{ required: true, message: "请输入书籍名称", trigger: "blur" }],
-            bookIndex: [{ required: true, message: "请输入索书号", trigger: "blur" }],
-            author: [{ required: true, message: "请输入作者", trigger: "blur" }],
+            barcode:[{ required: true, message: '请输入条码',trigger: 'change'}],
+            isbn:[{ required: true, message: "请输入ISBN", trigger: "change" }],
+            bookName: [{ required: true, message: "请输入书籍名称", trigger: "change" }],
+            bookIndex: [{ required: true, message: "请输入索书号", trigger: "change" }],
+            author: [{ required: true, message: "请输入作者", trigger: "change" }],
             lib: [{ required: true, message: "请选择出版社", trigger: "change" }],
-            page: [{ required: true, message: "请输入页码", trigger: "blur" }],
-            value:[{ required: true, message: "请输入价格", trigger: "blur" }],
+            page: [{ required: true, message: "请输入页码", trigger: "change" }],
+            value:[{ required: true, message: "请输入价格", trigger: "change" }],
             typeName: [{ required: true, message: "请选择书籍类型", trigger: "change" }],
-            bookcontent: [{ required: true, message: "请输入书籍简介", trigger: "blur" }],
+            bookcontent: [{ required: true, message: "请输入书籍简介", trigger: "change" }],
             status: [{ required: true, message: "请选择状态", trigger: "change" }],
-            total:[{ required: true, message: "请输入总数", trigger: "blur" }]
           },
           formLabelWidth: "90px",
           formLoading:false,
@@ -285,7 +280,6 @@
                 this.addForm.value = res.data.row[0].price;
                 this.addForm.typeName = res.data.row[0].fkTypeName;
                 this.addForm.bookcontent = res.data.row[0].introduction;
-                this.addForm.total=res.data.row[0].total;
                 this.addForm.status=res.data.row[0].state=1?'上架':'下架'
                 this.disable=true
               }else{
@@ -298,7 +292,6 @@
                 this.addForm.value = ''
                 this.addForm.typeName =''
                 this.addForm.bookcontent=''
-                this.addForm.total=''
                 this.addForm.status=''
                 this.disable=false
               }
@@ -325,7 +318,6 @@
             price: this.addForm.value,
             searchNumber: this.addForm.bookIndex,
             state: this.addForm.status=='上架'?1:0,
-            total:this.addForm.total,
             pageNumber: this.addForm.page
           }).then((res)=>{
             console.log(res)
@@ -358,6 +350,7 @@
         /*====== 重置按钮清空表单内容 ======*/
         resetForm() {
           // 重置按钮
+          this.disable=false
           this.$refs[this.addForm].resetFields();
         },
       },
@@ -374,7 +367,7 @@
     display: none;
     position: absolute;
     top: 150px;
-    left:550px;
+    left:750px;
     z-index: 30000;
 
   }
