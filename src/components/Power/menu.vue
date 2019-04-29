@@ -180,7 +180,8 @@ export default {
           onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
           beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
           beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
-          onRemove: this.onRemove //删除事件
+          onRemove: this.onRemove, //删除事件
+          beforeExpand: this.zTreeBeforeExpand,
         }
       },//ztree加载配置
       zNodes: [],//ztree加载数据
@@ -230,6 +231,34 @@ export default {
     },
   },
   methods: {
+    /*====== zTree保持展开单一路径的实现 ======*/
+    zTreeBeforeExpand(treeId, treeNode) {
+      this.singlePath(treeNode);
+      return true;
+    },
+    singlePath(currNode) {
+      //console.log(currNode);
+      //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
+      var cLevel = currNode.level;
+      //这里假设id是唯一的
+      var cId = currNode.id;
+      //此对象可以保存起来，没有必要每次查找
+      var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+      /**
+       * 展开的所有节点，这是从父节点开始查找（也可以全文查找）
+       * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
+       */
+      var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
+      console.log(expandedNodes);
+      for(var i = expandedNodes.length - 1; i >= 0; i--){
+        var node = expandedNodes[i];
+        var level = node.level;
+        var id = node.id;
+        if (cId != id && level == cLevel) {
+          treeObj.expandNode(node, false);
+        }
+      }
+    },
     /*====== 菜单类型判断是否显示按钮集 ======*/
     change_select(num){
       console.log(num)

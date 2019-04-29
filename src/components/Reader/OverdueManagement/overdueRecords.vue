@@ -50,9 +50,9 @@
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="180" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
               <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
               <el-table-column align="center" prop="overdueAlreadyDay" width="150" label="逾期天数"></el-table-column>
               <el-table-column align="center" label="操作" width="150">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->

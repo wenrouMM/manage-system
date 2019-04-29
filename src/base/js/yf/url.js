@@ -43,7 +43,7 @@ url='http://192.168.2.121:8088/';
   bookRegist=url+'tibetmuseummodule/TbookTbInfo/selectOne' //图书登记ISBN接口查详情
   bookRegistadd=url+'tibetmuseummodule/TbookTbInfo/add' //图书登记添加
   bookRegistlib=url+'tibetmuseummodule/TbookTbPress/select' //图书登记出版社
-  bookRegisttype=url+'tibetmuseummodule/TbookTbType/select' //图书登记书籍类型
+  bookRegisttype=url+'tibetmuseummodule/TbookTbType/selectAllBookType' //图书登记书籍类型
 /*权限页面*/
   controlurl=url+'authmodule/currency/getAllMenuAndElement'
   controladd=url+'authmodule/roleMenuElement/edit' //权限添加
