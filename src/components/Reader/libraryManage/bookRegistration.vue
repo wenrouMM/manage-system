@@ -7,12 +7,9 @@
           <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">图书登记</div>
         </div>
       </div>
-      <el-form :model="numberValidateForm" :ref="numberValidateForm" label-width="100px" class="demo-ruleForm" style="position: absolute;left: 340px;top: 135px">
-        <el-form-item
-          label="条　　码 :"
-          prop="barcode"
-          :rules="[{ required: true, message: '请输入条码',trigger: 'blur'}]">
-          <el-input v-model="numberValidateForm.barcode" auto-complete="off" v-on:input="barcodeCheck"  style="width: 398px;" placeholder="请输入条码"></el-input>
+      <el-form :model="numberValidateForm" :rules="barcodeRule" :ref="numberValidateForm" label-width="100px" class="demo-ruleForm" style="position: absolute;left: 340px;top: 135px">
+        <el-form-item label="条　　码 :" prop="barcode">
+          <el-input v-model="numberValidateForm.barcode" auto-complete="off" @input="barcodeCheck"  style="width: 398px;" placeholder="请输入条码"></el-input>
         </el-form-item>
       </el-form>
       <el-form
@@ -125,11 +122,16 @@
             },
             callback: {
               onClick: this.zTreeOnClick, //节点点击事件
+              beforeExpand: this.zTreeBeforeExpand,
             }
           }, //ztree树加载的配置
           zNodes: [], //ztree树的数据
           numberValidateForm: {
             barcode: ''
+          },
+          barCode:'',
+          barcodeRule:{
+            barcode:[{ required: true, message: '请输入条码',trigger: 'blur'}]
           },
           addForm: {
             // 添加的数据表单 共8个参数
@@ -176,32 +178,40 @@
         }
       },
       computed: {
-        addData() {
-          // 计算属性 添加真正传递的数据
-          let addData = {
-            author: this.addForm.author,
-            barcode: this.numberValidateForm.barcode,
-            fkPressCode: this.libCode,
-            fkPressName: this.addForm.lib,
-            fkTypeCode:this.typeCode,
-            fkTypeName: this.addForm.typeName,
-            introduction: this.addForm.bookcontent,
-            name: this.addForm.bookName,
-            isbn:this.addForm.isbn,
-            //person //录入人
-            price: this.addForm.value,
-            searchNumber: this.addForm.bookIndex,
-            state: this.addForm.status=='上架'?1:0,
-            total:this.addForm.total,
-            pageNumber: this.addForm.page
-          };
-          return addData;
-        },
+
       },
       mounted() {
         $('#typeMessage').fadeOut()
       },
       methods: {
+        /*====== zTree保持展开单一路径的实现 ======*/
+        zTreeBeforeExpand(treeId, treeNode) {
+          this.singlePath(treeNode);
+          return true;
+        },
+        singlePath(currNode) {
+          //console.log(currNode);
+          //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
+          var cLevel = currNode.level;
+          //这里假设id是唯一的
+          var cId = currNode.id;
+          //此对象可以保存起来，没有必要每次查找
+          var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+          /**
+           * 展开的所有节点，这是从父节点开始查找（也可以全文查找）
+           * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
+           */
+          var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
+          console.log(expandedNodes);
+          for(var i = expandedNodes.length - 1; i >= 0; i--){
+            var node = expandedNodes[i];
+            var level = node.level;
+            var id = node.id;
+            if (cId != id && level == cLevel) {
+              treeObj.expandNode(node, false);
+            }
+          }
+        },
         /*====== 关闭弹窗 ======*/
         closeCheck() {
           $('#typeMessage').fadeOut()
@@ -260,6 +270,7 @@
         barcodeCheck() {
           console.log('input框值的变化')
           console.log('条码',this.numberValidateForm.barcode)
+          this.barCode=this.numberValidateForm.barcode
           for (let key in this.addForm) {
             console.log('表单值',this.addForm[key])
             this.addForm[key] = ''
@@ -309,8 +320,24 @@
           }
         },
         /*====== 添加请求操作 ======*/
-        addApi(value){
-          this.axios.post(bookRegistadd,value).then((res)=>{
+        addApi(){
+          console.log('保存按钮发送条码',this.barCode)
+          this.axios.post(bookRegistadd,{
+            barcode:this.barCode,
+            author: this.addForm.author,
+            fkPressCode: this.libCode,
+            fkPressName: this.addForm.lib,
+            fkTypeCode:this.typeCode,
+            fkTypeName: this.addForm.typeName,
+            introduction: this.addForm.bookcontent,
+            name: this.addForm.bookName,
+            isbn:this.addForm.isbn,
+            price: this.addForm.value,
+            searchNumber: this.addForm.bookIndex,
+            state: this.addForm.status=='上架'?1:0,
+            total:this.addForm.total,
+            pageNumber: this.addForm.page
+          }).then((res)=>{
             console.log(res)
             if(res.data.state==true){
               this.$message({
@@ -334,7 +361,7 @@
             console.log('不执行添加')
             return
           } else {
-           if(this.numberValidateForm.barcode){
+           if(this.numberValidateForm.barcode=''){
              this.$alert('条码不能为空', '提示', {
                confirmButtonText: '确定',
              });
@@ -342,7 +369,7 @@
              this.$refs[this.addForm].validate((valid) => {
                if (valid) {
                  console.log('submit!');
-                 this.addApi(this.addData)
+                 this.addApi()
                } else {
                  console.log('error submit!!');
                  return false;
