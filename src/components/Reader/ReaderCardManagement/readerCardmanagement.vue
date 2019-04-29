@@ -122,7 +122,7 @@
         >
           <el-form ref="changeForm" :model="changeForm" :rules="changeRules">
             <!-- 表单域 -->
-            <div v-if="i==0">
+            <div v-if="i!=4">
               <el-form-item :label="labelName[i]" prop="idCard">
                 <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
               </el-form-item>
