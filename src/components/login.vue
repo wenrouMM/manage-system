@@ -14,7 +14,7 @@
         </div>
         <div class="divHeight" id="yzm">
           <input type="text" placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
-          <span><img src="" id="imgYzm"></span>
+          <span><img src="" id="imgYzm" @click="imgClick"></span>
         </div>
         <div style="margin-top: 55px;">
           <button @click="submit">登录</button>
@@ -40,6 +40,9 @@ import {loginInter} from '../request/api/base.js'
       }
     },
     methods:{
+      imgClick(){
+        $('#imgYzm').attr("src",yzmurl+Math.random());
+      },
       isShowCheck(){
         console.log($('#pwd').attr('type'))
         if($('#pwd').attr('type')=='password'){
@@ -58,7 +61,7 @@ import {loginInter} from '../request/api/base.js'
             var token=res.data.row.authorization // 获取token
             var userInfo = JSON.stringify(res.data.row.authTbManager)
             var menu = JSON.stringify(res.data.row.roleModularMenus)
-            
+
             console.log(token)
             localStorage.setItem('token',token)
             localStorage.setItem('userInfo',userInfo)

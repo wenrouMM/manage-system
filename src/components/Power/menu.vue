@@ -99,9 +99,6 @@
 </template>
 
 <script>
-var id; //声明id，用来判断保存按钮发的是添加请求还是修改请求
-var praent; //生命的父元素id，用来发添加请求的时候获取上级id
-var click; //生命click，用来判断保存按钮是否向后台发送请求
 import serialize from "../../base/js/yf/serialize";
 export default {
   name: "menu.vue",
@@ -189,7 +186,10 @@ export default {
       pId:null,
       addButton:true,
       authTbMenuElementsEdit:[],//修改的按钮数组
-      authTbMenuElementsAdd:[] //添加的按钮数组
+      authTbMenuElementsAdd:[], //添加的按钮数组
+      id:'',
+      parent:'',
+      click:''
     };
   },
   computed:{
@@ -400,11 +400,11 @@ export default {
     },
     /*====== ztree点击节点将节点信息放入表单显示 ======*/
     zTreeOnClick(e, treeId, treeNode) {
-      id = treeNode.id; //点击节点时节点自己的id
-      click = 'click' //是否点击的赋值
+      console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
+      this.id = treeNode.id; //点击节点时节点自己的id
+      this.click = 'click' //是否点击的赋值
       this.buttonNameData.length=0
       $("#btn_select").fadeOut()
-      if(treeNode.menu_code_type=='page_menu') {
         this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
@@ -414,6 +414,11 @@ export default {
             });
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
+            if(res.data.row.authTbMenu.fkMenuTypeCode=='list_menu'){
+              $('#btn_select').fadeOut()
+            }else if(res.data.row.authTbMenu.fkMenuTypeCode=='page_menu'){
+              $('#btn_select').fadeIn()
+            }
             this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
@@ -434,10 +439,6 @@ export default {
             this.$message.error(res.data.msg);
           }
         })
-      }else if(treeNode.menu_code_type=='list_menu'){
-          console.log(111)
-          this.$refs[this.ruleForm].resetFields();
-      }
     },
     /*====== ztree节点添加按钮做添加操作 ======*/
     addHoverDom(treeId, treeNode) {
@@ -448,16 +449,16 @@ export default {
         treeNode.menu_code_type === null
       ) {
         var sObj = $("#" + treeNode.tId + "_span");
-        console.log('sObj',sObj)
+        //console.log('sObj',sObj)
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
           return;
         console.log(treeNode.tId)
         var addStr =
           "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加子节点' onfocus='this.blur();'></span>";
-        console.log('addStr',addStr)
+        //console.log('addStr',addStr)
         sObj.after(addStr);
         var btn = $("#addBtn_" + treeNode.tId);
-        console.log('btn',btn)
+        //console.log('btn',btn)
         if (btn)
           this.$refs[this.ruleForm].resetFields()
           btn.bind("click", { paramName: treeNode }, function(e) {
@@ -466,8 +467,8 @@ export default {
             var newNode = { name: "newNode1" };
             newNode = treeObj.addNodes(treeNode, newNode);
             console.log('添加按钮'+treeNode.id)
-            praent = treeNode.id;
-            click = "add";
+            this.parent = treeNode.id;
+            this.click = "add";
             return false;
           });
       }
@@ -481,7 +482,7 @@ export default {
     /*====== 点击保存按钮发送修改或添加的请求 ======*/
     save() {
       console.log(this.zNodes)
-      this.pId=praent
+      this.pId=this.parent
       console.log('父id：'+this.pId)
       let files = this.formdata;
       //console.log(files)
