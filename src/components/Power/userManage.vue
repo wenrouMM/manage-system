@@ -26,7 +26,7 @@
                     v-for="(option) of optionsData"
                     :key="option.roleCode"
                     :label="option.roleName"
-                    :value="option"
+                    :value="option.roleCode"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -203,8 +203,8 @@
 
                   <img
                     style="width:100px; height:100px ;border-radius:50%;"
-                    v-if="addForm.headIcon"
-                    :src="addForm.headIcon"
+                    v-if="preloadImg"
+                    :src="preloadImg"
                     alt="预览照片"
                     class="preloadImg"
                   >
@@ -305,6 +305,7 @@ export default {
       Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
       i: 0, // 切换弹框标题
       defaultImg: " ", // 上传头像默认头像
+      preloadImg:'',
       dialogFormVisible: false, // // 添加弹框的展示和消失
       files: null,
       addForm: {
@@ -390,13 +391,11 @@ export default {
       let date = this.searchForm.date;
       let searchForm = {
         pageSize: this.pageSize,
-        currentPage: 1,
+        current:1,
         name: this.searchForm.userName,
-        fkRoleCode: this.searchForm.userType.roleCode, // 只是给了一个code
-        loginSource:
-          this.searchForm.loginSource === "全部"
-            ? null
-            : this.searchForm.loginSource,
+        fkRoleCode: this.searchForm.userType, // 只是给了一个code
+        idCard:this.searchForm.userId,
+        phone:this.searchForm.userPhone,
         beginTime: null,
         endTime: null
       };
@@ -561,16 +560,13 @@ export default {
       this.SearchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1; // 并把结果返回给第一页
     },
-    SearchApi(value) {
-      //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
+    paginationApi(value){
       this.tableLoading = true; // 加载前控制加载状态
-      console.log("初始化查询", this.searchForm);
       axios
         .get(userManageInterface.select, {
           params: value
         })
         .then(res => {
-          console.log("当前获取的数据", res);
           if (res.data.state === true) {
             let nomol = res.data.row;
             for (let item of nomol) {
@@ -583,10 +579,45 @@ export default {
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            console.log("过滤后的数据", nomol);
-            console.log("保存当前查询", this.paginationForm);
+            
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            console.log(res);
+            this.$message.error(res.data.msg);
+            this.tableLoading = false;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    SearchApi(value) {
+      //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
+      this.tableLoading = true; // 加载前控制加载状态
+      axios
+        .get(userManageInterface.select, {
+          params: value
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            let nomol = res.data.row;
+            for (let item of nomol) {
+               let id = item.idCard
+               let tel = item.phone
+               item.idShow = id.substr(0,5) + "********" + id.substr(13)
+               item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
+
+            }
+            this.tableData = nomol; //获取返回数据
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+            
+            this.tableLoading = false;
+            this.searchLoading = false; // 按钮放行
+            this.currentPage = 1
+            console.log("保存当前查询", this.paginationForm);
           } else {
             console.log(res);
             this.$message.error(res.data.msg);
@@ -602,7 +633,7 @@ export default {
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
       console.log("保存当前查询", this.paginationForm);
-      this.SearchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
 
     /*====== 弹框内相关函数 ======*/
@@ -664,7 +695,7 @@ export default {
             }).then(request => {
               // 如果是编辑 更换图片失败后
               if (request.data.row != "") {
-                this.addForm.headerAddress = request.data.row;
+                
               }
               console.log("上传图片后", this.addEdit);
             });
@@ -722,7 +753,7 @@ export default {
       let reader = new FileReader(); // 定义 fileReader对象
       reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
       reader.onloadend = function() {
-        _this.addForm.headerAddress = this.result; // 此时this指向的fileReader对象
+        _this.preloadImg = this.result; // 此时this指向的fileReader对象
         _this.$refs.file.value = "";
       };
     },
@@ -737,6 +768,7 @@ export default {
       }
       obj.authTbRoles = [];
       this.files = null;
+      this.preloadImg = ''
       console.log(this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;

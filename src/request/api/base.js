@@ -36,6 +36,12 @@ export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限�
 
 
 // 图书模块
+var bookMode = url + 'tibetmuseummodule/TbookTbInfo/'
+export const bookModeInt = {
+  selectOne:`${bookMode}selectOne`,
+  select:`${bookMode}select`
+
+}
 
 /*------ 区域模块 ------*/
 //库房模块
