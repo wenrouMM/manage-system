@@ -219,15 +219,17 @@
         console.log('ztree树节点信息',this.zTree.code)
         if(this.zTree.code==undefined){
           this.formApi('北京市','bj_jing')
-          let defaultBJ={cityCode:'bj_jing'}
-          this.tableApi(defaultBJ)
         }else{
           this.formApi(this.zTree.name,this.zTree.code)
-          let cityName={cityCode:this.zTree.code}
-          this.tableApi(cityName)
         }
       },
       formApi(ztreeName,ztreeCode){
+        let citynameCode=''
+        if(this.zTree.code==undefined){
+          citynameCode='bj_jing'
+        }else{
+          citynameCode=this.zTree.code
+        }
         var addStr=[{
           fkCityCode:ztreeCode,
           fkCityName:ztreeName,
@@ -244,6 +246,8 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
+            let cityName={cityCode:citynameCode}
+            this.tableApi(cityName)
           }else{
             this.$message({
               message: res.data.msg,

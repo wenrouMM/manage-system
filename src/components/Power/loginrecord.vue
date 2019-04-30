@@ -228,7 +228,6 @@
           let num = parseInt(this.pageInput)
           this.current_change(num)
         }
-
       }
     },
     mounted () {
