@@ -529,7 +529,7 @@ export default {
       this.addForm.phone = row.phone;
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.isLock.toString();
+      this.addForm.isLock = row.disabled.toString();
       this.dialogFormVisible = true;
       console.log(index, row);
       console.log("编辑后的表单", this.addForm);

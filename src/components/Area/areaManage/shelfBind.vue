@@ -168,7 +168,7 @@
         })
       },
       zTreeOnExpand(event, treeId, treeNode){
-        console.log(treeNode)
+        console.log('展开',treeNode)
         let name=treeNode.name.toString()
         if(this.Address.search(name) == -1 ){
           this.Address+=name
@@ -177,12 +177,19 @@
       },
 
       zTreeOnClick(event, treeId, treeNode){
-        console.log(treeNode)
-        console.log(treeNode.direction)
-        this.saveString=treeNode
-        this.form.tag=treeNode.rfid
-        if(treeNode.direction!==null){
-          this.direction=treeNode.name
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        console.log('treeObj',treeObj)
+        console.log('direction',treeNode.direction)
+        if(treeNode.direction==null){
+          this.$message('层架标签必须绑定在面级！！');
+        }else{
+          console.log(treeNode)
+          console.log(treeNode.direction)
+          this.saveString=treeNode
+          this.form.tag=treeNode.rfid
+          if(treeNode.direction!==null){
+            this.direction=treeNode.name
+          }
         }
       },
       onSubmit(){

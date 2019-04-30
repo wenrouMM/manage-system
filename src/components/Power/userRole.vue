@@ -68,14 +68,13 @@
 
               <el-table-column align="center" prop="disabled" width="200" label="状态">
                 <template slot-scope="scope">
-                  <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
+                  <span>{{scope.row.disabled ==0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -100,7 +99,6 @@
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
-
           </div>
           <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
@@ -122,7 +120,7 @@
             id="addFormYf"
             :model="addForm"
             :rules="rules"
-            ref="addForm"
+            :ref="addForm"
             label-width="100px"
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
@@ -140,10 +138,10 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item class="select" prop="disabled" label="状态" style="margin-left: 50px">
-              <el-radio-group v-model="addForm.disabled">
-                <el-radio label="禁用">禁用</el-radio>
-                <el-radio label="启用">启用</el-radio>
+            <el-form-item prop="isLock" label="状态" style="margin-left: 50px">
+              <el-radio-group v-model="addForm.isLock">
+                <el-radio label="禁用"></el-radio>
+                <el-radio label="启用"></el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -174,21 +172,16 @@ export default {
       defaultImg: " ", // 上传头像默认头像
       dialogFormVisible: false, // // 添加弹框的展示和消失
       addForm: {
-        // 添加的数据表单 共8个参数
-        addDialog: false,
         userType: "", // 角色名称 不明参数
         parent: "", // 上级
         roleName: "",
-        isDefault: "", // 是否默认
-        disabled: "" // 状态
+        isLock: "" // 状态
       },
       rules: {
         // 添加的参数验证
-        userType: [
-          { required: true, message: "请输入角色名称", trigger: "change" }
-        ],
+        userType: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
         parent: [{ required: true, message: "请选择角色类型", trigger: "change" }],
-        disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
+        isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "120px",
       /*====== 2.0表单提交数据项 ======*/
@@ -240,7 +233,6 @@ export default {
       ],
       id: null,
       roleCode: null,
-      disable: null
       /*====== 5.0 分页相关设置项 ======*/
     };
   },
@@ -299,51 +291,17 @@ export default {
     },
 
     /*====== 4.0表格操作相关 ======*/
-    handleBan(index, row) {
-      // 删除 做判断 如果已经被禁用则不触发弹框
-      console.log(index, row); // 当前选中表格的索引和对象
-      if(row.disabled ==1){
-        this.$message.error('该用户已被禁用')
-      } else{
-        this.i = 0;
-      this.centerDialogVisible = true;
-      this.id = row.id;
-      this.disable = row.disabled;
-      this.roleCode = row.roleCode;
-      console.log(row.roleCode);
-      }
-
-    },
     handleEdit(index, row) {
       // 编辑
-      //console.log(this.tableData.roleName)
-      //this.addForm.userType=this.tableData.roleName
-      //console.log(this.addForm.userType)
       this.i = 2;
-      this.dialogFormVisible = true;
-      console.log(row);
-      console.log(
-        row.id,
-        row.roleName,
-        row.roleCode,
-        row.isDefault,
-        row.disabled
-      );
+      console.log('row',row);
+      console.log(row.disabled)
       this.addForm.userType = row.roleName;
       this.addForm.parent = row.fkParentRoleCode;
-      if (row.disabled == 1) {
-        this.addForm.disabled = "禁用";
-      } else {
-        this.addForm.disabled = "启用";
-      }
-      if (row.isDefault == 1) {
-        this.addForm.isDefault = "是";
-      } else {
-        this.addForm.isDefault = "否";
-      }
+      this.addForm.isLock =row.disabled===1?'禁用':'启用'
       this.id = row.id;
       this.roleCode = row.roleCode;
-      //this.addForm.push({userType:,parent:this.tableData.roleCode,isdefault:this.tableData.isDefault,status:this.tableData.disabled,})
+      this.dialogFormVisible = true;
     },
 
     /*====== 弹框相关函数 ======*/
@@ -351,27 +309,6 @@ export default {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
       let i = this.i;
       console.log(this.i);
-      if (this.i === 0) {
-        console.log(this.roleCode);
-        var roleCode = this.roleCode;
-        this.axios
-          .put(roleManageInt.edit, { id: this.id, disabled: 1, roleCode: roleCode })
-          .then(respones => {
-            console.log(respones);
-            if (respones.data.state == true) {
-              this.$message({
-                message: respones.data.msg,
-                type: "success"
-              });
-              this.selectApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: "存在下级角色无法删除或者禁用",
-                type: "error"
-              });
-            }
-          });
-      }
       if (this.i === 1) {
         var deleteParam = [];
         for (var item of this.tableChecked) {
@@ -400,29 +337,20 @@ export default {
             }
           });
       }
-      let tips = this.Dialogtitle[i];
-      //alert(`${tips}成功`); // 成功之后映射到数组的操作
       this.centerDialogVisible = false;
     },
     // 编辑弹框
-    submitForm(formName) {
-      console.log(formName);
+    submitForm() {
       console.log(this.i);
-
-      this.$refs[formName].validate(valid => {
+      this.$refs[this.addForm].validate(valid => {
         if (valid) {
           if (this.i === 3) {
             this.addApi(this.newaddForm);
-
           }
           if (this.i === 2) {
             this.editApi(this.neweditForm);
-
           }
-
         } else {
-          //console.log("error submit!!");
-          //console.log(this.addForm);
           return false;
         }
       });
@@ -437,7 +365,6 @@ export default {
             type: "success"
           });
           this.selectApi(this.searchTimeForm);
-          this.addForm.disabled = ''
           this.dialogFormVisible = false;
           this.closeForm();
         } else {
@@ -458,7 +385,7 @@ export default {
             type: "success"
           });
           this.selectApi(this.searchTimeForm);
-          this.addForm.disabled = ''
+          this.addForm.isLock = ''
           this.dialogFormVisible = false;
           this.closeForm();
         } else {
@@ -469,24 +396,24 @@ export default {
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-      this.addForm={}
+    resetForm() {
+      let obj = this.addForm;
+      this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+      for (var i in obj) {
+        obj[i] = "";
+      }
       this.dialogFormVisible = false
     },
     pointer() {
       this.$refs.file.click();
     },
     closeForm() {
-      // 弹框关闭的时候执行 清空数据
-      //console.log("关闭测试");
       let obj = this.addForm;
+      this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
       for (var i in obj) {
         obj[i] = "";
       }
-      //this.addForm.disabled = ''
-      console.log('这个disabled',this.addForm.disabled)
-      this.$refs.addForm.resetFields();
+      this.dialogFormVisible = false
     }
   },
   mounted() {
@@ -532,8 +459,7 @@ export default {
     newaddForm() {
       let newForm = {
         roleName: this.addForm.userType,
-        isDefault: this.addForm.isDefault === "是" ? 1 : 0,
-        disabled: this.addForm.disabled === "禁用" ? 1 : 0,
+        disabled: this.addForm.isLock==='禁用'?1:0,
         fkParentRoleCode: this.addForm.parent
       };
       //console.log(newForm)
@@ -545,8 +471,7 @@ export default {
         id: this.id,
         roleCode: this.roleCode,
         roleName: this.addForm.userType,
-        isDefault: this.addForm.isDefault === "是" ? 1 : 0,
-        disabled: this.addForm.disabled === "禁用" ? 1 : 0,
+        disabled: this.addForm.isLock==='禁用'?1:0,
         fkParentRoleCode: this.addForm.parent
       };
       console.log(newForm);
