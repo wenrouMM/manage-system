@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
   if(to.path === '/login'){
     console.log(token)
     if(token&&userInfo&&menu){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
-      if(store.state.token == null){
+      if(store.state.token == null){ // 还有个bug
         store.commit('setUserInfo', userInfo)// 刷新后拉取用户信息
         store.commit('setMenu', menu)
         console.log('去往',to.path)
