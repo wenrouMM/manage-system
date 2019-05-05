@@ -29,7 +29,7 @@
           <img src="../base/img/index/deal.png">
         </div>
         <div class="sellInfo">
-          <p class="text">520</p>
+          <p class="text">{{cardNum}}</p>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
           </div>
@@ -146,7 +146,7 @@ export default {
       borrowNum: "",
       returnNum: "",
       bookNum: "",
-      cardNum: null,
+      cardNum: "",
       /*====== 中层图表战术数据 ======*/
       // 柱形图相关数据
       HisData: {
@@ -359,6 +359,17 @@ export default {
         }
       });
     },
+    // 办卡记录
+    cardOnApi() {
+      axios.get(indexInt.cardOn).then((res) =>{
+        if (res.data.state === true) {
+          this.cardNum = res.data.row
+          console.log('办卡记录',res.data.row)
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
     // 借出记录API
     recordApi() {
       axios.get(indexInt.record).then(res => {
@@ -404,6 +415,7 @@ export default {
     this.recordApi();
     this.fanApi();
     this.pillarApi();
+    this.cardOnApi()
   },
   components: {
     VePie,

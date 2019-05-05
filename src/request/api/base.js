@@ -1,7 +1,7 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-//var url = 'http://192.168.2.31:8088/'
- var url = 'http://192.168.2.121:8088/'
+var url = 'http://192.168.2.31:8088/'
+ //var url = 'http://192.168.2.121:8088/'
 
 // 首页
 var index = url + 'borrowmodule/history/'
@@ -11,7 +11,8 @@ export const indexInt = {
   book:`${url}tibetmuseummodule/bookRFID/selectCount`,
   record:`${url}borrowmodule/InAndOut/getFiveLog`,
   fan:`${url}tibetmuseummodule/bookRFID/getFiveType`,
-  pillar:`${url}borrowmodule/history/selectSevenBorrowInfo`
+  pillar:`${url}borrowmodule/history/selectSevenBorrowInfo`,
+  cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`
 }
 
 // 权限模块的API

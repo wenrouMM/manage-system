@@ -7,7 +7,7 @@ import {
 
 
 
- axios.defaults.timeout = 20000
+ axios.defaults.timeout = 2000
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
@@ -19,7 +19,7 @@ axios.interceptors.request.use(
     return config
   },
   error => {
-    console.log(error)
+    console.log('超时错误在这里吗',error)
     return Promise.reject(error)
   }
 )
