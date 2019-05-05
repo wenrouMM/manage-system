@@ -2,6 +2,17 @@
 //var url = 'http://192.168.2.131:8088/'
 //var url = 'http://192.168.2.31:8088/'
 var url = 'http://192.168.2.121:8088/'
+
+// 首页
+var index = url + 'borrowmodule/history/'
+export const indexInt = {
+  borrow:`${index}selectTodayBorrow`,
+  return:`${index}selectTodayReturn`,
+  book:`${url}tibetmuseummodule/bookRFID/selectCount`,
+  record:`${url}borrowmodule/InAndOut/getFiveLog`,
+  fan:`${url}tibetmuseummodule/bookRFID/getFiveType`
+}
+
 // 权限模块的API
 // 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
