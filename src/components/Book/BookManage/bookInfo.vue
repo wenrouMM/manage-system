@@ -268,7 +268,6 @@ export default {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
 }
 #typeMessage{
   display: none;

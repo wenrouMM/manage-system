@@ -683,7 +683,6 @@ section.pagination {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
 }
 .ban {
   color: #ff5c3c;

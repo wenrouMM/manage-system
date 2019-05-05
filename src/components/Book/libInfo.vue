@@ -217,11 +217,19 @@
       // 编辑弹框
       submitForm() {
         console.log('ztree树节点信息',this.zTree.code)
-        if(this.zTree.code==undefined){
-          this.formApi('北京市','bj_jing')
-        }else{
-          this.formApi(this.zTree.name,this.zTree.code)
-        }
+        this.$refs[this.addForm].validate((valid) => {
+          if (valid) {
+            //alert('submit!');
+            if(this.zTree.code==undefined){
+              this.formApi('北京市','bj_jing')
+            }else{
+              this.formApi(this.zTree.name,this.zTree.code)
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       formApi(ztreeName,ztreeCode){
         let citynameCode=''

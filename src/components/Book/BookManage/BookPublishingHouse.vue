@@ -94,6 +94,17 @@
 </template>
 
 <script>
+  import {isvalidPhone} from '../../../base/js/yf/elementValidate'
+  var validPhone=(rule, value,callback)=>{
+    if (!value){
+      callback(new Error('请输入电话号码'))
+    }else  if (!isvalidPhone(value)){
+      callback(new Error('请输入正确的11位手机号码'))
+    }else {
+      callback()
+    }
+  }
+
   export default {
     data() {
       return {
@@ -162,7 +173,7 @@
           publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
           componentAddress: [{ required: true, message: "请输入公司地址", trigger: "blur" }],
           contacts: [{ required: true, message: "请输入联系人", trigger: "blur" }],
-          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "blur" }],
+          contactPhone: [{ required: true, trigger: 'blur', validator: validPhone }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -192,7 +203,7 @@
       async freshArea() {
         this.axios.get(bookurlcity).then((response)=>{
           console.log('ztree树',response)
-          for (var item of response.data.row) {
+          for (let item of response.data.row) {
             this.zNodes.push({
               name:item.name,
               code: item.code, //节点菜单编码
@@ -224,13 +235,18 @@
       // 编辑弹框
       submitForm() {
         console.log('ztree树节点信息',this.zTree.code)
-        if(this.zTree.code==undefined){
-          this.formApi('北京市','bj_jing')
-          //let defaultBJ={cityCode:'bj_jing'}
-          //this.tableApi(defaultBJ)
-        }else{
-          this.formApi(this.zTree.name,this.zTree.code)
-        }
+        this.$refs[this.addForm].validate((valid) => {
+          if (valid) {
+            if(this.zTree.code==undefined){
+              this.formApi('北京市','bj_jing')
+            }else{
+              this.formApi(this.zTree.name,this.zTree.code)
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       formApi(ztreeName,ztreeCode){
         console.log('ztree',this.zTree.code)

@@ -13,7 +13,7 @@
           <img src="../base/img/currency/yanjing.png"  id="show" style="width: 25px;height: 25px;position: absolute;top: 33px;left: 270px" @click="isShowCheck">
         </div>
         <div class="divHeight" id="yzm">
-          <input type="text" placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
+          <input type="text" placeholder="请输入验证码" id="yzvalue" notnull info="验证码" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
           <span><img src="" id="imgYzm" @click="imgClick"></span>
         </div>
         <div style="margin-top: 55px;">

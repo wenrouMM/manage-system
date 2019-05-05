@@ -65,20 +65,20 @@
               <span>逾期管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/overduerecords">逾期记录+</el-menu-item>
+              <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
               <el-menu-item index="/overduesetting">逾期设置*</el-menu-item>
-              <el-menu-item index="/overduehistory">逾期历史记录*</el-menu-item>
+              <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="losttrust">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>失信管理*</span>
+              <span>失信管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item >失信记录</el-menu-item>
-              <el-menu-item >失信设置</el-menu-item>
-              <el-menu-item >失信历史记录</el-menu-item>
+              <el-menu-item index="/DishonestyRecords">失信记录</el-menu-item>
+              <el-menu-item index="">失信设置*</el-menu-item>
+              <el-menu-item index="/DishonestyHistory">失信历史记录</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="lose">

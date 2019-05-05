@@ -66,7 +66,7 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="deposit" width="180" label="充值金额"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" width="180" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" width="180" label="处理对象"></el-table-column>
               <el-table-column align="center" prop="operation"  label="操作">
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">详情</span>
@@ -237,7 +237,6 @@
   .edit {
     color: #00d7f0;
     cursor: pointer;
-    margin-right: 20px;
   }
   .sonTitle .titleName {
     border-left: 4px solid #0096ff;

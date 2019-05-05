@@ -29,7 +29,7 @@
               </el-form-item>
               <!-- 下拉框 -->
               <el-form-item label="类型:" size="160"  style="position: relative">
-                <el-input v-model="searchForm.type" placeholder="请输入类型"></el-input>
+                <el-input v-model="searchForm.type" placeholder="请输入类型" @focus="typeMessage"></el-input>
                 <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 135px" @click="typeMessage">
               </el-form-item>
               <el-form-item label="状态:" size="160">
@@ -79,7 +79,7 @@
               <el-table-column align="center" prop="fkTypeCode" width="120" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
-                  <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
+                  <span>{{scope.row.state ===1?'上架':'下架'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="操作">
@@ -192,7 +192,7 @@ export default {
       defaultImg:'', // 默认图片地址
       i:0,
       Dialogtitle: ["添加",'下架'],
-      undercarriage:null, //下架所需参数
+      id:null,
     };
   },
   computed: {
@@ -227,19 +227,26 @@ export default {
   },
   methods: {
     async freshArea() {
-      this.axios.get(bookurltypemes).then((response)=>{
-        console.log(response)
-        for (var item of response.data.row) {
-          //console.log(item)
-          this.zNodes.push({
-            id: item.id, //节点id
-            pId: item.pid, //节点父id
-            name: item.name, //节点名称
-            code:item.code, //
+      this.axios.get(bookurltypemes).then((res)=>{
+        console.log('res',res)
+        if(res.data.state==true){
+          for (let item of res.data.row) {
+            //console.log(item)
+            this.zNodes.push({
+              id: item.id, //节点id
+              pId: item.pid, //节点父id
+              name: item.name, //节点名称
+              code:item.code, //
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+        }else{
+          this.$message({
+            message: res.data.msg,
+            type: 'error'
           });
         }
-        //将数据渲染到ztree树
-        $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       })
     },
     typeMessage(){
@@ -266,22 +273,20 @@ export default {
     handleBan(index, row) {
       //下架
       console.log( row); // 当前选中表格的索引和对象
-      this.undercarriage=row
+      this.id=row.id
       this.i= 1;
       this.centerDialogVisible = true;
     },
     submitDialog() {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-      let i = this.i;
-      let tips = this.Dialogtitle[i];
-      //alert(`${tips}成功`); // 成功之后映射到数组的操作
-      this.axios.post(libbookedit,this.undercarriage).then((res)=>{
+      this.axios.post(libbookedit,{state:0,id:this.id}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           this.$message({
             message: res.data.msg,
             type: 'success'
           });
+          this.SearchApi()
         }else{
           this.$message.error(res.data.msg);
         }

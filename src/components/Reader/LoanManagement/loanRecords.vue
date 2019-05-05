@@ -19,14 +19,16 @@
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
-                  v-model="searchForm.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  :picker-options="pickerOptions"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -59,7 +61,7 @@
               <el-table-column align="center" prop="fkReaderName"width="180" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="190" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" width="190" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" width="180" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="180" label="书籍编码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="190" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="renewCount" width="180" label="续借次数"></el-table-column>
               <el-table-column align="center" prop="createTime" width="190" label="预计归还时间"></el-table-column>
@@ -102,9 +104,24 @@
         rowStyle: {
           height: "60px"
         },
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
+        },
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            );
           }
         },
         total: 0,
@@ -114,7 +131,8 @@
           // 搜索需要的表单数据
           userName: "",
           cardNum: "",
-          date:[]
+          beginTime: "",
+          endTime: "",
         },
         tableLoading:false,
         tableData: [
@@ -135,18 +153,13 @@
           currentPage: 1,
           logCardNum:this.searchForm.cardNum,
           logName:this.searchForm.userName,
-          logStartTime: null,
-          logEndTime: null
+          logStartTime: !this.searchForm.beginTime
+            ? null
+            : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
+          logEndTime:!this.searchForm.endTime
+            ? null
+            : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
         };
-        if (date != null && date != "") {
-          searchForm.logStartTime = moment(this.searchForm.date[0]).format(
-            "YYYY-MM-DD"
-          ); //开始时间
-          searchForm.logEndTime = moment(this.searchForm.date[1]).format(
-            "YYYY-MM-DD"
-          );
-        }
-
         return searchForm;
       },
     },

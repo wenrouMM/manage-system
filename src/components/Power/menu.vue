@@ -31,12 +31,12 @@
                 <div style="width: 90px;height: 90px;margin-left: 4px;margin-top: 4px" @click="point">
                   <img class="defaultimage" style="width:50px; height:50px;margin-left: 20px;margin-top: 5px" v-if="!src" src="../../base/img/menu/tbhs.png" alt="user image">
                   <input type="file" accept="jpg/png" @change="getFile" enctype="multipart/form-data" ref="file" id="file">
-                  <p v-if="!src" style="position: absolute;top: 70px;left: 17px;font-size: 15px;color: lightgray;">选择图标</p>
+                  <p v-if="!src" style="position: absolute;top: 60px;left: 17px;font-size: 15px;color: lightgray;">选择图标</p>
                 </div>
               </div>
               <div class="inputBox" style="margin-left: 30px;position: relative">
                 <img src="../../base/img/menu/tbls.png" style="width:50px; height:50px;margin-left: 25px;margin-top: 10px">
-                <p style="position: absolute;top: 70px;left: 17px;font-size: 15px;color: lightgray">默认图标</p>
+                <p style="position: absolute;top: 60px;left: 17px;font-size: 15px;color: lightgray">默认图标</p>
                 <div style="background-color:white;width:100px; height:100px;position:absolute;top: 0;left: 0;display: none;border-radius: 5px" id="icon1">
                   <img :src="src1" style="width: 100px;height: 100px">
                 </div>
@@ -100,6 +100,7 @@
 
 <script>
 import serialize from "../../base/js/yf/serialize";
+parent=null;
 export default {
   name: "menu.vue",
   data() {
@@ -183,12 +184,11 @@ export default {
       },//ztree加载配置
       zNodes: [],//ztree加载数据
       treeName:null,
-      pId:null,
       addButton:true,
       authTbMenuElementsEdit:[],//修改的按钮数组
       authTbMenuElementsAdd:[], //添加的按钮数组
       id:'',
-      parent:'',
+      pId:null,
       click:''
     };
   },
@@ -204,17 +204,18 @@ export default {
         iconDefault:this.photo ,
         iconSelected:'' ,
         fkMenuTypeCode: this.ruleForm.menuType,
-        fkParentMenuId: this.parent,
+        fkParentMenuId: parent,
         authTbMenuElements: this.authTbMenuElementsAdd
       };
-      //console.log(searchForm)
+      console.log(addData)
       return addData;
     },
     editForm() {
       // 传递给后端的搜索数据
+      console.log('ztree',this.zTree)
       let editData = {
         id: this.zTree.id,
-        fkParentMenuId: this.zTree.parent,
+        fkParentMenuId: this.zTree.pId,
         fkMenuId: this.zTree.id,
         menuName: this.ruleForm.name,
         menuCode: this.ruleForm.menuCode,
@@ -399,7 +400,8 @@ export default {
     },
     /*====== ztree点击节点将节点信息放入表单显示 ======*/
     zTreeOnClick(e, treeId, treeNode) {
-      console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
+      //console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
+      console.log('获取节点信息',treeNode)
       this.id = treeNode.id; //点击节点时节点自己的id
       this.click = 'click' //是否点击的赋值
       this.buttonNameData.length=0
@@ -418,16 +420,21 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            if(res.data.row.authTbMenu.fkMenuTypeCode=="list_menu"){
+              $('#btn_select').fadeOut()
+            }else{
+              $('#btn_select').fadeIn()
+            }
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
             this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
-            this.src1 = menugetimg + treeNode.id //展示节点图片
-            $('#icon1').show() //点击节点是显示,否则隐藏
+            /*this.src1 = menugetimg + treeNode.id //展示节点图片
+            $('#icon1').show() //点击节点是显示,否则隐藏*/
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
-            $('#btn_select').fadeIn()
+
             this.buttonData.length=0
             console.log('已存在的按钮1',res.data.row.authTbMenuElements)
             for (let item of res.data.row.authTbMenuElements) {
@@ -467,7 +474,8 @@ export default {
             var newNode = { name: "newNode1" };
             newNode = treeObj.addNodes(treeNode, newNode);
             console.log('添加按钮'+treeNode.id)
-            this.parent = treeNode.id;
+            parent = treeNode.id;
+            console.log('this.pId',parent)
             this.click = "add";
             return false;
           });
@@ -482,8 +490,7 @@ export default {
     /*====== 点击保存按钮发送修改或添加的请求 ======*/
     save(formTable) {
       //console.log(this.zNodes)
-      //this.pId=this.parent
-      console.log('父id：'+this.pId)
+      console.log('this.pId1111',parent)
       let files = this.formdata;
       //console.log(files)
       var formdatas = new FormData();

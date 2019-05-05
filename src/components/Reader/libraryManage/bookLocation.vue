@@ -237,6 +237,8 @@
             if(list.length>0){
               $('#typeMessage').fadeIn()
               this.zNodes=list
+            }else{
+              this.$message('暂无数据')
             }
           }else{
             this.$message({

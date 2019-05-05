@@ -51,16 +51,16 @@
               <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
               <el-table-column align="center" prop="cardNumber" width="180" label="卡号"></el-table-column>
               <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueAlreadyDay" width="150" label="逾期天数"></el-table-column>
-              <el-table-column align="center" label="操作" width="150">
-                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
-                  <span class="edit" @click="handleBan(scope.$index, scope.row)">处理</span>
-                </template>
-              </el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" width="180" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="180" label="应还书时间"></el-table-column>
+              <el-table-column align="center" prop="overdueAlreadyDay" width="160" label="逾期天数"></el-table-column>
+              <el-table-column align="center" label="操作" width="180">
+              <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+              <template slot-scope="scope">
+                <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
+                <span class="edit" @click="handleBan(scope.$index, scope.row)">处理</span>
+              </template>
+            </el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

@@ -9,7 +9,7 @@
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:952px" v-loading="formLoading">
         <div style="width: 350px" class="inputDiv">
-          <span style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address}}{{direction}}</span>
+          <span style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
           <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;display: none" @click="closeCheck"></span>
           <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
@@ -74,10 +74,16 @@
         form:{
           tag:''
         },
-        Address:'',
-        direction:'',
+        //Address:'',
+        Address:{ //层架绑定的位置信息
+          fkStoreId:'',
+          fkRegionId:'',
+          colNum:'',
+          divNum:'',
+          laysNum:'',
+          direction:'',
+        },
         i:0,
-        saveString:{},
         id:'',
         formLoading:false
       }
@@ -86,13 +92,13 @@
       //模糊查询参数
       saveData() {
         let saveData = {
-          fkStoreId: this.saveString.fkStoreId,
-          fkRegionId:this.saveString.fkRegionId,
-          colNum:this.saveString.colNum,
-          divNum:this.saveString.divNum,
-          laysNum:this.saveString.laysNum,
+          fkStoreId: this.addressDate.fkStoreId,
+          fkRegionId:this.addressDate.fkRegionId,
+          colNum:this.addressDate.colNum,
+          divNum:this.addressDate.divNum,
+          laysNum:this.addressDate.laysNum,
           rfid:this.form.tag,
-          direction:this.saveString.direction
+          direction:this.addressDate.direction
         };
         //console.log(searchForm)
         return saveData;
@@ -100,7 +106,7 @@
     },
     mounted(){
       $('#imgX').fadeOut()
-      $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+      //$.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       this.freshArea()
     },
     methods:{
@@ -133,10 +139,10 @@
         }
       },
       closeCheck(){
-        this.Address=''
-        this.direction=''
-        this.zNodes.length=0
-        this.freshArea()
+        let obj = this.Address;
+        for (var i in obj) {
+          obj[i] = "";
+        }
         this.form.tag=''
         $('#imgX').fadeOut()
       },
@@ -169,13 +175,19 @@
       },
       zTreeOnExpand(event, treeId, treeNode){
         console.log('展开',treeNode)
-        let name=treeNode.name.toString()
-        if(this.Address.search(name) == -1 ){
-          this.Address+=name
+        if(treeNode.fkStoreId!=null&&treeNode.fkRegionId==null){
+          this.Address.fkStoreId=treeNode.name
           $('#imgX').fadeIn()
+        }else if(treeNode.fkRegionId!=null&&treeNode.colNum==null){
+          this.Address.fkRegionId=treeNode.name
+        }else if(treeNode.colNum!=null&&treeNode.divNum==null){
+          this.Address.colNum=treeNode.name
+        }else if(treeNode.divNum!=null&&treeNode.laysNum==null){
+          this.Address.divNum=treeNode.name
+        }else if(treeNode.laysNum!=null&&treeNode.direction==null){
+          this.Address.laysNum=treeNode.name
         }
       },
-
       zTreeOnClick(event, treeId, treeNode){
         let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
         console.log('treeObj',treeObj)
@@ -185,26 +197,32 @@
         }else{
           console.log(treeNode)
           console.log(treeNode.direction)
-          this.saveString=treeNode
+          this.addressDate=treeNode
           this.form.tag=treeNode.rfid
-          if(treeNode.direction!==null){
-            this.direction=treeNode.name
-          }
+          this.Address.direction=treeNode.name
         }
       },
       onSubmit(){
-        this.$refs[this.form].validate((valid) => {
-          if (valid) {
-            //alert('submit!');
-            this.save(this.saveData)
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+        console.log('this.Address.direction',this.Address.direction)
+        if(this.Address.direction){
+          this.$refs[this.form].validate((valid) => {
+            if (valid) {
+              //alert('submit!');
+              this.save(this.saveData)
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        }else{
+          this.$message({
+            message: '位置绑定错误！！',
+            type: 'warning'
+          });
+
+        }
       },
       save(value){
-        if(this.direction){
           this.formLoading=true
           this.axios.post(layerFrameSave,value).then((res)=>{
             console.log(res)
@@ -213,10 +231,10 @@
                 message: res.data.msg,
                 type: 'success'
               });
+              $('#imgX').fadeOut()
               this.formLoading=false
               this.$refs[this.form].resetFields()
-              this.Address=''
-              this.direction=''
+              this.Address={}
               this.zNodes.length=0
               this.freshArea()
             }else{
@@ -227,11 +245,6 @@
               this.formLoading=false
             }
           })
-        }else{
-          this.$alert('请选择您要修改的层架标签面', '提示', {
-            confirmButtonText: '确定',
-          })
-        }
       }
     },
   }
