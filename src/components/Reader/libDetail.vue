@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import {bookModeInt} from '../../request/api/base.js'
 import axios from "axios";
 export default {
   data() {
@@ -97,7 +98,7 @@ export default {
         barcode: id
       };
       axios
-        .get("http://192.168.2.121:8088/tibetmuseummodule/TbookTbInfo/selectOne", {
+        .get(bookModeInt.selectOne, {
           params: data
         })
         .then(res => {

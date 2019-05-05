@@ -7,10 +7,7 @@
           <img src="../base/img/index/borrow.png">
         </div>
         <div class="sellInfo">
-          <p class="text">520</p>
-          <div class="progress">
-            <div class="percentprogress"></div>
-          </div>
+          <p class="text">{{borrowNum}}</p>
           <div class="iconBox">
             <p class="icon">今日借出</p>
           </div>
@@ -21,10 +18,7 @@
           <img src="../base/img/index/repay.png">
         </div>
         <div class="sellInfo">
-          <p class="text">680</p>
-          <div class="progress">
-            <div class="percentprogress"></div>
-          </div>
+          <p class="text">{{returnNum}}</p>
           <div class="iconBox">
             <p class="icon">今日归还</p>
           </div>
@@ -36,9 +30,6 @@
         </div>
         <div class="sellInfo">
           <p class="text">520</p>
-          <div class="progress">
-            <div class="percentprogress"></div>
-          </div>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
           </div>
@@ -49,10 +40,7 @@
           <img src="../base/img/index/online.png">
         </div>
         <div class="sellInfo">
-          <p class="text">520</p>
-          <div class="progress">
-            <div class="percentprogress"></div>
-          </div>
+          <p class="text">{{bookNum}}</p>
           <div class="iconBox">
             <p class="icon">在线图书</p>
           </div>
@@ -67,15 +55,7 @@
           <span class="text">借出数据表</span>
         </div>
         <div class="checkBox">
-          <el-select v-model="optionValue" class="selectBorder">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+          <span class="text">周借出数据</span>
         </div>
         <div class="Vhis">
           <ve-his 
@@ -92,7 +72,7 @@
       <div class="cataroyData">
         <div class="cataIcon">
           <i class="icon"></i>
-          <span class="text">图书分类</span>
+          <span class="text">热门分类</span>
         </div>
         <div class="Vpie">
           <ve-pie 
@@ -116,15 +96,14 @@
         </div>
         <!-- 信息列表循环处 -->
         <div class="forlist">
-          <ul>
-            <li class="listBox" v-for="(item,index) of faseList" :key="index">
+          <ul v-if="recardList.length">
+            <li class="listBox" v-for="(item,index) of recardList" :key="index">
               <p class="listInfo">
-                <span class="listInfo">{{item.id}}、</span>
-                <span class="listInfo">{{item.info}}、</span>
+                <span class="listInfo">{{item.id}}</span>
+                <span class="listInfo">{{item.info}}</span>
               </p>
               <p class>
                 <span class="listDate">{{item.time}}</span>
-                <span class="listDatehours">{{item.secods}}</span>
               </p>
             </li>
           </ul>
@@ -159,34 +138,19 @@
 <script>
 import VePie from "v-charts/lib/pie.common";
 import VeHis from "v-charts/lib/histogram.common";
+import {indexInt} from '../request/api/base.js'
+import axios from 'axios'
 export default {
   
   data() {
     return {
       /*====== 上层展示数据 ======*/
-
+      borrowNum:null,
+      returnNum:null,
+      bookNum:null,
+      cardNum:null,
       /*====== 中层图表战术数据 ======*/
-      // 下拉框数据
-      options:[{
-        value:'0',
-        label:'周借出数据'
-      },
-      {
-        value:'1',
-        label:'月借出数据'
-      },
-      {
-        value:'2',
-        label:'年借出数据'
-      }
-      
-      ],
-      optionValue:'周借出数据',
       // 柱形图相关数据
-      /*
-        尚未完成其一：坐标轴的偏移
-        尚未完成其二：X轴元素离X轴距离过远
-       */
       HisData:{
         columns: ["日期", "周借出数据"],
         rows: [
@@ -277,6 +241,8 @@ export default {
        */
       PieData:{ // 饼图具体展示数据
         columns: ["type", "value"], // 两个参数选择X轴和Y轴展示的数据
+        rows:[]
+        /*
         rows: [
           { type: "文学类", value: 1393 },
           { type: "理科类", value: 3530 },
@@ -284,6 +250,7 @@ export default {
           { type: "艺术类", value: 1723 },
           { type: "生活常识类", value: 3792 }
         ],
+        */
       },
       /* 饼图配置项 */
       // 饼图常规设置项
@@ -315,6 +282,7 @@ export default {
       },
       // 
       /*====== 下层信息展示数据 ======*/
+      recardList:[],
       faseList: [ 
         {
           id: 1,
@@ -336,6 +304,65 @@ export default {
         }
       ]
     };
+  },
+  methods:{
+    // 今日借出
+    borrowApi() {
+      axios.get(indexInt.borrow).then((res) => {
+        if(res.data.state === true){
+          this.borrowNum = res.data.row
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    // 今日归还
+    returnApi() {
+      axios.get(indexInt.return).then((res) => {
+        if(res.data.state === true){
+          this.returnNum = res.data.row
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    // 在册图书
+    bookApi() {
+      axios.get(indexInt.book).then((res) => {
+        if(res.data.state === true){
+          this.bookNum = res.data.row
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    // 借出记录API
+    recordApi() {
+      axios.get(indexInt.record).then((res) => {
+        if(res.data.state === true){
+          this.recardList = res.data.row
+          console.log('借出记录',this.recardList)
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    fanApi() {
+      axios.get(indexInt.fan).then((res) => {
+        if(res.data.state === true){
+          this.PieData.rows = res.data.row
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    }
+  },
+  created() {
+    this.borrowApi()
+    this.returnApi()
+    this.bookApi()
+    this.recordApi()
+    this.fanApi()
   },
   components:{
     VePie,
@@ -364,6 +391,7 @@ export default {
   background: rgba(0, 162, 255, 1);
   border-radius: 20px;
   display: flex;
+  justify-content: space-around
 }
 /*卡片不同颜色开始 hover颜色待定*/
 .bookInfo .sell {
@@ -498,11 +526,14 @@ export default {
 .chartsBox .sellData .checkBox{
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: -20px;
   width: 150px;
   z-index: 55;
 }
-
+.chartsBox .sellData .checkBox .text{
+    font-size: 16px;
+    color: rgba(135, 135, 135, 1);
+}
 /*饼图*/
 .chartsBox .cataroyData .cataIcon {
   position: absolute;

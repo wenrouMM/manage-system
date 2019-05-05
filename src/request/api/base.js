@@ -1,7 +1,18 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
+
+// 首页
+var index = url + 'borrowmodule/history/'
+export const indexInt = {
+  borrow:`${index}selectTodayBorrow`,
+  return:`${index}selectTodayReturn`,
+  book:`${url}tibetmuseummodule/bookRFID/selectCount`,
+  record:`${url}borrowmodule/InAndOut/getFiveLog`,
+  fan:`${url}tibetmuseummodule/bookRFID/getFiveType`
+}
+
 // 权限模块的API
 // 权限管理模块
 var userManage = url + 'authmodule/managerInformation/'
@@ -36,6 +47,12 @@ export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限�
 
 
 // 图书模块
+var bookMode = url + 'tibetmuseummodule/TbookTbInfo/'
+export const bookModeInt = {
+  selectOne:`${bookMode}selectOne`,
+  select:`${bookMode}select`
+
+}
 
 /*------ 区域模块 ------*/
 //库房模块
