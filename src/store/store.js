@@ -1,7 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import createLogger from 'vuex/dist/logger'
-import {setToken,removeToken} from '../base/js/normal'
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 const state= {
@@ -18,30 +17,29 @@ const getters={
     }
 }
 const mutations={
-    login:(state, data) => {
-        setToken(data) // 设置token
+    setToken:(state,data) =>{
         state.token = data
     },
-
-    logOut: (state) => {
-        removeToken() // 清除token
+    removeToken:(state) =>{
+        sessionStorage.removeItem('token')
         state.token = null
     },
-
     setUserInfo:(state,data) => {
         state.user = data
     },
     deleteUserInfo:(state) => {
-        localStorage.removeItem('userInfo')
+        sessionStorage.removeItem('userInfo')
         state.user = {} // 清空数组
     },
-
     setMenu:(state,data) =>{
         state.menu = data
     },
     deleteMenu:(state) => {
-        localStorage.removeItem('menu')
+        sessionStorage.removeItem('menu')
         state.menu = {}
+    },
+    loginOut:() =>{
+        
     }
 }
 const actions= {

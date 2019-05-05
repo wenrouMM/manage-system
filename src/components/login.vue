@@ -61,12 +61,11 @@ import {loginInter} from '../request/api/base.js'
             var token=res.data.row.authorization // 获取token
             var userInfo = JSON.stringify(res.data.row.authTbManager)
             var menu = JSON.stringify(res.data.row.roleModularMenus)
-
-            console.log(token)
-            localStorage.setItem('token',token)
-            localStorage.setItem('userInfo',userInfo)
-            localStorage.setItem('menu',menu)
-            this.$store.commit('login', token) // 存入本地 字符串形式存取
+    
+            sessionStorage.setItem('token',token)
+            sessionStorage.setItem('userInfo',userInfo)
+            sessionStorage.setItem('menu',menu)
+            this.$store.commit('setToken',token)
             this.$store.commit('setUserInfo',userInfo)
             this.$store.commit('setMenu',menu)
             // 获取路由信息

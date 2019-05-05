@@ -145,9 +145,9 @@ export default {
   data() {
     return {
       /*====== 上层展示数据 ======*/
-      borrowNum:null,
-      returnNum:null,
-      bookNum:null,
+      borrowNum:'',
+      returnNum:'',
+      bookNum:'',
       cardNum:null,
       /*====== 中层图表战术数据 ======*/
       // 柱形图相关数据
