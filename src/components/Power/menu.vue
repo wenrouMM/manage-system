@@ -204,7 +204,7 @@ export default {
         iconDefault:this.photo ,
         iconSelected:'' ,
         fkMenuTypeCode: this.ruleForm.menuType,
-        fkParentMenuId: this.pId,
+        fkParentMenuId: this.parent,
         authTbMenuElements: this.authTbMenuElementsAdd
       };
       //console.log(searchForm)
@@ -214,7 +214,7 @@ export default {
       // 传递给后端的搜索数据
       let editData = {
         id: this.zTree.id,
-        fkParentMenuId: this.zTree.pId,
+        fkParentMenuId: this.zTree.parent,
         fkMenuId: this.zTree.id,
         menuName: this.ruleForm.name,
         menuCode: this.ruleForm.menuCode,
@@ -482,7 +482,7 @@ export default {
     /*====== 点击保存按钮发送修改或添加的请求 ======*/
     save(formTable) {
       //console.log(this.zNodes)
-      this.pId=this.parent
+      //this.pId=this.parent
       console.log('父id：'+this.pId)
       let files = this.formdata;
       //console.log(files)
