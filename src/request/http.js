@@ -2,13 +2,12 @@
 import axios from 'axios'
 import store from '../store/store'
 import {
-  MessageBox,
   Message
 } from 'element-ui'
-import {getToken,removeToken} from '../base/js/normal'
 
 
-// axios.defaults.timeout = 10000
+
+ axios.defaults.timeout = 2000
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
@@ -20,7 +19,7 @@ axios.interceptors.request.use(
     return config
   },
   error => {
-    console.log(error)
+    console.log('超时错误在这里吗',error)
     return Promise.reject(error)
   }
 )
@@ -29,8 +28,8 @@ axios.interceptors.response.use(
   response => { // 回复信息配置 code！=200 
     // 还要其他的方法获得权限吗 这样是否有一些缺陷
     if(response.data.code == 3001 || response.data.code ==3003){ // 没有登录 token失效
-       removeToken()// 清除本地token
-       store.commit('logOut')// 清除vuex内token 异步还是同步
+       sessionStorage.removeItem('token')
+       store.commit('removeToken')// 清除vuex内token 异步还是同步
        Message.error(response.data.msg);
        console.log('当前页面路径',window.vm.$route.path)
        if(window.vm.$route.path != '/login'){ // 当前页面不是登录页 就进入登录页
@@ -39,7 +38,6 @@ axios.interceptors.response.use(
 
     }
     if(response.code == 3002){ // 权限不足
-      
       window.vm.$router.push('/404') // 进入404页面Or权限不够页面
     }
 

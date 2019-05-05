@@ -103,7 +103,7 @@ export default {
       this.$router.push({path:'/'})
     },
     loginOut() {
-      this.$store.commit("logOut");
+      this.$store.commit("removeToken");
       this.$store.commit('deleteUserInfo')
       this.$store.commit('deleteMenu')
       this.$router.push("/login");

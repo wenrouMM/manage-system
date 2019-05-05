@@ -73,7 +73,7 @@ export default {
       console.log(key, keyPath);
     },
     loginOut() {
-      this.$store.commit("logOut");
+      this.$store.commit("removeToken");
       this.$store.commit('deleteUserInfo')
       this.$store.commit('deleteMenu')
       this.$router.push("/login");
@@ -86,7 +86,7 @@ export default {
     ...mapGetters(["userInfo"])
   },
   created(){
-    let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     this.localUser = userInfo
     console.log('用户信息呢', this.localUser)
   }

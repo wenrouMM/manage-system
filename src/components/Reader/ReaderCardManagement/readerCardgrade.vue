@@ -351,9 +351,26 @@ export default {
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
       //console.log('保存当前查询',this.paginationForm);
-      this.searchTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      this.pagationTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
     /*====== API部分 ======*/
+    pagationTable(data) {
+      console.log("初始化查询", this.searchTimeForm);
+      axios.get(cardLevelInt.select,{
+        params:data
+      }).then((res) => {
+        if (res.data.state === true){
+          console.log(res)
+          // 获取数据进行过滤
+          this.tableData = res.data.row
+          this.total = res.data.total; //总条目数
+          this.paginationForm = Object.assign({}, data);
+          console.log("保存当前查询", this.paginationForm);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
     searchTable(data) {
       console.log("初始化查询", this.searchTimeForm);
@@ -366,6 +383,7 @@ export default {
           this.tableData = res.data.row
           this.total = res.data.total; //总条目数
           this.paginationForm = Object.assign({}, data);
+          this.currentPage = 1
           console.log("保存当前查询", this.paginationForm);
         } else {
           this.$message.error(res.data.msg);
@@ -389,6 +407,7 @@ export default {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
+          this.searchOption()
           this[dialogName] = false;
         } else {
           this.$message.error(res.data.msg);
@@ -417,6 +436,7 @@ export default {
         if (res.data.state === true) {
           this.$message.success("删除成功");
           this.searchTable()
+          this.searchOption()
           this.deleteDialog = false;
           console.log(res);
         } else {

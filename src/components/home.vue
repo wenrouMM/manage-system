@@ -29,7 +29,7 @@
           <img src="../base/img/index/deal.png">
         </div>
         <div class="sellInfo">
-          <p class="text">520</p>
+          <p class="text">{{cardNum}}</p>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
           </div>
@@ -58,15 +58,14 @@
           <span class="text">周借出数据</span>
         </div>
         <div class="Vhis">
-          <ve-his 
-            width="780px" height="400px"
+          <ve-his
+            width="780px"
+            height="400px"
             :data="HisData"
             :legend-visible="false"
             :settings="HisSetting"
             :extend="HisExtend"
-          >
-
-          </ve-his>
+          ></ve-his>
         </div>
       </div>
       <div class="cataroyData">
@@ -75,14 +74,14 @@
           <span class="text">热门分类</span>
         </div>
         <div class="Vpie">
-          <ve-pie 
-            width="780px" height="400px"
+          <ve-pie
+            width="780px"
+            height="400px"
             :data="PieData"
             :colors="PieColors"
             :settings="PieSetting"
             :extend="PieExtend"
-            >
-          </ve-pie>
+          ></ve-pie>
         </div>
       </div>
     </section>
@@ -138,110 +137,127 @@
 <script>
 import VePie from "v-charts/lib/pie.common";
 import VeHis from "v-charts/lib/histogram.common";
-import {indexInt} from '../request/api/base.js'
-import axios from 'axios'
+import { indexInt } from "../request/api/base.js";
+import axios from "axios";
 export default {
-  
   data() {
     return {
       /*====== 上层展示数据 ======*/
-      borrowNum:null,
-      returnNum:null,
-      bookNum:null,
-      cardNum:null,
+      borrowNum: "",
+      returnNum: "",
+      bookNum: "",
+      cardNum: "",
       /*====== 中层图表战术数据 ======*/
       // 柱形图相关数据
-      HisData:{
-        columns: ["日期", "周借出数据"],
+      HisData: {
+        columns: ["showTime", "周借出数据"],
+        rows: []
+        /*
         rows: [
-          { 日期: "2019/4/15", 周借出数据: "300" },
-          { 日期: "2019/4/16", 周借出数据: "700" },
-          { 日期: "2019/4/17", 周借出数据: "900" },
-          { 日期: "2019/4/18", 周借出数据: "400" },
+          { type: "2019/4/15", value: "300" },
+          { type: "2019/4/16", value: "700" },
+          { type: "2019/4/17", 周借出数据: "900" },
+          { value: "2019/4/18", 周借出数据: "400" },
           { 日期: "2019/4/19", 周借出数据: "600" },
           { 日期: "2019/4/20", 周借出数据: "700" },
           { 日期: "2019/4/21", 周借出数据: "800" }
         ]
+        */
       },
-      HisSetting:{
+      HisSetting: {
         itemStyle: {
-            normal: {
-              //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组 但未实现
-              color: function(params) {
-                var colorList = [
-                  "#1e9eff",
-                  "#00d2ff",
-                  "#1e9eff",
-                  "#00d2ff",
-                  "#1e9eff",
-                  "#00d2ff",
-                  "#1e9eff"
-                ];
-                return colorList[params.dataIndex];
-              },
-              barBorderRadius: [8, 8, 0, 0] // 柱子的阴影
+          normal: {
+            //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组 但未实现
+            color: function(params) {
+              var colorList = [
+                "#1e9eff",
+                "#00d2ff",
+                "#1e9eff",
+                "#00d2ff",
+                "#1e9eff",
+                "#00d2ff",
+                "#1e9eff"
+              ];
+              return colorList[params.dataIndex];
+            },
+            barBorderRadius: [8, 8, 0, 0], // 柱子的阴影
+            label: { // 柱状图头部文字
+              show: true, //开启显示
+              position: "top", //在上方显示
+              textStyle: {
+                //数值样式
+                color: "rgba(135, 135, 135, 1)",
+                fontSize: 16
+              }
             }
           }
+        }
       },
-      HisExtend:{
-        grid:{
-          x:45, // 相对于绝对定义的left x2是right
-          x2:45,
-          y:68,
-          y2:28 // bottom y是top
-          
+      HisExtend: {
+        grid: {
+          x: 45, // 相对于绝对定义的left x2是right
+          x2: 45,
+          y: 68,
+          y2: 28 // bottom y是top
         },
         xAxis: {
+          show: true,
+          axisLine: {
             show: true,
-            axisLine: {
-              show: true,
-              lineStyle:{ // 设置坐标轴
-                color:'#CECECE' //Y轴轴线的颜色
-              }
-            },
-            splitLine: { // 是否启用网格线
-              show: false
-            },
-            axisLabel:{ // 轴线和坐标名的距离
-              margin:10
-            },
-            
-          },
-          yAxis: {
-            show: true, // 是否展示Y轴
-            position:'left', // 设置Y轴位置 多个Y轴全部合并到左边就是视觉上的一条了
-            axisLine: {
-              show: true, // 是否显示轴线
-              lineStyle:{ // 设置坐标轴
-                color:'#CECECE' //Y轴轴线的颜色
-              }
-            },
-            axisLabel:{ // X轴轴线和坐标名的距离
-              margin:10
-            },
-            splitLine: { //是否展示网格
-              show: false
-            },
-            nameTextStyle:{ // 字体设置
-              fontSize:'14',
-              fontFamily:'Microsoft YaHei',
-              color:'#CECECE'
+            lineStyle: {
+              // 设置坐标轴
+              color: "#CECECE" //Y轴轴线的颜色
             }
           },
-          series: {
-            //barWidth: 50, // 柱条长度定死
-            //barGap: '-5%',
-            barCategoryGap:'40' //同类目的间距 默认百分20% 谁的20%
+          splitLine: {
+            // 是否启用网格线
+            show: false
           },
+          axisLabel: {
+            // 轴线和坐标名的距离
+            margin: 10
+          }
+        },
+        yAxis: {
+          show: true, // 是否展示Y轴
+          position: "left", // 设置Y轴位置 多个Y轴全部合并到左边就是视觉上的一条了
+          axisLine: {
+            show: true, // 是否显示轴线
+            lineStyle: {
+              // 设置坐标轴
+              color: "#CECECE" //Y轴轴线的颜色
+            }
+          },
+          axisLabel: {
+            // X轴轴线和坐标名的距离
+            margin: 10
+          },
+          splitLine: {
+            //是否展示网格
+            show: false
+          },
+          nameTextStyle: {
+            // 字体设置
+            fontSize: "14",
+            fontFamily: "Microsoft YaHei",
+            color: "#CECECE"
+          }
+        },
+        series: {
+          //barWidth: 50, // 柱条长度定死
+          //barGap: '-5%',
+          barCategoryGap: "40" //同类目的间距 默认百分20% 谁的20%
+        }
       },
       // 饼图数据相关
       /*
         尚未完成1. 饼图整体的位移距离
         尚未完成2： label的位移距离
        */
-      PieData:{ // 饼图具体展示数据
+      PieData: {
+        // 饼图具体展示数据
         columns: ["type", "value"], // 两个参数选择X轴和Y轴展示的数据
-        rows:[]
+        rows: []
         /*
         rows: [
           { type: "文学类", value: 1393 },
@@ -254,8 +270,9 @@ export default {
       },
       /* 饼图配置项 */
       // 饼图常规设置项
-      PieColors:["#00A2FF", "#FC32F0", "#00D2FF", "#ff5c3c", "#ff9231"],
-      PieSetting:{ // 饼图设置
+      PieColors: ["#00A2FF", "#FC32F0", "#00D2FF", "#ff5c3c", "#ff9231"],
+      PieSetting: {
+        // 饼图设置
         roseType: "radius", // 玫瑰图配置项
         // 引导线
         labelLine: {
@@ -266,24 +283,30 @@ export default {
           show: false
         }
       },
-      PieExtend:{ // 饼图扩展使用echarts配置覆盖原始配置
-        grid:{ // 位置无法调整
-
+      PieExtend: {
+        // 饼图扩展使用echarts配置覆盖原始配置
+        grid: {
+          // 位置无法调整 饼图是在series里调整
         },
+        // 图例提示标签
         legend: {
           // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
           orient: "vertical",
           // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
-          x: "600px", // 要设置位置 否则位置和文字会相反
+          x: "550px", // 要设置位置 否则位置和文字会相反
           // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
           y: "center",
           icon: "circle" // 设置显示图标
+        },
+        series:{
+          radius:'70%',
+          center: ['24%','50%']
         }
       },
-      // 
+      //
       /*====== 下层信息展示数据 ======*/
-      recardList:[],
-      faseList: [ 
+      recardList: [],
+      faseList: [
         {
           id: 1,
           info: "干脆面借《UI必修课》一本",
@@ -305,32 +328,43 @@ export default {
       ]
     };
   },
-  methods:{
+  methods: {
     // 今日借出
     borrowApi() {
-      axios.get(indexInt.borrow).then((res) => {
-        if(res.data.state === true){
-          this.borrowNum = res.data.row
+      axios.get(indexInt.borrow).then(res => {
+        if (res.data.state === true) {
+          this.borrowNum = res.data.row;
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     },
     // 今日归还
     returnApi() {
-      axios.get(indexInt.return).then((res) => {
-        if(res.data.state === true){
-          this.returnNum = res.data.row
+      axios.get(indexInt.return).then(res => {
+        if (res.data.state === true) {
+          this.returnNum = res.data.row;
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     },
     // 在册图书
     bookApi() {
-      axios.get(indexInt.book).then((res) => {
-        if(res.data.state === true){
-          this.bookNum = res.data.row
+      axios.get(indexInt.book).then(res => {
+        if (res.data.state === true) {
+          this.bookNum = res.data.row;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 办卡记录
+    cardOnApi() {
+      axios.get(indexInt.cardOn).then((res) =>{
+        if (res.data.state === true) {
+          this.cardNum = res.data.row
+          console.log('办卡记录',res.data.row)
         } else {
           this.$message.error(res.data.msg);
         }
@@ -338,33 +372,52 @@ export default {
     },
     // 借出记录API
     recordApi() {
-      axios.get(indexInt.record).then((res) => {
-        if(res.data.state === true){
-          this.recardList = res.data.row
-          console.log('借出记录',this.recardList)
+      axios.get(indexInt.record).then(res => {
+        if (res.data.state === true) {
+          this.recardList = res.data.row;
+          console.log("借出记录", this.recardList);
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     },
     fanApi() {
-      axios.get(indexInt.fan).then((res) => {
-        if(res.data.state === true){
-          this.PieData.rows = res.data.row
+      axios.get(indexInt.fan).then(res => {
+        if (res.data.state === true) {
+          this.PieData.rows = res.data.row;
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
+    },
+    pillarApi() {
+      axios.get(indexInt.pillar).then(res => {
+        if (res.data.state === true) {
+          let dataArr = res.data.row;
+          let arr = [];
+          for (let item of dataArr) {
+            delete item.endTime;
+            delete item.startTime;
+            item.周借出数据 = item.num;
+            delete item.num;
+          }
+          this.HisData.rows = dataArr;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     }
   },
   created() {
-    this.borrowApi()
-    this.returnApi()
-    this.bookApi()
-    this.recordApi()
-    this.fanApi()
+    this.borrowApi();
+    this.returnApi();
+    this.bookApi();
+    this.recordApi();
+    this.fanApi();
+    this.pillarApi();
+    this.cardOnApi()
   },
-  components:{
+  components: {
     VePie,
     VeHis
   }
@@ -391,7 +444,7 @@ export default {
   background: rgba(0, 162, 255, 1);
   border-radius: 20px;
   display: flex;
-  justify-content: space-around
+  justify-content: space-around;
 }
 /*卡片不同颜色开始 hover颜色待定*/
 .bookInfo .sell {
@@ -503,7 +556,7 @@ export default {
   margin-right: 40px;
 }
 /*柱形图*/
-.chartsBox .sellData .sellIcon{
+.chartsBox .sellData .sellIcon {
   position: absolute;
   top: 24px;
   left: 21px;
@@ -523,16 +576,16 @@ export default {
   color: rgba(135, 135, 135, 1);
 }
 /*选择框*/
-.chartsBox .sellData .checkBox{
+.chartsBox .sellData .checkBox {
   position: absolute;
   top: 20px;
   right: -20px;
   width: 150px;
   z-index: 55;
 }
-.chartsBox .sellData .checkBox .text{
-    font-size: 16px;
-    color: rgba(135, 135, 135, 1);
+.chartsBox .sellData .checkBox .text {
+  font-size: 16px;
+  color: rgba(135, 135, 135, 1);
 }
 /*饼图*/
 .chartsBox .cataroyData .cataIcon {
@@ -554,8 +607,7 @@ export default {
   font-size: 16px;
   color: rgba(135, 135, 135, 1);
 }
-.chartsBox .cataroyData .Vpie{
-
+.chartsBox .cataroyData .Vpie {
 }
 /*======下层信息框======*/
 .messageBox {

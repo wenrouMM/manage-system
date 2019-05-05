@@ -9,15 +9,15 @@
         </div>
         <div class="divHeight">
           <img src="../base/img/login/icon_2.png" class="imgHeight">
-          <input type="password" placeholder="请输入密码" id="pwd"  notnull info="密码" maxlength="30" class="inputHeight" v-model="form.password" style="position: relative">
+          <input @keyup.enter="submit" type="password" placeholder="请输入密码" id="pwd"  notnull info="密码" maxlength="30" class="inputHeight" v-model="form.password" style="position: relative">
           <img src="../base/img/currency/yanjing.png"  id="show" style="width: 25px;height: 25px;position: absolute;top: 33px;left: 270px" @click="isShowCheck">
         </div>
         <div class="divHeight" id="yzm">
-          <input type="text" placeholder="请输入验证码" id="yzvalue" notnull info="验证码" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
+          <input type="text"  placeholder="请输入验证码" id="yzvalue" class="inputHeight" maxlength="4" style="position: absolute;left: 0;width: 150px" v-model="form.yzm">
           <span><img src="" id="imgYzm" @click="imgClick"></span>
         </div>
         <div style="margin-top: 55px;">
-          <button @click="submit">登录</button>
+          <button @click="submit" >登录</button>
         </div>
         <div id="msg"></div>
       </div></el-col>
@@ -61,12 +61,11 @@ import {loginInter} from '../request/api/base.js'
             var token=res.data.row.authorization // 获取token
             var userInfo = JSON.stringify(res.data.row.authTbManager)
             var menu = JSON.stringify(res.data.row.roleModularMenus)
-
-            console.log(token)
-            localStorage.setItem('token',token)
-            localStorage.setItem('userInfo',userInfo)
-            localStorage.setItem('menu',menu)
-            this.$store.commit('login', token) // 存入本地 字符串形式存取
+    
+            sessionStorage.setItem('token',token)
+            sessionStorage.setItem('userInfo',userInfo)
+            sessionStorage.setItem('menu',menu)
+            this.$store.commit('setToken',token)
             this.$store.commit('setUserInfo',userInfo)
             this.$store.commit('setMenu',menu)
             // 获取路由信息

@@ -13,12 +13,14 @@
           ref="searchForm"
           :rules="rules"
         >
+        <!--
           <el-form-item label="用户名" prop="userName">
             <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="卡号" prop="cardNum">
             <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
           </el-form-item>
+          -->
           <el-form-item label="书籍编码" prop="bookCode">
             <el-input v-model="searchForm.bookCode" style="width: 200px" placeholder="请输入书籍编码"></el-input>
             <el-button
@@ -42,13 +44,13 @@
           <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
           <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
           <el-table-column align="center" prop="fkTypeName" width="200" label="书籍类型"></el-table-column>
+          <el-table-column align="center" prop="author"  label="作者"></el-table-column>
         </el-table>
       </section>
       <div class="buttonBox">
         <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">还书</el-button>
         <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
       </div>
-      <div>{{message}}</div>
     </div>
   </div>
 </template>
@@ -62,16 +64,21 @@ export default {
       message: "",
       labelPosition: "right",
       searchForm: {
-        userName: "",
+        
+        //userName: "",
         cardNum: "",
+        
         bookCode: ""
       },
       rules: {
         // 添加的参数验证
+        /*
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
+        
         cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
+        */
       },
       tableData: [],
       codeData: [],
@@ -92,8 +99,10 @@ export default {
     },
     submitTimeForm() {
       let obj = {
-        name: this.searchForm.userName,
-        cardNum: this.searchForm.cardNum,
+        
+        // name: this.searchForm.userName,
+        // cardNum: this.searchForm.cardNum,
+        
         list: this.tableData
       };
       return obj;
@@ -183,7 +192,6 @@ export default {
           let cardNum = this.searchForm.cardNum;
           this.$router.push({
             path: `/returnstatus`,
-            query: { Num: cardNum }
           });
         } else {
           this.$message.error(res.data.msg);
