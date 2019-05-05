@@ -35,7 +35,7 @@
               <el-form-item label="等级名称:" size="160">
                 <el-select clearable v-model="searchForm.level" placeholder="请选择等级">
                   <el-option
-                    v-for="(option,index) of optionsData"
+                    v-for="(option,index) of levelOption"
                     :key="index"
                     :label="option.name"
                     :value="option.code"
@@ -160,7 +160,8 @@ import axios from "axios";
 import {
   selectEffect,
   levelOption,
-  cardTypeInt
+  cardTypeInt,
+  unBanOption
 } from "../../../request/api/base.js";
 export default {
   data() {
@@ -168,6 +169,7 @@ export default {
       /*====== 2.0查询功能配置项 ======*/
       optionsData: [],
       optionsDataType: [], // 类型下拉框
+      levelOption:[],
       searchForm: {
         level: "",
         type: ""
@@ -212,7 +214,7 @@ export default {
       let obj = {
         typeCode: this.searchForm.type,
         gradeCode: this.searchForm.level,
-        currentPage: this.currentPage,
+        currentPage: 1,
         pageSize: this.pageSize
       };
       return obj;
@@ -267,6 +269,7 @@ export default {
     // 查询按钮
     searchBtn() {
       this.searchTable(this.searchTimeForm);
+      this.currentPage = 1
       console.log("当前查询", this.searchTimeForm);
     },
     // 编辑按钮
@@ -342,12 +345,12 @@ export default {
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
       //console.log('保存当前查询',this.paginationForm);
-      this.searchTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      this.pagationTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
     /*====== API部分 ======*/
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
-    searchTable(data) {
-      console.log("初始化查询", this.searchTimeForm);
+    pagationTable(data) {
+      console.log("记录查询", this.searchTimeForm);
       axios
         .get(cardTypeInt.select, {
           params: data
@@ -365,23 +368,55 @@ export default {
           }
         });
     },
-    // 类型API
-    searchOptionType() {
-      axios.get(selectEffect).then(res => {
+    searchTable(data) {
+      this.currentPage = 1
+      console.log("初始化查询", this.searchTimeForm);
+      axios
+        .get(cardTypeInt.select, {
+          params: data
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            console.log(res);
+            // 获取数据进行过滤
+            this.tableData = res.data.row;
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, data);
+            this.currentPage = 1
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
+    // 等级API
+    UnBanApi() {
+      axios.get(unBanOption).then(res => {
         if (res.data.state === true) {
-          this.optionsData = res.data.row;
-          console.log("类型下拉框数据", res);
+          this.levelOption = res.data.row;
+          console.log("等级下拉框数据", res);
         } else {
           this.$message.error(res.data.msg);
         }
       });
     },
-    // 等级API
+    // 类型API
     searchOption() {
+      axios.get(selectEffect).then(res => {
+        if (res.data.state === true) {
+          this.optionsData = res.data.row;
+          console.log("添加等级下拉框数据", res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 添加 等级API
+    searchOptionType() {
       axios.get(levelOption).then(res => {
         if (res.data.state === true) {
           this.optionsDataType = res.data.row;
-          console.log("等级下拉框数据", res);
+          console.log("类型下拉框数据", res);
         } else {
           this.$message.error(res.data.msg);
         }
@@ -394,6 +429,8 @@ export default {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
+          this.searchOption()
+          this.searchOptionType()
           this[dialogName] = false;
         } else {
           this.$message.error(res.data.msg);
@@ -422,6 +459,8 @@ export default {
         if (res.data.state === true) {
           this.$message.success("删除成功");
           this.searchTable();
+          this.searchOption()
+          this.searchOptionType()
           this.deleteDialog = false;
           console.log(res);
         } else {
@@ -446,6 +485,7 @@ export default {
   created() {
     this.searchOption();
     this.searchOptionType();
+    this.UnBanApi()
     this.searchTable(this.searchTimeForm);
   }
 };

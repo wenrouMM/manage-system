@@ -39,7 +39,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="状态:" size="160">
-                <el-select clearable v-model="searchForm.disabled" placeholder="请选择类型">
+                <el-select clearable v-model="searchForm.state" placeholder="请选择状态">
                     <el-option
                       v-for="(option,index) of optionsData"
                       :key="index"
@@ -170,7 +170,7 @@ export default {
         cardNum:'',
         username:'',
         uerType:'',
-        disabled:''
+        state:''
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
       Allseclet: [], // 全选
@@ -213,8 +213,8 @@ export default {
         name: this.searchForm.name,
         cardNumber:this.searchForm.cardNumber,
         typeCode: this.searchForm.type,
-        disabled:this.disabled,
-        currentPage: this.currentPage,
+        state:this.searchForm.state,
+        currentPage: 1,
         pageSize: this.pageSize
       };
       return obj;
@@ -276,6 +276,7 @@ export default {
     // 查询按钮
     searchBtn() {
       this.searchTable(this.searchTimeForm);
+      
       console.log("当前查询", this.searchTimeForm);
     },
     // 补办读者卡
@@ -351,13 +352,32 @@ export default {
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
       //console.log('保存当前查询',this.paginationForm);
-      this.searchTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      this.pagationTable(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
     // 办卡按钮
     conductBtn() {
       this.$router.push({path:'/getCard'})
     },
     /*====== API部分 ======*/
+    pagationTable(data) {
+      console.log("记录查询", this.searchTimeForm);
+      axios
+        .get(cardInfoInt.select, {
+          params: data
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            console.log(res);
+            // 获取数据进行过滤
+            this.tableData = res.data.row;
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, data);
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
     searchTable(data) {
       console.log("初始化查询", this.searchTimeForm);

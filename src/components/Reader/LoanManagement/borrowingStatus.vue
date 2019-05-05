@@ -17,8 +17,7 @@
     <div style="margin-top: 50px" class="stateBox">
       <section class="text item tablebox">
         <div class="reason mb_30">
-          <p>用户名 :&nbsp;&nbsp;{{detail.name}}</p>
-          <p style="margin-left: 40px">卡号 :&nbsp;&nbsp;{{detail.cardNum}}</p>
+          <p>卡号 :&nbsp;&nbsp;{{detail.cardNum}}</p>
         </div>
         <el-table
           class="tableBorder"
@@ -28,7 +27,7 @@
         >
           <el-table-column align="center" type="index" width="150" label="序号"></el-table-column>
           <el-table-column align="center" prop="bookName"  width="200"  label="书籍名称"></el-table-column>
-          <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
+          <el-table-column align="center" prop="libraryBookCode" show-overflow-tooltip="true" label="书籍编码"></el-table-column>
           <el-table-column align="center" prop="start" width="250" label="借书开始时间"></el-table-column>
           <el-table-column align="center" prop="end" width="250" label="预计书籍归还时间"></el-table-column>
           <el-table-column align="center" prop="state" width="200"  label="借书状态">
@@ -40,7 +39,7 @@
         <section class="reasonBox">
           <div class="block" v-for="(item,index) of tableData" :key="index">
             <div class="reason" v-if="item.state == 0">
-              <p>注释 :&nbsp;&nbsp;{{item.bookName}}借书失败</p>
+              <p>注释 :&nbsp;&nbsp;《{{item.bookName}}》借书失败</p>
               <p style="margin-left: 40px">原因 :&nbsp;&nbsp;{{item.reason}}</p>
             </div>
           </div>
