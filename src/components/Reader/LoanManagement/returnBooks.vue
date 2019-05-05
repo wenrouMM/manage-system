@@ -51,7 +51,6 @@
         <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">还书</el-button>
         <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
       </div>
-      <div>{{message}}</div>
     </div>
   </div>
 </template>

@@ -2,13 +2,12 @@
 import axios from 'axios'
 import store from '../store/store'
 import {
-  MessageBox,
   Message
 } from 'element-ui'
-import {getToken,removeToken} from '../base/js/normal'
 
 
-// axios.defaults.timeout = 10000
+
+ axios.defaults.timeout = 20000
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
@@ -39,7 +38,6 @@ axios.interceptors.response.use(
 
     }
     if(response.code == 3002){ // 权限不足
-      
       window.vm.$router.push('/404') // 进入404页面Or权限不够页面
     }
 
