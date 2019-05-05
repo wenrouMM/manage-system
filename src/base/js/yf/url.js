@@ -1,6 +1,6 @@
 //url='http://192.168.2.131:8088/'
-//var url = 'http://192.168.2.31:8088/'
-url='http://192.168.2.121:8088/';
+var url = 'http://192.168.2.31:8088/'
+//url='http://192.168.2.121:8088/';
 //
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
@@ -13,7 +13,7 @@ url='http://192.168.2.121:8088/';
   menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
   menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
   menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
-  menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
+  menugetimg=url+'authmodule/menuInformation/getImg?id='//图片显示
   menubutton=url+'authmodule/menuInformation/currency/selectMenuById' //点击节点发请求
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询

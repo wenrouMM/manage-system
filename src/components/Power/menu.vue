@@ -7,18 +7,18 @@
       <div style="width: 1320px;margin-left: 30px;;height:852px;background-color:white" v-loading="formLoading">
         <el-form :model="ruleForm"
                  :rules="rules"
-                 :ref="ruleForm"
+                 ref="ruleForm"
                  label-width="100px"
                  class="demo-ruleForm"
                  style="width: 700px;margin: 100px auto"
                  :label-position="labelPosition">
           <el-form-item label="名　　称 :　" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入名称" id="name"></el-input>
           </el-form-item>
           <el-form-item label="U　R　L :" prop="url">
             <el-input v-model="ruleForm.url" placeholder="请输入url"></el-input>
           </el-form-item>
-          <el-form-item label="I C O N : " prop="img" style="margin-top: 55px">
+          <el-form-item label="I C O N : " prop="img" style="margin-top: 55px;margin-left: 10px">
             <div style="display: flex;flex-direction: row;margin-top: -30px">
               <div class="inputBox">
               <!-- 预览的图片 -->
@@ -60,7 +60,7 @@
               <el-radio label="启用"></el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label=" 按 钮 集 : " prop="menuMsg" id="btn_select" style="display: none">
+          <el-form-item label=" 按 钮 集 : "  id="btn_select" style="display: none;margin-left: 10px">
             <div class="myfont"  style="display: flex;flex-direction: row;position: relative">
               <img src="../../base/img/menu/tianjia.png" style="width: 25px;height: 25px;margin-top: -32px" @click="btn_type" >
               <div style="margin-left: 30px;margin-top: -40px;" id="but_show">
@@ -68,7 +68,7 @@
               </div>
             </div>
           </el-form-item>
-          <el-button type="primary" round @click="save()" style="width: 200px;margin: 20px 250px">保存</el-button>
+          <el-button type="primary" round @click="save('ruleForm')" style="width: 200px;margin: 20px 250px">保存</el-button>
         </el-form>
         <div class="but_div" id="but_type_div">
           <div class="but_type_div">
@@ -76,7 +76,7 @@
               按钮集
             </div>
             <div style="background-color: white;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px">
-              <el-form ref="formButton"  :model="formButton" :rules="rulesButton" :ref="formButton" label-width="90px" :label-position="labelPosition" style="padding-left:70px;padding-bottom: 50px ;margin-top: 50px">
+              <el-form  :model="formButton" :rules="rulesButton" :ref="formButton" label-width="90px" :label-position="labelPosition" style="padding-left:70px;padding-bottom: 50px ;margin-top: 50px">
                 <el-form-item label="元素名 : " prop="buttonName">
                   <el-input v-model="formButton.buttonName" placeholder="请输入按钮名称" style="width: 267px"></el-input>
                 </el-form-item>
@@ -114,7 +114,7 @@ export default {
         state: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入名称', trigger: 'blur' },],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         url: [{ required: true, message: '请输入url', trigger: 'blur' }],
         menuType: [{required: true, message: '请选择菜单类型', trigger: 'change' }],
         menuCode: [{required: true, message: '请输入菜单编码', trigger: 'blur' }],
@@ -126,7 +126,7 @@ export default {
         buttonTypeCode:''
       },
       rulesButton:{
-        buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' },],
+        buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' }],
         buttonTypeCode: [{ required: true, message: '请选择按钮类型', trigger: 'change' }],
       },
       isShow:false,
@@ -264,7 +264,6 @@ export default {
       console.log(num)
       if(num==='list_menu'||num===''){
         $('#btn_select').fadeOut()
-
       }else if(num==='page_menu'){
         $('#btn_select').fadeIn()
       }
@@ -310,7 +309,7 @@ export default {
           }
           //console.log(this.buttonData)
           this.addButton=true //按钮添加完成后使其可继续添加
-          this.formButton={} //清空添加按钮的数组
+          this.$refs[this.formButton].resetFields(); //清空添加按钮的数组
         } else {
           console.log('error submit!!');
           return false;
@@ -404,7 +403,14 @@ export default {
       this.id = treeNode.id; //点击节点时节点自己的id
       this.click = 'click' //是否点击的赋值
       this.buttonNameData.length=0
-      $("#btn_select").fadeOut()
+      //$("#btn_select").fadeOut()
+      if(treeNode.id==undefined){
+        for (var i in this.ruleForm) {
+          this.ruleForm[i] = "";
+        }
+        this.ruleForm.name=treeNode.name
+        $('#name').focus()
+      }
         this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
@@ -414,16 +420,11 @@ export default {
             });
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
-            if(res.data.row.authTbMenu.fkMenuTypeCode=='list_menu'){
-              $('#btn_select').fadeOut()
-            }else if(res.data.row.authTbMenu.fkMenuTypeCode=='page_menu'){
-              $('#btn_select').fadeIn()
-            }
             this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
-            this.src1 = 'http://192.168.2.121:8088/authmodule/menuInformation/getImg?id=' + treeNode.id //展示节点图片
+            this.src1 = menugetimg + treeNode.id //展示节点图片
             $('#icon1').show() //点击节点是显示,否则隐藏
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
             $('#btn_select').fadeIn()
@@ -435,10 +436,9 @@ export default {
               this.buttonNameData.push(item.elmName)
             }
             //console.log(this.buttonData)
-          } else {
-            this.$message.error(res.data.msg);
           }
         })
+      console.log('类表',this.ruleForm.menuType)
     },
     /*====== ztree节点添加按钮做添加操作 ======*/
     addHoverDom(treeId, treeNode) {
@@ -480,8 +480,8 @@ export default {
         .remove();
     },
     /*====== 点击保存按钮发送修改或添加的请求 ======*/
-    save() {
-      console.log(this.zNodes)
+    save(formTable) {
+      //console.log(this.zNodes)
       this.pId=this.parent
       console.log('父id：'+this.pId)
       let files = this.formdata;
@@ -489,36 +489,36 @@ export default {
       var formdatas = new FormData();
       formdatas.append("file", files);
       //console.log(formdatas.get('file'))
-      if (click === undefined) {
+      if (this.click ==false) {
         this.$alert("请选择您要添加或修改的内容", {
           confirmButtonText: "确定"
         });
         return;
       } else {
-        if (id === undefined) {
-          this.$refs[this.ruleForm].validate((valid) => {
+        if (this.id === undefined) {
+          this.$refs[formTable].validate((valid) => {
             if (valid) {
-              console.log('submit!');
-              this.addApi(this.addForm)
+              console.log('添加');
+              this.addApi(this.addForm,formTable)
             } else {
-              console.log('error submit!!');
+              console.log('添加失败');
               return false;
             }
           });
         } else {
-          this.$refs[this.ruleForm].validate((valid) => {
+          this.$refs[formTable].validate((valid) => {
             if (valid) {
-              console.log('submit!');
-              this.editApi(this.editForm)
+              console.log('修改');
+              this.editApi(this.editForm,formTable)
             } else {
-              console.log('error submit!!');
+              console.log('修改失败');
               return false;
             }
           });
         }
       }
     },
-    addApi(value){
+    addApi(value,rule){
       this.formLoading=true
       this.axios.post(menuaddurl, value).then((request) => {
         console.log(request);
@@ -527,7 +527,7 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].resetFields()
+          this.$refs[rule].resetFields()
           $("#btn_select").fadeOut()
           this.formLoading=false
           this.formButton.length=0
@@ -536,12 +536,10 @@ export default {
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
-          this.formLoading=false
-          this.buttonData.length=0
         }
       });
     },
-    editApi(value){
+    editApi(value,rule){
       this.formLoading=true
       this.axios.post(menuaddurl, value).then((request) => {
         this.zNodes.length=0
@@ -551,7 +549,7 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].resetFields()
+          this.$refs[rule].resetFields()
           $("#btn_select").fadeOut()
           this.formLoading=false
           this.formButton.length=0
@@ -560,8 +558,6 @@ export default {
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
-          this.formLoading=false
-          this.buttonData.length=0
         }
       });
     },

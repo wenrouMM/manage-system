@@ -63,7 +63,7 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
-              <el-table-column align="center" prop="fkParentRoleCode" label="上級"></el-table-column>
+              <el-table-column align="center" prop="fkParentRoleCode" label="上级"></el-table-column>
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
 
               <el-table-column align="center" prop="disabled" width="200" label="状态">
