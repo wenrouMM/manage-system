@@ -186,6 +186,7 @@
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
+            status-icon
             :model="addForm"
             :rules="addRules"
           >
@@ -299,6 +300,43 @@ export default {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
   },
   data() {
+    var checkPhone = (rule, value, callback) =>{
+      if(!value){
+        return callback(new Error('请输入手机号'))
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+        console.log('正则验证',reg.test(value))
+        if(reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的手机号'))
+        }
+      }
+    }
+    var checkEmail = (rule, value, callback) =>{
+      if(!value){
+        return callback(new Error('请输入邮箱'))
+      } else {
+        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        if(reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的邮箱'))
+        }
+      }
+    }
+    var checkId = (rule,value, callback) =>{
+      if(!value){
+        return callback(new error('请输入身份证'))
+      } else {
+        const reg18 = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+        if(reg18.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的身份证'))
+        }
+      }
+    }
     return {
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
@@ -329,13 +367,13 @@ export default {
           { required: true, message: "请选择用户类型", trigger: "change" }
         ],
         idCard: [
-          { required: true, message: "请输入身份证号码", trigger: "blur" }
+          { validator: checkId,required: true, trigger: "blur" }
         ],
         address: [
           { required: true, message: "请输入居住地址", trigger: "blur" }
         ],
-        email: [{ required: true, message: "请输入邮箱地址", trigger: "blur" }],
-        phone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
+        email: [{validator: checkEmail, required: true, trigger: "blur" }],
+        phone: [{validator: checkPhone, required: true,  trigger: "blur" }],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "100px",
