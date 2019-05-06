@@ -56,7 +56,7 @@
                 width="680px"
                 height="360px"
                 :legend-visible="false"
-                :data="HisData"
+                :data="region.HisData"
                 :settings="HisSetting"
                 :extend="HisExtend"
               ></ve-his>
@@ -304,7 +304,16 @@ export default {
               ];
               return colorList[params.dataIndex];
             },
-            barBorderRadius: [8, 8, 0, 0] // 柱子的圆角
+            barBorderRadius: [8, 8, 0, 0], // 柱子的圆角
+            label: { // 柱状图头部文字
+              show: true, //开启显示
+              position: "top", //在上方显示
+              textStyle: {
+                //数值样式
+                color: "rgba(135, 135, 135, 1)",
+                fontSize: 16
+              }
+            }
           }
         }
       },
@@ -793,6 +802,19 @@ export default {
         .then(res => {
           console.log("区域信息", res);
           if (res.data.state === true) {
+            
+            for(let item of res.data.row){
+              
+              for (let reg of item.regionIcon){
+                reg.数量  = reg.value
+                delete reg.value
+              }
+              item.HisData = {
+                columns: ["type", "数量"],
+                rows:item.regionIcon
+              }
+              
+            }
             this.regionInfo = res.data.row;
             console.log("获取的区信息", this.regionInfo);
           } else {
@@ -824,8 +846,9 @@ export default {
         .then(res => {
           if (res.data.state === true) {
             let arr = [];
-            let obj = {};
+            
             for (let item of res.data.row) {
+              let obj = {};
               obj.regionName = item.regionName;
               obj.id = item.id;
               arr.push(obj);

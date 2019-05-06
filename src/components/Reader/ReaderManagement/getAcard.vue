@@ -131,7 +131,7 @@
             <span>用户名：</span>{{addForm.name}}
           </p>
           <P>
-            <span>性别：</span>{{addForm.sex}}
+            <span>性别：</span>{{addForm.sex==1?'女':'男'}}
           </P>
           <P>
             <span>电话号码：</span>{{addForm.phoneNumber}}

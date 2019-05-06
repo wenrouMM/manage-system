@@ -124,11 +124,10 @@ export default {
     Tags
   },
   created(){
-    let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    let menu = JSON.parse(localStorage.getItem('menu'))
+    let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    let menu = JSON.parse(sessionStorage.getItem('menu'))
     this.userLo = userInfo
     this.menuLo = menu
-    console.log(this.menu)
   }
 };
 </script>

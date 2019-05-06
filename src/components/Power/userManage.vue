@@ -97,8 +97,8 @@
                     >
                     <img
                       class="head_pic"
-                      v-if="scope.row.headerAddress"
-                      :src="scope.row.headerAddress"
+                      v-if="scope.row.preUrl"
+                      :src="scope.row.preUrl"
                       width="30px"
                       height="30px;"
                       style="border-radius: 50%"
@@ -186,6 +186,7 @@
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
+            status-icon
             :model="addForm"
             :rules="addRules"
           >
@@ -197,8 +198,8 @@
                     class="defaultimage"
                     style="width:100px; height:100px; border-radius:50%;"
                     alt="怎么回事小老弟"
-                    :src="addForm.headerAddress==''?'/static/img/timg.38262dc.jpg':addForm.headerAddress"
-                    v-if="!addForm.headIcon"
+                    :src="srcPre"
+                    v-if="!preloadImg"
                   >
 
                   <img
@@ -259,8 +260,8 @@
             </el-form-item>
             <el-form-item class="select" prop="isLock" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
-                <el-radio label="1">禁用</el-radio>
-                <el-radio label="0">启用</el-radio>
+                <el-radio :label="1" >禁用</el-radio>
+                <el-radio :label="0" >启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -284,7 +285,8 @@ import {
   userManageInterface,
   selectRoleType,
   headUpload,
-  headimg
+  headimg,
+  photoUrl
 } from "../../request/api/base.js";
 import moment from "moment";
 import axios from "../../request/http.js";
@@ -299,6 +301,43 @@ export default {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
   },
   data() {
+    var checkPhone = (rule, value, callback) =>{
+      if(!value){
+        return callback(new Error('请输入手机号'))
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+        console.log('正则验证',reg.test(value))
+        if(reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的手机号'))
+        }
+      }
+    }
+    var checkEmail = (rule, value, callback) =>{
+      if(!value){
+        return callback(new Error('请输入邮箱'))
+      } else {
+        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        if(reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的邮箱'))
+        }
+      }
+    }
+    var checkId = (rule,value, callback) =>{
+      if(!value){
+        return callback(new error('请输入身份证'))
+      } else {
+        const reg18 = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+        if(reg18.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的身份证'))
+        }
+      }
+    }
     return {
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
@@ -320,7 +359,7 @@ export default {
         phone: "", // 电话号码
         address: "",
         email: "",
-        isLock: "" // 状态
+        isLock: null // 状态
       },
       addRules: {
         // 添加的参数验证
@@ -329,13 +368,13 @@ export default {
           { required: true, message: "请选择用户类型", trigger: "change" }
         ],
         idCard: [
-          { required: true, message: "请输入身份证号码", trigger: "blur" }
+          { validator: checkId,required: true, trigger: "blur" }
         ],
         address: [
           { required: true, message: "请输入居住地址", trigger: "blur" }
         ],
-        email: [{ required: true, message: "请输入邮箱地址", trigger: "blur" }],
-        phone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
+        email: [{validator: checkEmail, required: true, trigger: "blur" }],
+        phone: [{validator: checkPhone, required: true,  trigger: "blur" }],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "100px",
@@ -386,12 +425,24 @@ export default {
     };
   },
   computed: {
+    // 图片上传
+    srcPre(){
+      let src=''
+      if(this.addForm.headerAddress!=null &&this.addForm.headerAddress!=''){
+        src = this.addForm.preUrl
+        console.log(this.addForm.preUrl)
+        console.log('真就不执行了？')
+      } else{
+        src = '/static/img/timg.38262dc.jpg'
+      }
+      return src
+    },
     searchTimeForm() {
       // 计算属性 真正传递的数据
       let date = this.searchForm.date;
       let searchForm = {
         pageSize: this.pageSize,
-        current:1,
+        currentPage:1,
         name: this.searchForm.userName,
         fkRoleCode: this.searchForm.userType, // 只是给了一个code
         idCard:this.searchForm.userId,
@@ -413,14 +464,13 @@ export default {
     addEdit() {
       let i = this.i;
       let lock = parseInt(this.addForm.isLock);
-      console.log('添加上传的头像',this.headerAddress)
       let data = {
         username: this.addForm.username,
         idCard: this.addForm.idCard,
         address: this.addForm.address,
         phone: this.addForm.phone,
         email: this.addForm.email,
-        headerAddress: this.headerAddress,
+        headerAddress: this.addForm.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
         isLock: lock
       };
@@ -431,12 +481,9 @@ export default {
     },
     banForm(){
       let ban = null
-
     }
   },
   methods: {
-    /*====== 2.0 表单提交相关函数 ======*/
-
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       // 添加按钮
@@ -522,7 +569,6 @@ export default {
     },
     handleEdit(index, row) {
       // 编辑    点击这个的时候 把row对象的数据给予弹框中的对象数据
-      console.log(row)
       this.i = 2;
       this.addForm.id = row.id;
       this.addForm.username = row.username;
@@ -531,9 +577,10 @@ export default {
       this.addForm.phone = row.phone;
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.isLock.toString();
+      this.addForm.isLock = row.isLock 
+      this.addForm.preUrl = row.preUrl
       this.dialogFormVisible = true;
-      console.log(index, row);
+      console.log(index, row,typeof(this.addForm.isLock));
       console.log("编辑后的表单", this.addForm);
       console.log("提交的数据", this.addEdit);
     },
@@ -581,7 +628,7 @@ export default {
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-
+            
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
             console.log("保存当前查询", this.paginationForm);
@@ -610,15 +657,17 @@ export default {
                let tel = item.phone
                item.idShow = id.substr(0,5) + "********" + id.substr(13)
                item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-
+               if(item.headerAddress !=null && item.headerAddress !=''){
+                 item.preUrl = photoUrl + item.headerAddress
+               }
+               
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-
+            
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
-            this.currentPage = 1
             console.log("保存当前查询", this.paginationForm);
           } else {
             console.log(res);
@@ -661,7 +710,7 @@ export default {
       let url = "";
       let method = "";
       let data = this.addEdit;
-      let files = this.files; // 头像上传的文件 在编辑框中保存
+       // 头像上传的文件 在编辑框中保存
 
       if (i == 2) {
         url = userManageInterface.edit;
@@ -676,34 +725,6 @@ export default {
         if (valid) {
           this.submitLoading = true; // 进入执行状态 锁定表单
           console.log("堵塞的话", this.editLoading);
-          if (files != null) {
-            // 检测是否有文件 有就意味着被更改了
-            var formdatas = new FormData();
-            formdatas.append("file", files);
-            //console.log(formdatas.get('file'))
-            this.axios({
-              method: "post",
-              url: photoImg,
-              data: formdatas,
-              //cache: false,//上传文件无需缓存
-              processData: false, //用于对data参数进行序列化处理 这里必须false
-              contentType: false, //
-              dataType: "JSON",
-              ContentType: "multipart/form-data",
-              xhrFields: {
-                withCredentials: true
-              },
-              crossDomain: true
-            }).then(request => {
-              // 如果是编辑 更换图片失败后
-              console.log(request)
-              if (request.data.row != "") {
-                this.headerAddress=request.data.row
-              }
-              console.log("上传图片后", this.addEdit);
-            });
-          }
-
           axios({
             // 发起API请求
             url: url,
@@ -754,6 +775,7 @@ export default {
 
       if (!e || !window.FileReader) return; // 看支持不支持FileReader
       let reader = new FileReader(); // 定义 fileReader对象
+      _this.uPphotoApi()
       reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
       reader.onloadend = function() {
         _this.preloadImg = this.result; // 此时this指向的fileReader对象
@@ -775,6 +797,38 @@ export default {
       console.log(this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;
+    },
+    uPphotoApi() {
+      let files = this.files;
+      if (files != null) {
+            // 检测是否有文件 有就意味着被更改了
+            var formdatas = new FormData();
+            formdatas.append("file", files);
+            //console.log(formdatas.get('file'))
+            this.axios({
+              method: "post",
+              url: headUpload,
+              data: formdatas,
+              //cache: false,//上传文件无需缓存
+              processData: false, //用于对data参数进行序列化处理 这里必须false
+              contentType: false, //
+              dataType: "JSON",
+              ContentType: "multipart/form-data",
+              xhrFields: {
+                withCredentials: true
+              },
+              crossDomain: true
+            }).then(request => {
+              // 如果是编辑 更换图片失败后
+              if (request.data.state == true) {
+                this.addForm.headerAddress = request.data.row
+                console.log('是否图片',this.addForm)
+                console.log('图片上传成功',request.data.row,this.addEdit)
+              }
+              console.log("上传图片后", this.addEdit);
+            });
+          }
+
     }
   }
 };

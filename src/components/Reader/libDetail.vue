@@ -45,6 +45,7 @@
             <span class="name">《设计心理学1：日常的设计》：</span>
           </div>
           <div class="bookContent">
+            <p>简介：</p>
             <p>{{bookData[0].introduction}}</p>
           </div>
         </section>
@@ -107,6 +108,7 @@ export default {
             console.log("未转移的bookData", this.bookData);
             let obj = [];
             obj = res.data.row;
+            obj.introduction
             this.bookData = obj;
             console.log("bookData的值", this.bookData);
             console.log("数据给予后", this.bookData);

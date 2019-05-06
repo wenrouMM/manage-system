@@ -7,15 +7,17 @@ import {
 
 
 
- axios.defaults.timeout = 2000
+ //axios.defaults.timeout = 2000
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
+  
   config => { // 做判断 如果有token就发送token 这里应该判定vuex内的状态
     if (store.state.token != null) {
-
+      console.log('token打印')
       config.headers['Authorization'] = store.state.token // 约定头部字段
     }
+    
     return config
   },
   error => {
@@ -35,7 +37,6 @@ axios.interceptors.response.use(
        if(window.vm.$route.path != '/login'){ // 当前页面不是登录页 就进入登录页
         window.vm.$router.push('/login')
        }
-
     }
     if(response.code == 3002){ // 权限不足
       window.vm.$router.push('/404') // 进入404页面Or权限不够页面
@@ -44,7 +45,9 @@ axios.interceptors.response.use(
     return response
   },
   error => {
-    // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
+     console.log(error.code)
+     //console.log('状态吗',error.response.status)
+     console.log('超时错误吗',typeof(error));//console : Error: Request failed with status code 402
     return Promise.reject(error)
   },
 )
