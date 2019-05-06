@@ -468,7 +468,6 @@ export default {
     },
     banForm(){
       let ban = null
-
     }
   },
   methods: {

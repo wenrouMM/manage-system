@@ -11,11 +11,13 @@ import {
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
+  
   config => { // 做判断 如果有token就发送token 这里应该判定vuex内的状态
     if (store.state.token != null) {
-
+      console.log('token打印')
       config.headers['Authorization'] = store.state.token // 约定头部字段
     }
+    
     return config
   },
   error => {
