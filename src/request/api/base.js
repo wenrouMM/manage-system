@@ -1,7 +1,8 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
- var url = 'http://192.168.2.31:8088/'
- //var url = 'http://192.168.2.121:8088/'
+ //var url = 'http://192.168.2.31:8088/'
+ var imgurl = 'http://192.168.2.31:8090/'
+ var url = 'http://192.168.2.121:8088/'
 
 // 首页
 var index = url + 'borrowmodule/history/'
@@ -122,8 +123,9 @@ export const bookOperateInt = {
 /*------ 通用接口 ------*/
 
 //通用接口
+export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
-export const headUpload = url + 'filemodule/currency/uploadFile/addHead' //
+export const headUpload = imgurl + 'filemodule/uploadFile/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
 export const selectRoleType = url + 'authmodule/roleInformation/currency/selectRole' // 角色管理下拉
 

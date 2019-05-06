@@ -381,6 +381,7 @@ export default {
         }
       });
     },
+    // 饼图APi
     fanApi() {
       axios.get(indexInt.fan).then(res => {
         if (res.data.state === true) {
@@ -393,7 +394,7 @@ export default {
     pillarApi() {
       axios.get(indexInt.pillar).then(res => {
         if (res.data.state === true) {
-          let dataArr = res.data.row;
+          let dataArr = res.data.row.reverse();
           let arr = [];
           for (let item of dataArr) {
             delete item.endTime;

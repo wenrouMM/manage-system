@@ -97,8 +97,8 @@
                     >
                     <img
                       class="head_pic"
-                      v-if="scope.row.headerAddress"
-                      :src="scope.row.headerAddress"
+                      v-if="scope.row.preUrl"
+                      :src="scope.row.preUrl"
                       width="30px"
                       height="30px;"
                       style="border-radius: 50%"
@@ -198,8 +198,8 @@
                     class="defaultimage"
                     style="width:100px; height:100px; border-radius:50%;"
                     alt="怎么回事小老弟"
-                    :src="addForm.headerAddress==''?'/static/img/timg.38262dc.jpg':addForm.headerAddress"
-                    v-if="!addForm.headIcon"
+                    :src="srcPre"
+                    v-if="!preloadImg"
                   >
 
                   <img
@@ -285,7 +285,8 @@ import {
   userManageInterface,
   selectRoleType,
   headUpload,
-  headimg
+  headimg,
+  photoUrl
 } from "../../request/api/base.js";
 import moment from "moment";
 import axios from "../../request/http.js";
@@ -424,6 +425,18 @@ export default {
     };
   },
   computed: {
+    // 图片上传
+    srcPre(){
+      let src=''
+      if(this.addForm.headerAddress!=null &&this.addForm.headerAddress!=''){
+        src = this.addForm.preUrl
+        console.log(this.addForm.preUrl)
+        console.log('真就不执行了？')
+      } else{
+        src = '/static/img/timg.38262dc.jpg'
+      }
+      return src
+    },
     searchTimeForm() {
       // 计算属性 真正传递的数据
       let date = this.searchForm.date;
@@ -565,6 +578,7 @@ export default {
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
       this.addForm.isLock = row.isLock 
+      this.addForm.preUrl = row.preUrl
       this.dialogFormVisible = true;
       console.log(index, row,typeof(this.addForm.isLock));
       console.log("编辑后的表单", this.addForm);
@@ -643,7 +657,10 @@ export default {
                let tel = item.phone
                item.idShow = id.substr(0,5) + "********" + id.substr(13)
                item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-
+               if(item.headerAddress !=null && item.headerAddress !=''){
+                 item.preUrl = photoUrl + item.headerAddress
+               }
+               
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -693,7 +710,7 @@ export default {
       let url = "";
       let method = "";
       let data = this.addEdit;
-      let files = this.files; // 头像上传的文件 在编辑框中保存
+       // 头像上传的文件 在编辑框中保存
 
       if (i == 2) {
         url = userManageInterface.edit;
@@ -708,33 +725,6 @@ export default {
         if (valid) {
           this.submitLoading = true; // 进入执行状态 锁定表单
           console.log("堵塞的话", this.editLoading);
-          if (files != null) {
-            // 检测是否有文件 有就意味着被更改了
-            var formdatas = new FormData();
-            formdatas.append("file", files);
-            //console.log(formdatas.get('file'))
-            this.axios({
-              method: "post",
-              url: headUpload,
-              data: formdatas,
-              //cache: false,//上传文件无需缓存
-              processData: false, //用于对data参数进行序列化处理 这里必须false
-              contentType: false, //
-              dataType: "JSON",
-              ContentType: "multipart/form-data",
-              xhrFields: {
-                withCredentials: true
-              },
-              crossDomain: true
-            }).then(request => {
-              // 如果是编辑 更换图片失败后
-              if (request.data.row != "") {
-                
-              }
-              console.log("上传图片后", this.addEdit);
-            });
-          }
-
           axios({
             // 发起API请求
             url: url,
@@ -785,6 +775,7 @@ export default {
 
       if (!e || !window.FileReader) return; // 看支持不支持FileReader
       let reader = new FileReader(); // 定义 fileReader对象
+      _this.uPphotoApi()
       reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
       reader.onloadend = function() {
         _this.preloadImg = this.result; // 此时this指向的fileReader对象
@@ -806,6 +797,38 @@ export default {
       console.log(this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;
+    },
+    uPphotoApi() {
+      let files = this.files;
+      if (files != null) {
+            // 检测是否有文件 有就意味着被更改了
+            var formdatas = new FormData();
+            formdatas.append("file", files);
+            //console.log(formdatas.get('file'))
+            this.axios({
+              method: "post",
+              url: headUpload,
+              data: formdatas,
+              //cache: false,//上传文件无需缓存
+              processData: false, //用于对data参数进行序列化处理 这里必须false
+              contentType: false, //
+              dataType: "JSON",
+              ContentType: "multipart/form-data",
+              xhrFields: {
+                withCredentials: true
+              },
+              crossDomain: true
+            }).then(request => {
+              // 如果是编辑 更换图片失败后
+              if (request.data.state == true) {
+                this.addForm.headerAddress = request.data.row
+                console.log('是否图片',this.addForm)
+                console.log('图片上传成功',request.data.row,this.addEdit)
+              }
+              console.log("上传图片后", this.addEdit);
+            });
+          }
+
     }
   }
 };
