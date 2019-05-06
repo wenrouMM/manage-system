@@ -10,3 +10,4 @@ this.$store.state
 this.$store.commit(mutationName)
 this.$store.dispatch(actionName)
 // 使用mapMutations可以避免
+1. 回车符↵ 正则替换 或者pre标签

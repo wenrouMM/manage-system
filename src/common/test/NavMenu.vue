@@ -8,7 +8,7 @@
         v-if="navMenu.roleModularMenus ==null"
         :key="index"
         :data="navMenu"
-        :index="navMenu.menuCode"
+        :index=" '/' + navMenu.menuCode"
         :route="navMenu.menuCode"
       >
       <!-- 
