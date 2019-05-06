@@ -824,8 +824,9 @@ export default {
         .then(res => {
           if (res.data.state === true) {
             let arr = [];
-            let obj = {};
+            
             for (let item of res.data.row) {
+              let obj = {};
               obj.regionName = item.regionName;
               obj.id = item.id;
               arr.push(obj);
