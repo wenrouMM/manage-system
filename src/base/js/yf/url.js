@@ -2,6 +2,9 @@
 //var url = 'http://192.168.2.31:8088/'
 url='http://192.168.2.121:8088/';
 //
+fileUrl='http://192.168.2.31'
+/*头像上传地址*/
+  photoImg='http://192.168.2.31:8090/filemodule/uploadFile/addHead'
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
   yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
@@ -11,8 +14,8 @@ url='http://192.168.2.121:8088/';
   menuaddurl=url+'authmodule/menuInformation/add' ;//菜单添加接口
   menudeleteurl=url+'authmodule/menuInformation/delete' ;//菜单删除接口
   menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
-  menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
-  menugetimg=url+'authmodule/menuInformation/getImg?id='//图片显示
+  menuimg='http://192.168.2.31:8090/filemodule/uploadFile/addMenu' //图片上传接口
+  //menugetimg=url+'authmodule/menuInformation/getImg?id='//图片显示
   menubutton=url+'authmodule/menuInformation/currency/selectMenuById' //点击节点发请求
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询

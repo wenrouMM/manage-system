@@ -413,13 +413,14 @@ export default {
     addEdit() {
       let i = this.i;
       let lock = parseInt(this.addForm.isLock);
+      console.log('添加上传的头像',this.headerAddress)
       let data = {
         username: this.addForm.username,
         idCard: this.addForm.idCard,
         address: this.addForm.address,
         phone: this.addForm.phone,
         email: this.addForm.email,
-        headerAddress: this.addForm.headerAddress,
+        headerAddress: this.headerAddress,
         authTbRoles: this.addForm.authTbRoles,
         isLock: lock
       };
@@ -521,6 +522,7 @@ export default {
     },
     handleEdit(index, row) {
       // 编辑    点击这个的时候 把row对象的数据给予弹框中的对象数据
+      console.log(row)
       this.i = 2;
       this.addForm.id = row.id;
       this.addForm.username = row.username;
@@ -529,7 +531,7 @@ export default {
       this.addForm.phone = row.phone;
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.disabled.toString();
+      this.addForm.isLock = row.isLock.toString();
       this.dialogFormVisible = true;
       console.log(index, row);
       console.log("编辑后的表单", this.addForm);
@@ -579,7 +581,7 @@ export default {
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            
+
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
             console.log("保存当前查询", this.paginationForm);
@@ -613,7 +615,7 @@ export default {
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            
+
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
             this.currentPage = 1
@@ -681,7 +683,7 @@ export default {
             //console.log(formdatas.get('file'))
             this.axios({
               method: "post",
-              url: headUpload,
+              url: photoImg,
               data: formdatas,
               //cache: false,//上传文件无需缓存
               processData: false, //用于对data参数进行序列化处理 这里必须false
@@ -694,8 +696,9 @@ export default {
               crossDomain: true
             }).then(request => {
               // 如果是编辑 更换图片失败后
+              console.log(request)
               if (request.data.row != "") {
-                
+                this.headerAddress=request.data.row
               }
               console.log("上传图片后", this.addEdit);
             });

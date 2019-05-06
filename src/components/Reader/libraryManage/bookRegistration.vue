@@ -19,7 +19,7 @@
           <div style="display: flex;flex-direction: row;margin-left:350px;margin-top: -160px">
             <el-form-item label="条　　码 :  " prop="barcode" style="width: 500px;" :label-width="formLabelWidth">
               <el-input v-model="addForm.barcode" auto-complete="off" @input="barcodeCheck"  style="width: 398px;position: relative" placeholder="请输入条码"></el-input>
-              <img src="../../../base/img/currency/Xxxx.png" style="position: absolute;left:370px;top:13px;width: 15px;height: 15px" @click="closeInput">
+              <img src="../../../base/img/currency/Xxxx.png" id="closeInput" @click="closeInput">
             </el-form-item>
             <el-form-item label=" I S B N : "  prop="isbn" style="width: 500px;margin-left: 90px" :label-width="formLabelWidth">
               <el-input v-model="addForm.isbn" autocomplete="off" style="width: 400px" placeholder="请输入ISBN" :disabled="disable"></el-input>
@@ -167,10 +167,12 @@
 
       },
       mounted() {
+        $('#closeInput').fadeOut()
         $('#typeMessage').fadeOut()
       },
       methods: {
         closeInput(){
+          $('#closeInput').fadeOut()
           this.addForm.barcode=''
           this.disable=false
           this.$refs[this.addForm].resetFields();
@@ -266,6 +268,7 @@
           console.log('条码',this.addForm.barcode)
           this.barCode=this.addForm.barcode
           if(this.addForm.barcode){
+            $('#closeInput').fadeIn()
             this.axios.get(bookRegist, {params: {barcode: this.addForm.barcode}}).then((res) => {
               //console.log(1)
               console.log(res.data)
@@ -276,6 +279,8 @@
                 this.addForm.bookIndex = res.data.row[0].searchNumber;
                 this.addForm.author = res.data.row[0].author;
                 this.addForm.lib = res.data.row[0].fkPressName;
+                this.libCode = res.data.row[0].fkPressCode;
+                this.typeCode = res.data.row[0].fkTypeCode;
                 this.addForm.page = res.data.row[0].pageNumber;
                 this.addForm.value = res.data.row[0].price;
                 this.addForm.typeName = res.data.row[0].fkTypeName;
@@ -337,15 +342,19 @@
         },
         /*====== 确定按钮发送添加请求 ======*/
         submitForm() {
-          this.$refs[this.addForm].validate((valid) => {
-            if (valid) {
-              console.log('submit!');
-              this.addApi()
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
+          if(this.disable==true){
+            this.$message('表单禁用不能进行确定操作');
+          }else{
+            this.$refs[this.addForm].validate((valid) => {
+              if (valid) {
+                console.log('submit!');
+                this.addApi()
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+          }
         },
         /*====== 重置按钮清空表单内容 ======*/
         resetForm() {
@@ -358,6 +367,14 @@
 </script>
 
 <style scoped>
+  #closeInput{
+    position: absolute;
+    left:375px;
+    top:14px;
+    width: 10px;
+    height: 13px;
+    display: none
+  }
   .borrowbook{
     width: 100%;
     background-color: white;

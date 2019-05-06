@@ -171,15 +171,32 @@
         addmessage:''
       };
     },
+    computed:{
+      searchTimeForm() {
+        // 计算属性 真正传递的数据
+        console.log('ztree',this.zTree.code)
+        let citynameCode=''
+        if(this.zTree.code==undefined){
+          citynameCode='bj_jing'
+        }else{
+          citynameCode=this.zTree.code
+        }
+        let searchForm = {
+          pageSize: this.pageSize,
+          current:1,
+          cityCode:citynameCode
+        };
+        return searchForm;
+      },
+    },
     methods: {
       closeForm(){
-        this.addmessage=''
+        //this.addmessage=''
       },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
         console.log(this.zTree.code)
         this.dialogFormVisible = true;
-        this.addmessage='show'
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
@@ -196,6 +213,9 @@
           $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
         })
       },
+      zTreeOnCheck(event, treeId, treeNode){
+        console.log('treeNode',treeNode)
+      },
       /*====== 3.1点击ztree节点获取节点信息======*/
       zTreeOnClick(event, treeId, treeNode){
         let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -206,12 +226,7 @@
           code:treeNode.code
         }
         this.zTree=list
-        if(this.addmessage!=''){
-          this.dialogFormVisible=true
-        }else{
-          let cityCode={cityCode:this.zTree.code}
-          this.tableApi(cityCode)
-        }
+        this.SearchApi(this.searchTimeForm)
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
@@ -232,12 +247,6 @@
         });
       },
       formApi(ztreeName,ztreeCode){
-        let citynameCode=''
-        if(this.zTree.code==undefined){
-          citynameCode='bj_jing'
-        }else{
-          citynameCode=this.zTree.code
-        }
         var addStr=[{
           fkCityCode:ztreeCode,
           fkCityName:ztreeName,
@@ -254,8 +263,7 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
-            let cityName={cityCode:citynameCode}
-            this.tableApi(cityName)
+            this.tableApi(this.searchTimeForm)
           }else{
             this.$message({
               message: res.data.msg,
@@ -282,6 +290,7 @@
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               console.log("过滤后的数据", nomol);
+              this.currentPage = 1
               console.log("保存当前查询", this.paginationForm);
               this.tableLoading = false;
             } else {
@@ -290,17 +299,39 @@
             }
           })
       },
+      paginationApi(value){
+        this.tableLoading= true; // 加载前控制加载状态
+        this.axios
+          .get(libinfotable, {
+            params: value
+          })
+          .then(res => {
+            console.log("当前获取的数据", res.data);
+            if (res.data.state === true) {
+              let nomol = res.data.row;
+              this.tableData = nomol; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              console.log("过滤后的数据", nomol);
+              console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+      },
+
       current_change: function(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm);
-        this.tableApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
     },
     mounted(){
-      let defaultBJ={cityCode:'bj_jing'}
-      this.tableApi(defaultBJ)
+      this.tableApi(this.searchTimeForm)
       this.freshArea()
     }
   };

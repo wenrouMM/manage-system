@@ -37,7 +37,7 @@
             <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
           <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
-            <span>{{ruleForm.bookLocation}}{{ruleForm.direction}}</span>
+            <span>{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
           </el-form-item>
           <span @click="locationMessage" id="locaTion">
             位置选择
@@ -114,6 +114,14 @@
           direction:'',
           code:''
         },//添加的数据
+        Address:{ //层架绑定的位置信息
+          fkStoreId:'',
+          fkRegionId:'',
+          colNum:'',
+          divNum:'',
+          laysNum:'',
+          direction:'',
+        },
         rules:{
           barcode: [{ required: true, message: '请输入活动名称', trigger: 'blur' }],
           bookCode: [{required: true, message: '请输入图书编码', trigger: 'blur' }],
@@ -188,16 +196,30 @@
       /*====== 展开节点的操作 ======*/
       zTreeOnExpand(event, treeId, treeNode){
         console.log(treeNode)
-        let name=treeNode.name.toString()
-        if(this.ruleForm.bookLocation.search(name) == -1 ){
-          this.ruleForm.bookLocation+=name
+        if(treeNode.fkStoreId!=null&&treeNode.fkRegionId==null){
+          this.Address.fkStoreId=treeNode.name
+          $('#imgX').fadeIn()
+        }else if(treeNode.fkRegionId!=null&&treeNode.colNum==null){
+          this.Address.fkRegionId=treeNode.name
+        }else if(treeNode.colNum!=null&&treeNode.divNum==null){
+          this.Address.colNum=treeNode.name
+        }else if(treeNode.divNum!=null&&treeNode.laysNum==null){
+          this.Address.divNum=treeNode.name
+        }else if(treeNode.laysNum!=null&&treeNode.direction==null){
+          this.Address.laysNum=treeNode.name
         }
       },
       /*====== 点击节点的操作 ======*/
       zTreeOnClick(event, treeId, treeNode){
-        console.log(treeNode)
-        if(treeNode.direction!==null){
-          this.ruleForm.direction=treeNode.name
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        console.log('treeObj',treeObj)
+        console.log('direction',treeNode.direction)
+        if(treeNode.direction==null){
+          this.$message('图书位置必须绑定在面级！！');
+        }else{
+          console.log(treeNode)
+          console.log(treeNode.direction)
+          this.Address.direction=treeNode.name
           this.ruleForm.code=treeNode.code
           $('#typeMessage').fadeOut()
         }
@@ -270,8 +292,15 @@
                   message: res.data.msg,
                   type: 'success'
                 });
+                let obj = this.ruleForm;
                 this.$refs[this.ruleForm].resetFields();
-                this.ruleForm={}
+                for (var i in obj) {
+                  obj[i] = "";
+                }
+                let address = this.Address;
+                for (var i in address) {
+                  address[i] = "";
+                }
                 this.formLoading=false
               }else{
                 this.$message({

@@ -24,7 +24,7 @@
               <!-- 预览的图片 -->
                 <div v-if="src" class="preload">
                     <span class="close" @click="delet">
-                      <img src="../../base/img/menu/x.png" style="width: 15px;height: 15px" alt>
+                      <img src="../../base/img/currency/cuowu.png" style="width: 15px;height: 15px" alt>
                     </span>
                   <img :src="src" style="width:100px; height:100px;" alt="预览照片" id="icon">
                 </div>
@@ -213,6 +213,7 @@ export default {
     editForm() {
       // 传递给后端的搜索数据
       console.log('ztree',this.zTree)
+      console.log('photo',this.photo)
       let editData = {
         id: this.zTree.id,
         fkParentMenuId: this.zTree.pId,
@@ -431,8 +432,8 @@ export default {
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
-            /*this.src1 = menugetimg + treeNode.id //展示节点图片
-            $('#icon1').show() //点击节点是显示,否则隐藏*/
+            this.src1 = fileUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
+            $('#icon1').show() //点击节点是显示,否则隐藏
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
 
             this.buttonData.length=0
@@ -593,12 +594,13 @@ export default {
         dataType: "JSON",
         ContentType: "multipart/form-data"
       }).then(request => {
+        //console.log(11111)
         console.log(request);
         if(request.data.state==false){
           return
         }else{
           this.photo=request.data.row
-          alert(1111)
+          //alert(1111)
           console.log(this.photo)
         }
       });
@@ -749,8 +751,8 @@ input[type="radio"] {
 }
 .close {
   position: absolute;
-  left: 90px;
-  top: -3px;
+  left: 85px;
+  top: -10px;
   cursor: pointer;
   font-size: 10px;
 }
