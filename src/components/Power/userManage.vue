@@ -259,8 +259,8 @@
             </el-form-item>
             <el-form-item class="select" prop="isLock" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
-                <el-radio label="1">禁用</el-radio>
-                <el-radio label="0">启用</el-radio>
+                <el-radio :label="1" >禁用</el-radio>
+                <el-radio :label="0" >启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -320,7 +320,7 @@ export default {
         phone: "", // 电话号码
         address: "",
         email: "",
-        isLock: "" // 状态
+        isLock: null // 状态
       },
       addRules: {
         // 添加的参数验证
@@ -391,7 +391,7 @@ export default {
       let date = this.searchForm.date;
       let searchForm = {
         pageSize: this.pageSize,
-        current:1,
+        currentPage:1,
         name: this.searchForm.userName,
         fkRoleCode: this.searchForm.userType, // 只是给了一个code
         idCard:this.searchForm.userId,
@@ -434,8 +434,6 @@ export default {
     }
   },
   methods: {
-    /*====== 2.0 表单提交相关函数 ======*/
-
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       // 添加按钮
@@ -529,9 +527,9 @@ export default {
       this.addForm.phone = row.phone;
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.disabled.toString();
+      this.addForm.isLock = row.isLock 
       this.dialogFormVisible = true;
-      console.log(index, row);
+      console.log(index, row,typeof(this.addForm.isLock));
       console.log("编辑后的表单", this.addForm);
       console.log("提交的数据", this.addEdit);
     },
@@ -616,7 +614,6 @@ export default {
             
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
-            this.currentPage = 1
             console.log("保存当前查询", this.paginationForm);
           } else {
             console.log(res);
