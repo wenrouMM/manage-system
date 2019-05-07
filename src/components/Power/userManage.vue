@@ -195,6 +195,7 @@
                 <!-- 背景图片做改动 -->
                 <div class="defultHead" style="width:100px; height:100px; border-radius:50%;">
                   <img
+                    ref="imgTest"
                     class="defaultimage"
                     style="width:100px; height:100px; border-radius:50%;"
                     alt="怎么回事小老弟"
@@ -328,7 +329,7 @@ export default {
     }
     var checkId = (rule,value, callback) =>{
       if(!value){
-        return callback(new error('请输入身份证'))
+        return callback(new Error('请输入身份证'))
       } else {
         const reg18 = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
         if(reg18.test(value)) {
@@ -339,6 +340,8 @@ export default {
       }
     }
     return {
+      /*------ bugHack ------*/
+      formFlag:false,
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
       Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
@@ -373,7 +376,10 @@ export default {
         address: [
           { required: true, message: "请输入居住地址", trigger: "blur" }
         ],
-        email: [{validator: checkEmail, required: true, trigger: "blur" }],
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+        ],
         phone: [{validator: checkPhone, required: true,  trigger: "blur" }],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
@@ -487,7 +493,16 @@ export default {
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       // 添加按钮
+      let obj = this.addForm;
+      if(this.formFlag){
+        this.$refs.addForm.resetFields();
+      }
+      for (var i in obj) {
+        obj[i] = "";
+      }
+      obj.authTbRoles = [];
       this.i = 3;
+      this.preloadImg =""
       this.dialogFormVisible = true;
     },
     handleSelectionChange(selection) {
@@ -569,6 +584,8 @@ export default {
     },
     handleEdit(index, row) {
       // 编辑    点击这个的时候 把row对象的数据给予弹框中的对象数据
+      this.formFlag = true
+      this.preloadImg =""
       this.i = 2;
       this.addForm.id = row.id;
       this.addForm.username = row.username;
@@ -750,13 +767,15 @@ export default {
           // 执行结束后 解开锁屏
         } else {
           // 未填完不准通过
+          console.log('验证不过')
           return false;
         }
       });
     },
     resetForm(formName) {
       this.dialogFormVisible = false;
-      this.$refs[formName].resetFields();
+      //this.$refs[formName].resetFields();
+      
       this.editLoading = false;
     },
     pointer() {
@@ -784,17 +803,15 @@ export default {
     },
     closeForm() {
       // 弹框关闭的时候执行 清空数据
-
+      this.formFlag = true
       console.log("关闭测试");
-      let obj = this.addForm;
-      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-      for (var i in obj) {
-        obj[i] = "";
-      }
-      obj.authTbRoles = [];
+      
+     // this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+      
+      
       this.files = null;
-      this.preloadImg = ''
-      console.log(this.addForm);
+      //this.preloadImg = ''
+      console.log('更改了吗',this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;
     },

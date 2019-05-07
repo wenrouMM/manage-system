@@ -35,7 +35,8 @@
           </div>
           <div class="userBox">
             <div class="username">
-              <span>{{localUser.username}}</span>
+              
+              <span v-if="localUser!=null ">{{localUser.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>

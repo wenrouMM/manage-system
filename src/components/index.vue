@@ -32,7 +32,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              <span>{{userLo.username}}</span>
+              <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>

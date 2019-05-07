@@ -14,7 +14,7 @@ axios.interceptors.request.use(
   
   config => { // 做判断 如果有token就发送token 这里应该判定vuex内的状态
     if (store.state.token != null) {
-      console.log('token打印')
+      
       config.headers['Authorization'] = store.state.token // 约定头部字段
     }
     

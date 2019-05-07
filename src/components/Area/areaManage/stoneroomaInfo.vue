@@ -13,9 +13,9 @@
             <div :class="{isactive:activeIndex===index}" @click.stop="regionBtn(store,index)" class="storeModeTitle">
               <span class="storeName mr_30">{{store.storeName}}</span>
               <div class="storeOprate">
-                <span @click="editstoreBtn(store)">编辑</span>
-                <span @click="addAreaBtn(store)">添加区</span>
-                <span @click="deleteStoreBtn(store)">删除</span>
+                <span @click.stop="editstoreBtn(store)">编辑</span>
+                <span @click.stop="addAreaBtn(store)">添加区</span>
+                <span @click.stop="deleteStoreBtn(store)">删除</span>
               </div>
             </div>
             <div class="storeTips">
@@ -37,8 +37,8 @@
         </section>
       </section>
       <!-- 右侧图表展示区 柱状图数据与环形图数据 -->
-      <section class="area">
-        <div class="areaMode" v-for="(region, index) of regionInfo" :key="index">
+      <section  class="area">
+        <div  class="areaMode" v-for="(region, index) of regionInfo" :key="index">
           <div class="areaTitleBox">
             <div class="areaTitle">
               <i class="icon">图标</i>
@@ -272,6 +272,9 @@ export default {
   },
   data() {
     return {
+      /*------ bugHack ------*/
+      storeFormBug:false,
+      areaFormBug:false,
       /*====== 1.0左侧接收数据 ======*/
       storeInfo: [],
       activeIndex: 0, // 控制被选中标签的数据
@@ -562,6 +565,14 @@ export default {
       this.storeRoomDialog = true;
     },
     addStoreBtn() {
+      if(this.storeFormBug){
+        this.$refs.changeStoreForm.resetFields()
+      }
+      //
+      let pbj = this.changeStoreForm;
+      for (var i in pbj) {
+        pbj[i] = "";
+      }
       this.i = 5;
       this.preImg = "";
       this.storeRoomDialog = true;
@@ -579,6 +590,13 @@ export default {
     /*------ 区相关按钮 ------*/
     addAreaBtn(store) {
       this.i = 0;
+      if(this.areaFormBug){
+        this.$refs.changeAreaForm.resetFields()
+      }
+      let obj = this.changeAreaForm;
+      for (var i in obj) {
+        obj[i] = "";
+      }
       this.changeAreaForm.storeName = store.storeName;
       this.changeAreaForm.fkStoreId = store.id;
       this.changeDialog = true;
@@ -699,7 +717,7 @@ export default {
     },
     // 改变表单取消按钮
     resetForm(formName, dialogName) {
-      this.$refs[formName].resetFields();
+      //this.$refs[formName].resetFields();
       this[dialogName] = false;
     },
     // 绑定区按钮提交按钮
@@ -730,16 +748,14 @@ export default {
     // 弹框关闭执行的回调函数
     handleClose(formName) {
       // 关闭和取消 确定结束后都要清除数据
-      let obj = this.changeAreaForm;
-      let pbj = this.changeStoreForm;
-      for (var i in obj) {
-        obj[i] = "";
+      if(formName == 'changeStoreForm'){
+        this.storeFormBug = true
+      } else{
+        this.areaFormBug = true
       }
-      for (var i in pbj) {
-        obj[i] = "";
-      }
-      console.log("清空表单的哇");
-      this.$refs[formName].resetFields();
+      console.log("清空表单的哇",this.changeAreaForm);
+      console.log('仓库',this.changeStoreForm)
+      //this.$refs[formName].resetFields();
       // 清空的是手动输入的值 而绑定的值还是要手动清理掉 循环清理吧
     },
     /*------ 图片上传相关按钮 ------*/
@@ -802,7 +818,7 @@ export default {
         .then(res => {
           console.log("区域信息", res);
           if (res.data.state === true) {
-            
+              console.log('问题在这里？',res.data.row)
             for(let item of res.data.row){
               
               for (let reg of item.regionIcon){
