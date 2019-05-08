@@ -4,6 +4,6 @@ export function isvalidPhone(str) {
   return reg.test(str)
 }
 export function isvalidNumber(str) {
-  const reg =/^\d{6}$/
+  const reg =/^[0-9]*$/
   return reg.test(str)
 }

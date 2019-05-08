@@ -39,8 +39,8 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="类型:" size="160"  style="position: relative;width:250px">
-                <el-input v-model="searchForm.type" placeholder="请输入类型" style="width: 200px;"></el-input>
-                <img src="../../../base/img/currency/ss.png" id="typeImg" style="width: 20px;height: 20px;position: absolute;top:12px;left: 175px" @click="typeMessage">
+                <el-input v-model="searchForm.type" placeholder="请选择类型" style="width: 200px;" @focus="typeMessage"></el-input>
+                <img :src="changeSrc" id="typeImg" style="width: 13px;height:13px;position: absolute;top:14px;left: 177px" @click="typeInput">
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searchSubmit">搜索</el-button>
@@ -93,14 +93,25 @@
             <!--分页-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -128,10 +139,13 @@ import {
   headimg
 } from "../../../request/api/base.js";
 import moment from "moment";
+import sousou from "../../../base/img/currency/ss.png"
+import cuowu from "../../../base/img/currency/X.png"
 import axios from "axios";
 export default {
   data() {
     return {
+      changeSrc:sousou,
       setting: {
         edit: {
           enable: true,
@@ -182,6 +196,7 @@ export default {
       /*====== 3.1 分页设置项 ======*/
       total: 0,
       pageSize: 10,
+      pageInput:1,
       currentPage: 1,
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/
@@ -226,6 +241,21 @@ export default {
     })
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     async freshArea() {
       this.axios.get(bookurltypemes).then((res)=>{
         console.log('res',res)
@@ -249,8 +279,19 @@ export default {
         }
       })
     },
-    typeMessage(){
+    typeInput(){
       console.log(this.zNodes.length)
+      console.log('changeSrc',this.changeSrc)
+      if(this.changeSrc==sousou){
+        if(this.zNodes.length!=0){
+          $('#typeMessage').fadeIn()
+        }
+      }else if(this.changeSrc==cuowu){
+        this.searchForm.type=''
+        this.changeSrc=sousou
+      }
+    },
+    typeMessage(){
       if(this.zNodes.length!=0){
         $('#typeMessage').fadeIn()
       }
@@ -261,6 +302,7 @@ export default {
     zTreeOnClick(event, treeId, treeNode) {
       $('#typeMessage').fadeOut()
       this.searchForm.type=treeNode.name
+      this.changeSrc=cuowu
     },
     /*====== 2.0 搜索与添加按钮触发 ======*/
     searchSubmit() {

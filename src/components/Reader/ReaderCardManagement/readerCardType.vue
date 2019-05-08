@@ -82,13 +82,25 @@
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
-                @current-change="current_change"
+                layout="prev, pager, next,total,slot"
+                :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
-                :total="total"
-              ></el-pagination>
+                @current-change="current_change"
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
           <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
@@ -185,6 +197,7 @@ export default {
       // 分页器设置
       total: 0,
       pageSize: 10,
+      pageInput:1,
       currentPage: 1,
       paginationForm: {},
       /*====== 弹框配置项 ======*/
@@ -239,6 +252,21 @@ export default {
     deleteTimeForm() {}
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     /*====== 2.0 启动按钮组 ======*/
     // 全选按钮
     selectAllBtn(val) {
