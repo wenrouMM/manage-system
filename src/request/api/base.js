@@ -2,7 +2,7 @@
 //var url = 'http://192.168.2.131:8088/'
 var url = 'http://192.168.2.31:8088/'
  var imgurl = 'http://192.168.2.31:8090/'
- //var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.121:8088/'
 
 // 首页
 var index = url + 'borrowmodule/history/'
