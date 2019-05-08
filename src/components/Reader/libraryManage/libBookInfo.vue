@@ -28,10 +28,6 @@
                 <el-input v-model="searchForm.bookIndex" placeholder="请输入索书号"></el-input>
               </el-form-item>
               <!-- 下拉框 -->
-              <el-form-item label="类型:" size="160"  style="position: relative">
-                <el-input v-model="searchForm.type" placeholder="请输入类型" @focus="typeMessage"></el-input>
-                <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 135px" @click="typeMessage">
-              </el-form-item>
               <el-form-item label="状态:" size="160">
                 <el-select v-model="searchForm.status"  clearable  placeholder="请选择状态">
                   <el-option
@@ -41,6 +37,10 @@
                     :value="option"
                   ></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="类型:" size="160"  style="position: relative;width:250px">
+                <el-input v-model="searchForm.type" placeholder="请输入类型" style="width: 200px;"></el-input>
+                <img src="../../../base/img/currency/ss.png" id="typeImg" style="width: 20px;height: 20px;position: absolute;top:12px;left: 175px" @click="typeMessage">
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searchSubmit">搜索</el-button>
@@ -76,7 +76,7 @@
               <el-table-column align="center" prop="total" width="120" :show-overflow-tooltip="true" label="录入员"></el-table-column>
               <el-table-column align="center" prop="entryTime" width="130" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="130" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="120" label="类型"></el-table-column>
+              <el-table-column align="center" prop="fkTypeName" width="120" :show-overflow-tooltip="true" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===1?'上架':'下架'}}</span>

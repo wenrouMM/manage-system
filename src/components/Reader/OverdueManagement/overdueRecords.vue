@@ -7,7 +7,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期天数</span>
+            <span class="titleName">逾期记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -29,32 +29,18 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column width="120" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="180" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" width="180" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" width="180" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="180" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueAlreadyDay" width="160" label="逾期天数"></el-table-column>
-              <el-table-column align="center" label="操作" width="180">
+              <el-table-column align="center" prop="fkReaderName" width="200" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" width="200" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" width="200" label="书名"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
+              <el-table-column align="center" prop="overdueAlreadyDay" width="200" label="逾期天数"></el-table-column>
+              <el-table-column align="center" label="操作" width="200">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>

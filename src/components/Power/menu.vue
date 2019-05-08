@@ -80,10 +80,8 @@
                 <el-form-item label="元素名 : " prop="buttonName">
                   <el-input v-model="formButton.buttonName" placeholder="请输入按钮名称" style="width: 267px"></el-input>
                 </el-form-item>
-                <el-form-item label="元素类型 :" prop="buttonTypeCode">
-                  <el-select v-model="formButton.buttonTypeCode" clearable placeholder="请选择按钮类型" id="type" style="width: 267px;">
-                    <el-option v-for="item in butList" :key="item.value" :label="item.label" :value="item.code"></el-option>
-                  </el-select>
+                <el-form-item label="元素编码 :" prop="buttonTypeCode">
+                  <el-input v-model="formButton.buttonTypeCode" placeholder="请输入按钮编码" style="width: 267px"></el-input>
                 </el-form-item>
                 <div style="margin-top: 30px">
                   <el-button type="primary" round @click="click_ok()" style="width: 150px;">确定</el-button>
@@ -99,7 +97,6 @@
 </template>
 
 <script>
-import serialize from "../../base/js/yf/serialize";
 parent=null;
 export default {
   name: "menu.vue",
@@ -128,7 +125,7 @@ export default {
       },
       rulesButton:{
         buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' }],
-        buttonTypeCode: [{ required: true, message: '请选择按钮类型', trigger: 'change' }],
+        buttonTypeCode: [{ required: true, message: '请输入按钮编码', trigger: 'blur' }],
       },
       isShow:false,
       formLoading:false,
@@ -270,21 +267,6 @@ export default {
         $('#btn_select').fadeIn()
       }
     },
-    /*====== 判断数组中是否有相同元素，有则给出提示 ======*/
-    findSame(arr) {
-      arr.sort();
-      for (var i = 0; i < arr.length - 1; i++) {
-        if (arr[i] == arr[i + 1]) {
-          //alert("包含相同元素，相同值为：" + arr[i]);
-          this.$alert('您已存在相同的按钮类型', '提示', {
-            confirmButtonText: '确定',
-          })
-          this.addButton=false //提示后不能添加
-          return true;
-        }
-      };
-      return false;
-    },
     /*====== 按钮弹框的确定按钮 ======*/
     click_ok() {
       console.log('按钮名称与类型',this.formButton.buttonTypeCode)
@@ -292,8 +274,6 @@ export default {
         if (valid) {
           //alert('submit!');
           this.buttonData.push(this.formButton.buttonTypeCode) //当元素名称和类型不为空时将元类型添加buttonData
-          this.findSame(this.buttonData) //当buttonData中有相同的类型时给出提示
-          this.buttonData = serialize.deteleObject(this.buttonData) //过滤buttonData相同的值
           if(this.addButton==true){  //元素不为空能添加
             this.buttonNameData.push(this.formButton.buttonName) //将按钮名字添加进buttonNameData中用来展示添加的按钮
             this.authTbMenuElementsEdit.push({ //发送修改保存时添加的按钮
@@ -380,27 +360,29 @@ export default {
           type: "warning"
         });
       } else {
-        var str = { deleteParam: [{ id: treeNode.id }] };
+        let str = { deleteParam: [{ id: treeNode.id }] };
         this.axios.delete(menudeleteurl, { data: str }).then(response => {
-          //console.log(response)
+          console.log(response)
           if (response.data.state == true) {
             this.$message({
               message: response.data.msg,
               type: "success"
             });
+            this.zNodes.length=0
+            this.freshArea()
           } else {
             this.$message({
               message: response.data.msg,
               type: "error"
             });
-            this.zNodes.length=0
-            this.freshArea()
           }
         });
       }
     },
     /*====== ztree点击节点将节点信息放入表单显示 ======*/
     zTreeOnClick(e, treeId, treeNode) {
+      this.src = "";
+      this.$refs.file.value = "";
       //console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
       console.log('获取节点信息',treeNode)
       this.id = treeNode.id; //点击节点时节点自己的id
@@ -432,8 +414,12 @@ export default {
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
-            this.src1 = fileUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
-            $('#icon1').show() //点击节点是显示,否则隐藏
+            if(res.data.row.authTbMenu.iconDefault==null||res.data.row.authTbMenu.iconDefault==''){
+              $('#icon1').hide()
+            }else{
+              $('#icon1').show()
+              this.src1 = fileUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
+            }
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
 
             this.buttonData.length=0
@@ -535,15 +521,18 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
+          this.formLoading=false
           this.$refs[rule].resetFields()
           $("#btn_select").fadeOut()
-          this.formLoading=false
+          this.src = "";
+          this.$refs.file.value = "";
           this.formButton.length=0
           this.buttonData.length=0
           this.zNodes.length=0
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
+          this.formLoading=false
         }
       });
     },
@@ -559,6 +548,8 @@ export default {
           });
           this.$refs[rule].resetFields()
           $("#btn_select").fadeOut()
+          this.src = "";
+          this.$refs.file.value = "";
           this.formLoading=false
           this.formButton.length=0
           this.buttonData.length=0
@@ -566,6 +557,7 @@ export default {
           this.freshArea()
         } else {
           this.$message.error(request.data.msg);
+          this.formLoading=false
         }
       });
     },
@@ -594,7 +586,6 @@ export default {
         dataType: "JSON",
         ContentType: "multipart/form-data"
       }).then(request => {
-        //console.log(11111)
         console.log(request);
         if(request.data.state==false){
           return

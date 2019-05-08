@@ -297,7 +297,7 @@ export default {
        * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
        */
       var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
-      console.log(expandedNodes);
+      //console.log(expandedNodes);
       for(var i = expandedNodes.length - 1; i >= 0; i--){
         var node = expandedNodes[i];
         var level = node.level;
@@ -313,7 +313,7 @@ export default {
     },
     /*====== 点击授权时 ======*/
     editButton(index,row) {
-      console.log(row.id)
+      //console.log(row.id)
       this.roleId=row.id
       this.zNodes.length=0
       let list=[]
@@ -341,16 +341,23 @@ export default {
     },
     /*====== 授权加载ztree树，节点被勾选时 ======*/
     zTreeOnCheck(event,treeId,treeNode){
-      var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
-        nodes=treeObj.getCheckedNodes(true);
-      for(var i=0;i<nodes.length;i++){
-        console.log("节点id:"+nodes[i].id); //获取选中节点的值
-        this.menuId.push(nodes[i].id)
+      this.menuId.length=0
+      console.log(treeNode)
+      let treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+      nodes=treeObj.getCheckedNodes(true);
+      console.log('nodes',nodes)
+      console.log('nodes.length',nodes.length)
+      if(nodes.length!=0){
+        for(let item of nodes){
+          console.log(item.id)
+          this.menuId.push(item.id)
+        }
+      }else{
+        this.menuId.length=0
       }
-      //console.log(this.controlData)
     },
     controlClick(){
-      console.log(this.roleId,this.menuId)
+      console.log('选中值id',this.menuId)
       this.axios.post(controladd,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
         console.log(res)
         if(res.data.state==true){

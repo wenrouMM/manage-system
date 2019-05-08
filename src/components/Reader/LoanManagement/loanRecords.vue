@@ -39,32 +39,18 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" :data="tableData"style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="140" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="180" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" width="190" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="190" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="180" label="书籍编码"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="190" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="180" label="续借次数"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="190" label="预计归还时间"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName"width="200" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" width="200" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="200" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="200" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="createTime" width="200" label="预计归还时间"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

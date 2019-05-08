@@ -250,29 +250,57 @@ export default {
       this.currentPage = 1;
     },
     selectApi(value) {
-      this.tableLoading = true;
-      this.axios.get(roleManageInt.select, { params: value }).then(res => {
-        console.log("查询分页的页数", res.data);
-        if (res.data.state === true) {
-          this.tableData = res.data.row; //获取返回数据
-          //console.log('获取的表格数据',this.tableData)
-          this.total = res.data.total; //总条目数
-          this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-          //console.log("保存当前查询", this.paginationForm);
-          this.tableLoading = false;
-        } else {
-          this.$message.error(res.data.msg);
-          this.tableLoading = false;
-        }
-      });
+      this.tableLoading= true; // 加载前控制加载状态
+      this.axios
+        .get(roleManageInt.select, {
+          params: value
+        })
+        .then(res => {
+          //console.log("当前获取的数据", res.data);
+          if (res.data.state === true) {
+            let nomol = res.data.row;
+            this.tableData = nomol; //获取返回数据
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+            //console.log("过滤后的数据", nomol);
+            this.currentPage = 1
+            console.log("保存当前查询", this.paginationForm);
+            this.tableLoading = false;
+          } else {
+            this.$message.error(res.data.msg);
+            this.tableLoading = false;
+          }
+        })
 
+    },
+    paginationApi(value){
+      this.tableLoading= true; // 加载前控制加载状态
+      this.axios
+        .get(roleManageInt.select, {
+          params: value
+        })
+        .then(res => {
+          console.log("当前获取的数据", res.data);
+          if (res.data.state === true) {
+            let nomol = res.data.row;
+            this.tableData = nomol; //获取返回数据
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+            console.log("过滤后的数据", nomol);
+            console.log("保存当前查询", this.paginationForm);
+            this.tableLoading = false;
+          } else {
+            this.$message.error(res.data.msg);
+            this.tableLoading = false;
+          }
+        })
     },
     current_change: function(currentPage) {
       //分页查询
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
       //console.log('保存当前查询',this.paginationForm);
-      this.selectApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     },
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {

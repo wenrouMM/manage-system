@@ -44,31 +44,17 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column width="80" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="110" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="100" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="150" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName"width="170" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="160" label="书籍名称"></el-table-column>
+              <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
               <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="170" label="书籍编码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="110" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
               <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
               <el-table-column align="center" prop="realityReturnTime" width="200" label="实际归还时间"></el-table-column>
             </el-table>

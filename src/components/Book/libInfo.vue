@@ -42,9 +42,9 @@
                       <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="name" width="200" label="藏馆名称"></el-table-column>
+                  <el-table-column align="center" prop="name" width="200" label="藏馆名称" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="fkCityName" width="200" label="城市名字"></el-table-column>
-                  <el-table-column align="center" prop="libraryKey" width="200" label="密钥"></el-table-column>
+                  <el-table-column align="center" prop="libraryKey" width="200" label="密钥" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="creatTime" width="230" label="创建时间"></el-table-column>
                   <el-table-column align="center" prop="updateTime" width="230" label="更新时间"></el-table-column>
                 </el-table>
@@ -213,15 +213,26 @@
           $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
         })
       },
-      zTreeOnCheck(event, treeId, treeNode){
-        console.log('treeNode',treeNode)
+      zTreeOnCheck(event,treeId,treeNode){
+        console.log('treeNode',treeNode.checked)
+        if(treeNode.checked==false){
+          let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+          treeObj.checkNode(treeNode, !treeNode.checked, true);
+        }
+        let list={
+          name:treeNode.name,
+          code:treeNode.code
+        }
+        this.zTree=list
+        this.SearchApi(this.searchTimeForm)
       },
       /*====== 3.1点击ztree节点获取节点信息======*/
       zTreeOnClick(event, treeId, treeNode){
-        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        treeObj.checkNode(treeNode, !treeNode.checked, true);
-        console.log(treeNode.name,treeNode.code)
-        var list={
+        if(treeNode.checked==false){
+          let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+          treeObj.checkNode(treeNode, !treeNode.checked, true);
+        }
+        let list={
           name:treeNode.name,
           code:treeNode.code
         }
@@ -276,7 +287,7 @@
         this.$refs[this.addForm].resetFields();
         this.addmessage=''
       },
-      tableApi(value){
+      SearchApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
           .get(libinfotable, {
@@ -331,7 +342,7 @@
       },
     },
     mounted(){
-      this.tableApi(this.searchTimeForm)
+      this.SearchApi(this.searchTimeForm)
       this.freshArea()
     }
   };

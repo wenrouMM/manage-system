@@ -42,8 +42,8 @@
                       <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="name" width="260" label="出版社名称"></el-table-column>
-                  <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
+                  <el-table-column align="center" prop="name" width="260" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="address" width="250" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
                   <el-table-column align="center" prop="telephone" width="250" label="联系电话"></el-table-column>
                 </el-table>
@@ -103,7 +103,6 @@
       callback()
     }
   }
-
   export default {
     data() {
       return {
@@ -233,19 +232,23 @@
         })
       },
       /*====== 3.1点击ztree节点获取节点信息======*/
-      zTreeOnCheck(event, treeId, treeNode){
-        console.log('treeId',treeId)
-        console.log('treeNode',treeNode)
-        /*let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        let nodes = treeObj.getSelectedNodes();
-        for (let i=0, l=nodes.length; i < l; i++) {
-          treeObj.checkNode(nodes[i], true, true);
-        }*/
+      zTreeOnCheck(event,treeId){
+        console.log('checktreeId',treeId)
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        if(treeId.checked==true){
+          treeObj.checkNode(treeId, !treeId.checked, true);
+        }
+        let list={
+          name:treeId.name,
+          code:treeId.code
+        }
+        this.zTree=list
+        this.SearchApi(this.searchTimeForm)
       },
       zTreeOnClick(event, treeId, treeNode){
-        console.log(treeNode.checked)
+        console.log('clicktreeNode',treeNode)
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
         if(treeNode.checked==false){
-          let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
           treeObj.checkNode(treeNode, !treeNode.checked, true);
         }
         let list={

@@ -8,9 +8,12 @@
         </div>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:952px" v-loading="formLoading">
-        <div style="width: 350px" class="inputDiv">
-          <span style="color:#878787;font-size: 15px;padding-left: 4px;margin: 0 auto">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
+        <div style="text-align: center;margin-top: 350px;color: #878787">
+          <span style="display: none" id="addressName">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;</span>
+          {{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}
           <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;display: none" @click="closeCheck"></span>
+        </div>
+        <div style="width: 270px" class="inputDiv">
           <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
               <el-input v-model="form.tag" id="tag"></el-input>
@@ -48,7 +51,7 @@
           view: {
             showLine: false,
             showIcon: true,
-            dblClickExpand: true,
+            dblClickExpand: false,
             addDiyDom: this.addDiyDom,
             selectedMulti: true,
             addHoverDom: this.addHoverDom,
@@ -143,7 +146,10 @@
         for (var i in obj) {
           obj[i] = "";
         }
+        this.zNodes.length=0
+        this.freshArea()
         this.form.tag=''
+        $('#addressName').fadeOut()
         $('#imgX').fadeOut()
       },
       async freshArea() {
@@ -177,6 +183,7 @@
         console.log('展开',treeNode)
         if(treeNode.fkStoreId!=null&&treeNode.fkRegionId==null){
           this.Address.fkStoreId=treeNode.name
+          $('#addressName').fadeIn()
           $('#imgX').fadeIn()
         }else if(treeNode.fkRegionId!=null&&treeNode.colNum==null){
           this.Address.fkRegionId=treeNode.name
@@ -189,17 +196,25 @@
         }
       },
       zTreeOnClick(event, treeId, treeNode){
-        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        console.log('treeObj',treeObj)
-        console.log('direction',treeNode.direction)
-        if(treeNode.direction==null){
-          this.$message('层架标签必须绑定在面级！！');
-        }else{
-          console.log(treeNode)
-          console.log(treeNode.direction)
+        let zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.expandNode(treeNode)
+        if(treeNode.fkStoreId!=null&&treeNode.fkRegionId==null){
+          this.Address.fkStoreId=treeNode.name
+          $('#addressName').fadeIn()
+          $('#imgX').fadeIn()
+        }else if(treeNode.fkRegionId!=null&&treeNode.colNum==null){
+          this.Address.fkRegionId=treeNode.name
+        }else if(treeNode.colNum!=null&&treeNode.divNum==null){
+          this.Address.colNum=treeNode.name
+        }else if(treeNode.divNum!=null&&treeNode.laysNum==null){
+          this.Address.divNum=treeNode.name
+        }else if(treeNode.laysNum!=null&&treeNode.direction==null){
+          this.Address.laysNum=treeNode.name
+        }else if(treeNode.laysNum!=null&&treeNode.direction!=null){
           this.addressDate=treeNode
           this.form.tag=treeNode.rfid
           this.Address.direction=treeNode.name
+          console.log(this.addressDate)
         }
       },
       onSubmit(){
@@ -217,9 +232,8 @@
         }else{
           this.$message({
             message: '位置绑定错误！！',
-            type: 'warning'
+            type: 'error'
           });
-
         }
       },
       save(value){
@@ -232,6 +246,7 @@
                 type: 'success'
               });
               $('#imgX').fadeOut()
+              $('#addressName').fadeOut()
               this.formLoading=false
               this.$refs[this.form].resetFields()
               this.Address={}
@@ -252,6 +267,6 @@
 
 <style scoped>
     .inputDiv{
-      margin: 337px auto;
+      margin: 0px auto;
     }
 </style>

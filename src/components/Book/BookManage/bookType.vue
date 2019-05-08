@@ -97,7 +97,7 @@ export default {
       tableChecked:[],
       /*====== 3.1 分页相关 搜索相关设置项 ======*/
       total: 0, // 总页数
-      pageSize: 7, // 页面个数
+      pageSize: 10, // 页面个数
       currentPage: 1, // 控制当前页面处于第几页
       paginationForm: {} // 查询保存的数据
     };
@@ -277,7 +277,7 @@ export default {
 .pagination .el-pagination {
   display: flex;
   justify-content: center;
-  
+
 }
 
 

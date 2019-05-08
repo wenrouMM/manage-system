@@ -44,14 +44,14 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="180" prop="name" label="书籍名称"></el-table-column>
+              <el-table-column align="center" width="180" prop="name" label="书籍名称" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" :show-overflow-tooltip="true" prop="searchNumber" width="110" label="索书号"></el-table-column>
               <el-table-column align="center" prop="isbn"  label="ISBN"></el-table-column>
               <el-table-column align="center" prop="author" width="150" label="作者"></el-table-column>
-              <el-table-column align="center" width="150" prop="fkPressName" label="出版社"></el-table-column>
+              <el-table-column align="center" width="150" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="pageNumber" width="150" label="页码"></el-table-column>
               <el-table-column align="center" prop="price" width="100" label="价格"></el-table-column>
-              <el-table-column align="center" prop="barcode" width="160" label="条码"></el-table-column>
+              <el-table-column align="center" prop="barcode" width="160" label="条码" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="fkTypeName" :show-overflow-tooltip="true" width="150" label="类型"></el-table-column>
               <el-table-column align="center" label="操作" width="180">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
@@ -117,7 +117,7 @@ export default {
       ],
       /*====== 3.1 分页设置项 ======*/
       total: 0,
-      pageSize: 7,
+      pageSize: 10,
       currentPage: 1,
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/

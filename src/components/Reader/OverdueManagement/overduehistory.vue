@@ -7,7 +7,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期天数</span>
+            <span class="titleName">逾期历史记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -34,27 +34,13 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="140" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="180" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName"width="200" label="用户名"></el-table-column>
               <el-table-column align="center" prop="cardNumber" width="200" label="卡号"></el-table-column>
               <el-table-column align="center" prop="fkBookName" width="200" label="书名"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="应还书日期"></el-table-column>
-              <el-table-column align="center" prop="overdueTotalDay" width="170" label="逾期天数"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" width="170" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" label="应还书日期"></el-table-column>
+              <el-table-column align="center" prop="overdueTotalDay" width="200" label="逾期天数"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" width="200" label="处理方式"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
