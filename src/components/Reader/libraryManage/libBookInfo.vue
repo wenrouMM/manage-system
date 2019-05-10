@@ -136,7 +136,9 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booknews,
+  libbooknews
 } from "../../../request/api/base.js";
 import moment from "moment";
 import sousou from "../../../base/img/currency/ss.png"
@@ -174,8 +176,8 @@ export default {
       },
       zNodes: [],
       optionsStatus: [
-        "禁用",
-        "启用",
+        "上架",
+        "下架",
       ],
       /*====== 2.0表单搜索提交数据项 ======*/
       searchForm: {
@@ -214,9 +216,9 @@ export default {
     searchTimeForm() {
       // 搜索所需数据 过滤数据 传递给后端的数据
       var state=null
-      if(this.searchForm.status=='禁用'){
+      if(this.searchForm.status=='上架'){
         state=1
-      }else if(this.searchForm.status=='启用'){
+      }else if(this.searchForm.status=='下架'){
         state=0
       }else if(this.searchForm.status==''){
         state=''
@@ -236,7 +238,7 @@ export default {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
     this.freshArea()
     $('#typeMessage').fadeOut()
-    this.axios.get(libbook).then((res)=>{
+    this.axios.get(libbooknews.table).then((res)=>{
       console.log(res)
     })
   },
@@ -257,7 +259,7 @@ export default {
       }
     },
     async freshArea() {
-      this.axios.get(bookurltypemes).then((res)=>{
+      this.axios.get(libbooknews.type).then((res)=>{
         console.log('res',res)
         if(res.data.state==true){
           for (let item of res.data.row) {
@@ -321,7 +323,7 @@ export default {
     },
     submitDialog() {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-      this.axios.post(libbookedit,{state:0,id:this.id}).then((res)=>{
+      this.axios.post(libbooknews.edit,{state:0,id:this.id}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           this.$message({
@@ -356,7 +358,7 @@ export default {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
       this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(libbook, {
+        .get(libbooknews.table, {
           params: value
         })
         .then(res => {

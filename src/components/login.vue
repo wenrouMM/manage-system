@@ -27,7 +27,7 @@
 
 <script>
 import axios from 'axios'
-import {loginInter} from '../request/api/base.js'
+import {loginInter,login} from '../request/api/base.js'
   export default {
     name: "login.vue",
     data:function(){
@@ -110,11 +110,11 @@ import {loginInter} from '../request/api/base.js'
       },
     },
     mounted:function(){ // 二维码的获取
-      axios.post( rowurl ,({})).then(function (request) {
+      axios.post( login.yzm ,({})).then(function (request) {
         console.log(request);
         if(request.data.row>2){
           $('#yzm').show()
-          $('#imgYzm').attr("src",yzmurl+Math.random());
+          $('#imgYzm').attr("src",login.yzm+Math.random());
         }
       })
       $('#yzm').hide()

@@ -103,7 +103,8 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booknews
 } from "../../../request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -201,7 +202,7 @@ export default {
     },
     /*====== 0.0类型名称ztree树的渲染 ======*/
     async freshArea() {
-      this.axios.get(bookurltypemes).then((response)=>{
+      this.axios.get(booknews.grade).then((response)=>{
         console.log(response)
         for (var item of response.data.row) {
           //console.log(item)
@@ -257,7 +258,7 @@ export default {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
       this.tableLoading= true; // 加载前控制加载状态
       axios
-        .get(bookurlmessage, {
+        .get(booknews.table, {
           params: value
         })
         .then(res => {

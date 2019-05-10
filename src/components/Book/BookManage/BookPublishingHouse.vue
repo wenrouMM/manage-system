@@ -105,6 +105,7 @@
 </template>
 
 <script>
+  import {bookpublish } from '../../../request/api/base.js'
   import {isvalidPhone} from '../../../base/js/yf/elementValidate'
   var validPhone=(rule, value,callback)=>{
     if (!value){
@@ -244,7 +245,7 @@
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
         let list=[]
-        this.axios.get(bookurlcity).then((response)=>{
+        this.axios.get(bookpublish.city).then((response)=>{
           console.log('ztree树',response)
           for (let item of response.data.row) {
             list.push({
@@ -314,7 +315,7 @@
           contacts:this.addForm.contacts,
           telephone:this.addForm.contactPhone
         }]
-        this.axios.post(bookpublishhouse,addStr).then((res)=>{
+        this.axios.post(bookpublish.add,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -335,16 +336,13 @@
           }
         })
         this.$refs[this.addForm].resetFields();
-        this.addmessage=''
       },
       resetForm() {
         this.$refs[this.addForm].resetFields();
         this.dialogFormVisible=false
-        this.addmessage=''
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
-        this.addmessage=''
         this.$refs[this.addForm].resetFields();
         let obj = this.addForm;
         for (var i in obj) {
@@ -354,7 +352,7 @@
       paginationApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(bookurlselect, {
+          .get(bookpublish.select, {
             params: value
           })
           .then(res => {
@@ -376,7 +374,7 @@
       SearchApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(bookurlselect, {
+          .get(bookpublish.select, {
             params: value
           })
           .then(res => {

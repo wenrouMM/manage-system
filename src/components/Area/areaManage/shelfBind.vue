@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import { layerFrame } from "../../../request/api/base.js";
   export default {
     name: "LayerBinding",
     data(){
@@ -153,7 +154,7 @@
         $('#imgX').fadeOut()
       },
       async freshArea() {
-        this.axios.get(layerFramezTree).then((response) => {
+        this.axios.get(layerFrame.tree).then((response) => {
           console.log(response)
           if(response.data.state==true){
             for (var item of response.data.row) {
@@ -238,7 +239,7 @@
       },
       save(value){
           this.formLoading=true
-          this.axios.post(layerFrameSave,value).then((res)=>{
+          this.axios.post(layerFrame.save,value).then((res)=>{
             console.log(res)
             if(res.data.state==true){
               this.$message({

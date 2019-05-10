@@ -169,7 +169,7 @@
 import axios from "axios";
 import {
   readerType,
-
+  deposit,
   cardInfoInt
 } from "../../../request/api/base.js";
 export default {
@@ -465,7 +465,7 @@ export default {
     },
     //押金充值
     depositApi(dialogName){
-      this.axios.post(depositMoney,{
+      this.axios.post(deposit.money,{
         deposit:this.changeForm.deposit,
         cardNumber:this.changeForm.cardNumber
       }).then((res)=>{

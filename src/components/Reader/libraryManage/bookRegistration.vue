@@ -85,6 +85,10 @@
 </template>
 
 <script>
+  import {
+    headimg,
+    libbookRegist
+  } from "../../../request/api/base.js";
   import {isvalidNumber} from '../../../base/js/yf/elementValidate'
   let validNumber=(rule, value,callback)=>{
     if (!value){
@@ -222,13 +226,13 @@
       libMessage(){
         this.messageName='请选择出版社名称'
         this.zNodes.length=0
-        this.freshArea(bookRegistlib)
+        this.freshArea(libbookRegist.publish)
       },
       /*====== 书籍弹窗内容 ======*/
       typeMessage() {
         this.messageName = '请选择书籍类型'
         this.zNodes.length = 0
-        this.freshArea(bookRegisttype)
+        this.freshArea(libbookRegist.type)
       },
       /*====== ztree节点点击添加节点信息 ======*/
       zTreeOnClick(event, treeId, treeNode){
@@ -280,24 +284,26 @@
         this.barCode=this.addForm.barcode
         if(this.addForm.barcode){
           $('#closeInput').fadeIn()
-          this.axios.get(bookRegist, {params: {barcode: this.addForm.barcode}}).then((res) => {
+          this.axios.get(libbookRegist.barcode, {params: {barcode: this.addForm.barcode}}).then((res) => {
             //console.log(1)
             console.log(res.data)
             if (res.data.state == true) {
               console.log('isbn的数据', res.data)
-              this.addForm.bookName = res.data.row[0].name;
-              this.addForm.isbn=res.data.row[0].isbn
-              this.addForm.bookIndex = res.data.row[0].searchNumber;
-              this.addForm.author = res.data.row[0].author;
-              this.addForm.lib = res.data.row[0].fkPressName;
-              this.libCode = res.data.row[0].fkPressCode;
-              this.typeCode = res.data.row[0].fkTypeCode;
-              this.addForm.page = res.data.row[0].pageNumber;
-              this.addForm.value = res.data.row[0].price;
-              this.addForm.typeName = res.data.row[0].fkTypeName;
-              this.addForm.bookcontent = res.data.row[0].introduction;
-              this.addForm.status=res.data.row[0].state=1?'上架':'下架'
-              this.disable=true
+              if(res.data.row.length>0){
+                this.addForm.bookName = res.data.row[0].name;
+                this.addForm.isbn=res.data.row[0].isbn
+                this.addForm.bookIndex = res.data.row[0].searchNumber;
+                this.addForm.author = res.data.row[0].author;
+                this.addForm.lib = res.data.row[0].fkPressName;
+                this.libCode = res.data.row[0].fkPressCode;
+                this.typeCode = res.data.row[0].fkTypeCode;
+                this.addForm.page = res.data.row[0].pageNumber;
+                this.addForm.value = res.data.row[0].price;
+                this.addForm.typeName = res.data.row[0].fkTypeName;
+                this.addForm.bookcontent = res.data.row[0].introduction;
+                this.addForm.status=res.data.row[0].state=1?'上架':'下架'
+                //this.disable=true
+              }
             }else{
               this.addForm.bookName = ''
               this.addForm.isbn=''
@@ -321,7 +327,7 @@
       /*====== 添加请求操作 ======*/
       addApi(){
         console.log('保存按钮发送条码',this.barCode)
-        this.axios.post(bookRegistadd,{
+        this.axios.post(libbookRegist.add,{
           barcode:this.barCode,
           author: this.addForm.author,
           fkPressCode: this.libCode,

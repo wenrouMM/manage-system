@@ -81,6 +81,7 @@
 </template>
 
 <script>
+  import {overdue} from '../../../request/api/base.js'
   export default {
     data() {
       return {
@@ -170,7 +171,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(overdueHistory, {
+          .get(overdue.history, {
             params: value
           })
           .then(res => {

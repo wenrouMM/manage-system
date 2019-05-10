@@ -169,7 +169,7 @@
 
 <script>
 import moment from "moment";
-import {roleManageInt,roleType } from '../../request/api/base.js'
+import {roleManageInt,role_table} from '../../request/api/base.js'
 export default {
   data() {
     return {

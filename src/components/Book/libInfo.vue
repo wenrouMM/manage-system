@@ -2,7 +2,7 @@
   <div id="bookpublishhouse" style="">
     <div style="display: flex;flex-direction: row;height: 952px" id="mybook">
       <div style="background-color:white;width:250px;height:952px;display: flex;flex-direction:column;overflow-y: auto">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
+        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">藏馆信息</div>
         <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+  import {bookpublish,libnews} from '../../request/api/base.js'
   export default {
     data() {
       return {
@@ -227,7 +228,7 @@
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
-        this.axios.get(cityselect).then((response)=>{
+        this.axios.get(bookpublish.city).then((response)=>{
           console.log('ztree树',response)
           for (var item of response.data.row) {
             this.zNodes.push({
@@ -292,7 +293,7 @@
           name:this.addForm.name,
           libraryKey:this.addForm.key
         }]
-        this.axios.post(libinfo,addStr).then((res)=>{
+        this.axios.post(libnews.add,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -301,7 +302,7 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
-            this.tableApi(this.searchTimeForm)
+            this.SearchApi(this.searchTimeForm)
           }else{
             this.$message({
               message: res.data.msg,
@@ -317,7 +318,7 @@
       SearchApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(libinfotable, {
+          .get(libnews.select, {
             params: value
           })
           .then(res => {
@@ -340,7 +341,7 @@
       paginationApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(libinfotable, {
+          .get(libnews.select, {
             params: value
           })
           .then(res => {

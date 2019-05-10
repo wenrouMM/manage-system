@@ -59,6 +59,7 @@
 </template>
 
 <script>
+  import { bookLocation } from "../../../request/api/base.js";
   export default {
     data(){
       return{
@@ -170,7 +171,7 @@
       barcodeClick:function(){
         console.log('input框值的变化')
         console.log(this.ruleForm.barcode)
-        this.axios.get(booklocationbarcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
+        this.axios.get(bookLocation.barcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
           //console.log(res.data)
           if (res.data.state == true) {
             console.log('isbn的数据', res.data)
@@ -234,7 +235,7 @@
       /*====== 加载位置信息ztree树的内容 ======*/
       async freshArea() {
         let list=[]
-        this.axios.get(layerFramezTree).then((response) => {
+        this.axios.get(bookLocation.tree).then((response) => {
           console.log(response)
           if(response.data.state==true){
             for (var item of response.data.row) {
@@ -276,7 +277,7 @@
           if (valid) {
             console.log('submit!');
             this.formLoading=true
-            this.axios.post(booklocation,{
+            this.axios.post(bookLocation.location,{
               libraryBookCode:this.ruleForm.bookCode,
               searchNumber:this.ruleForm.bookIndex,
               bookName:this.ruleForm.bookName,

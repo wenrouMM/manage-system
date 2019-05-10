@@ -154,7 +154,7 @@
 <script>
 import moment from "moment";
 import axios from "axios";
-import { powerMangaeInt, selectRoleType } from "../../request/api/base.js";
+import { powerMangaeInt, selectRoleType,control,powerControl } from "../../request/api/base.js";
 import * as respones from "echarts";
 export default {
   created() {
@@ -344,7 +344,7 @@ export default {
       this.roleId=row.id
       this.zNodes.length=0
       let list=[]
-      this.axios.get(controlurl,{params:{roleid:row.id}}).then((res)=>{
+      this.axios.get(control.tree,{params:{roleid:row.id}}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           for (var item of res.data.rows) {
@@ -385,7 +385,7 @@ export default {
     },
     controlClick(){
       console.log('选中值id',this.menuId)
-      this.axios.post(controladd,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
+      this.axios.post(control.add,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           this.$message({
@@ -468,7 +468,7 @@ export default {
     },
     searchApi(value) {
       this.tableLoading = true;
-      this.axios.get(userroleselect, { params: value }).then(res => {
+      this.axios.get(powerControl, { params: value }).then(res => {
         console.log("查询分页的页数", res.data);
         if (res.data.state === true) {
           this.tableData = res.data.row; //获取返回数据

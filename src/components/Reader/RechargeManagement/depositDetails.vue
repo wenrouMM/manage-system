@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import {deposit} from '../../../request/api/base.js'
   export default {
     data(){
       return{
@@ -51,7 +52,7 @@
       selectApi(){
         this.userId = Number(this.$route.query.id);
         console.log(this.userId)
-        this.axios.get(depositDetails,{params: {id:this.userId}}).then((res)=>{
+        this.axios.get(deposit.details,{params: {id:this.userId}}).then((res)=>{
           console.log(res)
           this.detailsData.userName=res.data.row.fkReaderName
           this.detailsData.depositMoney=res.data.row.deposit

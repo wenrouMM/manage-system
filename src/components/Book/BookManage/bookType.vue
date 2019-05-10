@@ -77,7 +77,8 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booktype
 } from "../../../request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -168,7 +169,7 @@ export default {
 
       this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(bookurltype, {
+        .get(booktype, {
           params: value
         })
         .then(res => {

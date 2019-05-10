@@ -97,6 +97,7 @@
 </template>
 
 <script>
+  import {dishonesty} from '../../../request/api/base.js'
   import moment from "moment";
   export default {
     data() {
@@ -194,7 +195,7 @@
       },
       submitDialog(){
         console.log(this.id)
-        this.axios.post(dishonestyRevoke,{id:this.id,fkReaderId:this.fkReaderId}).then((res)=>{
+        this.axios.post(dishonesty.revoke,{id:this.id,fkReaderId:this.fkReaderId}).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -230,7 +231,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(dishonestyRecords, {
+          .get(dishonesty.table, {
             params: value
           })
           .then(res => {

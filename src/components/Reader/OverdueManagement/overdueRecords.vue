@@ -92,6 +92,7 @@
 </template>
 
 <script>
+  import {overdue} from '../../../request/api/base.js'
   export default {
     data() {
       return {
@@ -159,7 +160,7 @@
       },
       submitDialog(){
         console.log(this.id)
-        this.axios.post(overduemake,{id:this.id}).then((res)=>{
+        this.axios.post(overdue.make,{id:this.id}).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -195,7 +196,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(overdueRecords, {
+          .get(overdue.table, {
             params: value
           })
           .then(res => {
@@ -222,7 +223,7 @@
         this.i=0
         this.phone=''
         console.log(row)
-        this.axios.get(overduePhone,{params:{id:row.id}}).then((res)=>{
+        this.axios.get(overdue.phone,{params:{id:row.id}}).then((res)=>{
           console.log(res)
           if(res.data.state=true){
             this.phone=res.data.row.phone
@@ -242,7 +243,7 @@
         this.id=row.id
         this.i=1
         this.overdueMoney=''
-        this.axios.get(overdueMoney,{params:{id:row.id}}).then((res)=>{
+        this.axios.get(overdue.money,{params:{id:row.id}}).then((res)=>{
           console.log(res)
           if(res.data.state=true){
             this.overdueMoney=res.data.row

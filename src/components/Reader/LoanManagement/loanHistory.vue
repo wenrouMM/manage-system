@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import {loan} from '../../../request/api/base.js'
   import moment from "moment";
   export default {
     data() {
@@ -192,7 +193,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(loanHistory, {
+          .get(loan.history, {
             params: value
           })
           .then(res => {

@@ -78,7 +78,8 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  libbooknews
 } from "../../../request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -153,7 +154,7 @@ export default {
 
       this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(libbooktype, {
+        .get(libbooknews.type, {
           params: value
         })
         .then(res => {

@@ -106,6 +106,7 @@
 
 <script>
 parent=null;
+import {menu,photoUrl} from '../../request/api/base.js'
 export default {
   name: "menu.vue",
   data() {
@@ -314,7 +315,7 @@ export default {
     btn_type() {$("#but_type_div").fadeIn();},
     /*====== 左侧ztree树结构的加载 ======*/
     async freshArea() {
-      this.axios.get(menuselecturl).then((response)=>{
+      this.axios.get(menu.select).then((response)=>{
         console.log(response)
         if(response.data.state=true){
           for (var item of response.data.row) {
@@ -349,7 +350,7 @@ export default {
         this.formOverload()
       } else {
         let str = { deleteParam: [{ id: treeNode.id }] };
-        this.axios.delete(menudeleteurl, { data: str }).then(response => {
+        this.axios.delete(menu.delete, { data: str }).then(response => {
           console.log(response)
           if (response.data.state == true) {
             this.$message({
@@ -382,7 +383,7 @@ export default {
         this.ruleForm.name=treeNode.name
         $('#name').focus()
       }
-        this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
+        this.axios.get(menu.button, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
             if(res.data.row.authTbMenu.fkMenuTypeCode=="list_menu"){
@@ -407,7 +408,7 @@ export default {
               $('#icon1').hide()
             }else{
               $('#icon1').show()
-              this.src1 = fileUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
+              this.src1 = photoUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
             }
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
             console.log('已存在的按钮1',res.data.row.authTbMenuElements)
@@ -511,7 +512,7 @@ export default {
     },
     addApi(value){
       this.formLoading=true
-      this.axios.post(menuaddurl, value).then((request) => {
+      this.axios.post(menu.add, value).then((request) => {
         console.log(request);
         if (request.data.state == true) {
           this.$message({
@@ -561,7 +562,7 @@ export default {
       //console.log(formdatas.get('file'))
       this.axios({
         method: "post",
-        url: menuimg,
+        url: menu.img,
         data: formdatas,
         //cache: false,//上传文件无需缓存
         processData: false, //用于对data参数进行序列化处理 这里必须false
@@ -592,7 +593,7 @@ export default {
     /*====== 菜单类型下拉框数据 ======*/
     var list = [];
     this.axios
-      .get(menutypeurl, { params: { type: "menu" } })
+      .get(menu.type, { params: { type: "menu" } })
       .then(function(request) {
         //console.log(request)
           for (let item of request.data.row) {
