@@ -383,6 +383,7 @@ export default {
         this.ruleForm.name=treeNode.name
         $('#name').focus()
       }
+        this.dynamicTags.length=0
         this.axios.get(menu.button, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
@@ -529,7 +530,7 @@ export default {
     },
     editApi(value){
       this.formLoading=true
-      this.axios.post(menuaddurl, value).then((request) => {
+      this.axios.post(menu.add, value).then((request) => {
         this.zNodes.length=0
         console.log(request);
         if (request.data.state == true) {

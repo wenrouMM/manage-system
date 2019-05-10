@@ -161,7 +161,7 @@
           author: [{ required: true, message: "请输入作者", trigger: "change" }],
           lib: [{ required: true, message: "请选择出版社", trigger: "change" }],
           page: [{ required: true, message: "请输入页码", trigger: "change" }],
-          value:[{ required: true, trigger: 'blur', validator: validNumber }],
+          value:[{ required: true, trigger: 'change', validator: validNumber }],
           typeName: [{ required: true, message: "请选择书籍类型", trigger: "change" }],
           bookcontent: [{ required: true, message: "请输入书籍简介", trigger: "change" }],
           status: [{ required: true, message: "请选择状态", trigger: "change" }],
@@ -303,19 +303,24 @@
                 this.addForm.bookcontent = res.data.row[0].introduction;
                 this.addForm.status=res.data.row[0].state=1?'上架':'下架'
                 //this.disable=true
+              }else{
+                this.addForm.bookName = ''
+                this.addForm.isbn=''
+                this.addForm.bookIndex =''
+                this.addForm.author = ''
+                this.addForm.lib = ''
+                this.addForm.page = ''
+                this.addForm.value = ''
+                this.addForm.typeName =''
+                this.addForm.bookcontent=''
+                this.addForm.status=''
+                this.disable=false
               }
             }else{
-              this.addForm.bookName = ''
-              this.addForm.isbn=''
-              this.addForm.bookIndex =''
-              this.addForm.author = ''
-              this.addForm.lib = ''
-              this.addForm.page = ''
-              this.addForm.value = ''
-              this.addForm.typeName =''
-              this.addForm.bookcontent=''
-              this.addForm.status=''
-              this.disable=false
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
             }
           })
         }else{
