@@ -11,23 +11,25 @@ import {
 // axios.defaults.baseURL = process.env // 环境 本地发送方的url环境 这个环境怪怪的
 
 axios.interceptors.request.use(
-  
+
   config => { // 做判断 如果有token就发送token 这里应该判定vuex内的状态
     if (store.state.token != null) {
-      
+
       config.headers['Authorization'] = store.state.token // 约定头部字段
     }
-    
+
     return config
   },
+
   error => {
     console.log('超时错误在这里吗',error)
     return Promise.reject(error)
   }
 )
 
+
 axios.interceptors.response.use(
-  response => { // 回复信息配置 code！=200 
+  response => { // 回复信息配置 code！=200
     // 还要其他的方法获得权限吗 这样是否有一些缺陷
     if(response.data.code == 3001 || response.data.code ==3003){ // 没有登录 token失效
        sessionStorage.removeItem('token')

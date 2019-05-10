@@ -227,7 +227,7 @@
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
-        this.axios.get(bookurlcity).then((response)=>{
+        this.axios.get(cityselect).then((response)=>{
           console.log('ztree树',response)
           for (var item of response.data.row) {
             this.zNodes.push({

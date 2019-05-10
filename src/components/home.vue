@@ -343,6 +343,7 @@ export default {
     returnApi() {
       axios.get(indexInt.return).then(res => {
         if (res.data.state === true) {
+          console.log('今日归还',res)
           this.returnNum = res.data.row;
         } else {
           this.$message.error(res.data.msg);
@@ -374,6 +375,7 @@ export default {
     recordApi() {
       axios.get(indexInt.record).then(res => {
         if (res.data.state === true) {
+          console.log('实时借还列表',res)
           this.recardList = res.data.row;
           console.log("借出记录", this.recardList);
         } else {
@@ -385,6 +387,7 @@ export default {
     fanApi() {
       axios.get(indexInt.fan).then(res => {
         if (res.data.state === true) {
+          console.log('热门分类',res)
           this.PieData.rows = res.data.row;
         } else {
           this.$message.error(res.data.msg);

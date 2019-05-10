@@ -385,14 +385,17 @@ export default {
         this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
-            this.$message({
-              message: res.data.msg,
-              type: "success"
-            });
             if(res.data.row.authTbMenu.fkMenuTypeCode=="list_menu"){
               $('#btn_select').fadeOut()
             }else{
               $('#btn_select').fadeIn()
+              if(res.data.row.authTbMenuElements){
+                this.dynamicTags.length=0
+                for (let item of res.data.row.authTbMenuElements) {
+                  //console.log('已存在的按钮',item)
+                  this.dynamicTags.push({name:item.elmName,code:item.elmCode})
+                }
+              }
             }
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
@@ -408,15 +411,6 @@ export default {
             }
             this.zTree = treeNode //将点击节点后的节点信息给treeNode
             console.log('已存在的按钮1',res.data.row.authTbMenuElements)
-            if(res.data.row.authTbMenuElements){
-              this.dynamicTags.length=0
-              for (let item of res.data.row.authTbMenuElements) {
-                //console.log('已存在的按钮',item)
-                setTimeout(()=>{
-                  this.dynamicTags.push({name:item.elmName,code:item.elmCode})
-                },500)
-              }
-            }
           }
         })
       console.log('类表',this.ruleForm.menuType)

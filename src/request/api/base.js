@@ -1,18 +1,17 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
 var url = 'http://192.168.2.31:8088/'
- var imgurl = 'http://192.168.2.31:8090/'
+var imgurl = 'http://192.168.2.31:8090/'
 //var url = 'http://192.168.2.121:8088/'
 
 // 首页
-var index = url + 'borrowmodule/history/'
 export const indexInt = {
-  borrow:`${index}selectTodayBorrow`,
-  return:`${index}selectTodayReturn`,
-  book:`${url}tibetmuseummodule/bookRFID/selectCount`,
-  record:`${url}borrowmodule/InAndOut/getFiveLog`,
-  fan:`${url}tibetmuseummodule/bookRFID/getFiveType`,
-  pillar:`${url}borrowmodule/history/selectSevenBorrowInfo`,
+  borrow:`${url}borrowmodule/index/selectTodayBorrow`,
+  return:`${url}borrowmodule/index/selectTodayReturn`,
+  book:`${url}tibetmuseummodule/index/selectCount`,
+  record:`${url}borrowmodule/index/getNewLog`,
+  fan:`${url}tibetmuseummodule/index/getHotType`,
+  pillar:`${url}borrowmodule/index/selectNearBorrowInfo`,
   cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`
 }
 
@@ -50,7 +49,7 @@ export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限�
 
 
 // 图书模块
-var bookMode = url + 'tibetmuseummodule/TbookTbInfo/'
+var bookMode = url + 'tibetmuseummodule/libraryInformationManagementPage/'
 export const bookModeInt = {
   selectOne:`${bookMode}selectOne`,
   select:`${bookMode}select`
@@ -59,7 +58,7 @@ export const bookModeInt = {
 
 /*------ 区域模块 ------*/
 //库房模块
-var store = url + 'regionmodule/store/'
+var store = url + 'regionmodule/areaManagementPage/store'
 export const storeInt = {
   select: `${store}select`,
   add: `${store}add`,
@@ -67,7 +66,7 @@ export const storeInt = {
   delete: `${store}delete`
 }
 //区模块
-var region = url + 'regionmodule/region/'
+var region = url + 'regionmodule/areaManagementPage/region'
 export const regionInt = {
   select: `${region}select`,
   add: `${region}add`,
@@ -114,10 +113,10 @@ export const borrowInt = {
   selectCode: `${borrow}selectOneByCode`,
   selectRfid: `${borrow}selectOneByRFID`
 }
-var bookOperate = url + 'borrowmodule/InAndOut/'
+var bookOperate = url + 'borrowmodule/'
 export const bookOperateInt = {
-  borrow: `${bookOperate}out`,
-  sell: `${bookOperate}in`
+  borrow: `${bookOperate}borrow/out`,
+  sell: `${bookOperate}return/in`
 
 }
 /*------ 通用接口 ------*/

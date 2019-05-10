@@ -222,7 +222,7 @@
               </el-form-item>
             </div>
             <div class="row2">
-              <el-form-item label="本区区号:" :label-width="changelabel" prop="zoneName">
+              <el-form-item label="本区区号:" :label-width="changelabel" prop="zoneNumber">
                 <el-input v-model="changeAreaForm.zoneNumber"></el-input>
               </el-form-item>
               <el-form-item label="每列有:" :label-width="changelabel" prop="section">
@@ -667,7 +667,7 @@ export default {
         this.$refs[formName].validate(valid => {
           if (valid) {
             // 发送上传图片请求
-            this.uploadImgApi(); 
+            this.uploadImgApi();
             // 发送数据提交请求
             axios({
               url: url,
@@ -820,7 +820,7 @@ export default {
           if (res.data.state === true) {
               console.log('问题在这里？',res.data.row)
             for(let item of res.data.row){
-              
+
               for (let reg of item.regionIcon){
                 reg.数量  = reg.value
                 delete reg.value
@@ -829,7 +829,7 @@ export default {
                 columns: ["type", "数量"],
                 rows:item.regionIcon
               }
-              
+
             }
             this.regionInfo = res.data.row;
             console.log("获取的区信息", this.regionInfo);
@@ -862,7 +862,7 @@ export default {
         .then(res => {
           if (res.data.state === true) {
             let arr = [];
-            
+
             for (let item of res.data.row) {
               let obj = {};
               obj.regionName = item.regionName;
@@ -903,7 +903,7 @@ export default {
           }else{
             this.$message.error('图片上传失败')
           }
-          
+
         });
       }
     }
