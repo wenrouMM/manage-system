@@ -3,7 +3,7 @@
 var url = 'http://192.168.2.31:8088/'
 //var url = 'http://192.168.2.121:8088/'
 
-var imgurl = 'http://192.168.2.31:8090/'
+var imgurl='192.168.2.31:8090/'
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
