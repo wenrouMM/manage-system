@@ -32,7 +32,6 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="/readercardmanagement">读者卡信息</el-menu-item>
-              <el-menu-item index="/readercardtype">读者卡类型</el-menu-item>
               <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
             </el-menu-item-group>
           </el-submenu>

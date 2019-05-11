@@ -405,7 +405,7 @@ export default {
       axios.get(selectEffect).then(res => {
         if (res.data.state === true) {
           this.optionsData = res.data.row;
-          console.log("添加等级下拉框数据", res);
+          console.log("添加等级下拉框数据", this.optionsData);
         } else {
           this.$message.error(res.data.msg);
         }
