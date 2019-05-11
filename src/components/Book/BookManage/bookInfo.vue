@@ -44,14 +44,14 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="180" prop="name" label="书籍名称"></el-table-column>
+              <el-table-column align="center" width="180" prop="name" label="书籍名称" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" :show-overflow-tooltip="true" prop="searchNumber" width="110" label="索书号"></el-table-column>
               <el-table-column align="center" prop="isbn"  label="ISBN"></el-table-column>
               <el-table-column align="center" prop="author" width="150" label="作者"></el-table-column>
-              <el-table-column align="center" width="150" prop="fkPressName" label="出版社"></el-table-column>
+              <el-table-column align="center" width="150" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="pageNumber" width="150" label="页码"></el-table-column>
               <el-table-column align="center" prop="price" width="100" label="价格"></el-table-column>
-              <el-table-column align="center" prop="barcode" width="160" label="条码"></el-table-column>
+              <el-table-column align="center" prop="barcode" width="160" label="条码" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="fkTypeName" :show-overflow-tooltip="true" width="150" label="类型"></el-table-column>
               <el-table-column align="center" label="操作" width="180">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
@@ -64,14 +64,25 @@
             <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -92,7 +103,8 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booknews
 } from "../../../request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -117,7 +129,8 @@ export default {
       ],
       /*====== 3.1 分页设置项 ======*/
       total: 0,
-      pageSize: 7,
+      pageSize: 10,
+      pageInput: 1,
       currentPage: 1,
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/
@@ -169,12 +182,27 @@ export default {
     },
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     closeCheck(){
       $('#typeMessage').fadeOut()
     },
     /*====== 0.0类型名称ztree树的渲染 ======*/
     async freshArea() {
-      this.axios.get(bookurltypemes).then((response)=>{
+      this.axios.get(booknews.grade).then((response)=>{
         console.log(response)
         for (var item of response.data.row) {
           //console.log(item)
@@ -230,7 +258,7 @@ export default {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
       this.tableLoading= true; // 加载前控制加载状态
       axios
-        .get(bookurlmessage, {
+        .get(booknews.table, {
           params: value
         })
         .then(res => {
@@ -268,7 +296,6 @@ export default {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
 }
 #typeMessage{
   display: none;

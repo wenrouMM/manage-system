@@ -2,11 +2,12 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
+        <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">借阅记录</span>
+            <span class="titleName">失信记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -38,19 +39,17 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" :data="tableData"style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
+            <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+              <el-table-column width="240" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="200" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" width="200" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="200" label="书籍编码"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="200" label="续借次数"></el-table-column>
-              <el-table-column align="center" prop="createTime" width="200" label="预计归还时间"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" width="260" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" width="260" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="remarks" width="260" label="备注"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="260" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" width="260" label="处理方式"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
@@ -75,6 +74,17 @@
               <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
+          <div class="forbid">
+            <el-dialog title="撤销" :visible.sync="centerDialogVisible" width="500px" center>
+              <div style="text-align: center">
+                <div style="font-size: 20px;color: grey">是否撤销他 (她) 的失信记录？</div>
+              </div>
+              <div slot="footer">
+                <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+                <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+              </div>
+            </el-dialog>
+          </div>
         </div>
       </div>
     </el-container>
@@ -82,33 +92,18 @@
 </template>
 
 <script>
-  import {loan} from '../../../request/api/base.js'
+  import {dishonesty} from '../../../request/api/base.js'
   import moment from "moment";
   export default {
     data() {
       return {
         /*====== 0.0初始化弹框数据 ======*/
-        defaultImg: " ", // 上传头像默认头像
-        formLabelWidth: "120px",
-        pickerOptions: {
-          disabledDate(date) {
-            const maxDate = Date.now();
-            const time = date.getTime();
-            return time > maxDate;
-          }
-        },
-        /*====== 2.0表单提交数据项 ======*/
-        search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
-        /*====== 4.0表格设置项 ======*/
-        rowStyle: {
-          height: "60px"
-        },
         pickerOptions0: {
           disabledDate: time => {
-            if (this.searchForm.endTime) {
+            if (this.formInline.endTime) {
               return (
                 time.getTime() > Date.now() ||
-                time.getTime() > this.searchForm.endTime
+                time.getTime() > this.formInline.endTime
               );
             } else {
               return time.getTime() > Date.now();
@@ -118,11 +113,21 @@
         pickerOptions1: {
           disabledDate: time => {
             return (
-              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() < this.formInline.beginTime ||
               time.getTime() > Date.now()
             );
           }
         },
+        rowStyle: {
+          height: "60px"
+        },
+        Dialogtitle:['催还','处理'],
+        i: null, // 切换弹框标题
+        centerDialogVisible:false,
+        defaultImg: " ", // 上传头像默认头像
+        formLabelWidth: "120px",
+        /*====== 2.0表单提交数据项 ======*/
+        /*====== 4.0表格设置项 ======*/
         total: 0,
         pageSize: 10,
         pageInput:1,
@@ -137,8 +142,11 @@
         tableLoading:false,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-        ]
-        /*====== 5.0 分页相关设置项 ======*/
+        ],
+        phone:'',//催还用户电话号码
+        overdueMoney:'',//处理用户逾期金额
+        id:'',
+        fkReaderId:''
       };
     },
     mounted() {
@@ -147,18 +155,19 @@
     computed:{
       searchTimeForm() {
         // 计算属性 真正传递的数据
-        let date = this.searchForm.date;
         let searchForm = {
           pageSize: this.pageSize,
           currentPage: 1,
-          logCardNum:this.searchForm.cardNum,
-          logName:this.searchForm.userName,
-          logStartTime: !this.searchForm.beginTime
-            ? null
-            : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
-          logEndTime:!this.searchForm.endTime
-            ? null
-            : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
+          cardNumber:this.searchForm.cardNum,
+          name:this.searchForm.userName,
+          beginTime:
+            !this.searchForm.beginTime
+              ? null
+              : moment(this.formInline.beginTime).format("YYYY-MM-DD"), //开始时间
+          endTime:
+            !this.searchForm.endTime
+              ? null
+              : moment(this.formInline.endTime).format("YYYY-MM-DD") //结束时间
         };
         return searchForm;
       },
@@ -179,6 +188,25 @@
           this.current_change(num)
         }
       },
+      submitDialog(){
+        console.log(this.id)
+        this.axios.post(dishonestyRevoke,{id:this.id,fkReaderId:this.fkReaderId}).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            });
+            this.centerDialogVisible=false
+            this.SearchApi(this.searchTimeForm)
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
+          }
+        })
+      },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
         console.log("此时传给后台的搜索数据", this.searchTimeForm);
@@ -198,7 +226,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(loan.table, {
+          .get(dishonesty.history, {
             params: value
           })
           .then(res => {
@@ -221,20 +249,23 @@
           });
       },
       handleEdit(index, row){
+        //this.centerDialogVisible=true
         console.log(row)
-        this.$router.push({
-          path:'/depositdetails',
-          query: {
-            id: row.id
-          }
-        });
-      }
+        this.fkReaderId=row.fkReaderId
+        this.id=row.id
+        this.centerDialogVisible=true
+      },
     }
   };
 </script>
 
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
+  .edit {
+    color: #00d7f0;
+    cursor: pointer;
+    margin-right: 20px;
+  }
   section.pagination {
     display: flex;
     justify-content: center;

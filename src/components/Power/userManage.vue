@@ -139,13 +139,25 @@
             <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -413,6 +425,7 @@ export default {
       optionsData: [],
       total: 0,
       pageSize: 10,
+      pageInput: 1,
       currentPage: 1,
       searchForm: {
         // 搜索需要的表单数据
@@ -490,6 +503,21 @@ export default {
     }
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       // 添加按钮
@@ -594,7 +622,7 @@ export default {
       this.addForm.phone = row.phone;
        this.addForm.email = row.email
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.isLock 
+      this.addForm.isLock = row.isLock
       this.addForm.preUrl = row.preUrl
       this.dialogFormVisible = true;
       console.log(index, row,typeof(this.addForm.isLock));
@@ -645,7 +673,7 @@ export default {
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            
+
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
             console.log("保存当前查询", this.paginationForm);
@@ -677,12 +705,12 @@ export default {
                if(item.headerAddress !=null && item.headerAddress !=''){
                  item.preUrl = photoUrl + item.headerAddress
                }
-               
+
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
-            
+
             this.tableLoading = false;
             this.searchLoading = false; // 按钮放行
             console.log("保存当前查询", this.paginationForm);
@@ -775,7 +803,7 @@ export default {
     resetForm(formName) {
       this.dialogFormVisible = false;
       //this.$refs[formName].resetFields();
-      
+
       this.editLoading = false;
     },
     pointer() {
@@ -805,10 +833,10 @@ export default {
       // 弹框关闭的时候执行 清空数据
       this.formFlag = true
       console.log("关闭测试");
-      
+
      // this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-      
-      
+
+
       this.files = null;
       //this.preloadImg = ''
       console.log('更改了吗',this.addForm);

@@ -7,7 +7,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期天数</span>
+            <span class="titleName">逾期历史记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -29,40 +29,40 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" :data="tableData"style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column align="center" width="120" prop="idType" label="序号"></el-table-column>
-              <el-table-column align="center" width="120" prop="srcdata" label="头像">
+              <el-table-column width="80" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
+                  <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="name"width="130" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNum" width="160" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="renewTime" width="160" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="endTime" width="160" label="归还时间"></el-table-column>
-              <el-table-column align="center" prop="returnTime" width="160" label="应还书日期"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="160" label="书名"></el-table-column>
-              <el-table-column align="center" prop="yqts" width="120" label="逾期天数"></el-table-column>
-              <el-table-column align="center" prop="phone" width="130" label="手机号码"></el-table-column>
-              <el-table-column align="center" prop="clfs" width="120" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName"width="200" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" width="200" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" width="200" label="书名"></el-table-column>
+              <el-table-column align="center" prop="creatTime" width="200" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" label="应还书日期"></el-table-column>
+              <el-table-column align="center" prop="overdueTotalDay" width="200" label="逾期天数"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" width="200" label="处理方式"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
           <div class="forbid">
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+  import {overdue} from '../../../request/api/base.js'
   export default {
     data() {
       return {
@@ -102,6 +103,7 @@
         /*====== 4.0表格设置项 ======*/
         total: 0,
         pageSize: 10,
+        pageInput:1,
         currentPage: 1,
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
         tableData: [
@@ -132,6 +134,21 @@
       },
     },
     methods: {
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
+      },
       submitDialog(){
 
       },
@@ -154,7 +171,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(overdueHistory, {
+          .get(overdue.history, {
             params: value
           })
           .then(res => {

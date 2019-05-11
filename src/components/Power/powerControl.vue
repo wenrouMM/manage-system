@@ -102,14 +102,25 @@
             <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -143,7 +154,7 @@
 <script>
 import moment from "moment";
 import axios from "axios";
-import { powerMangaeInt, selectRoleType } from "../../request/api/base.js";
+import { powerMangaeInt, selectRoleType,control,powerControl } from "../../request/api/base.js";
 import * as respones from "echarts";
 export default {
   created() {
@@ -226,6 +237,7 @@ export default {
       allSeclet: [], // 全选的对象
       total: 0,
       pageSize: 10,
+      pageInput: 1,
       currentPage: 1,
       paginationForm: {}, // 提交的数据 保存查询的结果后查询分页
       /*====== 弹框表单配置项 ======*/
@@ -279,6 +291,21 @@ export default {
     $('#typeMessage').fadeOut()
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     /*====== zTree保持展开单一路径的实现 ======*/
     zTreeBeforeExpand(treeId, treeNode) {
       this.singlePath(treeNode);
@@ -297,7 +324,7 @@ export default {
        * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
        */
       var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
-      console.log(expandedNodes);
+      //console.log(expandedNodes);
       for(var i = expandedNodes.length - 1; i >= 0; i--){
         var node = expandedNodes[i];
         var level = node.level;
@@ -313,11 +340,11 @@ export default {
     },
     /*====== 点击授权时 ======*/
     editButton(index,row) {
-      console.log(row.id)
+      //console.log(row.id)
       this.roleId=row.id
       this.zNodes.length=0
       let list=[]
-      this.axios.get(controlurl,{params:{roleid:row.id}}).then((res)=>{
+      this.axios.get(control.tree,{params:{roleid:row.id}}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           for (var item of res.data.rows) {
@@ -341,17 +368,24 @@ export default {
     },
     /*====== 授权加载ztree树，节点被勾选时 ======*/
     zTreeOnCheck(event,treeId,treeNode){
-      var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
-        nodes=treeObj.getCheckedNodes(true);
-      for(var i=0;i<nodes.length;i++){
-        console.log("节点id:"+nodes[i].id); //获取选中节点的值
-        this.menuId.push(nodes[i].id)
+      this.menuId.length=0
+      console.log(treeNode)
+      let treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+      nodes=treeObj.getCheckedNodes(true);
+      console.log('nodes',nodes)
+      console.log('nodes.length',nodes.length)
+      if(nodes.length!=0){
+        for(let item of nodes){
+          console.log(item.id)
+          this.menuId.push(item.id)
+        }
+      }else{
+        this.menuId.length=0
       }
-      //console.log(this.controlData)
     },
     controlClick(){
-      console.log(this.roleId,this.menuId)
-      this.axios.post(controladd,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
+      console.log('选中值id',this.menuId)
+      this.axios.post(control.add,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           this.$message({
@@ -434,7 +468,7 @@ export default {
     },
     searchApi(value) {
       this.tableLoading = true;
-      this.axios.get(userroleselect, { params: value }).then(res => {
+      this.axios.get(powerControl, { params: value }).then(res => {
         console.log("查询分页的页数", res.data);
         if (res.data.state === true) {
           this.tableData = res.data.row; //获取返回数据
@@ -683,7 +717,6 @@ section.pagination {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
 }
 .ban {
   color: #ff5c3c;

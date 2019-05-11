@@ -1,23 +1,41 @@
 // 用来管理接口的域名相关
-var url = 'http://192.168.2.131:8088/'
- //var url = 'http://192.168.2.31:8088/'
- var imgurl = 'http://192.168.2.31:8090/'
- //var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.131:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
 
+var imgurl = 'http://192.168.2.31:8090/'
+//登陆页
+export const login = {
+  yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
+}
+export const powerControl=url+'authmodule/roleInformation/select' //权限表格查询
+//菜单页面
+export const menu = {
+  select:`${url}authmodule/menuInformation/select`,//菜单查询接口
+  add:`${url}authmodule/menuInformation/add`,//菜单添加接口
+  delete:`${url}authmodule/menuInformation/delete`,//菜单删除接口
+  type:`${url}basemodule/currency/sysTbDictCode/select`, //菜单类型接口
+  img:`${imgurl}filemodule/uploadFile/addMenu`, //图片上传接口
+  button:`${url}authmodule/menuInformation/currency/selectMenuById`, //点击节点发请求
+}
 // 首页
-var index = url + 'borrowmodule/history/'
 export const indexInt = {
-  borrow:`${index}selectTodayBorrow`,
-  return:`${index}selectTodayReturn`,
-  book:`${url}tibetmuseummodule/bookRFID/selectCount`,
-  record:`${url}borrowmodule/InAndOut/getFiveLog`,
-  fan:`${url}tibetmuseummodule/bookRFID/getFiveType`,
-  pillar:`${url}borrowmodule/history/selectSevenBorrowInfo`,
+  borrow:`${url}borrowmodule/index/selectTodayBorrow`,
+  return:`${url}borrowmodule/index/selectTodayReturn`,
+  book:`${url}tibetmuseummodule/index/selectCount`,
+  record:`${url}borrowmodule/index/getNewLog`,
+  fan:`${url}tibetmuseummodule/index/getHotType`,
+  pillar:`${url}borrowmodule/index/selectNearBorrowInfo`,
   cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`
 }
 
 // 权限模块的API
 // 权限管理模块
+export const control = {
+  tree:`${url}authmodule/currency/getAllMenuAndElement`,
+  add:`${url}authmodule/roleMenuElement/edit`, //权限添加
+}
+
 var userManage = url + 'authmodule/managerInformation/'
 var roleManage = url + 'authmodule/roleInformation/'
 var powerMangae = url + 'authmodule/roleMenuElement/'
@@ -50,16 +68,78 @@ export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限�
 
 
 // 图书模块
-var bookMode = url + 'tibetmuseummodule/TbookTbInfo/'
+var bookMode = url + 'tibetmuseummodule/libraryInformationManagementPage/'
 export const bookModeInt = {
   selectOne:`${bookMode}selectOne`,
   select:`${bookMode}select`
-
 }
-
+//图书出版社页面
+export const bookpublish = {
+  select:`${url}tibetmuseummodule/libraryPressManagementPage/select`,//图书出版社初始化查询接口
+  city:`${url}bookmodule/bookTbPress/selectCity `, //图书出版社城市信息
+  add:`${url}tibetmuseummodule/libraryPressManagementPage/add`, //图书出版社添加信息
+}
+//图书类型查询
+export const booktype = url + 'bookmodule/bookTbType/select' // 预览图片前缀
+//图书信息
+export const booknews = {
+  table:`${url}bookmodule/bookTbInfo/select`, //图书信息表格接口
+  grade:`${url}bookmodule/bookTbType/selectAllBookType`, //图书信息类型名称下拉接口
+}
+//馆内图书信息
+export const libbooknews = {
+  table:`${url}tibetmuseummodule/libraryInformationManagementPage/select`, //馆内图书信息查询
+  add:`${url}tibetmuseummodule/TbookTbInfo/add' //馆内图书信息添加`,
+  edit:`${url}tibetmuseummodule/libraryInformationManagementPage/edit`, //馆内图书信息修改下架状态
+  type:`${url}tibetmuseummodule/libraryBookTypeManagementPage/select`, //馆内图书类型查询
+}
+//图书登记
+export const libbookRegist = {
+  barcode:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectOneT`, //图书登记条码接口查详情
+  add:`${url}tibetmuseummodule/libraryBookRegistrationPage/add`, //图书登记添加
+  publish:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectPressTree`, //图书登记出版社
+  type:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectAllBookType`, //图书登记书籍类型
+}
+//图书位置绑定
+export const bookLocation = {
+  location:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/add`, //图书位置绑定
+  barcode:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectOneT`,//图书位置条码
+  tree:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectLocationTree`, //图书位置树
+}
+//藏馆信息
+export const libnews = {
+  add:`${url}bookmodule/booklib/add`, //藏馆信息
+  select:`${url}bookmodule/booklib/select`, //藏馆表格信息
+}
+//押金记录
+export const deposit = {
+  table:`${url}tibetmuseummodule/currency/depositRecord/select`,//查询表格
+  details:`${url}tibetmuseummodule/currency/depositRecord/selectDetails`,//押金记录详情
+  money:`${url}tibetmuseummodule/currency/depositRecord/add`, //押金充值
+}
+//逾期记录
+export const overdue = {
+  table:`${url}tibetmuseummodule/currency/expectLog/select`, //逾期查询表格
+  phone:`${url}tibetmuseummodule/currency/expectLog/selectUserPhone`, //逾期催还电话
+  history:`${url}tibetmuseummodule/currency/expectHistoryLog/select`, //逾期历史记录查询表格
+  money:`${url}tibetmuseummodule/currency/expectLog/overdueMon`, //逾期金额查询
+  make:`${url}tibetmuseummodule/currency/expectLog/handle` //逾期金额处理
+}
+//借阅记录
+export const loan = {
+  table:`${url}borrowmodule/log/select`, //借阅记录表格查询
+  history:`${url}borrowmodule/history/select`, //借阅历史记录
+}
+//失信记录
+export const dishonesty = {
+  table:`${url}tibetmuseummodule/loseLog/select`,//失信记录表格查询
+  revoke:`${url}tibetmuseummodule/loseLog/revoke`, //失信撤销操作
+  history:`${url}tibetmuseummodule/loseHistoryLog/select`//失信历史记录
+}
+//馆内图书类型
 /*------ 区域模块 ------*/
 //库房模块
-var store = url + 'regionmodule/store/'
+var store = url + 'regionmodule/areaManagementPage/store'
 export const storeInt = {
   select: `${store}select`,
   add: `${store}add`,
@@ -67,7 +147,7 @@ export const storeInt = {
   delete: `${store}delete`
 }
 //区模块
-var region = url + 'regionmodule/region/'
+var region = url + 'regionmodule/areaManagementPage/region'
 export const regionInt = {
   select: `${region}select`,
   add: `${region}add`,
@@ -75,6 +155,11 @@ export const regionInt = {
   delete: `${region}delete`,
   selectBind: `${region}selectBind`,
   bind: `${region}editBind`
+}
+//层架绑定
+export const layerFrame = {
+  tree:`${url}regionmodule/layerKidnappingBindingPage/selectTree`, //层架绑定树
+  save:`${url}regionmodule/layerKidnappingBindingPage/edit'`, //层架绑定修改
 }
 
 
@@ -114,10 +199,10 @@ export const borrowInt = {
   selectCode: `${borrow}selectOneByCode`,
   selectRfid: `${borrow}selectOneByRFID`
 }
-var bookOperate = url + 'borrowmodule/InAndOut/'
+var bookOperate = url + 'borrowmodule/'
 export const bookOperateInt = {
-  borrow: `${bookOperate}out`,
-  sell: `${bookOperate}in`
+  borrow: `${bookOperate}borrow/out`,
+  sell: `${bookOperate}return/in`
 
 }
 /*------ 通用接口 ------*/
@@ -133,8 +218,8 @@ export const selectRoleType = url + 'authmodule/roleInformation/currency/selectR
 export const cardReport = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReport' // 挂失
 export const cardReissue = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReissue' // 补办
 // 读者卡等级模块
-export const selectEffect = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBox' // 获取未被禁用的 没有被使用的 读者卡等级类型下拉框 
-export const selectAllDrop = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox' // 获取所有读者卡等级类型列表下拉框 
+export const selectEffect = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBox' // 获取未被禁用的 没有被使用的 读者卡等级类型下拉框
+export const selectAllDrop = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox' // 获取所有读者卡等级类型列表下拉框
 
 // 读者卡类型模块
 export const readerType = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectEffectiveDropBox' // 类型 部分

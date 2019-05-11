@@ -13,30 +13,30 @@
                  style="width: 700px;margin: 100px auto"
                  :label-position="labelPosition">
           <el-form-item label="名　　称 :　" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入名称" id="name"></el-input>
           </el-form-item>
           <el-form-item label="U　R　L :" prop="url">
             <el-input v-model="ruleForm.url" placeholder="请输入url"></el-input>
           </el-form-item>
-          <el-form-item label="I C O N : " prop="img" style="margin-top: 55px">
+          <el-form-item label="I C O N : " prop="img" style="margin-top: 55px;margin-left: 10px" label-width="90px">
             <div style="display: flex;flex-direction: row;margin-top: -30px">
               <div class="inputBox">
               <!-- 预览的图片 -->
                 <div v-if="src" class="preload">
                     <span class="close" @click="delet">
-                      <img src="../../base/img/menu/x.png" style="width: 15px;height: 15px" alt>
+                      <img src="../../base/img/currency/cuowu.png" style="width: 15px;height: 15px" alt>
                     </span>
                   <img :src="src" style="width:100px; height:100px;" alt="预览照片" id="icon">
                 </div>
                 <div style="width: 90px;height: 90px;margin-left: 4px;margin-top: 4px" @click="point">
                   <img class="defaultimage" style="width:50px; height:50px;margin-left: 20px;margin-top: 5px" v-if="!src" src="../../base/img/menu/tbhs.png" alt="user image">
                   <input type="file" accept="jpg/png" @change="getFile" enctype="multipart/form-data" ref="file" id="file">
-                  <p v-if="!src" style="position: absolute;top: 70px;left: 17px;font-size: 15px;color: lightgray;">选择图标</p>
+                  <p v-if="!src" style="position: absolute;top: 60px;left: 17px;font-size: 15px;color: lightgray;">选择图标</p>
                 </div>
               </div>
               <div class="inputBox" style="margin-left: 30px;position: relative">
                 <img src="../../base/img/menu/tbls.png" style="width:50px; height:50px;margin-left: 25px;margin-top: 10px">
-                <p style="position: absolute;top: 70px;left: 17px;font-size: 15px;color: lightgray">默认图标</p>
+                <p style="position: absolute;top: 60px;left: 17px;font-size: 15px;color: lightgray">默认图标</p>
                 <div style="background-color:white;width:100px; height:100px;position:absolute;top: 0;left: 0;display: none;border-radius: 5px" id="icon1">
                   <img :src="src1" style="width: 100px;height: 100px">
                 </div>
@@ -60,15 +60,23 @@
               <el-radio label="启用"></el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label=" 按 钮 集 : " prop="menuMsg" id="btn_select" style="display: none">
+          <el-form-item label=" 按 钮 集 : "  id="btn_select" style="display: none;margin-left: 10px" label-width="90px">
             <div class="myfont"  style="display: flex;flex-direction: row;position: relative">
               <img src="../../base/img/menu/tianjia.png" style="width: 25px;height: 25px;margin-top: -32px" @click="btn_type" >
-              <div style="margin-left: 30px;margin-top: -40px;" id="but_show">
-                <button style="width:70px;height: 26px;border-radius: 10px;border:1px solid lightgray;margin-left:10px;background-color:white" v-for="item of buttonNameData">{{item}}</button>
+              <div id="but_show">
+                <el-tag
+                  :key="tag.name"
+                  :type="tag.code"
+                  v-for="tag of dynamicTags"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)">
+                  {{tag.name}}
+                </el-tag>
               </div>
             </div>
           </el-form-item>
-          <el-button type="primary" round @click="save()" style="width: 200px;margin: 20px 250px">保存</el-button>
+          <el-button type="primary" round @click="save('ruleForm')" style="width: 200px;margin: 0px 250px">保存</el-button>
         </el-form>
         <div class="but_div" id="but_type_div">
           <div class="but_type_div">
@@ -76,18 +84,16 @@
               按钮集
             </div>
             <div style="background-color: white;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px">
-              <el-form ref="formButton"  :model="formButton" :rules="rulesButton" :ref="formButton" label-width="90px" :label-position="labelPosition" style="padding-left:70px;padding-bottom: 50px ;margin-top: 50px">
+              <el-form  :model="formButton" :rules="rulesButton" ref="formButton" label-width="90px" :label-position="labelPosition" style="padding-left:70px;padding-bottom: 50px ;margin-top: 50px">
                 <el-form-item label="元素名 : " prop="buttonName">
                   <el-input v-model="formButton.buttonName" placeholder="请输入按钮名称" style="width: 267px"></el-input>
                 </el-form-item>
-                <el-form-item label="元素类型 :" prop="buttonTypeCode">
-                  <el-select v-model="formButton.buttonTypeCode" clearable placeholder="请选择按钮类型" id="type" style="width: 267px;">
-                    <el-option v-for="item in butList" :key="item.value" :label="item.label" :value="item.code"></el-option>
-                  </el-select>
+                <el-form-item label="元素编码 :" prop="buttonTypeCode">
+                  <el-input v-model="formButton.buttonTypeCode" placeholder="请输入按钮编码" style="width: 267px"></el-input>
                 </el-form-item>
                 <div style="margin-top: 30px">
-                  <el-button type="primary" round @click="click_ok()" style="width: 150px;">确定</el-button>
-                  <el-button type="info" round @click="click_no()" style="width: 150px;margin-left: 50px">取消</el-button>
+                  <el-button type="primary" round @click="click_ok('formButton')" style="width: 150px;">确定</el-button>
+                  <el-button type="info" round @click="click_no('formButton')" style="width: 150px;margin-left: 50px">取消</el-button>
                 </div>
               </el-form>
             </div>
@@ -99,7 +105,8 @@
 </template>
 
 <script>
-import serialize from "../../base/js/yf/serialize";
+parent=null;
+import {menu,photoUrl} from '../../request/api/base.js'
 export default {
   name: "menu.vue",
   data() {
@@ -114,7 +121,7 @@ export default {
         state: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入名称', trigger: 'blur' },],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         url: [{ required: true, message: '请输入url', trigger: 'blur' }],
         menuType: [{required: true, message: '请选择菜单类型', trigger: 'change' }],
         menuCode: [{required: true, message: '请输入菜单编码', trigger: 'blur' }],
@@ -126,16 +133,14 @@ export default {
         buttonTypeCode:''
       },
       rulesButton:{
-        buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' },],
-        buttonTypeCode: [{ required: true, message: '请选择按钮类型', trigger: 'change' }],
+        buttonName: [{ required: true, message: '请输入按钮名称', trigger: 'blur' }],
+        buttonTypeCode: [{ required: true, message: '请输入按钮编码', trigger: 'blur' }],
       },
       isShow:false,
       formLoading:false,
       fullscreenLoading: false,
       zTree: [], //点击节点后节点上对应的值
       addZTreePid: 0, //点击节点添加按钮所对应节点的值
-      buttonData: [], //过滤相同的按钮后渲染在表单上按钮的元素
-      buttonNameData:[],
       //value2: "", //表单下拉列表的code值
       //value3: "", //按钮集下拉列表的code值
       selectList: [], //渲染表单下拉列表的数组
@@ -182,14 +187,13 @@ export default {
         }
       },//ztree加载配置
       zNodes: [],//ztree加载数据
-      treeName:null,
-      pId:null,
-      addButton:true,
+      dynamicTags:[],
       authTbMenuElementsEdit:[],//修改的按钮数组
       authTbMenuElementsAdd:[], //添加的按钮数组
       id:'',
-      parent:'',
-      click:''
+      pId:null,
+      click:'',
+      add:''
     };
   },
   computed:{
@@ -204,14 +208,16 @@ export default {
         iconDefault:this.photo ,
         iconSelected:'' ,
         fkMenuTypeCode: this.ruleForm.menuType,
-        fkParentMenuId: this.pId,
+        fkParentMenuId: parent,
         authTbMenuElements: this.authTbMenuElementsAdd
       };
-      //console.log(searchForm)
+      console.log(addData)
       return addData;
     },
     editForm() {
       // 传递给后端的搜索数据
+      console.log('ztree',this.zTree)
+      console.log('photo',this.photo)
       let editData = {
         id: this.zTree.id,
         fkParentMenuId: this.zTree.pId,
@@ -231,6 +237,24 @@ export default {
     },
   },
   methods: {
+    /*====== 表单所有元素重载 ======*/
+    formOverload(){
+      this.$refs[this.ruleForm].resetFields()
+      $("#btn_select").fadeOut()
+      this.src = "";
+      this.$refs.file.value = "";
+      $('#icon1').hide()
+      this.formButton.length=0
+      this.dynamicTags.length=0
+      this.zNodes.length=0
+      this.freshArea()
+    },
+    /*====== 移除按钮集按钮 ======*/
+    handleClose(tag) {
+      console.log('tag',tag)
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      console.log('this.dynamicTags',this.dynamicTags)
+    },
     /*====== zTree保持展开单一路径的实现 ======*/
     zTreeBeforeExpand(treeId, treeNode) {
       this.singlePath(treeNode);
@@ -264,53 +288,18 @@ export default {
       console.log(num)
       if(num==='list_menu'||num===''){
         $('#btn_select').fadeOut()
-
       }else if(num==='page_menu'){
         $('#btn_select').fadeIn()
       }
     },
-    /*====== 判断数组中是否有相同元素，有则给出提示 ======*/
-    findSame(arr) {
-      arr.sort();
-      for (var i = 0; i < arr.length - 1; i++) {
-        if (arr[i] == arr[i + 1]) {
-          //alert("包含相同元素，相同值为：" + arr[i]);
-          this.$alert('您已存在相同的按钮类型', '提示', {
-            confirmButtonText: '确定',
-          })
-          this.addButton=false //提示后不能添加
-          return true;
-        }
-      };
-      return false;
-    },
     /*====== 按钮弹框的确定按钮 ======*/
-    click_ok() {
+    click_ok(ruleButton) {
       console.log('按钮名称与类型',this.formButton.buttonTypeCode)
-      this.$refs[this.formButton].validate((valid) => {
+      this.$refs[ruleButton].validate((valid) => {
         if (valid) {
-          //alert('submit!');
-          this.buttonData.push(this.formButton.buttonTypeCode) //当元素名称和类型不为空时将元类型添加buttonData
-          this.findSame(this.buttonData) //当buttonData中有相同的类型时给出提示
-          this.buttonData = serialize.deteleObject(this.buttonData) //过滤buttonData相同的值
-          if(this.addButton==true){  //元素不为空能添加
-            this.buttonNameData.push(this.formButton.buttonName) //将按钮名字添加进buttonNameData中用来展示添加的按钮
-            this.authTbMenuElementsEdit.push({ //发送修改保存时添加的按钮
-              elmName: this.formButton.buttonName,
-              elmCode: this.formButton.buttonTypeCode,
-              fkElmCode: this.formButton.buttonTypeCode,
-              fkMenuId: this.zTree.id
-            });
-            this.authTbMenuElementsAdd.push({ //发送添加保存时添加的按钮
-              elmName: this.formButton.buttonName,
-              elmCode: this.formButton.buttonTypeCode,
-              fkElmCode: this.formButton.buttonTypeCode
-            });
-            $("#but_type_div").fadeOut();//添加完成后按钮弹框消失
-          }
-          //console.log(this.buttonData)
-          this.addButton=true //按钮添加完成后使其可继续添加
-          this.formButton={} //清空添加按钮的数组
+          this.dynamicTags.push({name:this.formButton.buttonName,code:this.formButton.buttonTypeCode}) //将按钮名字添加进buttonNameData中用来展示添加的按钮
+          $("#but_type_div").fadeOut();//添加完成后按钮弹框消失
+          this.$refs[ruleButton].resetFields(); //清空添加按钮的数组
         } else {
           console.log('error submit!!');
           return false;
@@ -318,35 +307,15 @@ export default {
       });
     },
     /*====== 按钮弹框的取消按钮 ======*/
-    click_no() {
+    click_no(ruleButton) {
       $("#but_type_div").fadeOut(); //添加完成后按钮弹框消失
-      this.$refs[this.formButton].resetFields();
+      this.$refs[ruleButton].resetFields();
     },
     /*====== 点击按钮集添加按钮出现元素集弹框发送请求加载按钮类型下拉框数据 ======*/
-    btn_type() {
-      $("#but_type_div").fadeIn();
-      var list = [];
-      this.axios
-        .get(menutypeurl, { params: { type: "element" } })
-        .then(function(request) {
-          //console.log(request)
-          for (var item of request.data.row) {
-            //console.log(item)
-            list.push({
-              value: item.id,
-              label: item.name,
-              code: item.code,
-              fkcode: item.fkDictTypeCode
-            });
-            //console.log(list)
-          }
-        });
-      this.butList = list;
-      //console.log(this.butList)
-    },
+    btn_type() {$("#but_type_div").fadeIn();},
     /*====== 左侧ztree树结构的加载 ======*/
     async freshArea() {
-      this.axios.get(menuselecturl).then((response)=>{
+      this.axios.get(menu.select).then((response)=>{
         console.log(response)
         if(response.data.state=true){
           for (var item of response.data.row) {
@@ -376,69 +345,77 @@ export default {
       if (treeNode.id === undefined) {
         this.$message({
           message: "删除成功",
-          type: "warning"
+          type: "success"
         });
+        this.formOverload()
       } else {
-        var str = { deleteParam: [{ id: treeNode.id }] };
-        this.axios.delete(menudeleteurl, { data: str }).then(response => {
-          //console.log(response)
+        let str = { deleteParam: [{ id: treeNode.id }] };
+        this.axios.delete(menu.delete, { data: str }).then(response => {
+          console.log(response)
           if (response.data.state == true) {
             this.$message({
               message: response.data.msg,
               type: "success"
             });
+            this.formOverload()
           } else {
             this.$message({
               message: response.data.msg,
               type: "error"
             });
-            this.zNodes.length=0
-            this.freshArea()
           }
         });
       }
     },
     /*====== ztree点击节点将节点信息放入表单显示 ======*/
     zTreeOnClick(e, treeId, treeNode) {
-      console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
+      this.src = "";
+      this.$refs.file.value = "";
+      //console.log('获取点击节点的id和父id',treeNode.id,treeNode.pId)
+      console.log('获取节点信息',treeNode.id)
       this.id = treeNode.id; //点击节点时节点自己的id
       this.click = 'click' //是否点击的赋值
-      this.buttonNameData.length=0
-      $("#btn_select").fadeOut()
-        this.axios.get(menubutton, {params: {id: treeNode.id}}).then((res) => {
+      //$("#btn_select").fadeOut()
+      if(treeNode.id==undefined){
+        for (var i in this.ruleForm) {
+          this.ruleForm[i] = "";
+        }
+        this.ruleForm.name=treeNode.name
+        $('#name').focus()
+      }
+        this.dynamicTags.length=0
+        this.axios.get(menu.button, {params: {id: treeNode.id}}).then((res) => {
           console.log('查询节点的信息',res)
           if (res.data.state == true) {
-            this.$message({
-              message: res.data.msg,
-              type: "success"
-            });
+            if(res.data.row.authTbMenu.fkMenuTypeCode=="list_menu"){
+              $('#btn_select').fadeOut()
+            }else{
+              $('#btn_select').fadeIn()
+              if(res.data.row.authTbMenuElements){
+                this.dynamicTags.length=0
+                for (let item of res.data.row.authTbMenuElements) {
+                  //console.log('已存在的按钮',item)
+                  this.dynamicTags.push({name:item.elmName,code:item.elmCode})
+                }
+              }
+            }
             this.ruleForm.name = res.data.row.authTbMenu.menuName;
             this.ruleForm.url = res.data.row.authTbMenu.menuHref;
-            if(res.data.row.authTbMenu.fkMenuTypeCode=='list_menu'){
-              $('#btn_select').fadeOut()
-            }else if(res.data.row.authTbMenu.fkMenuTypeCode=='page_menu'){
-              $('#btn_select').fadeIn()
-            }
             this.ruleForm.menuType = res.data.row.authTbMenu.fkMenuTypeCode;
             this.ruleForm.menuCode = res.data.row.authTbMenu.menuCode;
             this.ruleForm.menuMsg = res.data.row.authTbMenu.menuDescribe;
             this.ruleForm.state = res.data.row.authTbMenu.disabled == 1 ? '禁用' : '启用'
-            this.src1 = 'http://192.168.2.121:8088/authmodule/menuInformation/getImg?id=' + treeNode.id //展示节点图片
-            $('#icon1').show() //点击节点是显示,否则隐藏
-            this.zTree = treeNode //将点击节点后的节点信息给treeNode
-            $('#btn_select').fadeIn()
-            this.buttonData.length=0
-            console.log('已存在的按钮1',res.data.row.authTbMenuElements)
-            for (let item of res.data.row.authTbMenuElements) {
-              console.log('已存在的按钮',item)
-              this.buttonData.push(item.elmCode)
-              this.buttonNameData.push(item.elmName)
+            if(res.data.row.authTbMenu.iconDefault==null||res.data.row.authTbMenu.iconDefault==''){
+              $('#icon1').hide()
+            }else{
+              $('#icon1').show()
+              this.src1 = photoUrl+res.data.row.authTbMenu.iconDefault //展示节点图片
             }
-            //console.log(this.buttonData)
-          } else {
-            this.$message.error(res.data.msg);
+            this.zTree = treeNode //将点击节点后的节点信息给treeNode
+            console.log('已存在的按钮1',res.data.row.authTbMenuElements)
           }
         })
+      console.log('类表',this.ruleForm.menuType)
     },
     /*====== ztree节点添加按钮做添加操作 ======*/
     addHoverDom(treeId, treeNode) {
@@ -459,18 +436,19 @@ export default {
         sObj.after(addStr);
         var btn = $("#addBtn_" + treeNode.tId);
         //console.log('btn',btn)
-        if (btn)
-          this.$refs[this.ruleForm].resetFields()
+        if (btn){
           btn.bind("click", { paramName: treeNode }, function(e) {
             //console.log(this.zNodes)
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var newNode = { name: "newNode1" };
             newNode = treeObj.addNodes(treeNode, newNode);
             console.log('添加按钮'+treeNode.id)
-            this.parent = treeNode.id;
-            this.click = "add";
+            parent = treeNode.id;
+            console.log('this.pId',parent)
+            this.add = "add";
             return false;
           });
+        }
       }
     },
     /*====== ztree移除节点添加按钮消失 ======*/
@@ -481,37 +459,52 @@ export default {
     },
     /*====== 点击保存按钮发送修改或添加的请求 ======*/
     save() {
-      console.log(this.zNodes)
-      this.pId=this.parent
-      console.log('父id：'+this.pId)
+      console.log('this.zTree.id',this.zTree.id)
+      //console.log('this.click',this.click)
+      this.authTbMenuElementsAdd.length=0
+      this.authTbMenuElementsEdit.length=0
+      for(let item of this.dynamicTags){
+        console.log('item',item)
+        this.authTbMenuElementsAdd.push({ //发送添加保存时添加的按钮
+          elmName: item.name,
+          elmCode: item.code,
+          fkElmCode: item.code
+        })
+        this.authTbMenuElementsEdit.push({ //发送添加保存时添加的按钮
+          elmName: item.name,
+          elmCode: item.code,
+          fkElmCode: item.code,
+          fkMenuId: this.zTree.id
+        })
+      }
+      //console.log('this.authTbMenuElementsAdd',this.authTbMenuElementsAdd)
+      //console.log('this.authTbMenuElementsEdit',this.authTbMenuElementsEdit)
       let files = this.formdata;
       //console.log(files)
       var formdatas = new FormData();
       formdatas.append("file", files);
       //console.log(formdatas.get('file'))
-      if (click === undefined) {
-        this.$alert("请选择您要添加或修改的内容", {
-          confirmButtonText: "确定"
-        });
+      if (this.click ==false) {
+        this.$message.error('请选择您要添加或修改的内容');
         return;
       } else {
-        if (id === undefined) {
+        if (this.id === undefined) {
           this.$refs[this.ruleForm].validate((valid) => {
             if (valid) {
-              console.log('submit!');
+              console.log('添加');
               this.addApi(this.addForm)
             } else {
-              console.log('error submit!!');
+              console.log('添加失败');
               return false;
             }
           });
         } else {
           this.$refs[this.ruleForm].validate((valid) => {
             if (valid) {
-              console.log('submit!');
+              console.log('修改');
               this.editApi(this.editForm)
             } else {
-              console.log('error submit!!');
+              console.log('修改失败');
               return false;
             }
           });
@@ -520,30 +513,24 @@ export default {
     },
     addApi(value){
       this.formLoading=true
-      this.axios.post(menuaddurl, value).then((request) => {
+      this.axios.post(menu.add, value).then((request) => {
         console.log(request);
         if (request.data.state == true) {
           this.$message({
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].resetFields()
-          $("#btn_select").fadeOut()
           this.formLoading=false
-          this.formButton.length=0
-          this.buttonData.length=0
-          this.zNodes.length=0
-          this.freshArea()
+          this.formOverload()
         } else {
           this.$message.error(request.data.msg);
           this.formLoading=false
-          this.buttonData.length=0
         }
       });
     },
     editApi(value){
       this.formLoading=true
-      this.axios.post(menuaddurl, value).then((request) => {
+      this.axios.post(menu.add, value).then((request) => {
         this.zNodes.length=0
         console.log(request);
         if (request.data.state == true) {
@@ -551,17 +538,11 @@ export default {
             message: request.data.msg+',可展开查看！',
             type: "success"
           });
-          this.$refs[this.ruleForm].resetFields()
-          $("#btn_select").fadeOut()
           this.formLoading=false
-          this.formButton.length=0
-          this.buttonData.length=0
-          this.zNodes.length=0
-          this.freshArea()
+          this.formOverload()
         } else {
           this.$message.error(request.data.msg);
           this.formLoading=false
-          this.buttonData.length=0
         }
       });
     },
@@ -582,7 +563,7 @@ export default {
       //console.log(formdatas.get('file'))
       this.axios({
         method: "post",
-        url: menuimg,
+        url: menu.img,
         data: formdatas,
         //cache: false,//上传文件无需缓存
         processData: false, //用于对data参数进行序列化处理 这里必须false
@@ -595,7 +576,7 @@ export default {
           return
         }else{
           this.photo=request.data.row
-          alert(1111)
+          //alert(1111)
           console.log(this.photo)
         }
       });
@@ -613,10 +594,10 @@ export default {
     /*====== 菜单类型下拉框数据 ======*/
     var list = [];
     this.axios
-      .get(menutypeurl, { params: { type: "menu" } })
+      .get(menu.type, { params: { type: "menu" } })
       .then(function(request) {
         //console.log(request)
-          for (var item of request.data.row) {
+          for (let item of request.data.row) {
             //console.log(item)
             list.push({ value: item.id, label: item.name, menuType: item.code });
           }
@@ -626,6 +607,16 @@ export default {
 };
 </script>
 <style scoped>
+  #but_show{
+    margin-left: 30px;
+    margin-top: -40px;
+    width: 550px;
+    height:70px;
+    overflow-x: auto;
+  }
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
   input[type="text"]{
     border: 1px solid #dcdfe6;
     width: 598px;
@@ -746,8 +737,8 @@ input[type="radio"] {
 }
 .close {
   position: absolute;
-  left: 90px;
-  top: -3px;
+  left: 85px;
+  top: -10px;
   cursor: pointer;
   font-size: 10px;
 }

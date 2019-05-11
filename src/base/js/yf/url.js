@@ -1,7 +1,11 @@
+//url='http://192.168.2.131:8088/'
+var url = 'http://192.168.2.31:8088/'
+//url='http://192.168.2.121:8088/';
 
-//var url = 'http://192.168.2.31:8088/'
-url='http://192.168.2.121:8088/';
-//
+
+/*上传地址*/
+fileUrl='http://192.168.2.31'
+
 /*登陆页面接口*/
   loginurl=url+'authmodule/index/login' ;//登陆接口
   yzmurl=url+'authmodule/index/imgVerification?' ;//验证码接口
@@ -10,10 +14,8 @@ url='http://192.168.2.121:8088/';
   menuselecturl=url+'authmodule/menuInformation/select' ;//菜单查询接口
   menuaddurl=url+'authmodule/menuInformation/add' ;//菜单添加接口
   menudeleteurl=url+'authmodule/menuInformation/delete' ;//菜单删除接口
-  menuediturl=url+'authmodule/menuInformation/edit' //菜单修改接口
   menutypeurl=url+'basemodule/currency/sysTbDictCode/select' //菜单类型接口
-  menuimg=url+'filemodule/currency/uploadFile/addHead' //图片上传接口
-  menugetimg=url+'authmodule/menuInformation/currency/getImg?id='//图片显示
+  menuimg=fileUrl+':8090/filemodule/uploadFile/addMenu' //图片上传接口
   menubutton=url+'authmodule/menuInformation/currency/selectMenuById' //点击节点发请求
 /*角色页面接口*/
   userroleselect=url+'authmodule/roleInformation/select' //角色管理查询
@@ -21,13 +23,11 @@ url='http://192.168.2.121:8088/';
   userrole=url+'authmodule/roleInformation/currency/addSelectRole'//上级下拉框查询接口
   userroleedit=url+'authmodule/roleInformation/edit' //角色修改接口
   userroledelete=url+'authmodule/roleInformation/delete' //角色批量删除接口
-
-
 /*图书出版社页面接口*/
-  bookurlselect=url+'bookmodule/bookTbPress/select'//图书出版社初始化查询接口
+  bookurlselect=url+'tibetmuseummodule/libraryPressManagementPage/select'//图书出版社初始化查询接口
   bookurlcity=url+'bookmodule/bookTbPress/selectCity ' //图书出版社城市信息
-  bookpublishhouse=url+'bookmodule/bookTbPress/add' //图书出版社添加信息
-  cityselect=url+'bookmodule/bookTbPress/select' //城市信息查询表格
+  bookpublishhouse=url+'tibetmuseummodule/libraryPressManagementPage/add' //图书出版社添加信息
+  cityselect=url+'tibetmuseummodule/libraryPressManagementPage/selectCity' //城市信息查询表格
 /*图书类型接口*/
   bookurltype=url+'bookmodule/bookTbType/select' //图书类型表格接口
 /*图书信息页面接口*/
@@ -36,25 +36,25 @@ url='http://192.168.2.121:8088/';
   bookurlimg=url+'filemodule/currency/uploadFile/addBackage' //图书封面上传
   bookurladd=url+'bookmodule/bookTbInfo/add' //图书添加接口
 /*馆内图书信息*/
-  libbook=url+'tibetmuseummodule/TbookTbInfo/select' //馆内图书信息查询
+  libbook=url+'tibetmuseummodule/libraryInformationManagementPage/select' //馆内图书信息查询
   libbookadd=url+'tibetmuseummodule/TbookTbInfo/add' //馆内图书信息添加
-  libbookedit=url+'tibetmuseummodule/TbookTbInfo/edit' //馆内图书信息修改下架状态
-  libbooktype=url+'tibetmuseummodule/TbookTbType/select' //馆内图书类型查询
+  libbookedit=url+'tibetmuseummodule/libraryInformationManagementPage/edit' //馆内图书信息修改下架状态
+  libbooktype=url+'tibetmuseummodule/libraryBookTypeManagementPage/select' //馆内图书类型查询
 /*图书登记*/
-  bookRegist=url+'tibetmuseummodule/TbookTbInfo/selectOne' //图书登记ISBN接口查详情
-  bookRegistadd=url+'tibetmuseummodule/TbookTbInfo/add' //图书登记添加
-  bookRegistlib=url+'tibetmuseummodule/TbookTbPress/select' //图书登记出版社
-  bookRegisttype=url+'tibetmuseummodule/TbookTbType/selectAllBookType' //图书登记书籍类型
+  bookRegist=url+'tibetmuseummodule/libraryBookRegistrationPage/selectOneT' //图书登记ISBN接口查详情
+  bookRegistadd=url+'tibetmuseummodule/libraryBookRegistrationPage/add' //图书登记添加
+  bookRegistlib=url+'tibetmuseummodule/libraryBookRegistrationPage/selectPressTree' //图书登记出版社
+  bookRegisttype=url+'tibetmuseummodule/libraryBookRegistrationPage/selectAllBookType' //图书登记书籍类型
 /*权限页面*/
   controlurl=url+'authmodule/currency/getAllMenuAndElement'
   controladd=url+'authmodule/roleMenuElement/edit' //权限添加
 /*层架绑定*/
-  layerFramezTree=url+'regionmodule/location/selectTree' //层架绑定树
-  layerFrameSave=url+'regionmodule/location/edit' //层架绑定修改
+  layerFramezTree=url+'regionmodule/layerKidnappingBindingPage/selectTree' //层架绑定树
+  layerFrameSave=url+'regionmodule/layerKidnappingBindingPage/edit' //层架绑定修改
 /*图书位置绑定*/
-  booklocation=url+'tibetmuseummodule/bookRFID/add' //图书位置绑定
-  booklocationbarcode=url+'tibetmuseummodule/TbookTbInfo/selectOneT'//图书位置条码
-  booklocationztree=url+'regionmodule/location/selectTree' //图书位置树
+  booklocation=url+'tibetmuseummodule/bindingPagesForBookLocationsInLibraries/add' //图书位置绑定
+  booklocationbarcode=url+'tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectOneT'//图书位置条码
+  booklocationztree=url+'tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectLocationTree' //图书位置树
 /*藏馆信息*/
   libinfo=url+'bookmodule/booklib/add' //藏馆信息
   libinfotable=url+'bookmodule/booklib/select' //藏馆表格信息
@@ -71,5 +71,7 @@ url='http://192.168.2.121:8088/';
 /*借阅记录*/
   loanrecord=url+'borrowmodule/log/select' //借阅记录表格查询
   loanHistory=url+'borrowmodule/history/select' //借阅历史记录
-/*借书*/
-  borrowBook=url+'borrowmodule/InAndOut/out'//借书
+/*失信记录*/
+  dishonestyRecords=url+'tibetmuseummodule/loseLog/select'//失信记录表格查询
+  dishonestyRevoke=url+'tibetmuseummodule/loseLog/revoke' //失信撤销操作
+  dishonestyHistory=url+'tibetmuseummodule/loseHistoryLog/select'//失信历史记录

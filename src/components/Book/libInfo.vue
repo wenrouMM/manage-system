@@ -2,7 +2,7 @@
   <div id="bookpublishhouse" style="">
     <div style="display: flex;flex-direction: row;height: 952px" id="mybook">
       <div style="background-color:white;width:250px;height:952px;display: flex;flex-direction:column;overflow-y: auto">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
+        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">藏馆信息</div>
         <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
@@ -42,23 +42,34 @@
                       <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="name" width="200" label="藏馆名称"></el-table-column>
+                  <el-table-column align="center" prop="name" width="200" label="藏馆名称" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="fkCityName" width="200" label="城市名字"></el-table-column>
-                  <el-table-column align="center" prop="libraryKey" width="200" label="密钥"></el-table-column>
+                  <el-table-column align="center" prop="libraryKey" width="200" label="密钥" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="creatTime" width="230" label="创建时间"></el-table-column>
                   <el-table-column align="center" prop="updateTime" width="230" label="更新时间"></el-table-column>
                 </el-table>
                 <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
                 <section class="pagination mt_30">
                   <el-pagination
+                    style="display: inline-block"
                     background
-                    layout="prev, pager, next,total, jumper, ->"
+                    layout="prev, pager, next,total,slot"
                     :total="total"
                     :page-size="pageSize"
                     :current-page="currentPage"
                     @current-change="current_change"
-                  ></el-pagination>
-                  <span class="pagaButton">确定</span>
+                  >
+                    <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                    </slot>
+                  </el-pagination>
+                  <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
                 </section>
               </section>
             </div>
@@ -88,6 +99,7 @@
 </template>
 
 <script>
+  import {bookpublish,libnews} from '../../request/api/base.js'
   export default {
     data() {
       return {
@@ -136,6 +148,7 @@
         labelPosition:'left',
         total: 0,
         pageSize: 10,
+        pageInput: 1,
         currentPage: 1,
         paginationForm: {},
         centerDialogVisible: false, // 禁用弹框
@@ -171,19 +184,51 @@
         addmessage:''
       };
     },
+    computed:{
+      searchTimeForm() {
+        // 计算属性 真正传递的数据
+        console.log('ztree',this.zTree.code)
+        let citynameCode=''
+        if(this.zTree.code==undefined){
+          citynameCode='bj_jing'
+        }else{
+          citynameCode=this.zTree.code
+        }
+        let searchForm = {
+          pageSize: this.pageSize,
+          current:1,
+          cityCode:citynameCode
+        };
+        return searchForm;
+      },
+    },
     methods: {
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
+      },
       closeForm(){
-        this.addmessage=''
+        //this.addmessage=''
       },
       /*====== 3.0添加删除相关操作 ======*/
       addDialogOpen() {
         console.log(this.zTree.code)
         this.dialogFormVisible = true;
-        this.addmessage='show'
       },
       /*====== 3.1ztree城市树状图 ======*/
       async freshArea() {
-        this.axios.get(bookurlcity).then((response)=>{
+        this.axios.get(bookpublish.city).then((response)=>{
           console.log('ztree树',response)
           for (var item of response.data.row) {
             this.zNodes.push({
@@ -196,40 +241,51 @@
           $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
         })
       },
-      /*====== 3.1点击ztree节点获取节点信息======*/
-      zTreeOnClick(event, treeId, treeNode){
-        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        treeObj.checkNode(treeNode, !treeNode.checked, true);
-        console.log(treeNode.name,treeNode.code)
-        var list={
+      zTreeOnCheck(event,treeId,treeNode){
+        console.log('treeNode',treeNode.checked)
+        if(treeNode.checked==false){
+          let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+          treeObj.checkNode(treeNode, !treeNode.checked, true);
+        }
+        let list={
           name:treeNode.name,
           code:treeNode.code
         }
         this.zTree=list
-        if(this.addmessage!=''){
-          this.dialogFormVisible=true
-        }else{
-          let cityCode={cityCode:this.zTree.code}
-          this.tableApi(cityCode)
+        this.SearchApi(this.searchTimeForm)
+      },
+      /*====== 3.1点击ztree节点获取节点信息======*/
+      zTreeOnClick(event, treeId, treeNode){
+        if(treeNode.checked==false){
+          let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+          treeObj.checkNode(treeNode, !treeNode.checked, true);
         }
+        let list={
+          name:treeNode.name,
+          code:treeNode.code
+        }
+        this.zTree=list
+        this.SearchApi(this.searchTimeForm)
       },
       /*====== 弹框相关函数 ======*/
       // 编辑弹框
       submitForm() {
         console.log('ztree树节点信息',this.zTree.code)
-        if(this.zTree.code==undefined){
-          this.formApi('北京市','bj_jing')
-        }else{
-          this.formApi(this.zTree.name,this.zTree.code)
-        }
+        this.$refs[this.addForm].validate((valid) => {
+          if (valid) {
+            //alert('submit!');
+            if(this.zTree.code==undefined){
+              this.formApi('北京市','bj_jing')
+            }else{
+              this.formApi(this.zTree.name,this.zTree.code)
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       formApi(ztreeName,ztreeCode){
-        let citynameCode=''
-        if(this.zTree.code==undefined){
-          citynameCode='bj_jing'
-        }else{
-          citynameCode=this.zTree.code
-        }
         var addStr=[{
           fkCityCode:ztreeCode,
           fkCityName:ztreeName,
@@ -237,7 +293,7 @@
           name:this.addForm.name,
           libraryKey:this.addForm.key
         }]
-        this.axios.post(libinfo,addStr).then((res)=>{
+        this.axios.post(libnews.add,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -246,8 +302,7 @@
             });
             this.closeForm()
             this.dialogFormVisible=false
-            let cityName={cityCode:citynameCode}
-            this.tableApi(cityName)
+            this.SearchApi(this.searchTimeForm)
           }else{
             this.$message({
               message: res.data.msg,
@@ -260,10 +315,33 @@
         this.$refs[this.addForm].resetFields();
         this.addmessage=''
       },
-      tableApi(value){
+      SearchApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(libinfotable, {
+          .get(libnews.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("当前获取的数据", res.data);
+            if (res.data.state === true) {
+              let nomol = res.data.row;
+              this.tableData = nomol; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              console.log("过滤后的数据", nomol);
+              this.currentPage = 1
+              console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+      },
+      paginationApi(value){
+        this.tableLoading= true; // 加载前控制加载状态
+        this.axios
+          .get(libnews.select, {
             params: value
           })
           .then(res => {
@@ -282,17 +360,17 @@
             }
           })
       },
+
       current_change: function(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm);
-        this.tableApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
     },
     mounted(){
-      let defaultBJ={cityCode:'bj_jing'}
-      this.tableApi(defaultBJ)
+      this.SearchApi(this.searchTimeForm)
       this.freshArea()
     }
   };

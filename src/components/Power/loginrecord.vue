@@ -228,7 +228,7 @@
           let num = parseInt(this.pageInput)
           this.current_change(num)
         }
-      }
+      },
     },
     mounted () {
       this.login_recod(this.searchTimeForm) // 调用查询接口获取数据

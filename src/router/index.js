@@ -51,7 +51,8 @@ import OverdueSetting from '../components/Reader/OverdueManagement/overduesettin
 import IncreditRecord from '../components/Reader/IncreditManagement/increditRecord.vue'
 import IncreditHistory from '../components/Reader/IncreditManagement/incredithistory.vue'
 import IncreditSetting from '../components/Reader/IncreditManagement/increditsettings.vue'
-
+import DishonestyRecords from '../components/Reader/DishonestyManagement/dishonestyRecords'
+import DishonestyHistory from '../components/Reader/DishonestyManagement/dishonestyHistory'
 import Login from '@/components/login.vue'
 import Detail from '../components/Book/detail.vue'
 import LibDetail from '../components/Reader/libDetail.vue'
@@ -363,7 +364,15 @@ export default new Router({
             {
               path:'/IncreditSetting',
               component:IncreditSetting
-            }
+            },
+            {
+              path:'/DishonestyRecords',
+              component:DishonestyRecords
+            },
+            {
+              path:'/DishonestyHistory',
+              component:DishonestyHistory
+            },
           ]
         }
       ]

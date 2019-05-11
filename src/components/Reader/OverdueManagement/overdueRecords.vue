@@ -7,7 +7,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期天数</span>
+            <span class="titleName">逾期记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -29,48 +29,46 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column width="120" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="180" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" width="180" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" width="180" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" width="180" label="书名"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" width="200" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" width="200" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" width="200" label="书名"></el-table-column>
               <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueAlreadyDay" width="150" label="逾期天数"></el-table-column>
-              <el-table-column align="center" label="操作" width="150">
-                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                <template slot-scope="scope">
-                  <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
-                  <span class="edit" @click="handleBan(scope.$index, scope.row)">处理</span>
-                </template>
-              </el-table-column>
+              <el-table-column align="center" prop="overdueAlreadyDay" width="200" label="逾期天数"></el-table-column>
+              <el-table-column align="center" label="操作" width="200">
+              <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+              <template slot-scope="scope">
+                <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
+                <span class="edit" @click="handleBan(scope.$index, scope.row)">处理</span>
+              </template>
+            </el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
           <div class="forbid">
@@ -94,6 +92,7 @@
 </template>
 
 <script>
+  import {overdue} from '../../../request/api/base.js'
   export default {
     data() {
       return {
@@ -110,6 +109,7 @@
         /*====== 4.0表格设置项 ======*/
         total: 0,
         pageSize: 10,
+        pageInput:1,
         currentPage: 1,
         searchForm: {
           // 搜索需要的表单数据
@@ -143,9 +143,24 @@
       },
     },
     methods: {
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
+      },
       submitDialog(){
         console.log(this.id)
-        this.axios.post(overduemake,{id:this.id}).then((res)=>{
+        this.axios.post(overdue.make,{id:this.id}).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -181,7 +196,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(overdueRecords, {
+          .get(overdue.table, {
             params: value
           })
           .then(res => {
@@ -208,7 +223,7 @@
         this.i=0
         this.phone=''
         console.log(row)
-        this.axios.get(overduePhone,{params:{id:row.id}}).then((res)=>{
+        this.axios.get(overdue.phone,{params:{id:row.id}}).then((res)=>{
           console.log(res)
           if(res.data.state=true){
             this.phone=res.data.row.phone
@@ -228,7 +243,7 @@
         this.id=row.id
         this.i=1
         this.overdueMoney=''
-        this.axios.get(overdueMoney,{params:{id:row.id}}).then((res)=>{
+        this.axios.get(overdue.money,{params:{id:row.id}}).then((res)=>{
           console.log(res)
           if(res.data.state=true){
             this.overdueMoney=res.data.row

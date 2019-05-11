@@ -9,7 +9,6 @@ import '../src/base/css/zyf.css'
 import '../src/base/css/common.css'
 import '../src/base/css/spReset.css'
 import axios from 'axios'
-import '../src/base/js/yf/url'
 import '../src/base/js/yf/jquery'
 import '../src/base/js/yf/jquery.flot'
 import '../src/base/js/yf/validate'
@@ -30,7 +29,7 @@ router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let menu = JSON.parse(sessionStorage.getItem('menu'))
-  
+
   if(to.path === '/login'){
     if(token&&userInfo&&menu){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
       if(store.state.token == null){ // 还有个bug

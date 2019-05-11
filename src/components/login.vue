@@ -27,7 +27,7 @@
 
 <script>
 import axios from 'axios'
-import {loginInter} from '../request/api/base.js'
+import {loginInter,login} from '../request/api/base.js'
   export default {
     name: "login.vue",
     data:function(){
@@ -37,6 +37,8 @@ import {loginInter} from '../request/api/base.js'
           password:'',
           yzm:'',
         },
+        isLand:null,
+        clickNum:0,
       }
     },
     methods:{
@@ -49,48 +51,70 @@ import {loginInter} from '../request/api/base.js'
           $('#pwd').attr('type','text')
         }else if($('#pwd').attr('type')=='text'){
           $('#pwd').attr('type','password')
-
         }
       },
       submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
         console.log('???执行了没')
-        axios.post(loginInter ,({account:this.form.name,
-          password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
-          console.log(res)
-          if(res.data.state==true){ // 获取数据后进行存取操作
-            var token=res.data.row.authorization // 获取token
-            var userInfo = JSON.stringify(res.data.row.authTbManager)
-            var menu = JSON.stringify(res.data.row.roleModularMenus)
-    
-            sessionStorage.setItem('token',token)
-            sessionStorage.setItem('userInfo',userInfo)
-            sessionStorage.setItem('menu',menu)
-            this.$store.commit('setToken',token)
-            this.$store.commit('setUserInfo',userInfo)
-            this.$store.commit('setMenu',menu)
-            // 获取路由信息
-            // 过滤生成动态路由
-            // 过滤生成权限菜单信息
-            // 存储动态路由
-            // 存储权限带单信息
-            this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
-          }else{
-            if($('#name').val()&&$('#pwd').val())
-              $('#msg').html(res.data.msg)
-            if(res.data.row>2){
-              $('#yzm').show()
-              $('#imgYzm').attr("src",yzmurl+Math.random());
+        console.log('name',$('#name').val())
+        console.log('pwd',$('#pwd').val())
+        if($('#name').val()&&$('#pwd').val()){
+          $('#msg').html('');
+          console.log('登陆')
+          this.clickNum++
+          axios.post(loginInter ,({account:this.form.name,
+            password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
+            console.log(res)
+            if(res.data.state==true){ // 获取数据后进行存取操作
+              this.isLand=true
+              var token=res.data.row.authorization // 获取token
+              var userInfo = JSON.stringify(res.data.row.authTbManager)
+              var menu = JSON.stringify(res.data.row.roleModularMenus)
+
+              sessionStorage.setItem('token',token)
+              sessionStorage.setItem('userInfo',userInfo)
+              sessionStorage.setItem('menu',menu)
+              this.$store.commit('setToken',token)
+              this.$store.commit('setUserInfo',userInfo)
+              this.$store.commit('setMenu',menu)
+              // 获取路由信息
+              // 过滤生成动态路由
+              // 过滤生成权限菜单信息
+              // 存储动态路由
+              // 存储权限带单信息
+              this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
+            }else{
+              if($('#name').val()&&$('#pwd').val())
+                $('#msg').html(res.data.msg)
+              if(res.data.row>2){
+                $('#yzm').show()
+                $('#imgYzm').attr("src",yzmurl+Math.random());
+              }
             }
+          })
+          if(this.clickNum>2){
+            $('#msg').html('连接出错，请检查您的网络')
           }
-        })
+          var landTime=setTimeout(()=>{
+            if(this.isLand==null){
+              $('#msg').html('连接出错，请检查您的网络')
+            }
+          },5000)
+          clearTimeout(landTime)
+        }else if($('#name').val()==false&&$('#pwd').val()==false){
+          $('#msg').html('请先输入用户名和密码');
+        }else if($('#name').val()&&$('#pwd').val()==false){
+          $('#msg').html('密码不能为空');
+        }else if($('#name').val()==false&&$('#pwd').val()){
+          $('#msg').html('用户名不能为空');
+        }
       },
     },
     mounted:function(){ // 二维码的获取
-      axios.post( rowurl ,({})).then(function (request) {
+      axios.post( login.yzm ,({})).then(function (request) {
         console.log(request);
         if(request.data.row>2){
           $('#yzm').show()
-          $('#imgYzm').attr("src",yzmurl+Math.random());
+          $('#imgYzm').attr("src",login.yzm+Math.random());
         }
       })
       $('#yzm').hide()

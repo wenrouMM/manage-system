@@ -44,43 +44,41 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column width="80" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="110" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="100" prop="srcdata" label="头像">
-                <template slot-scope="scope">
-                  <span class="imgDefault">
-                    <img
-                      v-if="scope.row.srcdata"
-                      class="head_pic"
-                      :src="scope.row.srcdata"
-                      width="30px"
-                      height="30px;"
-                      style="border-radius: 50%"
-                    >
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="150" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName"width="170" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="160" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" width="170" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="170" label="书籍编码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="110" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
               <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
               <el-table-column align="center" prop="realityReturnTime" width="200" label="实际归还时间"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -90,6 +88,7 @@
 </template>
 
 <script>
+  import {loan} from '../../../request/api/base.js'
   import moment from "moment";
   export default {
     data() {
@@ -117,6 +116,7 @@
         },
         total: 0,
         pageSize: 10,
+        pageInput:1,
         currentPage: 1,
         searchForm: {
           // 搜索需要的表单数据
@@ -159,6 +159,21 @@
       },
     },
     methods: {
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
+      },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
         console.log("此时传给后台的搜索数据", this.searchTimeForm);
@@ -178,7 +193,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(loanHistory, {
+          .get(loan.history, {
             params: value
           })
           .then(res => {

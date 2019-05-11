@@ -15,4 +15,30 @@
     height: 170px;
     width: 532px;
 }
+.readerCard{
+
+}
+.readerCard form.el-form{
+  flex-direction: column;
+
+}
+.readerCard .el-input .el-input__inner {
+  width: 100%;
+}
+.readerCard .el-form-item__content {
+  display: flex;
+}
+.readerCard .el-select {
+  width: 100%;
+}
+.readerCard .el-form-item.select {
+  width: 260px;
+  margin-left: 0;
+}
+.readerCard .selectBan{
+  display: flex;
+}
+.readerCard .selectBan .el-form-item__content{
+  display: block;
+}
 

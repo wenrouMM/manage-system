@@ -19,7 +19,7 @@
             <p>充值金额 :&nbsp;&nbsp;{{detailsData.depositMoney}}</p>
             <p>充值时间 :&nbsp;&nbsp;{{detailsData.depositTime}}</p>
             <p>充值地点 :&nbsp;&nbsp;{{detailsData.depositAddress}}</p>
-            <p>处理方式 :&nbsp;&nbsp;{{detailsData.type}}</p>
+            <p>处理对象 :&nbsp;&nbsp;{{detailsData.type}}</p>
           </div>
           <div>
             <p>读者卡号 :&nbsp;&nbsp;{{detailsData.userCard}}</p>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import {deposit} from '../../../request/api/base.js'
   export default {
     data(){
       return{
@@ -51,7 +52,7 @@
       selectApi(){
         this.userId = Number(this.$route.query.id);
         console.log(this.userId)
-        this.axios.get(depositDetails,{params: {id:this.userId}}).then((res)=>{
+        this.axios.get(deposit.details,{params: {id:this.userId}}).then((res)=>{
           console.log(res)
           this.detailsData.userName=res.data.row.fkReaderName
           this.detailsData.depositMoney=res.data.row.deposit

@@ -42,23 +42,34 @@
                       <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="name" width="260" label="出版社名称"></el-table-column>
-                  <el-table-column align="center" prop="address" width="250" label="公司地址"></el-table-column>
+                  <el-table-column align="center" prop="name" width="260" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="address" width="250" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
                   <el-table-column align="center" prop="telephone" width="250" label="联系电话"></el-table-column>
                 </el-table>
                   <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
                   <section class="pagination mt_30">
-                  <el-pagination
-                    background
-                    layout="prev, pager, next,total, jumper, ->"
-                    :total="total"
-                    :page-size="pageSize"
-                    :current-page="currentPage"
-                    @current-change="current_change"
-                  ></el-pagination>
-                  <span class="pagaButton">确定</span>
-                </section>
+                    <el-pagination
+                      style="display: inline-block"
+                      background
+                      layout="prev, pager, next,total,slot"
+                      :total="total"
+                      :page-size="pageSize"
+                      :current-page="currentPage"
+                      @current-change="current_change"
+                    >
+                      <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                      </slot>
+                    </el-pagination>
+                    <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
+                  </section>
               </section>
             </div>
           </div>
@@ -94,6 +105,17 @@
 </template>
 
 <script>
+  import {bookpublish } from '../../../request/api/base.js'
+  import {isvalidPhone} from '../../../base/js/yf/elementValidate'
+  var validPhone=(rule, value,callback)=>{
+    if (!value){
+      callback(new Error('请输入电话号码'))
+    }else  if (!isvalidPhone(value)){
+      callback(new Error('请输入正确的11位手机号码'))
+    }else {
+      callback()
+    }
+  }
   export default {
     data() {
       return {
@@ -126,7 +148,7 @@
           },
           callback: {
             onClick: this.zTreeOnClick, //节点点击事件
-            onCheck: this.zTreeOnCheck, //勾选时事件
+            beforeCheck: this.zTreeOnCheck, //勾选时事件
           },
           check: {
             enable: true,
@@ -143,8 +165,10 @@
         //total: 0,
         total: 0,
         pageSize: 10,
+        pageInput: 1,
         currentPage: 1,
         paginationForm: {},
+        zTree:{},
         centerDialogVisible: false, // 禁用弹框
         Dialogtitle: ["添加"],
         i: 0, // 切换弹框标题
@@ -153,7 +177,7 @@
           // 添加的数据表单 共8个参数
           idType:"", //序号
           publishName:"", //出版社名称
-          companyAddress:"", //公司地址
+          componentAddress:"", //公司地址
           contacts:"", //联系人
           contactPhone:"" //联系电话
         },
@@ -162,7 +186,7 @@
           publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
           componentAddress: [{ required: true, message: "请输入公司地址", trigger: "blur" }],
           contacts: [{ required: true, message: "请输入联系人", trigger: "blur" }],
-          contactPhone: [{ required: true, message: "请输入联系电话", trigger: "blur" }],
+          contactPhone: [{ required: true, trigger: 'blur', validator: validPhone }],
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
@@ -176,63 +200,12 @@
           height: "60px"
         },
         /*====== 5.0 分页相关设置项 ======*/
-        zTree:{},
         tableData:[],
-        addmessage:''
       };
     },
-    methods: {
-      /*====== 3.0添加删除相关操作 ======*/
-      addDialogOpen() {
-        console.log(this.zTree.code)
-        this.dialogFormVisible = true;
-        this.addmessage='show'
-      },
-      /*====== 3.1ztree城市树状图 ======*/
-      async freshArea() {
-        this.axios.get(bookurlcity).then((response)=>{
-          console.log('ztree树',response)
-          for (var item of response.data.row) {
-            this.zNodes.push({
-              name:item.name,
-              code: item.code, //节点菜单编码
-              checked:item.checked
-            });
-          }
-          //将数据渲染到ztree树
-          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
-        })
-      },
-      /*====== 3.1点击ztree节点获取节点信息======*/
-      zTreeOnClick(event, treeId, treeNode){
-        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        treeObj.checkNode(treeNode, !treeNode.checked, true);
-        console.log(treeNode.name,treeNode.code)
-        var list={
-          name:treeNode.name,
-          code:treeNode.code
-        }
-        this.zTree=list
-        if(this.addmessage!=''){
-          this.dialogFormVisible=true
-        }else{
-          let cityCode={cityCode:this.zTree.code}
-          this.tableApi(cityCode)
-        }
-      },
-      /*====== 弹框相关函数 ======*/
-      // 编辑弹框
-      submitForm() {
-        console.log('ztree树节点信息',this.zTree.code)
-        if(this.zTree.code==undefined){
-          this.formApi('北京市','bj_jing')
-          //let defaultBJ={cityCode:'bj_jing'}
-          //this.tableApi(defaultBJ)
-        }else{
-          this.formApi(this.zTree.name,this.zTree.code)
-        }
-      },
-      formApi(ztreeName,ztreeCode){
+    computed:{
+      searchTimeForm() {
+        // 计算属性 真正传递的数据
         console.log('ztree',this.zTree.code)
         let citynameCode=''
         if(this.zTree.code==undefined){
@@ -240,6 +213,98 @@
         }else{
           citynameCode=this.zTree.code
         }
+        let searchForm = {
+          pageSize: this.pageSize,
+          current:1,
+          cityCode:citynameCode
+        };
+        return searchForm;
+      },
+    },
+    methods: {
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
+      },
+      /*====== 3.0添加相关操作 ======*/
+      addDialogOpen() {
+        console.log(this.zTree.code)
+        this.dialogFormVisible = true;
+      },
+      /*====== 3.1ztree城市树状图 ======*/
+      async freshArea() {
+        let list=[]
+        this.axios.get(bookpublish.city).then((response)=>{
+          console.log('ztree树',response)
+          for (let item of response.data.row) {
+            list.push({
+              name:item.name,
+              code: item.code, //节点菜单编码
+              checked:item.checked
+            });
+          }
+          //将数据渲染到ztree树
+          console.log('list',list[0].checked)
+          $.fn.zTree.init($("#treeDemo"), this.setting, list);
+          this.zNodes=list
+        })
+      },
+      /*====== 3.1点击ztree节点获取节点信息======*/
+      zTreeOnCheck(event,treeId){
+        console.log('checktreeId',treeId)
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        if(treeId.checked==true){
+          treeObj.checkNode(treeId, !treeId.checked, true);
+        }
+        let list={
+          name:treeId.name,
+          code:treeId.code
+        }
+        this.zTree=list
+        this.SearchApi(this.searchTimeForm)
+      },
+      zTreeOnClick(event, treeId, treeNode){
+        console.log('clicktreeNode',treeNode)
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        if(treeNode.checked==false){
+          treeObj.checkNode(treeNode, !treeNode.checked, true);
+        }
+        let list={
+          name:treeNode.name,
+          code:treeNode.code
+        }
+        this.zTree=list
+        this.SearchApi(this.searchTimeForm)
+      },
+      /*====== 弹框相关函数 ======*/
+      // 编辑弹框
+      submitForm() {
+        console.log('ztree树节点信息',this.zTree.code)
+        this.$refs[this.addForm].validate((valid) => {
+          if (valid) {
+            if(this.zTree.code==undefined){
+              this.formApi('北京市','bj_jing')
+            }else{
+              this.formApi(this.zTree.name,this.zTree.code)
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      formApi(ztreeName,ztreeCode){
         var addStr=[{
           id: null,
           code: "",
@@ -250,17 +315,17 @@
           contacts:this.addForm.contacts,
           telephone:this.addForm.contactPhone
         }]
-        this.axios.post(bookpublishhouse,addStr).then((res)=>{
+        this.axios.post(bookpublish.add,addStr).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
               message: res.data.msg,
               type: 'success'
             });
+            this.SearchApi(this.searchTimeForm)
             this.closeForm()
             this.dialogFormVisible=false
-            let cityName={cityCode:citynameCode}
-            this.tableApi(cityName)
+            /*let cityName={cityCode:citynameCode}*/
           }else{
             this.$message({
               message: res.data.msg,
@@ -271,26 +336,23 @@
           }
         })
         this.$refs[this.addForm].resetFields();
-        this.addmessage=''
       },
       resetForm() {
         this.$refs[this.addForm].resetFields();
         this.dialogFormVisible=false
-        this.addmessage=''
       },
       closeForm() { // 弹框关闭的时候执行 清空数据
         //console.log("关闭测试");
-        this.addmessage=''
         this.$refs[this.addForm].resetFields();
         let obj = this.addForm;
         for (var i in obj) {
           obj[i] = "";
         }
       },
-      tableApi(value){
+      paginationApi(value){
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(bookurlselect, {
+          .get(bookpublish.select, {
             params: value
           })
           .then(res => {
@@ -309,17 +371,40 @@
             }
           })
       },
+      SearchApi(value){
+        this.tableLoading= true; // 加载前控制加载状态
+        this.axios
+          .get(bookpublish.select, {
+            params: value
+          })
+          .then(res => {
+            //console.log("当前获取的数据", res.data);
+            if (res.data.state === true) {
+              let nomol = res.data.row;
+              this.tableData = nomol; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              //console.log("过滤后的数据", nomol);
+              this.currentPage = 1
+              console.log("保存当前查询", this.paginationForm);
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+      },
       current_change: function(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm);
-        this.tableApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
+
     },
     mounted(){
-      let defaultBJ={cityCode:'bj_jing'}
-      this.tableApi(defaultBJ)
+      this.SearchApi(this.searchTimeForm);
       this.freshArea()
     }
   };

@@ -45,13 +45,25 @@
             <!-- 3.1 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -65,7 +77,8 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booktype
 } from "../../../request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -97,7 +110,8 @@ export default {
       tableChecked:[],
       /*====== 3.1 分页相关 搜索相关设置项 ======*/
       total: 0, // 总页数
-      pageSize: 7, // 页面个数
+      pageSize: 10, // 页面个数
+      pageInput: 1,
       currentPage: 1, // 控制当前页面处于第几页
       paginationForm: {} // 查询保存的数据
     };
@@ -117,6 +131,21 @@ export default {
     }
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     handleSelectionChange(val){
       console.log(val)
       this.tableChecked=val
@@ -140,7 +169,7 @@ export default {
 
       this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(bookurltype, {
+        .get(booktype, {
           params: value
         })
         .then(res => {
@@ -277,7 +306,7 @@ export default {
 .pagination .el-pagination {
   display: flex;
   justify-content: center;
-  
+
 }
 
 

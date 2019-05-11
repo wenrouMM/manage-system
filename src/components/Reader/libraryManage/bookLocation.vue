@@ -37,7 +37,7 @@
             <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
           <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
-            <span>{{ruleForm.bookLocation}}{{ruleForm.direction}}</span>
+            <span>{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
           </el-form-item>
           <span @click="locationMessage" id="locaTion">
             位置选择
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+  import { bookLocation } from "../../../request/api/base.js";
   export default {
     data(){
       return{
@@ -114,6 +115,14 @@
           direction:'',
           code:''
         },//添加的数据
+        Address:{ //层架绑定的位置信息
+          fkStoreId:'',
+          fkRegionId:'',
+          colNum:'',
+          divNum:'',
+          laysNum:'',
+          direction:'',
+        },
         rules:{
           barcode: [{ required: true, message: '请输入活动名称', trigger: 'blur' }],
           bookCode: [{required: true, message: '请输入图书编码', trigger: 'blur' }],
@@ -162,7 +171,7 @@
       barcodeClick:function(){
         console.log('input框值的变化')
         console.log(this.ruleForm.barcode)
-        this.axios.get(booklocationbarcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
+        this.axios.get(bookLocation.barcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
           //console.log(res.data)
           if (res.data.state == true) {
             console.log('isbn的数据', res.data)
@@ -188,16 +197,30 @@
       /*====== 展开节点的操作 ======*/
       zTreeOnExpand(event, treeId, treeNode){
         console.log(treeNode)
-        let name=treeNode.name.toString()
-        if(this.ruleForm.bookLocation.search(name) == -1 ){
-          this.ruleForm.bookLocation+=name
+        if(treeNode.fkStoreId!=null&&treeNode.fkRegionId==null){
+          this.Address.fkStoreId=treeNode.name
+          $('#imgX').fadeIn()
+        }else if(treeNode.fkRegionId!=null&&treeNode.colNum==null){
+          this.Address.fkRegionId=treeNode.name
+        }else if(treeNode.colNum!=null&&treeNode.divNum==null){
+          this.Address.colNum=treeNode.name
+        }else if(treeNode.divNum!=null&&treeNode.laysNum==null){
+          this.Address.divNum=treeNode.name
+        }else if(treeNode.laysNum!=null&&treeNode.direction==null){
+          this.Address.laysNum=treeNode.name
         }
       },
       /*====== 点击节点的操作 ======*/
       zTreeOnClick(event, treeId, treeNode){
-        console.log(treeNode)
-        if(treeNode.direction!==null){
-          this.ruleForm.direction=treeNode.name
+        let treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        console.log('treeObj',treeObj)
+        console.log('direction',treeNode.direction)
+        if(treeNode.direction==null){
+          this.$message('图书位置必须绑定在面级！！');
+        }else{
+          console.log(treeNode)
+          console.log(treeNode.direction)
+          this.Address.direction=treeNode.name
           this.ruleForm.code=treeNode.code
           $('#typeMessage').fadeOut()
         }
@@ -212,7 +235,7 @@
       /*====== 加载位置信息ztree树的内容 ======*/
       async freshArea() {
         let list=[]
-        this.axios.get(layerFramezTree).then((response) => {
+        this.axios.get(bookLocation.tree).then((response) => {
           console.log(response)
           if(response.data.state==true){
             for (var item of response.data.row) {
@@ -237,6 +260,8 @@
             if(list.length>0){
               $('#typeMessage').fadeIn()
               this.zNodes=list
+            }else{
+              this.$message('暂无数据')
             }
           }else{
             this.$message({
@@ -252,7 +277,7 @@
           if (valid) {
             console.log('submit!');
             this.formLoading=true
-            this.axios.post(booklocation,{
+            this.axios.post(bookLocation.location,{
               libraryBookCode:this.ruleForm.bookCode,
               searchNumber:this.ruleForm.bookIndex,
               bookName:this.ruleForm.bookName,
@@ -268,8 +293,15 @@
                   message: res.data.msg,
                   type: 'success'
                 });
+                let obj = this.ruleForm;
                 this.$refs[this.ruleForm].resetFields();
-                this.ruleForm={}
+                for (var i in obj) {
+                  obj[i] = "";
+                }
+                let address = this.Address;
+                for (var i in address) {
+                  address[i] = "";
+                }
                 this.formLoading=false
               }else{
                 this.$message({

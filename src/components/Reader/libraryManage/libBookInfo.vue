@@ -28,10 +28,6 @@
                 <el-input v-model="searchForm.bookIndex" placeholder="请输入索书号"></el-input>
               </el-form-item>
               <!-- 下拉框 -->
-              <el-form-item label="类型:" size="160"  style="position: relative">
-                <el-input v-model="searchForm.type" placeholder="请输入类型"></el-input>
-                <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 135px" @click="typeMessage">
-              </el-form-item>
               <el-form-item label="状态:" size="160">
                 <el-select v-model="searchForm.status"  clearable  placeholder="请选择状态">
                   <el-option
@@ -41,6 +37,10 @@
                     :value="option"
                   ></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="类型:" size="160"  style="position: relative;width:250px">
+                <el-input v-model="searchForm.type" placeholder="请选择类型" style="width: 200px;" @focus="typeMessage"></el-input>
+                <img :src="changeSrc" id="typeImg" style="width: 13px;height:13px;position: absolute;top:14px;left: 177px" @click="typeInput">
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searchSubmit">搜索</el-button>
@@ -76,10 +76,10 @@
               <el-table-column align="center" prop="total" width="120" :show-overflow-tooltip="true" label="录入员"></el-table-column>
               <el-table-column align="center" prop="entryTime" width="130" :show-overflow-tooltip="true" label="录入时间"></el-table-column>
               <el-table-column align="center" prop="creatTime" width="130" :show-overflow-tooltip="true" label="入藏时间"></el-table-column>
-              <el-table-column align="center" prop="fkTypeCode" width="120" label="类型"></el-table-column>
+              <el-table-column align="center" prop="fkTypeName" width="120" :show-overflow-tooltip="true" label="类型"></el-table-column>
               <el-table-column align="center" prop="state" width="120" label="状态">
                 <template slot-scope="scope">
-                  <span>{{scope.row.state ===0?'启用':'禁用'}}</span>
+                  <span>{{scope.row.state ===1?'上架':'下架'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="操作">
@@ -93,14 +93,25 @@
             <!--分页-->
             <section class="pagination mt_30">
               <el-pagination
+                style="display: inline-block"
                 background
-                layout="prev, pager, next,total, jumper, ->"
+                layout="prev, pager, next,total,slot"
                 :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="current_change"
-              ></el-pagination>
-              <span class="pagaButton">确定</span>
+              >
+                <slot>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
+                </slot>
+              </el-pagination>
+              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -125,13 +136,18 @@ import {
   userManageInterface,
   roleType,
   headUpload,
-  headimg
+  headimg,
+  booknews,
+  libbooknews
 } from "../../../request/api/base.js";
 import moment from "moment";
+import sousou from "../../../base/img/currency/ss.png"
+import cuowu from "../../../base/img/currency/X.png"
 import axios from "axios";
 export default {
   data() {
     return {
+      changeSrc:sousou,
       setting: {
         edit: {
           enable: true,
@@ -160,8 +176,8 @@ export default {
       },
       zNodes: [],
       optionsStatus: [
-        "禁用",
-        "启用",
+        "上架",
+        "下架",
       ],
       /*====== 2.0表单搜索提交数据项 ======*/
       searchForm: {
@@ -182,6 +198,7 @@ export default {
       /*====== 3.1 分页设置项 ======*/
       total: 0,
       pageSize: 10,
+      pageInput:1,
       currentPage: 1,
       paginationForm: {},
       /*===== end 弹框初始化数据 ======*/
@@ -192,16 +209,16 @@ export default {
       defaultImg:'', // 默认图片地址
       i:0,
       Dialogtitle: ["添加",'下架'],
-      undercarriage:null, //下架所需参数
+      id:null,
     };
   },
   computed: {
     searchTimeForm() {
       // 搜索所需数据 过滤数据 传递给后端的数据
       var state=null
-      if(this.searchForm.status=='禁用'){
+      if(this.searchForm.status=='上架'){
         state=1
-      }else if(this.searchForm.status=='启用'){
+      }else if(this.searchForm.status=='下架'){
         state=0
       }else if(this.searchForm.status==''){
         state=''
@@ -221,29 +238,62 @@ export default {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
     this.freshArea()
     $('#typeMessage').fadeOut()
-    this.axios.get(libbook).then((res)=>{
+    this.axios.get(libbooknews.table).then((res)=>{
       console.log(res)
     })
   },
   methods: {
+    jumpBtn() {
+      // v-mode绑定好像会默认转数据类型
+      let page = Math.ceil(this.total / this.pageSize)
+      page ==0?1:page;
+      if(this.pageInput>page){
+        this.pageInput = 1
+        this.$nextTick(()=>{
+          this.$refs.text.value = 1 // hack方法
+          console.log('Vmode绑定值',this.pageInput)
+        })
+      }else{
+        let num = parseInt(this.pageInput)
+        this.current_change(num)
+      }
+    },
     async freshArea() {
-      this.axios.get(bookurltypemes).then((response)=>{
-        console.log(response)
-        for (var item of response.data.row) {
-          //console.log(item)
-          this.zNodes.push({
-            id: item.id, //节点id
-            pId: item.pid, //节点父id
-            name: item.name, //节点名称
-            code:item.code, //
+      this.axios.get(libbooknews.type).then((res)=>{
+        console.log('res',res)
+        if(res.data.state==true){
+          for (let item of res.data.row) {
+            //console.log(item)
+            this.zNodes.push({
+              id: item.id, //节点id
+              pId: item.pid, //节点父id
+              name: item.name, //节点名称
+              code:item.code, //
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+        }else{
+          this.$message({
+            message: res.data.msg,
+            type: 'error'
           });
         }
-        //将数据渲染到ztree树
-        $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       })
     },
-    typeMessage(){
+    typeInput(){
       console.log(this.zNodes.length)
+      console.log('changeSrc',this.changeSrc)
+      if(this.changeSrc==sousou){
+        if(this.zNodes.length!=0){
+          $('#typeMessage').fadeIn()
+        }
+      }else if(this.changeSrc==cuowu){
+        this.searchForm.type=''
+        this.changeSrc=sousou
+      }
+    },
+    typeMessage(){
       if(this.zNodes.length!=0){
         $('#typeMessage').fadeIn()
       }
@@ -254,6 +304,7 @@ export default {
     zTreeOnClick(event, treeId, treeNode) {
       $('#typeMessage').fadeOut()
       this.searchForm.type=treeNode.name
+      this.changeSrc=cuowu
     },
     /*====== 2.0 搜索与添加按钮触发 ======*/
     searchSubmit() {
@@ -266,22 +317,20 @@ export default {
     handleBan(index, row) {
       //下架
       console.log( row); // 当前选中表格的索引和对象
-      this.undercarriage=row
+      this.id=row.id
       this.i= 1;
       this.centerDialogVisible = true;
     },
     submitDialog() {
       // 用于提交接口数据的函数 可以传入一个接口回调函数使用 删除操作和禁用操作可以写在外面 然后根据i来判断此时是禁用窗口还是删除窗口 来执行对应操作 如果觉得麻烦就复制两份单独处理
-      let i = this.i;
-      let tips = this.Dialogtitle[i];
-      //alert(`${tips}成功`); // 成功之后映射到数组的操作
-      this.axios.post(libbookedit,this.undercarriage).then((res)=>{
+      this.axios.post(libbooknews.edit,{state:0,id:this.id}).then((res)=>{
         console.log(res)
         if(res.data.state==true){
           this.$message({
             message: res.data.msg,
             type: 'success'
           });
+          this.SearchApi()
         }else{
           this.$message.error(res.data.msg);
         }
@@ -309,7 +358,7 @@ export default {
       //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
       this.tableLoading = true; // 加载前控制加载状态
       axios
-        .get(libbook, {
+        .get(libbooknews.table, {
           params: value
         })
         .then(res => {
