@@ -16,7 +16,7 @@
           <!-- 选中之后的样式 -->
           <el-submenu background-color="#545c64" index="2">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>馆藏图书</span>
             </template>
             <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
@@ -27,7 +27,7 @@
           </el-submenu>
           <el-submenu index="readerCard">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>读者卡管理</span>
             </template>
             <el-menu-item-group>
@@ -37,7 +37,7 @@
           </el-submenu>
           <el-submenu index="self">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>借阅管理</span>
             </template>
             <el-menu-item-group>
@@ -49,7 +49,7 @@
           </el-submenu>
           <el-submenu index="recharge">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>充值管理</span>
             </template>
             <el-menu-item-group>
@@ -60,7 +60,7 @@
           </el-submenu>
           <el-submenu index="outDate">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>逾期管理</span>
             </template>
             <el-menu-item-group>
@@ -71,7 +71,7 @@
           </el-submenu>
           <el-submenu index="losttrust">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>失信管理</span>
             </template>
             <el-menu-item-group>
@@ -82,7 +82,7 @@
           </el-submenu>
           <el-submenu index="lose">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>遗失管理?</span>
             </template>
             <el-menu-item-group>
@@ -91,7 +91,7 @@
           </el-submenu>
           <el-submenu index="interview">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              
               <span>采访管理?</span>
             </template>
             <el-menu-item-group>
