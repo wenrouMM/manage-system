@@ -3,7 +3,7 @@
     <div style="display: flex;flex-direction: row" id="mybook">
       <div style="background-color:white;width:250px;display: flex;flex-direction:column;">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">区信息</div>
-        <div style="width: 250px;height: 892px;background-color: white;overflow: auto;">
+        <div style="width: 250px;height: 892px;background-color: white;overflow-y: auto;">
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
         </div>
       </div>

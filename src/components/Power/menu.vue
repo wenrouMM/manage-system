@@ -2,7 +2,9 @@
     <div style="display: flex;flex-direction: row;">
       <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow: paged-y">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
-        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px" v-loading="fullscreenLoading"></ul>
+        <div style="overflow-y: auto;background-color:white;">
+          <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px" v-loading="fullscreenLoading"></ul>
+        </div>
       </div>
       <div style="width: 1320px;margin-left: 30px;;height:852px;background-color:white" v-loading="formLoading">
         <el-form :model="ruleForm"

@@ -1,11 +1,11 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-var url = 'http://192.168.2.131:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
 //var url='http://127.0.0.1:8088/'
 
 
-var imgurl='http://192.168.2.131:8090/'
+var imgurl='http://192.168.2.31:8090/'
 //var imgurl='http://127.0.0.1:8090/'
 //登陆页
 export const login = {
@@ -18,7 +18,7 @@ export const menu = {
   add:`${url}authmodule/menuInformation/add`,//菜单添加接口
   delete:`${url}authmodule/menuInformation/delete`,//菜单删除接口
   type:`${url}basemodule/currency/sysTbDictCode/select`, //菜单类型接口
-  img:`${imgurl}filemodule/uploadFile/addMenu`, //图片上传接口
+  img:`${imgurl}filemodule/uploadImg/addMenu`, //图片上传接口
   button:`${url}authmodule/menuInformation/currency/selectMenuById`, //点击节点发请求
 }
 // 首页
@@ -213,9 +213,9 @@ export const bookOperateInt = {
 /*------ 通用接口 ------*/
 // 办卡接口
 //通用接口
-export const photoUrl = 'http://127.168.2.131' // 预览图片前缀
+export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
-export const headUpload = imgurl + 'filemodule/uploadFile/addHead' //
+export const headUpload = imgurl + 'filemodule/uploadImg/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
 export const selectRoleType = url + 'authmodule/roleInformation/currency/selectRole' // 角色管理下拉
 

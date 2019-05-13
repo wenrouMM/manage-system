@@ -1,7 +1,7 @@
 <template>
   <div id="login">
-    <el-row>
-      <el-col :span="5" :push='13'><div class="grid-content bg-purple" style="margin-top: 350px;padding-left: 45px">
+    <div id="backgroundImg">
+      <div style="position: absolute;top: 100px;left:680px">
         <div id="reg">管理员登陆</div>
         <div class="divHeight" style="margin-top: 20px">
           <img src="../base/img/login/icon_1.png" class="imgHeight">
@@ -20,8 +20,8 @@
           <button @click="submit" >登录</button>
         </div>
         <div id="msg"></div>
-      </div></el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -124,10 +124,28 @@ import {loginInter,login} from '../request/api/base.js'
 
 <style scoped>
   #login{
-    background-image: url("../base/img/login/login_bg_3.png");
+    background-image: url("../base/img/login/login_bg_1.png");
     background-size: cover;
     min-height: 100vh;
     width: 100%;
+    padding-top: 150px;
+  }
+  #backgroundImg{
+    border-radius: 20px;
+    margin: 0px auto;
+    padding-top:170px;
+    width: 1100px;
+    height: 380px;
+    position: relative;
+    background-image: url("../base/img/login/login_bg_2.png");
+    overflow: auto;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#014ad4,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 130px #014ad4;
+    -webkit-box-shadow: 2px 2px 130px #014ad4;
+    box-shadow:2px 2px 130px #014ad4;
   }
   #reg{
     font-size:35px;
