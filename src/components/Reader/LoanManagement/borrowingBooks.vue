@@ -1,6 +1,9 @@
 <template>
   <div class="borrowbook">
-    <div class="title" style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
+    <div
+      class="title"
+      style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
+    >
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">借书</div>
     </div>
@@ -32,20 +35,21 @@
               <el-button type="warning" class="cardBtn">重新扫描</el-button>
             </div>
           </div>
-          <div class="userInfo">
+          <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
+          <div class="userInfo" v-if="userTable.length">
             <div class="headBox"></div>
             <div class="infoBox">
               <div class="info">
                 <section class="left">
-                  <p>读者姓名：张 一 一</p>
-                  <p>读者角色：小猪佩奇</p>
-                  <p>有效期限：2019/8/9</p>
-                  <p>可借本数：5本</p>
+                  <p>读者姓名：{{userTable[0].cardFkReaderName}}</p>
+                  <p>读者角色：{{userTable[0].cardGradeName}}</p>
+                  <p>有效期限：{{userTable[0].cardExpireTime}}</p>
+                  <p>可借本数：{{userTable[0].stillBorrowNumber}}</p>
                 </section>
                 <section class="right">
-                  <p>读者性别：女</p>
-                  <p>读者状态：正常</p>
-                  <p>充值余额：100元</p>
+                  <p>读者性别：{{userTable[0].sex}}</p>
+                  <p>读者状态：{{userTable[0].state}}</p>
+                  <p>充值余额：{{userTable[0].cardGradeDeposit}}</p>
                 </section>
               </div>
               <p class="manage">权限：合计可借出总数量为3本，可借期限7天</p>
@@ -167,8 +171,61 @@
               </el-table>
             </section>
           </el-tab-pane>
-          <el-tab-pane label="待归还书籍" name="second">待归还书籍</el-tab-pane>
-          <el-tab-pane label="历史借阅记录" name="third">历史借阅记录</el-tab-pane>
+          <el-tab-pane label="待归还书籍" name="second">
+            <section class="endTable">
+              <el-table
+                class="tableBorder"
+                :data="oweTable"
+                style="width: 100%; text-align:center;"
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+              >
+                <el-table-column align="center" type="index" width="80" label="序号"></el-table-column>
+                <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="libraryBookCode"
+                  :show-overflow-tooltip="true"
+                  label="书籍编码"
+                ></el-table-column>
+                <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
+                <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
+                <el-table-column align="center" prop="state" label="借书状态">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
+              </el-table>
+            </section>
+          </el-tab-pane>
+
+          <el-tab-pane label="历史借阅记录" name="third">
+            <section class="endTable">
+              <el-table
+                class="tableBorder"
+                :data="bookHistory"
+                style="width: 100%; text-align:center;"
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+              >
+                <el-table-column align="center" type="index" width="80" label="序号"></el-table-column>
+                <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="libraryBookCode"
+                  :show-overflow-tooltip="true"
+                  label="书籍编码"
+                ></el-table-column>
+                <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
+                <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>
+                <el-table-column align="center" prop="state" label="借书状态">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
+              </el-table>
+            </section>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -244,6 +301,10 @@ export default {
         height: "60px"
       },
       activeName: "first",
+      tabFlag:false,
+      tabCard:{},
+      /*------ 用户信息 ------*/
+      userTable: [],
       /*------ 借书结果配置 ------*/
       endTable: [],
       /*------ 未归还列表配置 ------*/
@@ -286,6 +347,17 @@ export default {
     },
     // 读卡按钮
     readCardBtn() {
+      let value = this.searchForm.cardNum;
+      let obj = {
+        cardNum: value
+      };
+      console.log(value, "这是啥值啊");
+      if (value) {
+        this.readCardApi(obj);
+      } else {
+        this.$message.error("请输入读者卡号");
+      }
+
       console.log("我就当你读卡了");
     },
     // 借书按钮
@@ -310,11 +382,40 @@ export default {
       //console.log(this.wsValue);
     },
     // tab切换功能
-    tabBtn() {},
+    tabBtn() {
+      let value = this.tabFlag;
+      let obj = this.tabCard
+      
+      if(!value){
+        this.$message.error('请先填写读者卡号')
+        return
+      }
+      if(this.activeName == 'second'){
+        this.returnBookApi(obj)
+      }
+      if(this.activeName =='third'){
+        this.historyApi(obj)
+      }
+      console.log(this.activeName)
+    },
     /*------ API区 ------*/
     // websocker获取RFID
     // 读卡APi
-    readCardApi() {},
+    readCardApi(data) {
+      console.log("用户信息");
+
+      axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
+        if (res.data.state === true) {
+          this.userTable = res.data.row;
+          this.tabCard = data
+          this.tabFlag = true
+          console.log('查询成功的读者卡号',data,this.tabFlag)
+          console.log("用户信息", this.userTable);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
     // 通过RFID换取数据
     RfidApi(data) {
       axios
@@ -372,6 +473,28 @@ export default {
           console.log("借书记录", res.data.row);
           this.endTable = res.data.row.list;
           console.log("现在的借书机理", this.endTable);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 待归还Api
+    returnBookApi(data){
+      axios.get(bookOperateInt.return, { params: data }).then(res => {
+        if (res.data.state === true) {
+          this.oweTable = res.data.row;
+          console.log("待归还信息", this.oweTable);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 历史借阅Api
+    historyApi(data){
+      axios.get(bookOperateInt.history, { params: data }).then(res => {
+        if (res.data.state === true) {
+          this.bookHistory = res.data.row;
+          console.log("历史借阅记录", this.bookHistory);
         } else {
           this.$message.error(res.data.msg);
         }
@@ -473,7 +596,7 @@ export default {
 </script>
 
 <style scoped>
-.title{
+.title {
   margin-bottom: 36px;
 }
 .borrowbook {
@@ -560,7 +683,7 @@ export default {
   text-align: center;
 }
 /*------ 书籍查看 ------*/
-.endTable{
+.endTable {
   border: 1px solid #ebeef5;
   border-top: none;
   border-bottom: none;

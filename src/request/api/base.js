@@ -206,8 +206,10 @@ export const borrowInt = {
 var bookOperate = url + 'borrowmodule/'
 export const bookOperateInt = {
   borrow: `${bookOperate}borrow/out`,
-  sell: `${bookOperate}return/in`
-
+  sell: `${bookOperate}return/in`,
+  userInfo:`${url}borrowmodule/borrow/getReaderInfo`,
+  return:`${url}borrowmodule/borrow/getReaderLog`,
+  history:`${url}borrowmodule/borrow/getReaderHis`
 }
 /*------ 通用接口 ------*/
 // 办卡接口
