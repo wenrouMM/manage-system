@@ -3,7 +3,9 @@
 //var url = 'http://192.168.2.31:8088/'
 var url = 'http://192.168.2.121:8088/'
 
-var imgurl='192.168.2.31:8090/'
+
+var imgurl='http://192.168.2.131:8090/'
+//var imgurl='http://127.0.0.1:8090/'
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
@@ -58,7 +60,6 @@ export const powerMangaeInt = {
   edit: `${powerMangae}edit`,
   delete: `${powerMangae}delete`,
   prohibit:`${powerMangae}prohibit`
-
 }
 export const login_record = url + "authmodule/authTbManagerLoginLog/select" //登录记录接口
 export const role_name = url + 'authmodule/roleInformation/currency/select'//角色名称查询
@@ -95,7 +96,7 @@ export const libbooknews = {
 }
 //图书登记
 export const libbookRegist = {
-  barcode:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectOneT`, //图书登记条码接口查详情
+  barcode:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectOne`, //图书登记条码接口查详情
   add:`${url}tibetmuseummodule/libraryBookRegistrationPage/add`, //图书登记添加
   publish:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectPressTree`, //图书登记出版社
   type:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectAllBookType`, //图书登记书籍类型
@@ -186,7 +187,7 @@ export const cardLevelInt = {
   add: `${cardLevel}add`,
   edit: `${cardLevel}edit`,
   delete: `${cardLevel}delete`,
-  
+
 }
 // 读者卡类型
 var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
@@ -211,7 +212,7 @@ export const bookOperateInt = {
 /*------ 通用接口 ------*/
 // 办卡接口
 //通用接口
-export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
+export const photoUrl = 'http://127.168.2.131' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
 export const headUpload = imgurl + 'filemodule/uploadFile/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉

@@ -195,6 +195,7 @@
         }else if(treeNode.laysNum!=null&&treeNode.direction==null){
           this.Address.laysNum=treeNode.name
         }
+          console.log('展开节点子元素',treeNode.children)
       },
       zTreeOnClick(event, treeId, treeNode){
         let zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -217,6 +218,8 @@
           this.Address.direction=treeNode.name
           console.log(this.addressDate)
         }
+        this.singlePath(treeNode);
+        return true;
       },
       onSubmit(){
         console.log('this.Address.direction',this.Address.direction)

@@ -62,7 +62,7 @@
             <!-- 自定义插槽 -->
             <el-table-column align="center" prop="loginStatus" label="登录状态">
               <template slot-scope="scope">
-                <span :class="{error: scope.row.loginStatus===1}">{{scope.row.loginStatus == 0?'成功':'失败'}}</span>
+                <span :class="{error: scope.row.loginStatus==1}">{{scope.row.loginStatus == 0?'成功':'失败'}}</span>
               </template>
             </el-table-column>
           </el-table>

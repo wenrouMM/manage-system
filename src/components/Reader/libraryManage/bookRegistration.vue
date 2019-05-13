@@ -302,7 +302,7 @@
                 this.addForm.typeName = res.data.row[0].fkTypeName;
                 this.addForm.bookcontent = res.data.row[0].introduction;
                 this.addForm.status=res.data.row[0].state=1?'上架':'下架'
-                //this.disable=true
+                this.disable=true
               }else{
                 this.addForm.bookName = ''
                 this.addForm.isbn=''
@@ -316,11 +316,6 @@
                 this.addForm.status=''
                 this.disable=false
               }
-            }else{
-              this.$message({
-                message: res.data.msg,
-                type: 'error'
-              });
             }
           })
         }else{

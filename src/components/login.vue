@@ -91,14 +91,14 @@ import {loginInter,login} from '../request/api/base.js'
               }
             }
           })
-          if(this.clickNum>2){
+          if(this.clickNum>5){
             $('#msg').html('连接出错，请检查您的网络')
           }
           var landTime=setTimeout(()=>{
             if(this.isLand==null){
               $('#msg').html('连接出错，请检查您的网络')
             }
-          },5000)
+          },10000)
           clearTimeout(landTime)
         }else if($('#name').val()==false&&$('#pwd').val()==false){
           $('#msg').html('请先输入用户名和密码');
