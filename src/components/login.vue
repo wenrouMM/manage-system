@@ -43,7 +43,7 @@ import {loginInter,login} from '../request/api/base.js'
     },
     methods:{
       imgClick(){
-        $('#imgYzm').attr("src",yzmurl+Math.random());
+        $('#imgYzm').attr("src",login.yzm+Math.random());
       },
       isShowCheck(){
         console.log($('#pwd').attr('type'))
@@ -87,7 +87,7 @@ import {loginInter,login} from '../request/api/base.js'
                 $('#msg').html(res.data.msg)
               if(res.data.row>2){
                 $('#yzm').show()
-                $('#imgYzm').attr("src",yzmurl+Math.random());
+                $('#imgYzm').attr("src",login.yzm+Math.random());
               }
             }
           })
