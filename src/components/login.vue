@@ -140,8 +140,6 @@ import {loginInter,login} from '../request/api/base.js'
     background-image: url("../base/img/login/login_bg_2.png");
     overflow: auto;
     background-color: white;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#014ad4,direction=120,strength=4);
     -moz-box-shadow: 2px 2px 130px #014ad4;
     -webkit-box-shadow: 2px 2px 130px #014ad4;
