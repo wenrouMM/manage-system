@@ -1,0 +1,312 @@
+<template>
+  <div class="borrowbook">
+    <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
+      <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">借书</div>
+    </div>
+    <div style="width: 100%;margin-top: 75px">
+      <section style="width:400px;height: 200px;margin:0 auto">
+        <el-form
+          :label-position="labelPosition"
+          label-width="80px"
+          :model="searchForm"
+          ref="searchForm"
+          :rules="rules"
+        >
+          <el-form-item label="卡号" prop="cardNum">
+            <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+          </el-form-item>
+          <el-form-item label="书籍编码" prop="bookCode">
+            <el-input v-model="searchForm.bookCode" style="width: 200px" placeholder="请输入书籍编码"></el-input>
+            <el-button
+              type="primary"
+              style="height: 36px;width: 100px;padding-top:10px;margin-left: 15px"
+              @click="selectBtn"
+            >确定</el-button>
+          </el-form-item>
+        </el-form>
+      </section>
+      <section class="text item tablebox">
+        <el-table
+          class="tableBorder"
+          @selection-change="allSelect"
+          :data="tableData"
+          style="width:1000px;margin:0 auto; text-align:center;"
+          :row-style="rowStyle"
+          :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+        >
+          <el-table-column width="100" align="center" type="index" label="序号"></el-table-column>
+          <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
+          <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
+          <el-table-column align="center" prop="fkTypeName" width="200" label="书籍类型"></el-table-column>
+          <el-table-column align="center" prop="author"  label="作者"></el-table-column>
+        </el-table>
+      </section>
+      <div class="buttonBox">
+        <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">借书</el-button>
+        <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
+      </div>
+      
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import { bookOperateInt, borrowInt } from "../../../request/api/base.js";
+export default {
+  data() {
+    return {
+      message: "",
+      labelPosition: "right",
+      searchForm: {
+        cardNum: "",
+        bookCode: ""
+      },
+      rules: {
+        // 添加的参数验证
+        cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
+      },
+      tableData: [],
+      codeData: [],
+      rowStyle: {
+        height: "60px"
+      },
+      /*------ websocket配置 ------*/
+      wsValue: null,
+      reconnectStatus: false, // 是否重连
+      timeout: 5 * 1000, // 心跳检测间隔
+      timeoutObj: null, // 心跳间隔定时器
+      serverTimeOutObj: null, // 服务器超时关闭定时器
+      timeoutNum: null, // 重连定时器
+      last:0
+    };
+  },
+  computed: {
+    searchTimeForm() {
+      let obj = {
+        libraryBookCode: this.searchForm.bookCode
+      };
+      return obj;
+    },
+    submitTimeForm() {
+      let obj = {
+        cardNum: this.searchForm.cardNum,
+        list: this.tableData
+      };
+      return obj;
+    }
+  },
+  methods: {
+    // 搜索功能
+    selectBtn() {
+      this.codeSearchApi(this.searchTimeForm);
+    },
+    allSelect(val) {
+      console.log("被选择的数据", val);
+    },
+    // 借书按钮
+    sellBtn() {
+      this.operateApi(this.submitTimeForm);
+    },
+    //
+    // 重新扫描 已节流 关键在于函数的自运行和 var的作用域
+    reset() {
+      var now = +new Date();
+      console.log("相差的时间", now - this.last);
+      if (now - this.last > 10000) {
+        console.log('函数节流')
+        this.wsValue.send("reset");
+        this.tableData = [];
+        this.last = now;
+      }
+      //console.log(this.wsValue);
+    },
+    /*------ API区 ------*/
+    // websocker获取RFID
+
+    // 通过RFID换取数据
+    RfidApi(data) {
+      axios
+        .get(borrowInt.selectRfid, {
+          params: data
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.state === true) {
+            let obj = res.data.row;
+            const isExist = this.tableData.some(item => {
+              return item.libraryBookCode === obj.libraryBookCode;
+            });
+            if (!isExist) {
+              this.tableData.push(obj);
+              console.log("现在的数据", this.tableData);
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
+    // 通过编号换取数据
+    codeSearchApi(data) {
+      axios
+        .get(borrowInt.selectCode, {
+          params: data
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.state === true) {
+            let obj = res.data.row;
+            const isExist = this.tableData.some(item => {
+              return item.libraryBookCode === obj.libraryBookCode;
+            });
+            if (!isExist) {
+              this.tableData.push(obj);
+              console.log("现在的数据", this.tableData);
+            }
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
+    },
+    // 借书数据API
+    operateApi(data) {
+      console.log("传递的数据", this.submitTimeForm);
+      axios.post(bookOperateInt.borrow, data).then(res => {
+        if (res.data.state === true) {
+          console.log("返回的数据", res.data.row);
+          let obj = JSON.stringify(res.data.row);
+          localStorage.setItem("borrow", obj);
+          console.log("我路由跳转呢？");
+          let cardNum = this.searchForm.cardNum;
+          this.$router.push({
+            path: `/borrowingstatus`,
+            query: { Num: cardNum }
+          });
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+
+    /*------ websocket区域 ------*/
+    // 建立websocket连接
+    init(url) {
+      var ws = new WebSocket(url);
+      let that = this;
+      ws.onopen = e => {
+        ws.send("connect");
+        console.log("连接成功");
+      };
+      ws.onmessage = e => {
+        this.message = e.data;
+        // IC卡匹配过滤
+        let result = /^IC/.test(e.data)
+        let notice = /'error'/.test(e.data)
+        
+        if(notice){
+          this.$message.error('连接串口已断开')
+        }
+        if(result){
+          
+          let now = e.data.replace(/^IC/,"")
+          console.log('IC卡',now)
+          this.searchForm.cardNum = e.data.replace(/^IC/,"")
+          console.log()
+        } else{
+          let obj = {};
+          obj.rfid = e.data.replace(/\s+/g, "");
+          this.RfidApi(obj);
+        }
+        
+        console.log("接收数据", e.data);
+      };
+      ws.onclose = e => {
+        console.log("连接关闭");
+      };
+      ws.onerror = e => {
+        console.log("出错情况");
+      };
+      return ws;
+    },
+
+    // 数据过滤
+
+
+
+    /*------ 多余的函数 ------*/
+    // 重新连接
+    reconnect() {
+      var that = this;
+      if (this.reconnectStatus) {
+        return;
+      }
+      that.reconnectStatus = true;
+      if (that.timeoutnum) {
+        clearTimeout(that.timeoutnum);
+      }
+      that.timeoutNum = setTimeout(() => {
+        that.wsValue = that.init("ws://127.0.0.0:7181");
+        that.reconnectStatus = false;
+      }, 5000);
+      //that.timeoutnum && clearTimeout(that.timeoutnum);可读性极差
+    },
+    // 心跳开始
+    webstart() {
+      var self = this;
+      // 检测定时器是否存在 清除定时器
+      self.timeoutObj && clearTimeout(self.timeoutObj);
+      self.serverTimeOutObj && clearTimeout(self.serverTimeOutObj);
+      self.timeoutObj = setTimeout(res => {
+        if (self.wsValue.readyState == 1) {
+          self.wsValue.send("heartcheck");
+        } else {
+          self.reconnect();
+        }
+        // 超时关闭
+        self.serverTimeOutObj = setTimeout(res => {
+          self.wsValue.close();
+        }, self.timeout);
+      }, self.timeout);
+    },
+    // 心跳重置
+    webreset() {
+      var that = this;
+      clearTimeout(that.timeoutObj);
+      clearTimeout(that.serverTimeOutObj);
+      that.start();
+    }
+    // 数组去重其一
+    
+  },
+  created() {
+    this.wsValue = this.init("ws://127.0.0.1:7181");
+  },
+  destroyed() {
+    this.wsValue.close();
+  }
+};
+</script>
+
+<style scoped>
+.borrowbook {
+  width: 100%;
+  background-color: white;
+  min-height: 852px;
+}
+.tablebox {
+}
+.tablebox .tableBorder {
+  border: 1px solid #ebeef5;
+  border-bottom: none;
+  font-size: 16px;
+}
+.el-button--120 {
+  width: 120px;
+  border-radius: 6px;
+}
+.buttonBox {
+  text-align: center;
+}
+</style>
+
