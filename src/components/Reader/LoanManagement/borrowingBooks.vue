@@ -1,9 +1,178 @@
 <template>
   <div class="borrowbook">
-    <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
+    <div class="title" style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">借书</div>
     </div>
+    <div class="borrowMode">
+      <div class="borrowBox">
+        <!--卡号查询相关 -->
+        <section class="userInfoBox">
+          <div class="searchCard">
+            <div class="inputBox">
+              <el-form
+                :label-position="labelPosition"
+                label-width="80px"
+                :model="searchForm"
+                ref="searchForm"
+                :rules="rules"
+              >
+                <el-form-item label="卡　　号" prop="cardNum">
+                  <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+            <div class="btnBox">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                @click="readCardBtn"
+                class="cardBtn"
+              >读卡</el-button>
+              <el-button type="warning" class="cardBtn">重新扫描</el-button>
+            </div>
+          </div>
+          <div class="userInfo">
+            <div class="headBox"></div>
+            <div class="infoBox">
+              <div class="info">
+                <section class="left">
+                  <p>读者姓名：张 一 一</p>
+                  <p>读者角色：小猪佩奇</p>
+                  <p>有效期限：2019/8/9</p>
+                  <p>可借本数：5本</p>
+                </section>
+                <section class="right">
+                  <p>读者性别：女</p>
+                  <p>读者状态：正常</p>
+                  <p>充值余额：100元</p>
+                </section>
+              </div>
+              <p class="manage">权限：合计可借出总数量为3本，可借期限7天</p>
+            </div>
+          </div>
+        </section>
+        <!--书籍查询相关 -->
+        <section class="bookSearchBox">
+          <div class="bookSearch">
+            <div class="searchBox">
+              <el-form
+                :label-position="labelPosition"
+                label-width="80px"
+                :model="searchForm"
+                ref="searchForm"
+                :rules="rules"
+              >
+                <el-form-item label="书籍编码:" prop="bookCode">
+                  <el-input
+                    placeholder="请输入书籍编码"
+                    v-model="searchForm.bookCode"
+                    class="input-with-select"
+                  >
+                    <el-select v-model="searchForm.selectBook" slot="prepend" placeholder="请选择">
+                      <el-option label="书籍" value="1"></el-option>
+                      <el-option label="期刊" value="2"></el-option>
+                    </el-select>
+                    <el-button
+                      type="primary"
+                      slot="append"
+                      icon="el-icon-search"
+                      @click="selectBtn"
+                    ></el-button>
+                  </el-input>
+                </el-form-item>
+              </el-form>
+              <!--
+                <el-button
+                  type="primary"
+                  icon="el-icon-search"
+                  style="height: 36px;width: 100px;padding-top:10px;margin-left: 15px"
+                  @click="selectBtn"
+                >确定</el-button>
+              -->
+            </div>
+          </div>
+          <div class="borrowTableBox">
+            <section class="text item tablebox">
+              <el-table
+                class="tableBorder"
+                :data="borrowTableData"
+                style="text-align:center;"
+                :row-style="rowStyle"
+                max-height="250"
+                height="250"
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+              >
+                <el-table-column align="center" label="序号" width="80" type="index"></el-table-column>
+                <el-table-column align="center" prop="bookName" label="名称"></el-table-column>
+                <el-table-column
+                  align="center"
+                  :show-overflow-tooltip="true"
+                  prop="libraryBookCode"
+                  label="编码"
+                ></el-table-column>
+                <el-table-column
+                  align="center"
+                  :show-overflow-tooltip="true"
+                  prop="fkTypeName"
+                  label="类型"
+                ></el-table-column>
+                <el-table-column align="center" prop="author" label="作者"></el-table-column>
+                <el-table-column align="center" label="操作">
+                  <template slot-scope="scope">
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="removeBtn(scope.$index, scope.row)"
+                    >移除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </section>
+            <div class="buttonBox">
+              <el-button type="primary" size="120" @click="sellBtn">借书</el-button>
+              <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- tab选项卡 -->
+
+      <div class="tabMode">
+        <el-tabs v-model="activeName" @tab-click="tabBtn">
+          <el-tab-pane label="借阅结果" name="first">
+            <section class="endTable">
+              <el-table
+                class="tableBorder"
+                :data="endTable"
+                style="width: 100%; text-align:center;"
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+              >
+                <el-table-column align="center" type="index" width="80" label="序号"></el-table-column>
+                <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="libraryBookCode"
+                  :show-overflow-tooltip="true"
+                  label="书籍编码"
+                ></el-table-column>
+                <el-table-column align="center" prop="start" label="借书开始时间"></el-table-column>
+                <el-table-column align="center" prop="end" label="预计书籍归还时间"></el-table-column>
+                <el-table-column align="center" prop="state" label="借书状态">
+                  <template slot-scope="scope">
+                    <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" prop="reason" label="原因"></el-table-column>
+              </el-table>
+            </section>
+          </el-tab-pane>
+          <el-tab-pane label="待归还书籍" name="second">待归还书籍</el-tab-pane>
+          <el-tab-pane label="历史借阅记录" name="third">历史借阅记录</el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
+    <!--
     <div style="width: 100%;margin-top: 75px">
       <section style="width:400px;height: 200px;margin:0 auto">
         <el-form
@@ -30,7 +199,7 @@
         <el-table
           class="tableBorder"
           @selection-change="allSelect"
-          :data="tableData"
+          :data="borrowTableData"
           style="width:1000px;margin:0 auto; text-align:center;"
           :row-style="rowStyle"
           :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
@@ -48,6 +217,7 @@
       </div>
       
     </div>
+    -->
   </div>
 </template>
 
@@ -58,20 +228,28 @@ export default {
   data() {
     return {
       message: "",
-      labelPosition: "right",
+      labelPosition: "left",
       searchForm: {
         cardNum: "",
-        bookCode: ""
+        bookCode: "",
+        selectBook: "1"
       },
       rules: {
         // 添加的参数验证
         cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
       },
-      tableData: [],
+      borrowTableData: [],
       codeData: [],
       rowStyle: {
         height: "60px"
       },
+      activeName: "first",
+      /*------ 借书结果配置 ------*/
+      endTable: [],
+      /*------ 未归还列表配置 ------*/
+      oweTable: [],
+      /*------ 借阅历史记录 ------*/
+      bookHistory: [],
       /*------ websocket配置 ------*/
       wsValue: null,
       reconnectStatus: false, // 是否重连
@@ -79,7 +257,7 @@ export default {
       timeoutObj: null, // 心跳间隔定时器
       serverTimeOutObj: null, // 服务器超时关闭定时器
       timeoutNum: null, // 重连定时器
-      last:0
+      last: 0
     };
   },
   computed: {
@@ -92,7 +270,7 @@ export default {
     submitTimeForm() {
       let obj = {
         cardNum: this.searchForm.cardNum,
-        list: this.tableData
+        list: this.borrowTableData
       };
       return obj;
     }
@@ -100,31 +278,43 @@ export default {
   methods: {
     // 搜索功能
     selectBtn() {
-      this.codeSearchApi(this.searchTimeForm);
+      if (this.searchForm.selectBook == "1") {
+        this.codeSearchApi(this.searchTimeForm);
+      } else {
+        console.log("现在调用的是期刊API");
+      }
     },
-    allSelect(val) {
-      console.log("被选择的数据", val);
+    // 读卡按钮
+    readCardBtn() {
+      console.log("我就当你读卡了");
     },
     // 借书按钮
     sellBtn() {
       this.operateApi(this.submitTimeForm);
     },
-    //
+    // 移除按钮
+    removeBtn(index, row) {
+      console.log(index);
+      this.borrowTableData.splice(index, 1);
+    },
     // 重新扫描 已节流 关键在于函数的自运行和 var的作用域
     reset() {
       var now = +new Date();
       console.log("相差的时间", now - this.last);
       if (now - this.last > 10000) {
-        console.log('函数节流')
+        console.log("函数节流");
         this.wsValue.send("reset");
-        this.tableData = [];
+        this.borrowTableData = [];
         this.last = now;
       }
       //console.log(this.wsValue);
     },
+    // tab切换功能
+    tabBtn() {},
     /*------ API区 ------*/
     // websocker获取RFID
-
+    // 读卡APi
+    readCardApi() {},
     // 通过RFID换取数据
     RfidApi(data) {
       axios
@@ -135,12 +325,15 @@ export default {
           console.log(res);
           if (res.data.state === true) {
             let obj = res.data.row;
-            const isExist = this.tableData.some(item => {
+            // 数组去重
+            const isExist = this.borrowTableData.some(item => {
               return item.libraryBookCode === obj.libraryBookCode;
             });
             if (!isExist) {
-              this.tableData.push(obj);
-              console.log("现在的数据", this.tableData);
+              this.borrowTableData.push(obj);
+              console.log("现在的数据", this.borrowTableData);
+            } else {
+              this.$message.error("已选中该书");
             }
           } else {
             this.$message.error(res.data.msg);
@@ -157,12 +350,14 @@ export default {
           console.log(res);
           if (res.data.state === true) {
             let obj = res.data.row;
-            const isExist = this.tableData.some(item => {
+            const isExist = this.borrowTableData.some(item => {
               return item.libraryBookCode === obj.libraryBookCode;
             });
             if (!isExist) {
-              this.tableData.push(obj);
-              console.log("现在的数据", this.tableData);
+              this.borrowTableData.push(obj);
+              console.log("现在的数据", this.borrowTableData);
+            } else {
+              this.$message.error("已选中该书");
             }
           } else {
             this.$message.error(res.data.msg);
@@ -174,21 +369,14 @@ export default {
       console.log("传递的数据", this.submitTimeForm);
       axios.post(bookOperateInt.borrow, data).then(res => {
         if (res.data.state === true) {
-          console.log("返回的数据", res.data.row);
-          let obj = JSON.stringify(res.data.row);
-          localStorage.setItem("borrow", obj);
-          console.log("我路由跳转呢？");
-          let cardNum = this.searchForm.cardNum;
-          this.$router.push({
-            path: `/borrowingstatus`,
-            query: { Num: cardNum }
-          });
+          console.log("借书记录", res.data.row);
+          this.endTable = res.data.row.list;
+          console.log("现在的借书机理", this.endTable);
         } else {
           this.$message.error(res.data.msg);
         }
       });
     },
-
     /*------ websocket区域 ------*/
     // 建立websocket连接
     init(url) {
@@ -201,24 +389,23 @@ export default {
       ws.onmessage = e => {
         this.message = e.data;
         // IC卡匹配过滤
-        let result = /^IC/.test(e.data)
-        let notice = /'error'/.test(e.data)
-        
-        if(notice){
-          this.$message.error('连接串口已断开')
+        let result = /^IC/.test(e.data);
+        let notice = /'error'/.test(e.data);
+
+        if (notice) {
+          this.$message.error("连接串口已断开");
         }
-        if(result){
-          
-          let now = e.data.replace(/^IC/,"")
-          console.log('IC卡',now)
-          this.searchForm.cardNum = e.data.replace(/^IC/,"")
-          console.log()
-        } else{
+        if (result) {
+          let now = e.data.replace(/^IC/, "");
+          console.log("IC卡", now);
+          this.searchForm.cardNum = e.data.replace(/^IC/, "");
+          console.log();
+        } else {
           let obj = {};
           obj.rfid = e.data.replace(/\s+/g, "");
           this.RfidApi(obj);
         }
-        
+
         console.log("接收数据", e.data);
       };
       ws.onclose = e => {
@@ -231,8 +418,6 @@ export default {
     },
 
     // 数据过滤
-
-
 
     /*------ 多余的函数 ------*/
     // 重新连接
@@ -277,7 +462,6 @@ export default {
       that.start();
     }
     // 数组去重其一
-    
   },
   created() {
     this.wsValue = this.init("ws://127.0.0.1:7181");
@@ -289,17 +473,84 @@ export default {
 </script>
 
 <style scoped>
+.title{
+  margin-bottom: 36px;
+}
 .borrowbook {
   width: 100%;
   background-color: white;
   min-height: 852px;
+  overflow: auto;
+}
+.borrowMode {
+  width: 1200px;
+  margin: 0 auto;
+}
+.borrowBox {
+  display: flex;
+  margin-bottom: 10px;
+}
+.userInfoBox {
+  margin-right: 20px;
+}
+/*------ 读者卡信息搜索 ------*/
+.searchCard {
+  display: flex;
+}
+.searchCard .inputBox {
+  width: 310px;
+  margin-right: 30px;
+}
+.searchCard .btnBox {
+  font-size: 0;
+}
+.userInfo {
+  display: flex;
+}
+.userInfo .headBox {
+  width: 118px;
+  height: 136px;
+  margin-right: 40px;
+  background-color: antiquewhite;
+}
+.userInfo .infoBox .info {
+  display: flex;
+  margin-bottom: 20px;
+}
+.infoBox .info section p {
+  margin-bottom: 23px;
+  color: #878787;
+  font-size: 14px;
+}
+.infoBox .info .left {
+  margin-right: 90px;
+}
+.infoBox .manage {
+  color: #0096ff;
+  font-size: 14px;
+}
+
+/*------- 书籍搜索 ------*/
+.bookSearch {
+}
+.bookSearch .searchBox {
+  width: 480px;
+}
+.borrowTableBox {
 }
 .tablebox {
+  width: 620px;
+  height: 250px;
 }
 .tablebox .tableBorder {
   border: 1px solid #ebeef5;
   border-bottom: none;
-  font-size: 16px;
+  /*font-size: 16px;*/
+}
+.buttonBox {
+  border: 1px solid #ebeef5;
+  border-top: none;
+  padding: 10px 0;
 }
 .el-button--120 {
   width: 120px;
@@ -308,5 +559,17 @@ export default {
 .buttonBox {
   text-align: center;
 }
+/*------ 书籍查看 ------*/
+.endTable{
+  border: 1px solid #ebeef5;
+  border-top: none;
+  border-bottom: none;
+  box-sizing: border-box;
+}
 </style>
 
+<style>
+.searchBox .el-select .el-input--suffix {
+  width: 75px;
+}
+</style>
