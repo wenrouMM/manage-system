@@ -1,12 +1,11 @@
 <template>
-  <div id="bookpublishhouse" style="">
-    <div style="display: flex;flex-direction: row;height: 952px" id="mybook">
-      <div style="background-color:white;width:250px;height:952px;display: flex;flex-direction:column;overflow-y: auto">
-        <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
-        <div style="width: 250px;height: 892px;background-color: white;overflow-y: scroll">
-          <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
-        </div>
+  <div style="display: flex;flex-direction: row;overflow: auto">
+    <div style="width:250px;display: flex;flex-direction:column;">
+      <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
+      <div style="overflow-y: auto;background-color:white;height: 900px">
+        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
+    </div>
       <div style="width:1320px;margin-left: 30px;background-color:white;height:952px">
         <el-container>
           <div class="box-card">
@@ -100,7 +99,6 @@
           </div>
         </el-container>
       </div>
-    </div>
   </div>
 </template>
 

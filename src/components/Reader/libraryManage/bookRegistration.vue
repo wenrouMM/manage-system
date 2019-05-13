@@ -1,5 +1,5 @@
 <template>
-  <div class="borrowbook" v-loading="formLoading">
+  <div class="borrowbook" v-loading="formLoading" style="overflow: auto;position: relative">
     <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">图书登记</div>
@@ -11,66 +11,70 @@
       :model="addForm"
       :rules="addRules"
     >
-      <section class="upload mr_30">
-        <!-- 背景图片做改动 -->
+      <div style="display: flex;flex-direction: row;width: 1250px;margin: 30px auto;justify-content: space-around">
+          <!-- 背景图片做改动 -->
         <div class="defultHead"></div>
-      </section>
-      <div style="display: flex;flex-direction: row;margin-left:350px;margin-top: -160px">
-        <el-form-item label="条　　码 :  " prop="barcode" style="width: 500px;" :label-width="formLabelWidth">
-          <el-input v-model="addForm.barcode" auto-complete="off" @input="barcodeCheck"  style="width: 398px;position: relative" placeholder="请输入条码"></el-input>
-          <img src="../../../base/img/currency/Xxxx.png" id="closeInput" @click="closeInput">
-        </el-form-item>
-        <el-form-item label=" I S B N : "  prop="isbn" style="width: 500px;margin-left: 90px" :label-width="formLabelWidth">
-          <el-input v-model="addForm.isbn" autocomplete="off" style="width: 400px" placeholder="请输入ISBN" :disabled="disable"></el-input>
+        <div>
+          <div style="display: flex;flex-direction: row;margin-top: 30px">
+            <el-form-item label="条　　码 :  " prop="barcode"  :label-width="formLabelWidth">
+              <el-input v-model="addForm.barcode" auto-complete="off" @input="barcodeCheck"  style="position: relative;width: 400px" placeholder="请输入条码"></el-input>
+              <img src="../../../base/img/currency/Xxxx.png" id="closeInput" @click="closeInput">
+            </el-form-item>
+            <el-form-item label=" I S B N : "  prop="isbn" style="margin-left: 50px" :label-width="formLabelWidth">
+              <el-input v-model="addForm.isbn" autocomplete="off" style="width: 400px" placeholder="请输入ISBN" :disabled="disable"></el-input>
+            </el-form-item>
+          </div>
+          <div  style="display: flex;flex-direction: row;margin-top: 30px;">
+            <el-form-item label="索书号码 : " prop="bookIndex" :label-width="formLabelWidth" >
+              <el-input v-model="addForm.bookIndex" autocomplete="off" style="width: 400px" :disabled="disable"  placeholder="请输入索书号码"></el-input>
+            </el-form-item>
+            <el-form-item label="书籍名称 : " prop="bookName" :label-width="formLabelWidth" style="margin-left: 50px">
+              <el-input v-model="addForm.bookName" autocomplete="off" style="width: 400px" :disabled="disable"  placeholder="请输入书籍名称"></el-input>
+            </el-form-item>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex;flex-direction: column;width: 1250px;margin: 30px auto;justify-content: space-around">
+        <div style="display: flex;flex-direction: row;">
+          <el-form-item label="出版社名 : " prop="lib" :label-width="formLabelWidth" >
+            <el-input v-model="addForm.lib" autocomplete="off"  style="position: relative;width: 500px" :disabled="disable"  placeholder="请选择出版社名" @focus="libMessage"></el-input>
+            <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;right: 5px" @click="libMessage" >
+          </el-form-item>
+          <el-form-item label="作　　者 : " prop="author" :label-width="formLabelWidth" style="margin-left: 50px">
+            <el-input v-model="addForm.author" autocomplete="off" style="width: 500px" :disabled="disable"  placeholder="请输入作者"></el-input>
+          </el-form-item>
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 30px">
+          <el-form-item label="价　　格 : " prop="value" :label-width="formLabelWidth">
+            <el-input v-model="addForm.value" autocomplete="off" style="width: 500px" :disabled="disable"  placeholder="请输入价格"></el-input>
+          </el-form-item>
+          <el-form-item label="页　　码 : " prop="page" :label-width="formLabelWidth" style="margin-left: 50px">
+            <el-input v-model="addForm.page" autocomplete="off"  style="width: 500px" :disabled="disable"  placeholder="请输入页码"></el-input>
+          </el-form-item>
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 30px">
+          <div style="display: flex;flex-direction: column;">
+            <el-form-item label="书籍类型 : " prop="typeName" :label-width="formLabelWidth"  >
+              <el-input v-model="addForm.typeName" autocomplete="off" style="position: relative;width: 500px" :disabled="disable" @focus="typeMessage" placeholder="请选择书籍类型"></el-input>
+              <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;right: 5px" @click="typeMessage">
+            </el-form-item>
+            <el-form-item label="状　　态 : " prop="status" style="width: 500px;margin-top: 10px" :label-width="formLabelWidth">
+              <el-radio-group v-model="addForm.status" :disabled="disable">
+                <el-radio label="上架"></el-radio>
+                <el-radio label="下架"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </div>
+          <el-form-item label="书籍简介 : " prop="bookcontent" :label-width="formLabelWidth" style="margin-left: 50px">
+            <el-input type="textarea" style="width: 500px" v-model="addForm.bookcontent" autocomplete="off"  :autosize="{ minRows: 4, maxRows: 4}" :disabled="disable" placeholder="请输入书籍简介"></el-input>
+          </el-form-item>
+        </div>
+        <!-- 弹框表单按钮  验证失效-->
+        <el-form-item class="dialogFooter" style="margin:0 auto;width: 500px">
+          <el-button class="buttonTrueColor" @click="submitForm">确定</el-button>
+          <el-button class="buttonCancelColor" @click="resetForm">重置</el-button>
         </el-form-item>
       </div>
-      <div style="display: flex;flex-direction: row;width: 1200px;margin-left: 350px;margin-top: 30px">
-        <el-form-item label="索书号码 : " prop="bookIndex" :label-width="formLabelWidth">
-          <el-input v-model="addForm.bookIndex" autocomplete="off" style="width: 400px" :disabled="disable"  placeholder="请输入索书号码"></el-input>
-        </el-form-item>
-        <el-form-item label="书籍名称 : " prop="bookName" :label-width="formLabelWidth" style="margin-left: 100px">
-          <el-input v-model="addForm.bookName" autocomplete="off" style="width: 400px;" :disabled="disable"  placeholder="请输入书籍名称"></el-input>
-        </el-form-item>
-      </div>
-      <div style="display: flex;flex-direction: row;width: 1400px;margin-left: 10px;margin-top: 50px">
-        <el-form-item label="出版社名 : " class="mr_30" prop="lib" :label-width="formLabelWidth" style="position: relative;margin-left: 130px">
-          <el-input v-model="addForm.lib" autocomplete="off"  style="width: 500px" :disabled="disable"  placeholder="请选择出版社名" @focus="libMessage"></el-input>
-          <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 470px" @click="libMessage" >
-        </el-form-item>
-        <el-form-item label="作　　者 : " prop="author" :label-width="formLabelWidth" style="margin-left: 90px">
-          <el-input v-model="addForm.author" autocomplete="off" style="width: 500px;" :disabled="disable"  placeholder="请输入作者"></el-input>
-        </el-form-item>
-      </div>
-      <div style="display: flex;flex-direction: row;width: 1400px;margin-left: 140px;margin-top: 20px">
-        <el-form-item label="价　　格 : " prop="value" class="mr_30" :label-width="formLabelWidth">
-          <el-input v-model="addForm.value" autocomplete="off" style="width: 500px" :disabled="disable"  placeholder="请输入价格"></el-input>
-        </el-form-item>
-        <el-form-item label="页　　码 : " prop="page" :label-width="formLabelWidth" style="margin-left: 90px">
-          <el-input v-model="addForm.page" autocomplete="off"  style="width: 500px;" :disabled="disable"  placeholder="请输入页码"></el-input>
-        </el-form-item>
-      </div>
-      <div style="display: flex;flex-direction: row;width: 700px;margin-left: 790px;margin-top: 20px">
-        <el-form-item label="书籍类型 : " prop="typeName" :label-width="formLabelWidth" style="position: relative;margin-left: 60px" >
-          <el-input v-model="addForm.typeName" autocomplete="off" style="width: 500px;" :disabled="disable" @focus="typeMessage" placeholder="请选择书籍类型"></el-input>
-          <img src="../../../base/img/currency/ss.png" style="width: 20px;height: 20px;position: absolute;top:12px;left: 470px" @click="typeMessage">
-        </el-form-item>
-      </div>
-      <div style="display: flex;flex-direction: row;width:700px;margin-left: 780px;margin-top: 20px">
-        <el-form-item label="状　　态 : " prop="status" style="width: 300px;margin-left:70px " :label-width="formLabelWidth">
-          <el-radio-group v-model="addForm.status" :disabled="disable">
-            <el-radio label="上架"></el-radio>
-            <el-radio label="下架"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </div>
-      <el-form-item label="书籍简介 : " prop="bookcontent" :label-width="formLabelWidth" style="margin-top: -130px;margin-left:140px ;width: 500px">
-        <el-input type="textarea" style="width: 500px" v-model="addForm.bookcontent" autocomplete="off"  :autosize="{ minRows: 4, maxRows: 4}" :disabled="disable" placeholder="请输入书籍简介"></el-input>
-      </el-form-item>
-      <!-- 弹框表单按钮  验证失效-->
-      <el-form-item class="dialogFooter" style="margin-left: 520px;margin-top: 70px;width: 500px">
-        <el-button class="buttonTrueColor" @click="submitForm">确定</el-button>
-        <el-button class="buttonCancelColor" @click="resetForm">重置</el-button>
-      </el-form-item>
     </el-form>
     <div id="typeMessage" >
       <div style="position: relative">
@@ -400,8 +404,8 @@
   #typeMessage{
     display: none;
     position: absolute;
-    top: 150px;
-    left:750px;
+    top: 120px;
+    left:600px;
     z-index: 30000;
 
   }
@@ -440,12 +444,10 @@
     border: 1px solid lightgray;
     background-color: lightgray;
     position: relative;
-    margin-left: 30px;
   }
   .upload{
     height: 200px;
     width: 150px;
-    margin-left:120px;
     padding-top: 50px;
   }
   .dialogFooter{
