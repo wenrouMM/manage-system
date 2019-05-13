@@ -869,8 +869,9 @@ export default {
                 this.addForm.headerAddress = request.data.row
                 console.log('是否图片',this.addForm)
                 console.log('图片上传成功',request.data.row,this.addEdit)
+              } else{
+                this.$message.error(request.data.msg);
               }
-              console.log("上传图片后", this.addEdit);
             });
           }
 

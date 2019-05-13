@@ -135,9 +135,11 @@
             <el-form-item label="借书数量" prop="bookNum" :label-width="formLabelWidth">
               <el-input v-model="changeForm.bookNum" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
-              <el-input v-model="changeForm.deposit" autocomplete="off"></el-input>
+            
+            <el-form-item  label="押金金额" prop="deposit" :label-width="formLabelWidth">
+              <el-input :disabled="editJude" v-model="changeForm.deposit" autocomplete="off"></el-input>
             </el-form-item>
+            
             <el-form-item class="select" prop="disabled" label="状　　态">
               <el-radio-group v-model="changeForm.disabled">
                 <el-radio label="1" value='1'>禁用</el-radio>
@@ -200,6 +202,7 @@ export default {
         disabled: "", // 状态
         id:'' // ID
       },
+      editJude:false,//押金输入框锁定
       addRules: {
         name: [{ required: true, message: "请输入等级名称", trigger: "blur" }],
         renewNum: [
@@ -211,9 +214,11 @@ export default {
         bookNum: [
           { required: true, message: "请输入借阅数量", trigger: "blur" }
         ],
+        
         deposit: [
           { required: true, message: "请输入押金金额", trigger: "blur" }
         ],
+        
         disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
     };
@@ -295,6 +300,7 @@ export default {
     // 添加按钮
     addBtn() {
       this.i = 3;
+      this.editJude = false
       this.changeFormDialog = true;
     },
     // 查询按钮
@@ -312,6 +318,7 @@ export default {
       this.changeForm.deposit = row.deposit
       this.changeForm.id = row.id
       this.changeForm.disabled = row.disabled.toString()
+      this.editJude = true
       this.changeFormDialog = true;
       console.log(index, row,this.changeForm);
     },

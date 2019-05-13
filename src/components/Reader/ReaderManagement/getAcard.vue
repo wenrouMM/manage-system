@@ -49,17 +49,16 @@
         </el-form-item>
         <!-- 表单域 -->
         <div class="hideBox" v-if="!rebackData">
-        <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
-          <el-input
-            @blur="select"
-            v-model="addForm.id"
-            autocomplete="off"
-            class="inputDiv"
-            placeholder="请输入身份证号"
-          ></el-input>
-          <i v-if="loading" class="el-icon-loading"></i>
-        </el-form-item>
-
+          <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
+            <el-input
+              @blur="select"
+              v-model="addForm.id"
+              autocomplete="off"
+              class="inputDiv"
+              placeholder="请输入身份证号"
+            ></el-input>
+            <i v-if="loading" class="el-icon-loading"></i>
+          </el-form-item>
 
           <el-form-item label="用户名" prop="name" :label-width="formLabelWidth">
             <el-input
@@ -70,12 +69,6 @@
               placeholder="请输入用户名"
             ></el-input>
           </el-form-item>
-          <el-form-item class="select" label="性别" :label-width="formLabelWidth" prop="sex">
-            <el-radio-group v-model="addForm.sex" :disabled="judge">
-              <el-radio label='1'>男</el-radio>
-              <el-radio label='0'>女</el-radio>
-            </el-radio-group>
-          </el-form-item>
           <el-form-item label="电话号码" prop="phoneNumber" :label-width="formLabelWidth">
             <el-input
               v-model="addForm.phoneNumber"
@@ -83,6 +76,15 @@
               class="inputDiv"
               :disabled="judge"
               placeholder="请输入电话号码"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
+            <el-input
+              v-model="addForm.email"
+              autocomplete="off"
+              class="inputDiv"
+              :disabled="judge"
+              placeholder="请输入邮箱"
             ></el-input>
           </el-form-item>
           <el-form-item label="地址" prop="address" :label-width="formLabelWidth">
@@ -102,13 +104,17 @@
               placeholder="请输入卡号"
             ></el-input>
           </el-form-item>
-          <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
-            <el-radio-group v-model="addForm.deposit" size="small">
-              <el-radio label="100" border>￥ 100</el-radio>
-              <el-radio label="200" border>￥ 200</el-radio>
-              <el-radio label="300" border>￥ 300</el-radio>
-              <el-radio label="400" border>￥ 400</el-radio>
-            </el-radio-group>
+          <el-form-item label="角色等级" prop="level" :label-width="formLabelWidth">
+           
+              <el-select value-key="name"  v-model="addForm.level" placeholder="请选择">
+                <el-option
+                  v-for="(item,index) in optionsData"
+                  :key="index"
+                  :label="item.name"
+                  :value="item"
+                ></el-option>
+              </el-select>
+            <span>押金金额￥：{{addForm.level.deposit}}</span>
           </el-form-item>
           <el-form-item class="buttonBox">
             <el-button
@@ -120,30 +126,33 @@
               type="info"
               style="border-radius: 10px;width: 150px"
               @click="resetForm('addForm')"
-            >取消</el-button>
+            >重置</el-button>
           </el-form-item>
         </div>
         <div class="textBox" v-if="rebackData">
           <p>
-            <span>身份证号：</span>{{addForm.id}}
+            <span>身份证号：</span>
+            {{addForm.id}}
           </p>
           <p>
-            <span>用户名：</span>{{addForm.name}}
+            <span>用户名：</span>
+            {{addForm.name}}
           </p>
           <P>
-            <span>性别：</span>{{addForm.sex==1?'女':'男'}}
-          </P>
-          <P>
-            <span>电话号码：</span>{{addForm.phoneNumber}}
-          </P>
-          <P>
-            <span>地址：</span>{{addForm.address}}
+            <span>电话号码：</span>
+            {{addForm.phoneNumber}}
           </P>
           <p>
-            <span>押金金额：</span>{{addForm.deposit}}
+            <span>邮箱：</span>
+            {{addForm.email}}
           </p>
           <P>
-            <span>卡号：</span>{{addForm.cardNumber}}
+            <span>地址：</span>
+            {{addForm.address}}
+          </P>
+          <P>
+            <span>卡号：</span>
+            {{addForm.cardNumber}}
           </P>
         </div>
       </el-form>
@@ -153,14 +162,19 @@
 
 <script>
 import axios from "axios";
-import { cardInfoInt,headUpload } from "../../../request/api/base.js";
+import {
+  cardInfoInt,
+  headUpload,
+  getCardInt
+} from "../../../request/api/base.js";
 export default {
   name: "getAcard",
   data() {
     return {
+      optionsData:[],// 等级选择下拉框
       formBox: false,
       formLabelWidth: "100px",
-      loading:false,
+      loading: false,
       files: "", // 用于上传
       preloadImg: "", // 图片相关
       rebackData: false, // 回显数据
@@ -172,11 +186,12 @@ export default {
         name: "", // 用户名
         sex: "", // 性别
         id: "", // 身份证
-        preloadImg:'',
+        preloadImg: "",
         phoneNumber: "", // 电话号码
-        deposit: '',
+        level: "",
         cardNumber: "",
-        headerAddress:''
+        headerAddress: "",
+        email:''
       },
       addRules: {
         // 添加的参数验证
@@ -189,20 +204,23 @@ export default {
         cardNumber: [
           { required: true, message: "请输入读书卡号", trigger: "blur" }
         ],
-        deposit: [{ required: true, message: "请选择金额", trigger: "blur" }],
-        address: [{ required: true, message: "请输入地址", trigger: "blur" }]
+        level: [{ required: true, message: "请选择金额", trigger: "change" }],
+        address: [{ required: true, message: "请输入地址", trigger: "blur" }],
+        email:[{required: true, message: "请输入邮箱", trigger: "blur" }]
       }
     };
   },
   computed: {
     addTimeForm() {
       let obj = {
-        deposit: this.addForm.deposit,
+        fkGradeCode:this.addForm.level.code,
+        deposit: this.addForm.level.deposit,
         phone: this.addForm.phoneNumber,
         cardNumber: this.addForm.cardNumber,
         fkReaderCard: this.addForm.id,
         fkReaderName: this.addForm.name,
-        readerAddress: this.addForm.address
+        readerAddress: this.addForm.address,
+        email:this.addForm.email
       };
       return obj;
     },
@@ -213,25 +231,40 @@ export default {
       return obj;
     },
     judge() {
-      let obj = this.selectData
-      for(var key in obj) {
-          return true; // 不是空对象 锁输入框
+      let obj = this.selectData;
+      for (var key in obj) {
+        return true; // 不是空对象 锁输入框
       }
-      return false // 是空对象 不锁
+      return false; // 是空对象 不锁
     }
   },
   methods: {
+    // 等级选择下拉框
+    levelOptionApi() {
+      axios.get(getCardInt).then(res => {
+        if(res.data.state == true){
+          this.optionsData = res.data.row
+          console.log('当前下拉框',this.optionsData)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+        console.log("查询等级下拉框", res);
+      });
+    },
     // ID查询
     select() {
       let data = this.selectTimeForm;
-      console.log(data)
-      this.addForm.headerAddress = ''
-      this.addForm.name = ''
-      this.addForm.address = ''
-      this.addForm.phoneNumber = ''
-      this.addForm.sex = ''
+      console.log(data);
+      /*
+      this.addForm.headerAddress = "";
+      this.addForm.name = "";
+      this.addForm.address = "";
+      this.addForm.phoneNumber = "";
+      this.addForm.sex = "";
+      this.addForm.email = ""
+      */
       if (data.idCard) {
-        this.loading = true
+        this.loading = true;
         axios
           .get(cardInfoInt.selectUser, {
             params: data
@@ -240,37 +273,38 @@ export default {
             console.log("返回的数据", res);
             if (res.data.state === true) {
               console.log(res);
-              this.selectData = res.data.row
-              let data = res.data.row
-              if(data !=null){
-                this.addForm.headerAddress = data.headerAddress
-                this.addForm.name = data.readerName
-                this.addForm.address = data.readerAddress
-                this.addForm.phoneNumber = data.phone
-                this.addForm.sex = data.readerSex.toString() // 应该是初始设置 非要字符串格式才行
-                console.log('此时的addform',this.addForm)
+              this.selectData = res.data.row;
+              let data = res.data.row;
+              if (data != null) {
+                this.addForm.headerAddress = data.headerAddress;
+                this.addForm.name = data.readerName;
+                this.addForm.address = data.readerAddress;
+                this.addForm.phoneNumber = data.phone;
+                this.addForm.sex = data.readerSex.toString(); // 应该是初始设置 非要字符串格式才行
+                this.addForm.email = data.email
+                console.log("此时的addform", this.addForm);
               }
 
-              this.loading = false
+              this.loading = false;
             } else {
               this.$message.error(res.data.msg);
-              this.loading = false
+              this.loading = false;
             }
           });
       }
       console.log("触发了吗");
     },
     submitForm(formName) {
-      console.log('提交的数据',this.addTimeForm);
+      console.log("提交的数据", this.addTimeForm);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.uploadImgApi()
+          this.uploadImgApi();
           axios.post(cardInfoInt.add, this.addTimeForm).then(res => {
             console.log("返回成功的信息", res);
             if (res.data.state === true) {
               console.log("提交成功");
               this.$message.success("成功");
-              this.rebackData = true
+              this.rebackData = true;
             } else {
               this.$message.error(res.data.msg);
             }
@@ -309,7 +343,7 @@ export default {
     },
     // 图片上传API
     uploadImgApi() {
-      let files = this.files
+      let files = this.files;
       if (files) {
         var formdatas = new FormData();
         formdatas.append("file", files);
@@ -330,16 +364,17 @@ export default {
         }).then(request => {
           // 如果是编辑 更换图片失败后
           if (request.data.row != "") {
-            console.log('上传图片成功')
-          }else{
-            this.$message.error('图片上传失败')
+            console.log("上传图片成功");
+          } else {
+            this.$message.error("图片上传失败");
           }
-
         });
       }
     }
   },
-  mounted() {}
+  created() {
+    this.levelOptionApi();
+  }
 };
 </script>
 

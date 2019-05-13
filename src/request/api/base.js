@@ -1,9 +1,12 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
+//var url='http://127.0.0.1:8088/'
+
 
 var imgurl='192.168.2.31:8090/'
+//var imgurl='http://127.0.0.1:8090/'
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
@@ -95,7 +98,7 @@ export const libbooknews = {
 }
 //图书登记
 export const libbookRegist = {
-  barcode:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectOneT`, //图书登记条码接口查详情
+  barcode:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectOne`, //图书登记条码接口查详情
   add:`${url}tibetmuseummodule/libraryBookRegistrationPage/add`, //图书登记添加
   publish:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectPressTree`, //图书登记出版社
   type:`${url}tibetmuseummodule/libraryBookRegistrationPage/selectAllBookType`, //图书登记书籍类型
@@ -175,15 +178,18 @@ export const cardInfoInt = {
   cardReissue: `${cardInfo}currency/cardReissue`,// 补办
   cogradient: `${cardInfo}synchronizationReader`, // 登记读者卡
   add: `${cardInfo}currency/add`, // 办卡
-  selectUser: `${cardInfo}selectUserInfoByCard`
+  selectUser: `${cardInfo}selectUserInfoByCard`,
+  option:`${url}tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
 }
+export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'
 //读者卡等级
 var cardLevel = url + 'tibetmuseummodule/readerTbCardGradeinfo/'
 export const cardLevelInt = {
   select: `${cardLevel}select`,
   add: `${cardLevel}add`,
   edit: `${cardLevel}edit`,
-  delete: `${cardLevel}delete`
+  delete: `${cardLevel}delete`,
+
 }
 // 读者卡类型
 var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
@@ -206,7 +212,7 @@ export const bookOperateInt = {
 
 }
 /*------ 通用接口 ------*/
-
+// 办卡接口
 //通用接口
 export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'

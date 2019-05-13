@@ -70,7 +70,7 @@
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
               <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="cardTypeName" label="类型名称"></el-table-column>
+              <el-table-column align="center" prop="cardGradeName" label="等级名称"></el-table-column>
               <el-table-column align="center" prop="fkFromLibraryName" label="所属地区"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
@@ -82,6 +82,7 @@
               <el-table-column align="center" label="操作" width="200">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
+                  <span class="edit" @click="rechargeBtn(scope.$index, scope.row)">充值</span>
                   <span class="edit" @click="supply(scope.$index, scope.row)">补办</span>
                   <span class="ban" @click="lostBtn(scope.$index, scope.row)">{{scope.row.state ===0?'挂失':'取挂'}}</span>
                 </template>
@@ -141,7 +142,7 @@
             </div>
             <div v-else-if="i==4">
               <el-form-item label="卡号" prop="cardNumber">
-                <el-input v-model="changeForm.cardNumber" autocomplete="off"></el-input>
+                <el-input :disabled="juge" v-model="changeForm.cardNumber" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="押金" prop="deposit">
                 <el-input v-model="changeForm.deposit" autocomplete="off"></el-input>
@@ -217,7 +218,8 @@ export default {
         idCard: [{ required: true, message: "请输入卡号", trigger: "blur" }],
         cardNumber:[{ required: true, message: "请输入卡号", trigger: "blur" }],
         deposit: [{ required: true, message: "请输入押金", trigger: "blur" }],
-      }
+      },
+      juge:false //卡号禁用
     };
   },
   computed: {
@@ -225,7 +227,7 @@ export default {
       let obj = {
         name: this.searchForm.name,
         cardNumber:this.searchForm.cardNumber,
-        typeCode: this.searchForm.type,
+        gradeCode: this.searchForm.type,
         state:this.searchForm.state,
         currentPage: 1,
         pageSize: this.pageSize
@@ -272,6 +274,7 @@ export default {
     /*====== 2.0 启动按钮组 ======*/
     depositBtn(){
       this.i=4
+      this.juge = false
       this.changeFormDialog=true
     },
     // 全选按钮
@@ -307,9 +310,18 @@ export default {
 
       console.log("当前查询", this.searchTimeForm);
     },
+    // 充值快捷按钮
+    rechargeBtn(index,row){
+      this.i=4
+      this.juge=true
+      this.changeForm.cardNumber = row.cardNumber
+      console.log(row)
+      this.changeFormDialog=true
+    },
     // 补办读者卡
     supply(index, row) {
       this.i = 0;
+      
       this.changeForm.cardNumber = row.cardNumber
       this.changeForm.id = row.id
       this.changeFormDialog = true;
@@ -421,6 +433,7 @@ export default {
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, data);
             console.log("保存当前查询", this.paginationForm);
+            this.currentPage = 1
           } else {
             this.$message.error(res.data.msg);
           }
@@ -441,7 +454,7 @@ export default {
     */
     // 等级API
     searchOption() {
-      axios.get(readerType).then(res => {
+      axios.get(cardInfoInt.option).then(res => {
         if (res.data.state === true) {
           this.optionsDataType = res.data.row;
           console.log("等级下拉框数据", res);

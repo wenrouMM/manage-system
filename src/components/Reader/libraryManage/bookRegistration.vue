@@ -316,11 +316,6 @@
                 this.addForm.status=''
                 this.disable=false
               }
-            }else{
-              this.$message({
-                message: res.data.msg,
-                type: 'error'
-              });
             }
           })
         }else{
