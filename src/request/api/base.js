@@ -1,11 +1,11 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-//var url = 'http://192.168.2.31:8088/'
-var url = 'http://192.168.2.121:8088/'
+var url = 'http://192.168.2.131:8088/'
+//var url = 'http://192.168.2.121:8088/'
 //var url='http://127.0.0.1:8088/'
 
 
-var imgurl='192.168.2.31:8090/'
+var imgurl='http://192.168.2.131:8090/'
 //var imgurl='http://127.0.0.1:8090/'
 //登陆页
 export const login = {
@@ -61,7 +61,6 @@ export const powerMangaeInt = {
   edit: `${powerMangae}edit`,
   delete: `${powerMangae}delete`,
   prohibit:`${powerMangae}prohibit`
-
 }
 export const login_record = url + "authmodule/authTbManagerLoginLog/select" //登录记录接口
 export const role_name = url + 'authmodule/roleInformation/currency/select'//角色名称查询
@@ -214,7 +213,7 @@ export const bookOperateInt = {
 /*------ 通用接口 ------*/
 // 办卡接口
 //通用接口
-export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
+export const photoUrl = 'http://127.168.2.131' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
 export const headUpload = imgurl + 'filemodule/uploadFile/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
