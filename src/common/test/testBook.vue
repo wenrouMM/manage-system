@@ -100,6 +100,7 @@ body,
 .index .nav {
   background-color: #cc85d9;
   width: 100%;
+  padding-top: 20px;
 }
 
 .index .el-menu {

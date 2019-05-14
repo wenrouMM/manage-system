@@ -24,6 +24,7 @@
               <el-menu-item index="/bookMode">图书管理</el-menu-item>
               <el-menu-item index="/areaMode">区域管理</el-menu-item>
               <el-menu-item index="/powerMode">权限管理</el-menu-item>
+              <el-menu-item index="/systemMode">系统管理</el-menu-item>
             </el-menu>
           </div>
         </div>

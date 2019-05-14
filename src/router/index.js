@@ -57,8 +57,10 @@ import Login from '@/components/login.vue'
 import Detail from '../components/Book/detail.vue'
 import LibDetail from '../components/Reader/libDetail.vue'
 import Not from '../components/error.vue'
-import { resolve } from 'path';
 
+
+/*系统设置 */
+import TestSystem from '../common/test/testSystem.vue'
 Vue.use(Router)
 // 暴露一个router对象
 /*导航守卫 */
@@ -67,7 +69,7 @@ export default new Router({
   //mode:history,
   routes: [{
       path: '/',
-      redirect: '/home'
+      redirect: '/powerMode'
     },
     {
       path: '/login',
@@ -79,49 +81,49 @@ export default new Router({
       name: 'index',
       component: Index,
       children: [{
-        path: '/home',
-        name: 'home',
-        meta:{
-          title:'首页'
+          path: '/home',
+          name: 'home',
+          meta: {
+            title: '首页'
+          },
+          component: Home
         },
-        component: Home
-      },
-      {
-        path:'/menuInformation',
-        meta:{
-          title:'菜单管理'
+        {
+          path: '/menuInformation',
+          meta: {
+            title: '菜单管理'
+          },
+          component: Menu
         },
-        component: Menu
-      },
-      {
-        path:'/roleMenuElement',
-        meta:{
-          title:'权限管理'
+        {
+          path: '/roleMenuElement',
+          meta: {
+            title: '权限管理'
+          },
+          component: PowerControl
         },
-        component: PowerControl
-      },
-      {
-        path:'/roleInformation',
-        meta:{
-          title:'角色管理'
+        {
+          path: '/roleInformation',
+          meta: {
+            title: '角色管理'
+          },
+          component: UserRole
         },
-        component: UserRole
-      },
-      {
-        path:'/managerInformation',
-        meta:{
-          title:'用户管理'
+        {
+          path: '/managerInformation',
+          meta: {
+            title: '用户管理'
+          },
+          component: UserManage
         },
-        component: UserManage
-      },
-      {
-        path:'/authTbManagerLoginLog',
-        meta:{
-          title:'登录记录'
-        },
-        component: LoginRecord
-      }
-    ]
+        {
+          path: '/authTbManagerLoginLog',
+          meta: {
+            title: '登录记录'
+          },
+          component: LoginRecord
+        }
+      ]
       /*
       children: [{
           path: '/home',
@@ -177,6 +179,38 @@ export default new Router({
       path: '/test', // 一级路由 管理横条
       component: Test,
       children: [{
+          path: '/systemMode',
+          component: TestSystem,
+          children: [{
+              path: '/noticeSet',
+              meta: {
+                title: '系统设置'
+              },
+              component: resolve => require(['../components/System/notice.vue'],resolve)
+            },
+            {
+              path: '/damageSet',
+              meta: {
+                title: '损坏管理'
+              },
+              component: resolve => require(['../components/System/damage.vue'],resolve)
+            },
+            {
+              path: '/rechargeSet',
+              meta: {
+                title: '充值管理'
+              },
+              component: resolve => require(['../components/System/recharge.vue'],resolve)
+            },
+            {
+              path: '/vacationSet',
+              meta: {
+                title: '寒暑假设置'
+              },
+              component: resolve => require(['../components/System/vacation.vue'],resolve)
+            }
+          ]
+        }, {
           path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
           component: Test2,
           children: [{
@@ -187,8 +221,8 @@ export default new Router({
 
               path: '/userManage',
               component: UserManage,
-              meta:{
-                menuName:'权限管理'
+              meta: {
+                menuName: '权限管理'
               }
             },
             {
@@ -223,12 +257,11 @@ export default new Router({
           ]
         },
         {
-          path:'/bookMode',
-          component:TestBook,
-          children:[
-            {
-              path:'/libInfo',
-              component:LibInfo
+          path: '/bookMode',
+          component: TestBook,
+          children: [{
+              path: '/libInfo',
+              component: LibInfo
             },
             {
               path: '/bookType',
@@ -251,127 +284,126 @@ export default new Router({
         {
           path: '/readerMode',
           component: TestReader,
-          children: [
-            {
+          children: [{
               path: '/readeradmin',
               component: ReaderAdmin,
             },
             {
-              path:'/getcard',
-              name:"GetCard",
-              component:GetCard,
+              path: '/getcard',
+              name: "GetCard",
+              component: GetCard,
             },
             {
-              path:'/LibBookInfo',
-              component:LibBookInfo
+              path: '/LibBookInfo',
+              component: LibBookInfo
             },
             {
               path: '/LibBookInfo/:id',
               component: LibDetail
             },
             {
-              path:'/bookLocation',
-              component:bookLocation
+              path: '/bookLocation',
+              component: bookLocation
             },
             {
-              path:'/libBookType',
-              component:LibBookType
+              path: '/libBookType',
+              component: LibBookType
             },
             {
-              path:"/bookregistration",
-              component:BookRegistration
+              path: "/bookregistration",
+              component: BookRegistration
             },
             {
-              path:'/publishhouse',
-              component:BookPublishHouse
+              path: '/publishhouse',
+              component: BookPublishHouse
             },
             {
-              path:'/readercardmanagement',
-              component:ReaderCardManagement,
+              path: '/readercardmanagement',
+              component: ReaderCardManagement,
             },
             {
               path: '/readercardtype',
               component: ReaderCardType,
             },
             {
-              path:'/readercardgrade',
-              component:ReaderCardGrade,
+              path: '/readercardgrade',
+              component: ReaderCardGrade,
             },
             {
-              path:'/loanrecorde',
-              component:LoanRecorde,
+              path: '/loanrecorde',
+              component: LoanRecorde,
             },
             {
-              path:'/loanhistory',
-              component:LoanHistory,
+              path: '/loanhistory',
+              component: LoanHistory,
             },
             {
-              path:"/borrowingbooks",
-              component:BorrowingBooks
+              path: "/borrowingbooks",
+              component: BorrowingBooks
             },
             {
-              path:"/borrowingstatus",
-              component:BorrowingStatus
+              path: "/borrowingstatus",
+              component: BorrowingStatus
             },
             {
-              path:"/returnbooks",
-              component:ReturnBooks
+              path: "/returnbooks",
+              component: ReturnBooks
             },
             {
-              path:"/returnstatus",
-              component:ReturnStatus
+              path: "/returnstatus",
+              component: ReturnStatus
             },
             {
-              path:"/chargemoney",
-              component:ChargeMoney
+              path: "/chargemoney",
+              component: ChargeMoney
             },
             {
-              path:"/depositrecord",
-              component:DepositRecord
+              path: "/depositrecord",
+              component: DepositRecord
             },
             {
-              path:"/paymentrecord",
-              component:PaymentRecord
+              path: "/paymentrecord",
+              component: PaymentRecord
             },
             {
-              path:'/depositdetails',
-              component:DepositDetails
+              path: '/depositdetails',
+              component: DepositDetails
             },
             {
-              path:"/paymentdetails",
-              component:PaymentDetails
+              path: "/paymentdetails",
+              component: PaymentDetails
             },
             {
-              path:'/overduerecords',
-              component:OverdueRecords
+              path: '/overduerecords',
+              component: OverdueRecords
             },
             {
-              path:"/overduehistory",
-              component:OverdueHistory
+              path: "/overduehistory",
+              component: OverdueHistory
             },
             {
-              path:"/overduesetting",
-              component:OverdueSetting
+              path: "/overduesetting",
+              component: OverdueSetting
             },
             {
-              path:"/increditrecord",
-              component:IncreditRecord
+              path: "/increditrecord",
+              component: IncreditRecord
             },
             {
-              path:'/incredithistory',
-              component:IncreditHistory
+              path: '/incredithistory',
+              component: IncreditHistory
             },
             {
-              path:'/IncreditSetting',
-              component:IncreditSetting
+              path: '/IncreditSetting',
+              component: IncreditSetting
             },
             {
-              path:'/DishonestyRecords',
-              component:DishonestyRecords
+              path: '/DishonestyRecords',
+              component: DishonestyRecords
             },
             {
-              path:'/DishonestyHistory',
-              component:DishonestyHistory
+              path: '/DishonestyHistory',
+              component: DishonestyHistory
             },
           ]
         }

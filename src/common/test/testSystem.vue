@@ -4,22 +4,20 @@
       <!-- 2.0 二层路由 导航模块 -->
       <el-aside class="nav" width="260px" style="background-color: #343B4A">
         <!-- 侧边栏主体 -->
+        <!-- bug其一 选中状态的处理 -->
         <el-menu
           class="content"
           router
-          :default-active="onRoutes"
-          background-color="#545c64"
+          background-color="#343b4a"
           text-color="#fff"
+          :default-active="this.$route.path"
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
-          <el-menu-item class="activeMenu" index="userManage">
-            用户管理
-          </el-menu-item>
-          <el-menu-item class="activeMenu" index="userRole">角色管理</el-menu-item>
-          <el-menu-item class="activeMenu" index="powerControl">权限管理</el-menu-item>
-          <el-menu-item class="activeMenu" index="menu">菜单管理</el-menu-item>
-          <el-menu-item class="activeMenu" index="LoginRecord">登录记录</el-menu-item>
+          <el-menu-item index="/noticeSet">公告管理</el-menu-item>
+          <el-menu-item index="/damageSet">损坏管理</el-menu-item>
+          <el-menu-item index="/rechargeSet">充值设置</el-menu-item>
+          <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -36,18 +34,13 @@ export default {
     return {
       activeIndex: "1",
       activeIndex2: "1",
-      navRouter:true, // 点击到首页的时候清空这个数组 面包屑导航
+      navRouter: true // 点击到首页的时候清空这个数组 面包屑导航
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
-  },
-   computed: {
-    onRoutes() {
-      return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
-    },
   }
 };
 </script>
@@ -128,6 +121,12 @@ body,
   content: "";
   position: absolute;
   transition: all 0.5s;
+}
+.el-submenu__title{
+  background: #343b4a !important;
+}
+.el-menu{
+  background: #343b4a !important;
 }
 /*当初这里是被显示挡住了*/
 .el-menu-item.activeMenu.is-active::after {
