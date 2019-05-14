@@ -692,7 +692,7 @@ export default {
 </style>
 
 <style>
-.searchBox .el-select .el-input--suffix {
+.borrowbook .searchBox .el-select .el-input--suffix {
   width: 75px;
 }
 </style>

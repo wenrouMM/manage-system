@@ -73,6 +73,12 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.js$/,
+    loader: 'imports-loader?window.Quill=quill',
+    include: path.resolve('./node_modules/quill-image-resize-module')
+
       }
     ]
   },

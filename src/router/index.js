@@ -208,6 +208,12 @@ export default new Router({
                 title: '寒暑假设置'
               },
               component: resolve => require(['../components/System/vacation.vue'],resolve)
+            },{
+              path:'/publisher',
+              meta:{
+                title:'发布'
+              },
+              component:resolve => require(['../common/test/editor.vue'],resolve)
             }
           ]
         }, {

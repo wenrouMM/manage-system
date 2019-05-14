@@ -32,6 +32,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new webpack.ProvidePlugin({
+      'window.Quill': 'quill'
+    }),
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {

@@ -57,7 +57,11 @@
             <el-table-column align="center" prop="loginMessage" label="用户名称"></el-table-column>
             <el-table-column align="center" prop="loginIp" label="登录IP"></el-table-column>
             <el-table-column align="center" prop="loginAccount" label="登录账户"></el-table-column>
-            <el-table-column align="center" prop="fkLoginName" label="登录来源"></el-table-column>
+            <el-table-column align="center" prop="fkLoginCode" label="登录来源">
+              <template slot-scope="scope">
+                <span :class="{error: scope.row.loginStatus==1}">{{scope.row.loginStatus == 0?'平台登录':'设备登录'}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="loginTime" label="登录时间"></el-table-column>
             <!-- 自定义插槽 -->
             <el-table-column align="center" prop="loginStatus" label="登录状态">

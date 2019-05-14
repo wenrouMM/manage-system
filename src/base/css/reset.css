@@ -249,7 +249,7 @@ a{
 
 /*按钮覆盖*/
 .el-button{
-	color: #fff;
+	
 	font-size: 16px;
 }
 .el-button--primary{ /*primary 默认搜索用按钮*/

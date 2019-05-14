@@ -1,6 +1,6 @@
 <template>
     <div class="editor">
-
+        富文本编辑器
     </div>
 </template>
 

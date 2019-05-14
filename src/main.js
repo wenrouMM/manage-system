@@ -23,6 +23,10 @@ import './zTree_v3/css/zTreeStyle/zTreeStyle.css'
 import {
   Message
 } from 'element-ui'
+
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {

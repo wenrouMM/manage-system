@@ -42,3 +42,10 @@
   display: block;
 }
 
+
+.el-input--130{
+  width: 130px;
+}
+.el-input--140{
+  width: 140px!important;
+}
