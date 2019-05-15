@@ -61,6 +61,7 @@ import Not from '../components/error.vue'
 
 /*系统设置 */
 import TestSystem from '../common/test/testSystem.vue'
+import { resolve } from 'upath';
 Vue.use(Router)
 // 暴露一个router对象
 /*导航守卫 */
@@ -211,9 +212,16 @@ export default new Router({
             },{
               path:'/publisher',
               meta:{
-                title:'发布'
+                title:'文章发布'
               },
               component:resolve => require(['../common/test/editor.vue'],resolve)
+            },
+            {
+              path:'/editor/:id',
+              meta:{
+                title:'文章编辑'
+              },
+              component:resolve => require(['../common/test/editorFix.vue'],resolve)
             }
           ]
         }, {

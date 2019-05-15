@@ -3,7 +3,7 @@
     <!-- 输入框 -->
     <section class="formInputBox">
       <div class="title mb_30">
-        <p>新增公告</p>
+        <p>修改公告</p>
         <span class="backBtn" @click="backBtn">
           <i class="el-icon-back"></i>返回
         </span>
@@ -20,11 +20,9 @@
             <el-form-item label="标题" prop="title">
               <el-input v-model="editForm.title"></el-input>
             </el-form-item>
-            <!--
-            <el-form-item label="作者">
-              <el-input v-model="editForm.author"></el-input>
-            </el-form-item>
-            -->
+
+            <el-form-item label="作者">{{editForm.author}}</el-form-item>
+
             <div class="limit">
               <el-form-item label="阅读权限" prop="user">
                 <el-radio-group v-model="editForm.user">
@@ -126,6 +124,7 @@ Quill.register(Size, true);
 export default {
   data() {
     return {
+        id:'', // 页面ID
       /*------ 表单配置项 ------*/
       labelPosition: "right",
       editForm: {
@@ -193,7 +192,8 @@ export default {
         category: this.editForm.user,
         state: this.editForm.apex,
         disabled: this.editForm.disabled,
-        sysTbEnclosures: this.fileContent
+        sysTbEnclosures: this.fileContent,
+        id:this.id
       };
       return obj;
     }
@@ -301,8 +301,14 @@ export default {
         if (valid && flag) {
           for (let item of this.fileList) {
             let obj = {};
-            obj.fileAddress = item.response.row;
-            obj.fileName = item.name;
+            if(item.response){
+                obj.fileAddress = item.response.row;
+                obj.fileName = item.name;
+            } else{
+                obj.fileAddress =item.fileAddress
+                obj.fileName = item.name
+            }
+            
             arr.push(obj);
           }
           this.fileContent = arr;
@@ -323,23 +329,55 @@ export default {
     addArticeApi(){
       let data = this.editTimeForm
       axios({
-        url:editorInt.add,
-        method:'post',
+        url:editorInt.edit,
+        method:'put',
          headers:{'Content-Type':'application/json'},
         data:data
       }).then((res)=>{
         if(res.data.state == true){
-          this.$message.success('发布成功')
-           this.$router.push({path:'/noticeSet'})
+          this.$message.success('修改成功')
+          this.$router.push({path:'/noticeSet'})
         } else{
           this.$message.error(res.data.msg)
         }
         console.log(res)
       })
+    },
+    idSearchApi(){
+        let obj = this.$route.params
+        console.log('id号',obj)
+        this.axios.get(editorInt.detail,{
+            params:obj
+        }).then((res) =>{
+            console.log('res',res)
+            if(res.data.state ==true){
+                let data = res.data.row
+                this.editForm.title = data.title
+                this.content = data.content
+                this.editForm.user=data.category.toString()
+                this.editForm.apex = data.state.toString()
+                this.editForm.disabled = data.disabled.toString()
+                this.editForm.author = data.username
+                let arr = []
+                for(let item of data.sysTbEnclosures){
+                    let obj ={}
+                    obj.name = item.fileName
+                    obj.fileAddress = item.fileAddress
+                    obj.createTime = item.createTime
+                    arr.push(obj)
+                }
+                this.fileList = arr
+                console.log(res.data.row)
+            } else{
+                this.$message.error(res.data.msg)
+            }
+        })
+        
     }
   },
   created(){
-      console.log(this.$route.params.id)
+      this.idSearchApi()
+      this.id = this.$route.params.id
       
   }
 };

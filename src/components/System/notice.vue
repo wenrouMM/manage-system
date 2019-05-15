@@ -27,7 +27,7 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item label="阅读权限">
-                <el-select size="130" clearable v-model="searchForm.loginSource" placeholder="请选择">
+                <el-select size="130" clearable v-model="searchForm.name" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -58,15 +58,31 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="loginMessage" label="发布时间"></el-table-column>
-            <el-table-column align="center" prop="loginIp" label="作者"></el-table-column>
-            <el-table-column align="center" prop="loginAccount" label="阅读权限"></el-table-column>
-            <el-table-column align="center" prop="loginTime" label="标题"></el-table-column>
-            <!-- 自定义插槽 -->
-            <el-table-column align="center" prop="loginStatus" label="操作">
+            <el-table-column align="center" prop="createTime" label="发布时间"></el-table-column>
+            <el-table-column align="center" prop="username" label="作者"></el-table-column>
+            <el-table-column align="center" prop="disabled" label="状态">
               <template slot-scope="scope">
-                <el-button size="mini" @click="EditBtn(scope.$index, scope.row)">编辑</el-button>
-                <el-button size="mini" type="danger" @click="deleteBtn(scope.$index, scope.row)">删除</el-button>
+                  <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="power" label="阅读权限">
+            </el-table-column>
+            <el-table-column align="center" prop="title" label="标题">
+              <template slot-scope="scope">
+                  <p class="textLeft">{{scope.row.title}}</p>
+              </template>
+            </el-table-column>
+            <!-- 自定义插槽 -->
+            <el-table-column align="center" prop="state" label="操作">
+              <template slot-scope="scope">
+                <span  class="operate" @click="editBtn(scope.$index, scope.row)">编辑</span>
+                <span  class="operate" @click="deleteBtn(scope.$index, scope.row)">删除</span>
+                <span  class="operate" @click="cancelBtn(scope.$index, scope.row)">
+                  {{scope.row.disabled ===0?'撤销':'取消撤销'}}
+                </span>
+                <span  class="operate" @click="apexBtn(scope.$index, scope.row)">
+                  {{scope.row.state ===0?'置顶':'取消置顶'}}
+                  </span>
               </template>
             </el-table-column>
           </el-table>
@@ -109,7 +125,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-import { login_record } from "../../request/api/base.js";
+import { editorInt } from "../../request/api/base.js";
 
 export default {
   data() {
@@ -117,24 +133,24 @@ export default {
       /*====== 2.0表单搜索区域 ======*/
       searchForm: {
         // 接受搜索表单的数据
-        loginSource: "",
+        name: "",
         beginTime: "",
         endTime: "",
-        currentPage: 0
+        
       },
       /*初始化 */
       options: [
         {
           value: "0",
-          label: "全部"
+          label: "管理员&读者"
         },
         {
           value: "1",
-          label: "读者"
+          label: "管理员"
         },
         {
           value: "2",
-          label: "管理员"
+          label: "读者"
         }
       ],
       /*日期禁用规则 */
@@ -181,9 +197,7 @@ export default {
       let searchForm = {
         pageSize: this.pageSize,
         currentPage: 1,
-        fkLoginType: !this.searchForm.loginSource
-          ? null
-          : this.searchForm.loginSource,
+        name:this.searchForm.name,
         beginTime: !this.searchForm.beginTime
           ? null
           : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
@@ -192,6 +206,9 @@ export default {
           : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
       };
       return searchForm;
+    },
+    cancelTimeForm(){
+
     }
   },
   methods: {
@@ -200,14 +217,44 @@ export default {
         this.$router.push({path:'/publisher'})
     },
     // 删除按钮
-    deleteBtn() {},
+    deleteBtn(index,row) {
+      let id = row.id
+      let obj ={
+        deleteParams:[{
+          id:id
+        }]
+      }
+      
+      this.deleteApi(obj)
+    },
     // 编辑按钮
-    editBtn() {},
+    editBtn(index,row) {
+      let id = row.id
+      this.$router.push({path:`/editor/${id}`})
+      console.log('这个信息是',row)
+    },
     // 查询按钮
     searchBtn() {
       this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1;
     },
+    // 撤销按钮
+    cancelBtn(index,row){
+      let obj = {}
+      obj.id = row.id
+      obj.disabled = row.disabled
+      console.log('这个数据表是',row)
+      this.cancelApi(obj)
+    },
+    // 置顶按钮
+    apexBtn(index,row){
+      let obj = {}
+      obj.id = row.id
+      obj.state = row.state
+      console.log('传递的数据',obj)
+      this.apexApi(obj)
+    },
+    // 置顶按钮
     // 分页按钮
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
@@ -230,17 +277,29 @@ export default {
       console.log(value);
       this.tableLoading = true;
       axios
-        .get(login_record, {
+        .get(editorInt.select, {
           params: value
         })
         .then(res => {
-          console.log("登陆记录", res.data);
+          console.log("文章数据", res.data);
           if (res.data.state === true) {
+            for(let item of res.data.row){
+              if(item.category == 0){
+                item.power = '管理员&读者'
+              }
+              if(item.category == 1){
+                item.power = '管理员'
+              }
+              if(item.category == 2){
+                item.power = '读者'
+              }
+            }
             this.tableData = res.data.row; //获取返回数据
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             this.currentPage = 1; // 回到第一页显示
             this.tableLoading = false;
+            console.log('列表',this.tableData)
           } else {
             this.$message.error(res.data.msg);
             this.tableLoading = false;
@@ -249,6 +308,52 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    deleteApi(value){
+      axios({
+        url:editorInt.delete,
+        method:'delete',
+        data:value
+      }).then((res) =>{
+        if(res.data.state == true){
+          this.$message.success('删除成功')
+          this.searchApi(this.searchTimeForm)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    cancelApi(value){
+      axios({
+        url:editorInt.edit,
+        method:'put',
+        headers:{'Content-Type':'application/json'},
+        data:value
+      }).then((res)=>{
+        if(res.data.state == true){
+          this.$message.success('撤销成功')
+          this.searchApi(this.searchTimeForm)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+        console.log(res)
+      })
+    },
+    apexApi(value){
+      axios({
+        url:editorInt.edit,
+        method:'put',
+        headers:{'Content-Type':'application/json'},
+        data:value
+      }).then((res)=>{
+        if(res.data.state == true){
+          this.$message.success('置顶成功')
+          this.searchApi(this.searchTimeForm)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+        console.log(res)
+      })
     },
     current_change(currentPage) {
       //分页查询
@@ -302,7 +407,12 @@ export default {
 /*.el-select-dropdown__item {*/
 /*color: #878787;*/
 /*}*/
-
+.operate{
+  cursor: pointer;
+}
+.textLeft{
+  text-align: left;
+}
 #title {
   display: inline-block;
   padding-left: 10px;
