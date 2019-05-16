@@ -58,29 +58,29 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="createTime" label="发布时间"></el-table-column>
-            <el-table-column align="center" prop="username" label="作者"></el-table-column>
-            <el-table-column align="center" prop="disabled" label="状态">
+            <el-table-column width="180" align="center" prop="createTime" label="发布时间"></el-table-column>
+            <el-table-column align="center" width="80" prop="username" label="作者"></el-table-column>
+            <el-table-column align="center" width="80" prop="disabled" label="状态">
               <template slot-scope="scope">
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="power" label="阅读权限">
+            <el-table-column width="120" align="center" prop="power" label="阅读权限">
             </el-table-column>
-            <el-table-column align="center" prop="title" label="标题">
+            <el-table-column :show-overflow-tooltip="true" align="center" prop="title" label="标题">
               <template slot-scope="scope">
-                  <p class="textLeft">{{scope.row.title}}</p>
+                  <p @click="jumpArticle(scope.row.id)" class="textLeft">{{scope.row.title}}</p>
               </template>
             </el-table-column>
             <!-- 自定义插槽 -->
-            <el-table-column align="center" prop="state" label="操作">
+            <el-table-column width="200" align="center" prop="state" label="操作">
               <template slot-scope="scope">
-                <span  class="operate" @click="editBtn(scope.$index, scope.row)">编辑</span>
-                <span  class="operate" @click="deleteBtn(scope.$index, scope.row)">删除</span>
-                <span  class="operate" @click="cancelBtn(scope.$index, scope.row)">
+                <span  class="operate editColor" @click="editBtn(scope.$index, scope.row)">编辑</span>
+                <span  class="operate deleteColor" @click="deleteBtn(scope.$index, scope.row)">删除</span>
+                <span  class="operate cancelColor" @click="cancelBtn(scope.$index, scope.row)">
                   {{scope.row.disabled ===0?'撤销':'取消撤销'}}
                 </span>
-                <span  class="operate" @click="apexBtn(scope.$index, scope.row)">
+                <span  class="operate apexColor" @click="apexBtn(scope.$index, scope.row)">
                   {{scope.row.state ===0?'置顶':'取消置顶'}}
                   </span>
               </template>
@@ -229,7 +229,7 @@ export default {
     },
     // 编辑按钮
     editBtn(index,row) {
-      let id = row.id
+      let id = row.id 
       this.$router.push({path:`/editor/${id}`})
       console.log('这个信息是',row)
     },
@@ -241,8 +241,8 @@ export default {
     // 撤销按钮
     cancelBtn(index,row){
       let obj = {}
-      obj.id = row.id
-      obj.disabled = row.disabled
+      obj.id = row.id 
+      obj.disabled = row.disabled ==0?1:0;
       console.log('这个数据表是',row)
       this.cancelApi(obj)
     },
@@ -250,11 +250,16 @@ export default {
     apexBtn(index,row){
       let obj = {}
       obj.id = row.id
-      obj.state = row.state
+      obj.state = row.state ==0?1:0;
       console.log('传递的数据',obj)
       this.apexApi(obj)
     },
-    // 置顶按钮
+    
+    // 跳转按钮
+    jumpArticle(id){
+      this.$router.push({path:`/article/${id}`})
+      console.log(id)
+    },
     // 分页按钮
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
@@ -412,6 +417,10 @@ export default {
 }
 .textLeft{
   text-align: left;
+}
+.textLeft:hover{
+  color: #1e9eff;
+  cursor: pointer;
 }
 #title {
   display: inline-block;

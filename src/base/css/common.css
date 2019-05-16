@@ -129,7 +129,20 @@ body{
 .compo{
   padding: 0 3px;
 }
+/*通用颜色*/
+.editColor{
+  color: #00c0ff;
+}
+.deleteColor{
+  color:#ff4200;
+}
+.cancelColor{
+  color:#ff8400;
+}
+.apexColor{
+  color:#ff0000;
 
+}
 /*动画样式*/
 .move-enter-active,
 .move-leave-active {

@@ -222,6 +222,13 @@ export default new Router({
                 title:'文章编辑'
               },
               component:resolve => require(['../common/test/editorFix.vue'],resolve)
+            },
+            {
+              path:'/article/:id',
+              meta:{
+                title:'文章详情'
+              },
+              component:resolve => require(['../components/System/article.vue'],resolve)
             }
           ]
         }, {
