@@ -33,7 +33,9 @@
           <div class="headiconBox"></div>
           <div class="userBox">
             <div class="username">
+              <!--
               <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
+              -->
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -57,6 +59,20 @@
             background-color="#545c64"
             text-color="#fff"
           >
+            <!-- 采编管理 -->
+            <div class="navMenu" v-if="Mode == 1">
+              <el-menu-item index="/reader">采编管理</el-menu-item>
+              <el-submenu index="readerCard">
+                <template slot="title">
+                  <span>读者卡管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/readercardmanagement">读者卡信息</el-menu-item>
+                  <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
+              <el-menu-item index="/noticeSet">逾期管理</el-menu-item>
+            </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-if="Mode == 2">
               <el-submenu index="4">
@@ -69,13 +85,38 @@
               </el-submenu>
               <el-submenu background-color="#545c64" index="2">
                 <template slot="title">
-                  <span>馆藏图书</span>
+                  <span>藏馆管理</span>
                 </template>
                 <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
                 <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
                 <el-menu-item index="/publishhouse">馆内图书出版社</el-menu-item>
                 <el-menu-item index="/bookregistration">图书登记</el-menu-item>
                 <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
+              </el-submenu>
+              <el-menu-item index="/LibBookInfo">书籍典藏</el-menu-item>
+              <el-menu-item index="/libBookType">损坏清点</el-menu-item>
+            </div>
+            <!-- 流通管理 -->
+            <div class="navMenu" v-if="Mode == 3">
+              <el-submenu index="readerCard">
+                <template slot="title">
+                  <span>流通记录</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/readercardmanagement">借阅记录</el-menu-item>
+                  <el-menu-item index="/readercardgrade">预借记录</el-menu-item>
+                  <el-menu-item index="/readercardgrade">逾期记录</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
+              <el-submenu index="readerCard">
+                <template slot="title">
+                  <span>借阅管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/readercardmanagement">借书</el-menu-item>
+                  <el-menu-item index="/readercardgrade">还书</el-menu-item>
+                  <el-menu-item index="/readercardgrade">预借</el-menu-item>
+                </el-menu-item-group>
               </el-submenu>
             </div>
             <!-- 读者管理 -->
@@ -92,11 +133,21 @@
               </el-submenu>
               <el-menu-item index="/noticeSet">逾期管理</el-menu-item>
             </div>
+            <!-- 财务管理 -->
+            <div class="navMenu" v-if="Mode == 5">
+              <el-menu-item index="/reader">充值管理</el-menu-item>
+              <el-menu-item index="/noticeSet">日常财务</el-menu-item>
+            </div>
             <!-- 系统设置 -->
             <div class="navMenu" v-if="Mode ==6">
               <el-menu-item index="/noticeSet">公告管理</el-menu-item>
+              <el-menu-item index="/menuInformation">菜单管理</el-menu-item>
+              <el-menu-item index="/roleInformation">角色管理</el-menu-item>
+              <el-menu-item index="/roleMenuElement">权限管理</el-menu-item>
+              <el-menu-item index="/managerInformation">用户管理</el-menu-item>
+              <el-menu-item index="/authTbManagerLoginLog">登陆管理</el-menu-item>
               <el-menu-item index="/damageSet">损坏管理</el-menu-item>
-              <el-menu-item index="/rechargeSet">充值设置</el-menu-item>
+              <el-menu-item index="/rechargeSet">数据字典</el-menu-item>
               <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
             </div>
             <!-- 选中之后的样式 -->
@@ -121,7 +172,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      Mode: 0,
+      Mode: 6,
       navRouter: [],
       menuLo: [{}],
       userLo: null

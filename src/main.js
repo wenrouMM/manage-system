@@ -29,7 +29,7 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import '../src/base/css/font.css'
 Vue.config.productionTip = false
-
+/*
 router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
@@ -70,7 +70,7 @@ router.beforeEach((to, from, next) => {
 
 
 })
-
+*/
  //判定依据token起手 废弃
 /*
 router.beforeEach((to, from, next) => {

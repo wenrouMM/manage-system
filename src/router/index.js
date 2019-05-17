@@ -88,6 +88,48 @@ export default new Router({
       children: [ 
         // 系统模块
         {
+          path: '/indexTest',
+          meta: {
+            title: '首页'
+          },
+          component: Home
+        },
+        {
+          path: '/menuInformation',
+          meta: {
+            title: '菜单管理'
+          },
+          component: Menu
+        },
+        {
+          path: '/roleMenuElement',
+          meta: {
+            title: '权限管理'
+          },
+          component: PowerControl
+        },
+        {
+          path: '/roleInformation',
+          meta: {
+            title: '角色管理'
+          },
+          component: UserRole
+        },
+        {
+          path: '/managerInformation',
+          meta: {
+            title: '用户管理'
+          },
+          component: UserManage
+        },
+        {
+          path: '/authTbManagerLoginLog',
+          meta: {
+            title: '登录记录'
+          },
+          component: LoginRecord
+        },
+        {
           path: '/noticeSet',
           meta: {
             title: '系统设置'
@@ -156,49 +198,7 @@ export default new Router({
       path: '/home',
       name: 'index',
       component: Index,
-      children: [{
-          path: '/home',
-          name: 'home',
-          meta: {
-            title: '首页'
-          },
-          component: Home
-        },
-        {
-          path: '/menuInformation',
-          meta: {
-            title: '菜单管理'
-          },
-          component: Menu
-        },
-        {
-          path: '/roleMenuElement',
-          meta: {
-            title: '权限管理'
-          },
-          component: PowerControl
-        },
-        {
-          path: '/roleInformation',
-          meta: {
-            title: '角色管理'
-          },
-          component: UserRole
-        },
-        {
-          path: '/managerInformation',
-          meta: {
-            title: '用户管理'
-          },
-          component: UserManage
-        },
-        {
-          path: '/authTbManagerLoginLog',
-          meta: {
-            title: '登录记录'
-          },
-          component: LoginRecord
-        }
+      children: [
       ]
       /*
       children: [{
@@ -307,7 +307,9 @@ export default new Router({
               component: resolve => require(['../components/System/article.vue'], resolve)
             }
           ]*/
-        }, {
+        }, 
+        /*
+        {
           path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
           component: Test2,
           children: [{
@@ -340,6 +342,7 @@ export default new Router({
             }
           ]
         },
+        */
         {
           path: '/areaMode',
           component: TestArea,

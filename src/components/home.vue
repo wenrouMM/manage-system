@@ -122,8 +122,8 @@
           <ul>
             <li class="systemBox" v-for="(item,index) of systemList" :key="index">
               <p class="systemList">
-                <span @click="jumpArticle(item.id)" class="listInfo">{{item.title}}、</span>
-                <span>{{item.createTime}}、</span>
+                <span @click="jumpArticle(item.id)" class="listInfo">{{item.title}}</span>
+                <span>{{item.createTime}}</span>
               </p>
             </li>
           </ul>
