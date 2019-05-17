@@ -21,7 +21,7 @@
                 :rules="rules"
               >
                 <el-form-item label="卡　　号" prop="cardNum">
-                  <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+                  <el-input @keyup.enter.native="readCardBtn" clearable v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
                 </el-form-item>
               </el-form>
             </div>
@@ -32,7 +32,6 @@
                 @click="readCardBtn"
                 class="cardBtn"
               >读卡</el-button>
-              <el-button type="warning" class="cardBtn">重新扫描</el-button>
             </div>
           </div>
           <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
@@ -72,6 +71,7 @@
                     placeholder="请输入书籍编码"
                     v-model="searchForm.bookCode"
                     class="input-with-select"
+                    @keyup.enter.native="selectBtn"
                   >
                     <el-select v-model="searchForm.selectBook" slot="prepend" placeholder="请选择">
                       <el-option label="书籍" value="1"></el-option>

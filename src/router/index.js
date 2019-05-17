@@ -58,10 +58,12 @@ import Detail from '../components/Book/detail.vue'
 import LibDetail from '../components/Reader/libDetail.vue'
 import Not from '../components/error.vue'
 
-
+import IndexTest from '../common/indexTest.vue'
 /*系统设置 */
 import TestSystem from '../common/test/testSystem.vue'
-import { resolve } from 'upath';
+import {
+  resolve
+} from 'upath';
 Vue.use(Router)
 // 暴露一个router对象
 /*导航守卫 */
@@ -76,7 +78,80 @@ export default new Router({
       path: '/login',
       component: Login
     },
-
+    {
+      path: '/indexTest',
+      meta: {
+        title: '测试首页'
+      },
+      component: IndexTest,
+      
+      children: [ 
+        // 系统模块
+        {
+          path: '/noticeSet',
+          meta: {
+            title: '系统设置'
+          },
+          component: resolve => require(['../components/System/notice.vue'], resolve)
+        },
+        {
+          path: '/damageSet',
+          meta: {
+            title: '损坏管理'
+          },
+          component: resolve => require(['../components/System/damage.vue'], resolve)
+        },
+        {
+          path: '/rechargeSet',
+          meta: {
+            title: '充值管理'
+          },
+          component: resolve => require(['../components/System/recharge.vue'], resolve)
+        },
+        {
+          path: '/vacationSet',
+          meta: {
+            title: '寒暑假设置'
+          },
+          component: resolve => require(['../components/System/vacation.vue'], resolve)
+        }, {
+          path: '/publisher',
+          meta: {
+            title: '文章发布'
+          },
+          component: resolve => require(['../common/test/editor.vue'], resolve)
+        },
+        {
+          path: '/editor/:id',
+          meta: {
+            title: '文章编辑'
+          },
+          component: resolve => require(['../common/test/editorFix.vue'], resolve)
+        },
+        {
+          path: '/article/:id',
+          meta: {
+            title: '文章详情'
+          },
+          component: resolve => require(['../components/System/article.vue'], resolve)
+        },
+        // 读者模块
+        {
+          path:'/reader',
+          meta:{
+            title:'读者管理'
+          },
+          component: resolve => require(['../components/ReaderMode/reader.vue'],resolve)
+        },
+        {
+          path:'/readerInfo/:id',
+          meta:{
+            title:'读者信息'
+          },
+          component: resolve => require(['../components/ReaderMode/readerInfo.vue'],resolve)
+        }
+      ]
+    },
     {
       path: '/home',
       name: 'index',
@@ -182,55 +257,56 @@ export default new Router({
       children: [{
           path: '/systemMode',
           component: TestSystem,
+          /*
           children: [{
               path: '/noticeSet',
               meta: {
                 title: '系统设置'
               },
-              component: resolve => require(['../components/System/notice.vue'],resolve)
+              component: resolve => require(['../components/System/notice.vue'], resolve)
             },
             {
               path: '/damageSet',
               meta: {
                 title: '损坏管理'
               },
-              component: resolve => require(['../components/System/damage.vue'],resolve)
+              component: resolve => require(['../components/System/damage.vue'], resolve)
             },
             {
               path: '/rechargeSet',
               meta: {
                 title: '充值管理'
               },
-              component: resolve => require(['../components/System/recharge.vue'],resolve)
+              component: resolve => require(['../components/System/recharge.vue'], resolve)
             },
             {
               path: '/vacationSet',
               meta: {
                 title: '寒暑假设置'
               },
-              component: resolve => require(['../components/System/vacation.vue'],resolve)
-            },{
-              path:'/publisher',
-              meta:{
-                title:'文章发布'
+              component: resolve => require(['../components/System/vacation.vue'], resolve)
+            }, {
+              path: '/publisher',
+              meta: {
+                title: '文章发布'
               },
-              component:resolve => require(['../common/test/editor.vue'],resolve)
+              component: resolve => require(['../common/test/editor.vue'], resolve)
             },
             {
-              path:'/editor/:id',
-              meta:{
-                title:'文章编辑'
+              path: '/editor/:id',
+              meta: {
+                title: '文章编辑'
               },
-              component:resolve => require(['../common/test/editorFix.vue'],resolve)
+              component: resolve => require(['../common/test/editorFix.vue'], resolve)
             },
             {
-              path:'/article/:id',
-              meta:{
-                title:'文章详情'
+              path: '/article/:id',
+              meta: {
+                title: '文章详情'
               },
-              component:resolve => require(['../components/System/article.vue'],resolve)
+              component: resolve => require(['../components/System/article.vue'], resolve)
             }
-          ]
+          ]*/
         }, {
           path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
           component: Test2,

@@ -143,6 +143,24 @@ body{
   color:#ff0000;
 
 }
+.cardColor{
+  background-color: #ff9231;
+}
+.loading{
+  background:rgba(29,222,220,1);
+}
+.out{
+  background:rgba(49,214,255,1);
+}
+.deleteBtn{
+  background:rgba(255,107,49,1);
+}
+.rechargeBtn{
+  background:rgba(29,221,151,1);
+}
+.renewalBtn{
+  background:rgba(154,155,224,1);
+}
 /*动画样式*/
 .move-enter-active,
 .move-leave-active {

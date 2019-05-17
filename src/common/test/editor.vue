@@ -42,6 +42,7 @@
                 </el-radio-group>
               </el-form-item>
             </div>
+            <!--
             <div class="limit">
               <el-form-item label="文章状态" prop="disabled">
                 <el-radio-group v-model="editForm.disabled">
@@ -50,6 +51,7 @@
                 </el-radio-group>
               </el-form-item>
             </div>
+            -->
           </el-form>
         </div>
       </div>
@@ -192,7 +194,7 @@ export default {
         content: this.content,
         category: this.editForm.user,
         state: this.editForm.apex,
-        disabled: this.editForm.disabled,
+       // disabled: this.editForm.disabled,
         sysTbEnclosures: this.fileContent
       };
       return obj;
