@@ -29,7 +29,7 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 Vue.config.productionTip = false
 
-router.beforeEach((to, from, next) => {
+/*router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let menu = JSON.parse(sessionStorage.getItem('menu'))
@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
 
 
 })
-
+*/
  //判定依据token起手 废弃
 /*
 router.beforeEach((to, from, next) => {

@@ -14,16 +14,28 @@
         >
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
-          <el-menu-item index="/libInfo">藏馆信息</el-menu-item>
-          <el-submenu index="4" >
+          <el-submenu index="1" >
             <template slot="title">
               <span>图书管理</span>
             </template>
             <el-menu-item index="/bookType">图书类型</el-menu-item>
             <el-menu-item index="/bookInfo">图书信息</el-menu-item>
             <el-menu-item index="/bookpublishhouse">图书出版社</el-menu-item>
-
           </el-submenu>
+          <el-submenu background-color="#545c64" index="2">
+            <template slot="title">
+              <span>藏馆管理</span>
+            </template>
+            <el-menu-item index="/libInfo">藏馆信息</el-menu-item>
+            <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
+            <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
+            <el-menu-item index="/bookregistration">图书登记</el-menu-item>
+            <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
+            <el-menu-item index="/LibLocationInfo">图示位置信息</el-menu-item>
+          </el-submenu>
+          <el-menu-item index="/bookCollection" >
+            <span slot="title">书籍典藏</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -56,6 +68,13 @@ export default {
 <style scoped>
 html,
 body,
+.nav .el-menu-item[data-v-016087ad] {
+  background: #343b4a !important;
+  text-align: left;
+  height: 55px;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
 #app {
   height: 100%;
 }

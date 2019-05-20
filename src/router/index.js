@@ -30,7 +30,7 @@ import LibBookType from '../components/Reader/libraryManage/libBookType'
 import LibBookInfo from '../components/Reader/libraryManage/libBookInfo'
 import BookRegistration from '../components/Reader/libraryManage/bookRegistration'
 import bookLocation from '../components/Reader/libraryManage/bookLocation'
-
+import bookCollection from '../components/Book/BookCollection.vue'
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
@@ -285,6 +285,10 @@ export default new Router({
               path: '/bookpublishhouse',
               component: BookPublishHouse
             },
+            {
+              path:'/bookCollection',
+              component:bookCollection
+            }
           ]
         },
         {
