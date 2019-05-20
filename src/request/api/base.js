@@ -7,6 +7,28 @@ var url = 'http://192.168.2.31:8088/'
 
 var imgurl='http://192.168.2.31:8090/'
 //var imgurl='http://127.0.0.1:8090/'
+/*------ 文件上传模块 ------*/
+let fileUrl = 'http://192.168.2.31:8090/'
+export const uploadInt = {
+  headImg:`${fileUrl}filemodule/uploadImg/addHead`,
+  backImg:`${fileUrl}filemodule/uploadImg/addBackage`,
+  menuImg:`${fileUrl}filemodule/uploadImg/addMenu:8090`,
+  editorImg:`${fileUrl}filemodule/uploadImg/addEditorImg`,
+  editorFile:`${fileUrl}filemodule/uploadFile/addEnclosure`,
+  editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
+  preimg:`${fileUrl}filemodule/showFile/getShow`
+}
+/*------ 系统设置模块  ------*/
+
+// 发布公告
+export const editorInt = {
+  add:`${url}systemmodule/sysTbNoticeInfo/add`,
+  select: `${url}systemmodule/sysTbNoticeInfo/selectPage`,
+  edit:`${url}systemmodule/sysTbNoticeInfo/edit`,
+  delete:`${url}systemmodule/sysTbNoticeInfo/delete`,
+  detail:`${url}systemmodule/sysTbNoticeInfo/selectOne`,
+  moreDetail:`${url}systemmodule/sysTbNoticeInfo/selectMore`
+}
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
@@ -29,7 +51,8 @@ export const indexInt = {
   record:`${url}borrowmodule/index/getNewLog`,
   fan:`${url}tibetmuseummodule/index/getHotType`,
   pillar:`${url}borrowmodule/index/selectNearBorrowInfo`,
-  cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`
+  cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`,
+  notice:`${url}systemmodule/sysTbNoticeInfo/selectLittle`
 }
 
 // 权限模块的API

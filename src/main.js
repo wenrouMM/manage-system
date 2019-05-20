@@ -27,9 +27,12 @@ import {
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import '../src/base/css/font.css'
 Vue.config.productionTip = false
 
 /*router.beforeEach((to, from, next) => {
+/*
+router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let menu = JSON.parse(sessionStorage.getItem('menu'))

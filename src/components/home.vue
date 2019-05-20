@@ -111,20 +111,19 @@
       <!-- 系统公告 -->
       <div class="systemInfo">
         <div class="title">
-          <i class="icon"></i>
-          <span class="text">系统公告</span>
+          <div class="text">
+            <i class="icon"></i>
+            <span class="text">系统公告</span>
+          </div>
+          <span class="more" @click="moreBtn()">更多</span>
         </div>
         <!-- 信息列表循环处 -->
         <div class="forlist">
           <ul>
-            <li class="listBox" v-for="(item,index) of faseList" :key="index">
-              <p class="listInfo">
-                <span class="listInfo">{{item.id}}、</span>
-                <span class="listInfo">{{item.info}}、</span>
-              </p>
-              <p class>
-                <span class="listDate">{{item.time}}</span>
-                <span class="listDatehours">{{item.secods}}</span>
+            <li class="systemBox" v-for="(item,index) of systemList" :key="index">
+              <p class="systemList">
+                <span @click="jumpArticle(item.id)" class="listInfo">{{item.title}}</span>
+                <span>{{item.createTime}}</span>
               </p>
             </li>
           </ul>
@@ -306,6 +305,7 @@ export default {
       //
       /*====== 下层信息展示数据 ======*/
       recardList: [],
+      systemList:[],
       faseList: [
         {
           id: 1,
@@ -410,6 +410,24 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    // 系统公告
+    systemApi(){
+      axios.get(indexInt.notice).then((res) => {
+        if(res.data.state === true){
+          this.systemList = res.data.row
+          console.log('具体数据',res.data)
+        }else {
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    jumpArticle(id){
+      this.$router.push({path:`/article/${id}`})
+      console.log(id)
+    },
+    moreBtn(){
+      this.$router.push({path:'/noticeSet'})
     }
   },
   created() {
@@ -420,6 +438,7 @@ export default {
     this.fanApi();
     this.pillarApi();
     this.cardOnApi()
+    this.systemApi()
   },
   components: {
     VePie,
@@ -672,4 +691,35 @@ export default {
   margin-bottom: 0;
 }
 /*系统列表*/
+.systemInfo .title{
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
+}
+
+.systemList{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+.systemList .listInfo{
+  width:70%; 
+  display:inline-block;
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+.systemList .listInfo:hover{
+  color: #33dbff;
+}
+.systemInfo .more:hover{
+  color: #33dbff;
+  
+}
+.systemInfo .more{
+    font-size: 16px;
+    cursor: pointer;
+    color: rgba(135, 135, 135, 1);
+}
 </style>
