@@ -61,6 +61,9 @@ import Not from '../components/error.vue'
 
 /*系统设置 */
 import TestSystem from '../common/test/testSystem.vue'
+
+import TestFinance from '../common/test/testFinance'
+
 Vue.use(Router)
 // 暴露一个router对象
 /*导航守卫 */
@@ -187,20 +190,6 @@ export default new Router({
                 title: '系统设置'
               },
               component: resolve => require(['../components/System/notice.vue'],resolve)
-            },
-            {
-              path: '/damageSet',
-              meta: {
-                title: '损坏管理'
-              },
-              component: resolve => require(['../components/System/damage.vue'],resolve)
-            },
-            {
-              path: '/rechargeSet',
-              meta: {
-                title: '充值管理'
-              },
-              component: resolve => require(['../components/System/recharge.vue'],resolve)
             },
             {
               path: '/vacationSet',
@@ -414,6 +403,36 @@ export default new Router({
             {
               path: '/DishonestyHistory',
               component: DishonestyHistory
+            },
+          ]
+        },
+        {
+          path: '/financeMode',
+          component: TestFinance,
+          children: [{
+            path: '/readeradmin',
+            component: ReaderAdmin,
+          },
+            {
+              path: '/rechargeSet',
+              meta: {
+                title: '充值管理'
+              },
+              component: resolve => require(['../components/System/recharge.vue'],resolve)
+            },
+            {
+              path: '/refunds',
+              meta: {
+                title: '充值退款'
+              },
+              component: resolve => require(['../components/System/refunds.vue'],resolve)
+            },
+            {
+              path: '/damageSet',
+              meta: {
+                title: '损坏管理'
+              },
+              component: resolve => require(['../components/System/damage.vue'],resolve)
             },
           ]
         }

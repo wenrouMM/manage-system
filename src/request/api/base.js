@@ -1,7 +1,7 @@
 // 用来管理接口的域名相关
 //var url = 'http://192.168.2.131:8088/'
-//var url = 'http://192.168.2.31:8088/'
-var url = 'http://192.168.2.121:8088/'
+var url = 'http://192.168.2.31:8088/'
+//var url = 'http://192.168.2.121:8088/'
 //var url='http://127.0.0.1:8088/'
 
 
@@ -244,5 +244,12 @@ export const damage={
 export const vacation={
   select:`${url}systemmodule/holiday/select`,
   add:`${url}systemmodule/holiday/add`,
+  edit:`${url}systemmodule/holiday/edit`,
+}
+
+//充值设置
+export const recharge ={
+  select:`${url}tibetmuseummodule/currency/depositRecord/select`,
+  add:`${url}/tibetmuseummodule/currency/depositRecord/add`,
   edit:`${url}systemmodule/holiday/edit`,
 }

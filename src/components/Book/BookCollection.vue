@@ -18,7 +18,7 @@
               <i class="blueIcon el-icon-share"></i>导出
             </button>
             <button class="green" @click="tunnellingBtn">
-              批量调用
+              <i class="el-icon-edit"></i>调馆
             </button>
           </div>
           <div class="right">
@@ -198,6 +198,18 @@
           </el-form>
         </el-dialog>
       </div>
+      <!--'调馆','删除','启用','报损'弹框-->
+      <div class="forbid">
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+          <div class="dialogBody">
+            是否{{Dialogtitle[i]}}?
+          </div>
+          <div slot="footer">
+            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
+        </el-dialog>
+      </div>
     </el-container>
   </div>
 </template>
@@ -256,7 +268,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增"],
+        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -317,16 +329,13 @@
     methods: {
       //导出按钮
       deriveBtn(){
-
+        this.i=6
+        this.centerDialogVisible=true
       },
-      //退款按钮
+      //删除按钮
       drawbackBtn(){
-        this.$router.push({
-          path:'/refunds',
-          query: {
-            method: 'drawback'
-          }
-        });
+        this.i=3
+        this.centerDialogVisible=true
       },
       //新增按钮
       rechargeBtn(){
@@ -338,7 +347,7 @@
         this.i=0
         this.dialogFormVisible = true;
       },
-      // 修改添加弹框
+      // 修改添加弹框确定按钮
       submitForm() {
 
       },
@@ -357,10 +366,20 @@
       },
       //报损弹框
       deleteBtn(){
+        this.i=5
+        this.centerDialogVisible=true
+      },
+      //调馆按钮
+      tunnellingBtn(){
+        this.i=2
         this.centerDialogVisible=true
       },
       //启用按钮
       makeBtn(){
+        this.i=4
+        this.centerDialogVisible=true
+      },
+      submitDialog(){
 
       },
       // 分页按钮
@@ -378,10 +397,6 @@
           let num = parseInt(this.pageInput);
           this.current_change(num);
         }
-      },
-      //批量调馆按钮
-      tunnellingBtn(){
-
       },
       /*------ Api ------*/
       searchApi(value) {

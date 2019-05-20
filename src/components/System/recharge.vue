@@ -22,8 +22,8 @@
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
                 <el-select v-model="searchForm.makeMethod" placeholder="处理方式" style="width: 150px">
-                  <el-option label="押金充值" value="1"></el-option>
-                  <el-option label="退款金额" value="0"></el-option>
+                  <el-option label="押金充值" value="0"></el-option>
+                  <el-option label="退款金额" value="1"></el-option>
                 </el-select>
                 <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 150px"></el-input>
                 <el-input v-model="searchForm.cardNum" placeholder="请输入卡号" style="width: 150px"></el-input>
@@ -63,12 +63,16 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="damageName" label="处理方式"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="读者卡号"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="用户名"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="金额"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="处理日期"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="操作用户"></el-table-column>
+            <el-table-column align="center" prop="state" label="处理方式">
+              <template slot-scope="scope">
+                <span>{{scope.row.state ==1?'退款金额':'押金充值'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="cardNumber" label="读者卡号"></el-table-column>
+            <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
+            <el-table-column align="center" prop="momentum" label="金额"></el-table-column>
+            <el-table-column align="center" prop="createTime" label="处理日期"></el-table-column>
+            <el-table-column align="center" prop="fkHandleModeName" label="操作用户"></el-table-column>
             <el-table-column align="center" prop="compensationNum" label="流水标号"></el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
           </el-table>
@@ -111,7 +115,7 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { damage } from "../../request/api/base.js";
+  import { recharge } from "../../request/api/base.js";
 
   export default {
     data() {
@@ -242,11 +246,11 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(damage.select, {
+          .get(recharge.select, {
             params: value
           })
           .then(res => {
-            console.log("损坏记录", res.data);
+            console.log("充值记录", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数

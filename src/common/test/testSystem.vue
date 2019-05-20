@@ -15,8 +15,6 @@
           <!-- index就是跳转的路由 -->
           <!-- 选中之后的样式 -->
           <el-menu-item index="/noticeSet">公告管理</el-menu-item>
-          <el-menu-item index="/damageSet">损坏管理</el-menu-item>
-          <el-menu-item index="/rechargeSet">充值设置</el-menu-item>
           <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
         </el-menu>
       </el-aside>
