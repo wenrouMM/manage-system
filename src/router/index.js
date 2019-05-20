@@ -72,11 +72,18 @@ export default new Router({
   //mode:history,
   routes: [{
       path: '/',
-      redirect: '/powerMode'
+      redirect: '/indexTest'
     },
     {
       path: '/login',
       component: Login
+    },
+    {
+      path:'/userInfo',
+      meta:{
+        title:'个人中心'
+      },
+      component:resolve => require(['../components/userInfo.vue'],resolve)
     },
     {
       path: '/indexTest',
@@ -86,7 +93,30 @@ export default new Router({
       component: IndexTest,
       
       children: [ 
-        // 系统模块
+        // 1.0 采编管理
+       
+
+
+        // 2.0 典藏管理
+
+        // 3.0 流通管理
+
+        // 4.0 读者管理
+        {
+          path:'/reader',
+          meta:{
+            title:'读者管理'
+          },
+          component: resolve => require(['../components/ReaderMode/reader.vue'],resolve)
+        },
+        {
+          path:'/readerInfo/:id',
+          meta:{
+            title:'读者信息'
+          },
+          component: resolve => require(['../components/ReaderMode/readerInfo.vue'],resolve)
+        },
+        // 6.0系统模块
         {
           path: '/indexTest',
           meta: {
@@ -177,21 +207,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/article.vue'], resolve)
         },
-        // 读者模块
-        {
-          path:'/reader',
-          meta:{
-            title:'读者管理'
-          },
-          component: resolve => require(['../components/ReaderMode/reader.vue'],resolve)
-        },
-        {
-          path:'/readerInfo/:id',
-          meta:{
-            title:'读者信息'
-          },
-          component: resolve => require(['../components/ReaderMode/readerInfo.vue'],resolve)
-        }
+        
       ]
     },
     {
@@ -437,6 +453,7 @@ export default new Router({
               path: '/loanhistory',
               component: LoanHistory,
             },
+            /*
             {
               path: "/borrowingbooks",
               component: BorrowingBooks
@@ -453,6 +470,7 @@ export default new Router({
               path: "/returnstatus",
               component: ReturnStatus
             },
+            */
             {
               path: "/chargemoney",
               component: ChargeMoney
