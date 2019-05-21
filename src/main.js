@@ -28,9 +28,12 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import '../src/base/css/font.css'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 Vue.config.productionTip = false
-
+NProgress.configure({ showSpinner: false })
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let menu = JSON.parse(sessionStorage.getItem('menu'))
@@ -44,6 +47,7 @@ router.beforeEach((to, from, next) => {
         console.log('来源',from.path)
       }
       next(from.path)
+      NProgress.done()
     } else { // token不存在
       next()
     }
@@ -61,16 +65,19 @@ router.beforeEach((to, from, next) => {
         store.commit('setMenu', menu)
       }
       next()
+      
     }else{
       Message.error("请先登录");
       next('/login')
+      NProgress.done()
     }
 
   }
-
-
 })
-
+router.afterEach(() => {
+  
+  NProgress.done()
+})
  //判定依据token起手 废弃
 /*
 router.beforeEach((to, from, next) => {
