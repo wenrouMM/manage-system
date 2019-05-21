@@ -2,4 +2,92 @@
 #addFormYf .el-input .el-input__inner{
   width: 286px;
 }
-
+#damageForm .el-input .el-input__inner{
+  width: 464px;
+}
+#vacationForm .el-input .el-input__inner{
+  width: 250px;
+}
+#vacationForm .el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 250px;
+}
+#libbookinfo .el-input .el-input__inner{
+  width: 180px;
+}
+.flexLayout{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.nav  .nav1 .el-menu-item[data-v-016087ad] {
+  background: #343b4a !important;
+  text-align: left;
+  height: 55px;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+#Book_collection .el-input #isbnInput{
+  width: 860px;
+  border: 1px solid #DCDFE6
+}
+#Book_collection .el-input .el-input__inner{
+  border: 1px solid white;
+}
+#Book_collection .el-form-item{
+  margin-bottom: 20px;
+}
+#Book_collection #haveBottomBorder{
+  border: 1px solid #DCDCDC;
+  border-radius: 5px;
+  width: 900px;
+  padding: 10px 20px;
+}
+#Book_collection #haveBottomBorder .el-form-item{
+  margin-bottom: 0px;
+}
+#Book_collection #haveBottomBorder .el-form-item__error{
+  display: none;
+}
+#Book_collection #haveBottomBorder .el-input .el-input__inner{
+   border: none;
+   border-bottom: 1px solid #DCDCDC;
+ }
+#Book_collection #haveBottomBorder #inputDiv1 .el-input .el-input__inner{
+  width: 750px;
+}
+#Book_collection #haveBottomBorder #inputDiv2 .el-input .el-input__inner{
+  width: 350px;
+}
+#Book_collection #haveBottomBorder #inputDiv3 .el-input .el-input__inner{
+  width: 210px;
+}
+#Book_collection #haveBottomBorder #inputDiv4 .el-input .el-input__inner{
+  width: 350px;
+}
+#Book_collection #haveBottomBorder #inputDiv5 .el-input .el-input__inner{
+  width: 200px;
+}
+#Book_collection #haveBottomBorder #inputDiv6 .el-input .el-input__inner{
+  width: 200px;
+}
+#Book_collection #haveBottomBorder .el-checkbox{
+  margin-top: 10px;
+  height: 30px;
+}
+#Book_collection #haveBottomBorder .el-form-item__label{
+  line-height: 60px;
+  height: 40px
+}
+#Book_collection #haveBottomBorder #oneHalf .el-input .el-input__inner{
+  width: 200px;
+}
+#formDiv{
+  border: 1px solid #DCDCDC;
+  border-radius: 5px;
+  width: 900px;
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+#formDiv .el-input .el-input__inner{
+  border: 1px solid #DCDCDC;
+}

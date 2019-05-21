@@ -256,3 +256,23 @@ export const readerType = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency
 export const levelOption = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectAllDropBox' //  全部类型
 export const unBanOption = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll'  // 所有的 没被禁用的 等级下拉框
 
+//系统管理损坏管理
+export const damage={
+  select: `${url}systemmodule/damage/select`,
+  add: `${url}systemmodule/damage/add`,
+  edit: `${url}systemmodule/damage/edit`,
+  delete: `${url}systemmodule/damage/delete`
+}
+//寒暑假设置
+export const vacation={
+  select:`${url}systemmodule/holiday/select`,
+  add:`${url}systemmodule/holiday/add`,
+  edit:`${url}systemmodule/holiday/edit`,
+}
+
+//充值设置
+export const recharge ={
+  select:`${url}tibetmuseummodule/currency/depositRecord/select`,
+  add:`${url}/tibetmuseummodule/currency/depositRecord/add`,
+  edit:`${url}systemmodule/holiday/edit`,
+}

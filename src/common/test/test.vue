@@ -20,10 +20,13 @@
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="/readerMode">藏馆系统</el-menu-item>
-              <el-menu-item index="/bookMode">图书管理</el-menu-item>
-              <el-menu-item index="/areaMode">区域管理</el-menu-item>
-              <el-menu-item index="/powerMode">权限管理</el-menu-item>
+              <el-menu-item index="">采编管理*</el-menu-item>
+              <el-menu-item index="/bookMode">典藏管理</el-menu-item>
+              <el-menu-item index="">流通管理*</el-menu-item>
+              <el-menu-item index="/readerMode">读者管理</el-menu-item>
+              <el-menu-item index="/financeMode">财务管理</el-menu-item>
+              <!--<el-menu-item index="/areaMode">区域管理</el-menu-item>-->
+              <!--<el-menu-item index="/powerMode">权限管理</el-menu-item>-->
               <el-menu-item index="/systemMode">系统管理</el-menu-item>
             </el-menu>
           </div>
@@ -36,7 +39,7 @@
           </div>
           <div class="userBox">
             <div class="username">
-              
+
               <span v-if="localUser!=null ">{{localUser.username}}</span>
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
