@@ -85,8 +85,8 @@
                 <el-menu-item index="/bookregistration">图书登记</el-menu-item>
                 <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
               </el-submenu>
-              <el-menu-item index="/LibBookInfo">书籍典藏</el-menu-item>
-              <el-menu-item index="/libBookType">损坏清点</el-menu-item>
+              <el-menu-item index="/BookCollection">书籍典藏</el-menu-item>
+              <el-menu-item index="/damageCount">损坏清点</el-menu-item>
             </div>
             <!-- 流通管理 -->
             <div class="navMenu" v-show="Mode == 3">
