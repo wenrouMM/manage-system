@@ -103,18 +103,40 @@ export default new Router({
 
         // 4.0 读者管理
         {
-          path:'/reader',
+          path: '/readercardmanagement',
           meta:{
-            title:'读者管理'
+            title:'读者卡管理'
           },
-          component: resolve => require(['../components/ReaderMode/reader.vue'],resolve)
+          component: ReaderCardManagement,
         },
         {
-          path:'/readerInfo/:id',
+          path: '/readercardgrade',
+          component: ReaderCardGrade,
           meta:{
-            title:'读者信息'
-          },
-          component: resolve => require(['../components/ReaderMode/readerInfo.vue'],resolve)
+            title:'读者卡等级'
+          }
+        },
+        {
+          path: '/overduerecords',
+          component: OverdueRecords,
+          meta:{
+            title:'逾期记录'
+          }
+        },
+        {
+          path: "/overduehistory",
+          component: OverdueHistory,
+          meta:{
+            title:'逾期历史记录'
+          }
+        },
+        {
+          path: '/getcard',
+          name: "GetCard",
+          component: GetCard,
+          meta:{
+            title:'办卡'
+          }
         },
         // 6.0系统模块
         {
@@ -162,7 +184,7 @@ export default new Router({
         {
           path: '/noticeSet',
           meta: {
-            title: '系统设置'
+            title: '公告管理'
           },
           component: resolve => require(['../components/System/notice.vue'], resolve)
         },
@@ -216,52 +238,6 @@ export default new Router({
       component: Index,
       children: [
       ]
-      /*
-      children: [{
-          path: '/home',
-          name: 'home',
-          meta:{
-            title:'首页'
-          },
-          component: resolve => require(['../components/home.vue'],resolve)
-        },
-        {
-          path:'/menuInformation',
-          meta:{
-            title:'菜单管理'
-          },
-          component: resolve => require(['../components/Power/menu.vue'],resolve)
-        },
-        {
-          path:'/roleMenuElement',
-          meta:{
-            title:'权限管理'
-          },
-          component: resolve => require(['../components/Power/powerControl.vue',resolve])
-        },
-        {
-          path:'/roleInformation',
-          meta:{
-            title:'角色管理'
-          },
-          component: resolve => require(['../components/Power/userRole.vue'],resolve)
-        },
-        {
-          path:'/managerInformation',
-          meta:{
-            title:'用户管理'
-          },
-          component: resolve => require(['../components/Power/userManage.vue'],resolve)
-        },
-        {
-          path:'/authTbManagerLoginLog',
-          meta:{
-            title:'登录记录'
-          },
-          component: resolve => require(['../components/Power/loginrecord.vue'],resolve)
-        }
-      ]
-      */
     },
     {
       path: '*',
@@ -273,92 +249,9 @@ export default new Router({
       children: [{
           path: '/systemMode',
           component: TestSystem,
-          /*
-          children: [{
-              path: '/noticeSet',
-              meta: {
-                title: '系统设置'
-              },
-              component: resolve => require(['../components/System/notice.vue'], resolve)
-            },
-            {
-              path: '/damageSet',
-              meta: {
-                title: '损坏管理'
-              },
-              component: resolve => require(['../components/System/damage.vue'], resolve)
-            },
-            {
-              path: '/rechargeSet',
-              meta: {
-                title: '充值管理'
-              },
-              component: resolve => require(['../components/System/recharge.vue'], resolve)
-            },
-            {
-              path: '/vacationSet',
-              meta: {
-                title: '寒暑假设置'
-              },
-              component: resolve => require(['../components/System/vacation.vue'], resolve)
-            }, {
-              path: '/publisher',
-              meta: {
-                title: '文章发布'
-              },
-              component: resolve => require(['../common/test/editor.vue'], resolve)
-            },
-            {
-              path: '/editor/:id',
-              meta: {
-                title: '文章编辑'
-              },
-              component: resolve => require(['../common/test/editorFix.vue'], resolve)
-            },
-            {
-              path: '/article/:id',
-              meta: {
-                title: '文章详情'
-              },
-              component: resolve => require(['../components/System/article.vue'], resolve)
-            }
-          ]*/
+         
         }, 
-        /*
-        {
-          path: '/powerMode', // 二级路由 管理侧边栏 侧边栏内容随数据而变动 动态路由
-          component: Test2,
-          children: [{
-              path: '/powerMode', // 三级路由 真正的内容
-              component: Home,
-            },
-            {
 
-              path: '/userManage',
-              component: UserManage,
-              meta: {
-                menuName: '权限管理'
-              }
-            },
-            {
-              path: '/userRole',
-              component: UserRole,
-            },
-            {
-              path: '/powerControl',
-              component: PowerControl,
-            },
-            {
-              path: '/menu',
-              component: Menu,
-            },
-            {
-              path: '/loginRecord',
-              component: LoginRecord
-            }
-          ]
-        },
-        */
         {
           path: '/areaMode',
           component: TestArea,
@@ -405,11 +298,6 @@ export default new Router({
               component: ReaderAdmin,
             },
             {
-              path: '/getcard',
-              name: "GetCard",
-              component: GetCard,
-            },
-            {
               path: '/LibBookInfo',
               component: LibBookInfo
             },
@@ -433,18 +321,7 @@ export default new Router({
               path: '/publishhouse',
               component: BookPublishHouse
             },
-            {
-              path: '/readercardmanagement',
-              component: ReaderCardManagement,
-            },
-            {
-              path: '/readercardtype',
-              component: ReaderCardType,
-            },
-            {
-              path: '/readercardgrade',
-              component: ReaderCardGrade,
-            },
+            
             {
               path: '/loanrecorde',
               component: LoanRecorde,
@@ -490,14 +367,6 @@ export default new Router({
             {
               path: "/paymentdetails",
               component: PaymentDetails
-            },
-            {
-              path: '/overduerecords',
-              component: OverdueRecords
-            },
-            {
-              path: "/overduehistory",
-              component: OverdueHistory
             },
             {
               path: "/overduesetting",

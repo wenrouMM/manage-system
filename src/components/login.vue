@@ -81,7 +81,7 @@ import {loginInter,login} from '../request/api/base.js'
               // 过滤生成权限菜单信息
               // 存储动态路由
               // 存储权限带单信息
-              this.$router.push('/powerMode'); // 跳转至首页 首页的渲染应加入loading设置
+              this.$router.push('/'); // 跳转至首页 首页的渲染应加入loading设置
             }else{
               if($('#name').val()&&$('#pwd').val())
                 $('#msg').html(res.data.msg)

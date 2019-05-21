@@ -49,3 +49,8 @@
 .el-input--140{
   width: 140px!important;
 }
+
+#nprogress .bar {
+  background: #009a61 !important;
+  height: 4px!important;
+}

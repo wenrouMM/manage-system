@@ -203,6 +203,8 @@
             if(this.phone!=''){
               this.centerDialogVisible=true
             }
+          } else{
+            this.$message.error(res.data.msg)
           }
         })
       }

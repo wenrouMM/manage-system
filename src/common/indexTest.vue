@@ -55,23 +55,15 @@
             @select="routerBox"
             class="content"
             router
-            :default-active="onRoutes"
+            :default-active="this.$route.path"
             background-color="#545c64"
             text-color="#fff"
           >
             <!-- 采编管理 -->
             <div class="navMenu" v-if="Mode == 1">
               <el-menu-item index="/reader">采编管理</el-menu-item>
-              <el-submenu index="readerCard">
-                <template slot="title">
-                  <span>读者卡管理</span>
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item index="/readercardmanagement">读者卡信息</el-menu-item>
-                  <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
-                </el-menu-item-group>
-              </el-submenu>
-              <el-menu-item index="/noticeSet">逾期管理</el-menu-item>
+              
+              
             </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-if="Mode == 2">
@@ -115,7 +107,6 @@
                 <el-menu-item-group>
                   <el-menu-item index="/readercardmanagement">借书</el-menu-item>
                   <el-menu-item index="/readercardgrade">还书</el-menu-item>
-                  <el-menu-item index="/readercardgrade">预借</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
@@ -131,7 +122,15 @@
                   <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-menu-item index="/noticeSet">逾期管理</el-menu-item>
+              <el-submenu index="overdue">
+                <template slot="title">
+                  <span>逾期管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
+                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
             </div>
             <!-- 财务管理 -->
             <div class="navMenu" v-if="Mode == 5">
