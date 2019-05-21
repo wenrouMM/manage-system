@@ -89,7 +89,7 @@
                   <span class="imgDefault" width="30px" height="30px;" style="border-radius: 50%">
                     <img
                       class="head_pic"
-                      v-if="!scope.row.headerAddress"
+                      v-if="!scope.row.preUrl"
                       src="../../base/img/timg.jpg"
                       width="30px"
                       height="30px"
@@ -296,6 +296,7 @@
 <script>
 import {
   userManageInterface,
+  uploadInt,
   selectRoleType,
   headUpload,
   headimg,
@@ -668,7 +669,9 @@ export default {
                let tel = item.phone
                item.idShow = id.substr(0,5) + "********" + id.substr(13)
                item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-
+               if(item.headerAddress !=null && item.headerAddress !=''){
+                 item.preUrl = uploadInt.preimg + item.headerAddress
+               }
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -703,7 +706,7 @@ export default {
                item.idShow = id.substr(0,5) + "********" + id.substr(13)
                item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
                if(item.headerAddress !=null && item.headerAddress !=''){
-                 item.preUrl = photoUrl + item.headerAddress
+                 item.preUrl = uploadInt.preimg + item.headerAddress
                }
 
             }
@@ -834,7 +837,7 @@ export default {
       this.formFlag = true
       console.log("关闭测试");
 
-     // this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
 
 
       this.files = null;

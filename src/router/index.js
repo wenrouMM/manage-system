@@ -100,7 +100,34 @@ export default new Router({
         // 2.0 典藏管理
 
         // 3.0 流通管理
-
+        {
+          path: '/loanrecorde',
+          meta:{
+            title:'借阅记录'
+          },
+          component: LoanRecorde,
+        },
+        {
+          path: '/loanhistory',
+          meta:{
+            title:'还书记录'
+          },
+          component: LoanHistory,
+        },
+        {
+          path: "/borrowingbooks",
+          meta:{
+            title:'借书'
+          },
+          component: BorrowingBooks,
+        },
+        {
+          path: "/returnbooks",
+          meta:{
+            title:'还书'
+          },
+          component: ReturnBooks
+        },
         // 4.0 读者管理
         {
           path: '/readercardmanagement',
@@ -136,7 +163,7 @@ export default new Router({
           component: GetCard,
           meta:{
             title:'办卡'
-          }
+          },
         },
         // 6.0系统模块
         {
@@ -229,7 +256,13 @@ export default new Router({
           },
           component: resolve => require(['../components/System/article.vue'], resolve)
         },
-        
+        {
+          path:'/wordBook',
+          meta:{
+            title:'数据字典'
+          },
+          component: resolve => require(['../components/System/wordbook.vue'],resolve)
+        }
       ]
     },
     {
@@ -322,14 +355,8 @@ export default new Router({
               component: BookPublishHouse
             },
             
-            {
-              path: '/loanrecorde',
-              component: LoanRecorde,
-            },
-            {
-              path: '/loanhistory',
-              component: LoanHistory,
-            },
+            
+            
             /*
             {
               path: "/borrowingbooks",

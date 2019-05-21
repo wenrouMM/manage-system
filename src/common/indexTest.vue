@@ -56,17 +56,17 @@
             class="content"
             router
             :default-active="this.$route.path"
-            background-color="#545c64"
+            background-color="#343B4A"
             text-color="#fff"
           >
-            <!-- 采编管理 -->
-            <div class="navMenu" v-if="Mode == 1">
+            <div class="block"></div>
+            <el-menu-item v-show="false" index="/indexTest">首页</el-menu-item>
+            <!--采编管理 -->
+            <div class="navMenu" v-show="Mode == 1">
               <el-menu-item index="/reader">采编管理</el-menu-item>
-              
-              
             </div>
             <!-- 典藏管理 -->
-            <div class="navMenu" v-if="Mode == 2">
+            <div class="navMenu" v-show="Mode == 2">
               <el-submenu index="4">
                 <template slot="title">
                   <span>图书管理</span>
@@ -89,29 +89,28 @@
               <el-menu-item index="/libBookType">损坏清点</el-menu-item>
             </div>
             <!-- 流通管理 -->
-            <div class="navMenu" v-if="Mode == 3">
-              <el-submenu index="readerCard">
+            <div class="navMenu" v-show="Mode == 3">
+              <el-submenu index="bookIndex">
                 <template slot="title">
                   <span>流通记录</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/readercardmanagement">借阅记录</el-menu-item>
-                  <el-menu-item index="/readercardgrade">预借记录</el-menu-item>
-                  <el-menu-item index="/readercardgrade">逾期记录</el-menu-item>
+                  <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
+                  <el-menu-item index="/loanhistory">还书记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-submenu index="readerCard">
+              <el-submenu index="userbrowrr">
                 <template slot="title">
                   <span>借阅管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/readercardmanagement">借书</el-menu-item>
-                  <el-menu-item index="/readercardgrade">还书</el-menu-item>
+                  <el-menu-item index="/borrowingbooks">借书</el-menu-item>
+                  <el-menu-item index="/returnbooks">还书</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
             <!-- 读者管理 -->
-            <div class="navMenu" v-if="Mode == 4">
+            <div class="navMenu" v-show="Mode == 4">
               <el-menu-item index="/reader">读者管理</el-menu-item>
               <el-submenu index="readerCard">
                 <template slot="title">
@@ -133,12 +132,12 @@
               </el-submenu>
             </div>
             <!-- 财务管理 -->
-            <div class="navMenu" v-if="Mode == 5">
+            <div class="navMenu" v-show="Mode == 5">
               <el-menu-item index="/reader">充值管理</el-menu-item>
               <el-menu-item index="/noticeSet">日常财务</el-menu-item>
             </div>
             <!-- 系统设置 -->
-            <div class="navMenu" v-if="Mode ==6">
+            <div class="navMenu" v-show="Mode == 6">
               <el-menu-item index="/noticeSet">公告管理</el-menu-item>
               <el-menu-item index="/menuInformation">菜单管理</el-menu-item>
               <el-menu-item index="/roleInformation">角色管理</el-menu-item>
@@ -146,7 +145,7 @@
               <el-menu-item index="/managerInformation">用户管理</el-menu-item>
               <el-menu-item index="/authTbManagerLoginLog">登陆管理</el-menu-item>
               <el-menu-item index="/damageSet">损坏管理</el-menu-item>
-              <el-menu-item index="/rechargeSet">数据字典</el-menu-item>
+              <el-menu-item index="/wordBook">数据字典</el-menu-item>
               <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
             </div>
             <!-- 选中之后的样式 -->
@@ -154,6 +153,7 @@
         </el-aside>
         <el-main>
           <Tags></Tags>
+
           <div class="space"></div>
           <transition name="fade-transform" mode="out-in">
             <router-view></router-view>
@@ -266,6 +266,13 @@ body,
 .headmode .logoBox .logo {
 }
 /*头部nav区域*/
+.nav {
+}
+.block {
+  height: 20px;
+  background-color: #343b4a;
+  width: 260px;
+}
 .headmode .navBar {
   display: flex;
   align-items: center;
@@ -287,6 +294,8 @@ body,
   outline: 0 !important;
   color: #fff !important;
   background: #2bcbff !important;
+  border-bottom: 2px solid #409eff!important;
+  
 }
 
 .navBar .el-menu-item.is-active {
@@ -368,27 +377,8 @@ body,
 }
 /*====== body部分 ======*/
 /*侧边导航部分*/
-.index .nav {
-  background-color: #cc85d9;
-  width: 100%;
-}
-
-.index .el-menu {
-  border-right: none;
-}
-.index .el-aside {
-  color: #fff;
-  overflow: visible;
-}
-.nav .el-menu {
-  background: #343b4a !important;
-}
-.nav .el-menu-item {
-  background: #343b4a !important;
-  text-align: center;
-  height: 55px;
-  font-size: 18px;
-  margin-bottom: 25px;
+.navMenu {
+  width: 260px;
 }
 .nav .iconpath {
   margin-right: 15px;
@@ -423,11 +413,34 @@ body,
   color: #fff !important;
   background: #0096ff !important;
 }
+.nav .el-menu-item:hover::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: -8px;
+  width: 8px;
+  height: 55px;
+  background: #ffba00;
+}
 .nav .el-menu-item.is-active {
   color: #fff !important;
   background: #0096ff !important;
 }
-
+.nav .el-menu-item.is-active::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: -8px;
+  width: 8px;
+  height: 55px;
+  background: #ffba00;
+}
+.nav .el-menu-item{
+  font-size: 16px;
+}
+.nav .el-submenu__title{
+  font-size: 16px;
+}
 /*====== 图标类 可能后期需要更换 ======*/
 .logo {
   background-image: url("../base/img/normal/email-icon.png");

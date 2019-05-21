@@ -29,6 +29,11 @@ export const editorInt = {
   detail:`${url}systemmodule/sysTbNoticeInfo/selectOne`,
   moreDetail:`${url}systemmodule/sysTbNoticeInfo/selectMore`
 }
+// 数据字典
+export const bookWordInt = {
+  search:`${url}systemmodule/sysTbParamInfo/select`,
+  edit:`${url}systemmodule/sysTbParamInfo/edit`
+}
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
@@ -224,7 +229,7 @@ export const cardTypeInt = {
 /*------ 借阅管理 ------*/
 var borrow = url + 'tibetmuseummodule/bookRFID/'
 export const borrowInt = {
-  selectCode: `${borrow}selectOneByCode`,
+  selectCode: `${url}borrowmodule/InAndOutEquipment/selectByCode`,
   selectRfid: `${borrow}selectOneByRFID`
 }
 var bookOperate = url + 'borrowmodule/'

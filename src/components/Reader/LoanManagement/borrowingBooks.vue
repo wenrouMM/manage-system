@@ -21,18 +21,24 @@
                 :rules="rules"
               >
                 <el-form-item label="卡　　号" prop="cardNum">
-                  <el-input @keyup.enter.native="readCardBtn" clearable v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+                  <el-input
+                    @keyup.enter.native="readCardBtn"
+                    clearable
+                    v-model="searchForm.cardNum"
+                    placeholder="请输入卡号"
+                  >
+                    <el-button
+                      type="primary"
+                      icon="el-icon-search"
+                      slot="append"
+                      @click="readCardBtn"
+                      class="cardBtn"
+                    >读卡</el-button>
+                  </el-input>
                 </el-form-item>
               </el-form>
             </div>
-            <div class="btnBox">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                @click="readCardBtn"
-                class="cardBtn"
-              >读卡</el-button>
-            </div>
+            
           </div>
           <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
           <div class="userInfo" v-if="userTable.length">
@@ -46,12 +52,12 @@
                   <p>可借本数：{{userTable[0].stillBorrowNumber}}</p>
                 </section>
                 <section class="right">
-                  <p>读者性别：{{userTable[0].sex}}</p>
+                  <p>读者性别：{{userTable[0].sex ==1?'男':'女'}}</p>
                   <p>读者状态：{{userTable[0].state}}</p>
                   <p>充值余额：{{userTable[0].cardGradeDeposit}}</p>
                 </section>
               </div>
-              <p class="manage">权限：合计可借出总数量为3本，可借期限7天</p>
+              <p class="manage">{{userTable[0].msg}}</p>
             </div>
           </div>
         </section>
@@ -63,6 +69,7 @@
                 :label-position="labelPosition"
                 label-width="80px"
                 :model="searchForm"
+                clearable
                 ref="searchForm"
                 :rules="rules"
               >
@@ -108,11 +115,11 @@
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
               >
                 <el-table-column align="center" label="序号" width="80" type="index"></el-table-column>
-                <el-table-column align="center" prop="bookName" label="名称"></el-table-column>
+                <el-table-column align="center" prop="name" label="名称"></el-table-column>
                 <el-table-column
                   align="center"
                   :show-overflow-tooltip="true"
-                  prop="libraryBookCode"
+                  prop="code"
                   label="编码"
                 ></el-table-column>
                 <el-table-column
@@ -301,8 +308,8 @@ export default {
         height: "60px"
       },
       activeName: "first",
-      tabFlag:false,
-      tabCard:{},
+      tabFlag: false,
+      tabCard: {},
       /*------ 用户信息 ------*/
       userTable: [],
       /*------ 借书结果配置 ------*/
@@ -324,14 +331,24 @@ export default {
   computed: {
     searchTimeForm() {
       let obj = {
-        libraryBookCode: this.searchForm.bookCode
+        code: this.searchForm.bookCode
       };
       return obj;
     },
     submitTimeForm() {
+      let arr = [];
+      let map = this.borrowTableData;
+      for (let item of map) {
+        let pbj = {};
+        pbj.libraryBookCode = item.code;
+        pbj.bookName = item.name;
+        pbj.fkTypeName = item.fkTypeName;
+        pbj.fkTypeCode = item.fkTypeCode;
+        arr.push(pbj);
+      }
       let obj = {
         cardNum: this.searchForm.cardNum,
-        list: this.borrowTableData
+        list: arr
       };
       return obj;
     }
@@ -384,19 +401,19 @@ export default {
     // tab切换功能
     tabBtn() {
       let value = this.tabFlag;
-      let obj = this.tabCard
-      
-      if(!value){
-        this.$message.error('请先填写读者卡号')
-        return
+      let obj = this.tabCard;
+
+      if (!value) {
+        this.$message.error("请先填写读者卡号");
+        return;
       }
-      if(this.activeName == 'second'){
-        this.returnBookApi(obj)
+      if (this.activeName == "second") {
+        this.returnBookApi(obj);
       }
-      if(this.activeName =='third'){
-        this.historyApi(obj)
+      if (this.activeName == "third") {
+        this.historyApi(obj);
       }
-      console.log(this.activeName)
+      console.log(this.activeName);
     },
     /*------ API区 ------*/
     // websocker获取RFID
@@ -407,9 +424,9 @@ export default {
       axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
         if (res.data.state === true) {
           this.userTable = res.data.row;
-          this.tabCard = data
-          this.tabFlag = true
-          console.log('查询成功的读者卡号',data,this.tabFlag)
+          this.tabCard = data;
+          this.tabFlag = true;
+          console.log("查询成功的读者卡号", data, this.tabFlag);
           console.log("用户信息", this.userTable);
         } else {
           this.$message.error(res.data.msg);
@@ -451,11 +468,19 @@ export default {
           console.log(res);
           if (res.data.state === true) {
             let obj = res.data.row;
+            console.log(
+              "搜索出来的数据",
+              this.borrowTableData,
+              "接收的数据",
+              obj[0].code
+            );
+            // some不执行console.log
             const isExist = this.borrowTableData.some(item => {
-              return item.libraryBookCode === obj.libraryBookCode;
+              return item.code === obj[0].code;
             });
+            console.log(isExist);
             if (!isExist) {
-              this.borrowTableData.push(obj);
+              this.borrowTableData.push(obj[0]);
               console.log("现在的数据", this.borrowTableData);
             } else {
               this.$message.error("已选中该书");
@@ -472,6 +497,7 @@ export default {
         if (res.data.state === true) {
           console.log("借书记录", res.data.row);
           this.endTable = res.data.row.list;
+          this.$message.success('操作成功')
           console.log("现在的借书机理", this.endTable);
         } else {
           this.$message.error(res.data.msg);
@@ -479,7 +505,7 @@ export default {
       });
     },
     // 待归还Api
-    returnBookApi(data){
+    returnBookApi(data) {
       axios.get(bookOperateInt.return, { params: data }).then(res => {
         if (res.data.state === true) {
           this.oweTable = res.data.row;
@@ -490,7 +516,7 @@ export default {
       });
     },
     // 历史借阅Api
-    historyApi(data){
+    historyApi(data) {
       axios.get(bookOperateInt.history, { params: data }).then(res => {
         if (res.data.state === true) {
           this.bookHistory = res.data.row;
@@ -612,6 +638,7 @@ export default {
 .borrowBox {
   display: flex;
   margin-bottom: 10px;
+  justify-content: space-between;
 }
 .userInfoBox {
   margin-right: 20px;
@@ -621,7 +648,7 @@ export default {
   display: flex;
 }
 .searchCard .inputBox {
-  width: 310px;
+  width: 400px;
   margin-right: 30px;
 }
 .searchCard .btnBox {
@@ -646,7 +673,7 @@ export default {
   font-size: 14px;
 }
 .infoBox .info .left {
-  margin-right: 90px;
+  margin-right: 60px;
 }
 .infoBox .manage {
   color: #0096ff;

@@ -1,3 +1,4 @@
+/*样式覆盖文件夹*/
 #addFormBI .infoGroup .el-input .el-input__inner{
     width: 100%;
   }
@@ -15,6 +16,7 @@
     height: 170px;
     width: 532px;
 }
+/*读者卡模块elementUI样式覆盖*/
 .readerCard{
 
 }
@@ -50,7 +52,37 @@
   width: 140px!important;
 }
 
+.el-input.el-input--120 {
+  width: 160px;
+}
+
+.el-input.el-input--120 input {
+  height: 36px;
+  line-height: 36px;
+}
+
+.el-input.el-input--160 {
+  width: 160px;
+}
+
+.el-range-editor--130 {
+  width: 300px;
+}
+
+.el-select.el-select--160 {
+  width: 160px;
+}
+/*进度条样式修改*/
 #nprogress .bar {
   background: #009a61 !important;
   height: 4px!important;
+}
+
+/*elementUI样式覆盖*/
+/*侧边栏*/
+.el-submenu__title{
+  font-size: 16px;
+}
+.userManage .searchBox .el-form{
+  display: flex;
 }

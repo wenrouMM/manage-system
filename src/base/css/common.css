@@ -30,26 +30,7 @@
 .commonMode .el-input .el-input__inner{
   text-align: center;
 }
-.el-input.el-input--120 {
-  width: 160px;
-}
 
-.el-input.el-input--120 input {
-  height: 36px;
-  line-height: 36px;
-}
-
-.el-input.el-input--160 {
-  width: 160px;
-}
-
-.el-range-editor--130 {
-  width: 300px;
-}
-
-.el-select.el-select--160 {
-  width: 160px;
-}
 
 
 
@@ -70,12 +51,6 @@
 
 /*elementUI覆盖部分*/
 /*右侧侧边栏 多重下拉框*/
-.el-submenu__title{
-  font-size: 18px;
-}
-.el-submenu__title:hover{
-
-}
 
 /*通用边距设置*/
 .mb_30{
@@ -99,9 +74,7 @@
 .ml_30{
   margin-left: 30px;
 }
-.userManage .searchBox .el-form{
-  display: flex;
-}
+
 
 body{
   overflow: inherit!important;

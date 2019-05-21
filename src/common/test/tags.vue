@@ -1,5 +1,6 @@
 <template>
   <div class="tagsBox">
+    <transition>
     <ul class="routerBox" v-if="showTags">
       <li
         class="routerButton circularButton"
@@ -25,6 +26,7 @@
         </el-dropdown>
       </div>
     </ul>
+    </transition>
   </div>
 </template>
 
@@ -108,7 +110,7 @@ export default {
   },
   watch: {
     $route(newValue, oldValue) {
-      if (newValue.fullPath == "/home") {
+      if (newValue.fullPath == "/indexTest") {
         this.tagsList = [];
         return;
       }
