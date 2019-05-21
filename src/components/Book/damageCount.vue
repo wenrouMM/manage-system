@@ -3,35 +3,19 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">书籍典藏</span>
+          <span class="titleName">损坏清点</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="buttonBox">
-            <button class="add" @click="rechargeBtn">
-              <i class="addIcon el-icon-plus"></i>新增
-            </button>
-            <button class="delete" @click="drawbackBtn(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>删除
-            </button>
             <button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
-            </button>
-            <button class="green" @click="tunnellingBtn">
-              <i class="el-icon-edit"></i>调馆
             </button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" style="width: 150px">
-                  <el-option label="索书号" value="0"></el-option>
-                  <el-option label="馆藏码" value="1"></el-option>
-                  <el-option label="ISBN" value="2"></el-option>
-                  <el-option label="书名" value="3"></el-option>
-                  <el-option label="状态" value="4"></el-option>
-                </el-select>
-                <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
+              <el-form-item label="ISBN :">
+                <el-input v-model="searchForm.searchData" placeholder="请输入相关的ISBN" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -47,31 +31,21 @@
             style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
-            @selection-change="handleSelectionChange"
           >
-            <el-table-column align="center" type="selection"></el-table-column>
             <el-table-column align="center" prop="index" type="index" width="100" label="序号">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="available" label="状态">
-              <template slot-scope="scope">
-                <span>{{scope.row.available ==0?'停用':'启用'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="操作">
-              <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-              <template slot-scope="scope">
-                <span class="green" @click="makeBtn(scope.$index, scope.row)">启用</span>
-                <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
-                <span class="ban" @click="deleteBtn(scope.$index, scope.row)">报损</span>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="damageName" label="书名"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="ISBN"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="编著者"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="出版社"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="总藏馆数量"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="在馆"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="已借"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="损坏状态"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="备注"></el-table-column>
           </el-table>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
@@ -111,33 +85,33 @@
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <el-form id="Book_collection"  :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
             <div class="flexLayout">
-              <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
-                <el-input v-model="addForm.isbn" style="position: relative" id="isbnInput"></el-input>
+              <el-form-item label=" I S B N :" prop="ISBN" label-width="80px">
+                <el-input v-model="addForm.ISBN" style="position: relative" id="isbnInput"></el-input>
               </el-form-item>
-              <p class="searchButton" @click="isbnData">
-                <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
+              <p class="searchButton">
+                <img src="../../base/img/currency/ssbs.png" style="width: 25px;width:25px;margin-left: 18px;margin-top: 7px">
               </p>
             </div>
             <div id="haveBottomBorder">
               <div id="inputDiv1">
                 <el-form-item label=" 正题名 :" prop="titleProper" label-width="80px" style="">
                   <div class="flexLayout">
-                    <el-input v-model="addForm.name"></el-input>
+                    <el-input v-model="addForm.titleProper"></el-input>
                     <el-checkbox v-model="addForm.bulkBook">散装书</el-checkbox>
                   </div>
                 </el-form-item>
               </div>
               <div class="flexLayout" id="inputDiv2">
                 <el-form-item label=" 副题名 :" prop="subtitle" label-width="80px" style="">
-                    <el-input v-model="addForm.viceName"></el-input>
+                  <el-input v-model="addForm.subtitle"></el-input>
                 </el-form-item>
                 <el-form-item label=" 丛编题名 :" prop="cluster" label-width="100px" style="">
-                  <el-input v-model="addForm.clusterName "></el-input>
+                  <el-input v-model="addForm.cluster "></el-input>
                 </el-form-item>
               </div>
               <div class="flexLayout" id="inputDiv3">
                 <el-form-item label=" 分类号 :" prop="classificationCode" label-width="80px" style="">
-                  <el-input v-model="addForm.searchNumber"></el-input>
+                  <el-input v-model="addForm.classificationCode"></el-input>
                 </el-form-item>
                 <el-form-item label=" 版　　次 :" prop="edition" label-width="95px" style="">
                   <el-input v-model="addForm.edition"></el-input>
@@ -148,18 +122,18 @@
               </div>
               <div class="flexLayout" id="inputDiv4">
                 <el-form-item label=" 编著者 :" prop="contributors" label-width="80px" style="">
-                  <el-input v-model="addForm.author"></el-input>
+                  <el-input v-model="addForm.contributors"></el-input>
                 </el-form-item>
                 <el-form-item label=" 装订版面 :" prop="bindingLayout" label-width="100px" style="">
-                  <el-input v-model="addForm.layout "></el-input>
+                  <el-input v-model="addForm.bindingLayout "></el-input>
                 </el-form-item>
               </div>
               <div class="flexLayout" id="inputDiv5">
                 <el-form-item label=" 出 版 社 :" prop="publishHouse" label-width="90px" style="">
-                  <el-input v-model="addForm.fkPressName"></el-input>
+                  <el-input v-model="addForm.publishHouse"></el-input>
                 </el-form-item>
                 <el-form-item label=" 出版时间 :" prop="comeoutTime" label-width="100px" style="">
-                  <el-input v-model="addForm.publishingTime"></el-input>
+                  <el-input v-model="addForm.comeoutTime"></el-input>
                 </el-form-item>
                 <el-form-item label=" 附　　件 :" prop="appendix" label-width="100px" style="">
                   <el-input v-model="addForm.appendix"></el-input>
@@ -170,7 +144,7 @@
                   <el-input v-model="addForm.pageNumber"></el-input>
                 </el-form-item>
                 <el-form-item label=" 开　　本 :" prop="format" label-width="95px" style="">
-                  <el-input v-model="addForm.openBook"></el-input>
+                  <el-input v-model="addForm.format"></el-input>
                 </el-form-item>
                 <el-form-item label=" 价　　格 :" prop="price" label-width="95px" style="">
                   <el-input v-model="addForm.price"></el-input>
@@ -179,20 +153,19 @@
             </div>
             <div id="formDiv">
               <div class="flexLayout" style="margin-top: 10px">
-                <el-form-item label=" 条码号 :" prop="code" label-width="80px" style="">
-                  <el-input v-model="addForm.code"></el-input>
+                <el-form-item label=" 条码号 :" prop="barcode" label-width="80px" style="">
+                  <el-input v-model="addForm.barcode"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
-                  <el-input v-model="addForm.searchNumber"></el-input>
+                <el-form-item label=" 索书号 :" prop="bookIndex" label-width="95px" style="">
+                  <el-input v-model="addForm.bookIndex"></el-input>
                 </el-form-item>
-                <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
-                  <el-input v-model="addForm.place"></el-input>
+                <el-form-item label=" 馆藏地 :" prop="libAdress" label-width="80px" style="">
+                  <el-input v-model="addForm.libAdress"></el-input>
                 </el-form-item>
               </div>
-              <div style="margin-left: 150px">
-                <el-checkbox v-model="addForm.dailyRent">默认日租金</el-checkbox>
-                <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 150px">不外借</el-checkbox>
-                <el-checkbox v-model="addForm.available" style="margin-left: 150px">启用</el-checkbox>
+              <div style="margin-left: 270px">
+                <el-checkbox v-model="addForm.defaultDateRent">默认日租金</el-checkbox>
+                <el-checkbox v-model="addForm.norForLoan" style="margin-left: 150px">不外借</el-checkbox>
               </div>
             </div>
             <!-- 弹框表单按钮  验证失效-->
@@ -222,21 +195,14 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { collection } from "../../request/api/base.js";
+  import { damage } from "../../request/api/base.js";
 
   export default {
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
         addForm:{
-          id:'',
-          isbn:'',
-          code:'',//条码
-          searchNumber:'',//索书号
-          place:'',//藏馆地
-          dailyRent:'',//默认日租金
-          lendingPermission:'',//不外借
-          available:'',//启用
+          ISBN:'',
           titleProper:'', //正题名
           bulkBook:'', //套装书
           subtitle:'', //副题名
@@ -252,9 +218,14 @@
           pageNumber:'',//页码
           format:'',//开本
           price:'',//价格
+          barcode:'',//条码
+          bookIndex:'',//索书号
+          libAdress:'',//藏馆地
+          defaultDateRent:'',//默认日租金
+          norForLoan:''//不外借
         },
         rules:{
-          isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
+          ISBN:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           titleProper:[{ required: true}],
           subtitle:[{ required: true}],
           cluster:[{ required: true}],
@@ -269,9 +240,9 @@
           pageNumber:[{ required: true}],
           format:[{ required: true}],
           price:[{ required: true}],
-          code:[{ required: true,message: "请输入条码号", trigger: "blur" }],
-          searchNumber:[{ required: true,message: "请输入索书号", trigger: "blur" }],
-          place:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
+          barcode:[{ required: true,message: "请输入条码号", trigger: "blur" }],
+          bookIndex:[{ required: true,message: "请输入索书号", trigger: "blur" }],
+          libAdress:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
@@ -321,51 +292,19 @@
         total: 0,
         tableData: [],
         id:'',
-        tableChecked: [], // 全选绑定的数据
       };
     },
     computed: {
       searchTimeForm(){
-        let newData={
+        let newSearch={
+          name:this.searchForm.damageMothod,
           pageSize: this.pageSize,
           currentPage: 1,
         }
-        return newData
-      },
-      addFormData(){
-        let newData={
-          fkCataBookId:this.addForm.id,
-          code:this.addForm.barcode,
-          callNumber:this.addForm.searchNumber,
-          place:this.addForm.place,
-          dailyRent:this.addForm.dailyRent==true?1:0,
-          lendingPermission:this.addForm.lendingPermission==true?1:0,
-          available:this.addForm.available==true?1:0,
-          pageSize: this.pageSize,
-          currentPage: 1,
-        }
-        return newData
-      },
-      editFormData(){
-        let newData={
-          id:this.addForm.id,
-          code:this.addForm.code,
-          callNumber:this.addForm.searchNumber,
-          place:this.addForm.place,
-          dailyRent:this.addForm.dailyRent==true?1:0,
-          lendingPermission:this.addForm.lendingPermission==true?1:0,
-          pageSize: this.pageSize,
-          currentPage: 1,
-        }
-        console.log('newData',newData)
-        return newData
+        return newSearch
       }
     },
     methods: {
-      handleSelectionChange(val) {
-        console.log('全选按钮之后的数据',val);
-        this.tableChecked = val;
-      },
       //导出按钮
       deriveBtn(){
         this.i=6
@@ -373,98 +312,30 @@
       },
       //删除按钮
       drawbackBtn(){
-        if(this.tableChecked.length){
-          this.i=3
-          this.centerDialogVisible=true
-        } else {
-          this.$message.error('请先选择删除对象')
-        }
+        this.i=3
+        this.centerDialogVisible=true
       },
       //新增按钮
       rechargeBtn(){
         this.i=1
         this.dialogFormVisible=true
       },
-      //添加isbn数据搜索
-      isbnData(){
-        this.axios.get(collection.isbn,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-          console.log('isbn的数据',res)
-          if(res.data.state==true){
-            this.addForm=res.data.row[0]
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
-          }
-        })
-      },
       //修改弹框
-      EditBtn(index,row){
+      EditBtn(){
         this.i=0
-        console.log(row)
-        console.log('row',row)
-        this.addForm=row
-        this.addForm.available=row.available==1?true:false
-        this.addForm.lendingPermission=row.lendingPermission==1?true:false
-        this.addForm.dailyRent=row.dailyRent==1?true:false
         this.dialogFormVisible = true;
       },
       // 修改添加弹框确定按钮
       submitForm() {
-        console.log('defaultDateRent',this.addForm.defaultDateRent,'norForLoan',this.addForm.norForLoan)
-        if(this.i==1){
-          this.addApi(this.addFormData)
-        }else if(this.i==0){
-          this.editApi(this.editFormData)
-        }
-      },
-      addApi(value){
-        this.axios.post(collection.add,value).then((res)=>{
-          if (res.data.state == true) {
-            this.$message({
-              message: res.data.msg,
-              type: "success"
-            });
-            this.closeForm()
-            this.searchApi(this.searchTimeForm);
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
-          }
-        })
-      },
-      editApi(value){
-        this.axios.post(collection.edit,value).then((res)=>{
-          if (res.data.state == true) {
-            this.$message({
-              message: res.data.msg,
-              type: "success"
-            });
-            this.closeForm()
-            this.searchApi(this.searchTimeForm);
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
-          }
-        })
+
       },
       //添加修改弹框取消按钮
       resetForm() {
-        this.closeForm()
+        this.$refs[this.addForm].resetFields();
       },
       //添加修改关闭按钮
       closeForm() { // 弹框关闭的时候执行 清空数据
-        this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-        for (var i in this.addForm) {
-          this.addForm[i] = "";
-        }
-        this.dialogFormVisible = false
-        this.searchApi(this.searchTimeForm)
+
       },
       // 查询按钮
       searchBtn() {
@@ -472,9 +343,8 @@
         this.currentPage = 1;
       },
       //报损弹框
-      deleteBtn(index,row){
+      deleteBtn(){
         this.i=5
-        this.addForm.id=row.id
         this.centerDialogVisible=true
       },
       //调馆按钮
@@ -483,51 +353,12 @@
         this.centerDialogVisible=true
       },
       //启用按钮
-      makeBtn(index,row){
+      makeBtn(){
         this.i=4
-        this.addForm.id=row.id
         this.centerDialogVisible=true
       },
       submitDialog(){
-        if(this.i==4){
-          this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
-            if (res.data.state == true) {
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }else if(this.i==3){
-          let idData=[]
-          for (var item of this.tableChecked) {
-            console.log('删除id',item.id);
-            idData.push({id:item.id})
-          }
-          console.log('idData',idData)
-          this.axios.post(collection.delete,idData).then((res)=>{
-            if (res.data.state == true){
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }
+
       },
       // 分页按钮
       jumpBtn() {
@@ -551,11 +382,11 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(collection.select, {
+          .get(damage.select, {
             params: value
           })
           .then(res => {
-            console.log("书籍典藏", res.data);
+            console.log("损坏记录", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
@@ -594,9 +425,6 @@
     border-radius: 3px;
     position: absolute;
     left: 910px;
-  }
-  .searchButton:hover{
-    background-color: rgba(0,150,255,0.8);
   }
   .edit {
     color: #00d7f0;
@@ -713,11 +541,5 @@
     border: 1px solid #eaeaea;
     /*border-width: 0 1px 1px 1px ;*/
     border-bottom: 0;
-  }
-  #isbnSearch{
-    width: 25px;
-    width:25px;
-    margin-left: 18px;
-    margin-top: 7px
   }
 </style>

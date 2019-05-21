@@ -93,8 +93,8 @@
                 <el-menu-item index="/bookregistration">图书登记</el-menu-item>
                 <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
               </el-submenu>
-              <el-menu-item index="/LibBookInfo">书籍典藏</el-menu-item>
-              <el-menu-item index="/libBookType">损坏清点</el-menu-item>
+              <el-menu-item index="/BookCollection">书籍典藏</el-menu-item>
+              <el-menu-item index="/damageCount">损坏清点</el-menu-item>
             </div>
             <!-- 流通管理 -->
             <div class="navMenu" v-if="Mode == 3">
@@ -105,7 +105,8 @@
                 <el-menu-item-group>
                   <el-menu-item index="/readercardmanagement">借阅记录</el-menu-item>
                   <el-menu-item index="/readercardgrade">预借记录</el-menu-item>
-                  <el-menu-item index="/readercardgrade">逾期记录</el-menu-item>
+                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
+                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="readerCard">
@@ -135,7 +136,7 @@
             </div>
             <!-- 财务管理 -->
             <div class="navMenu" v-if="Mode == 5">
-              <el-menu-item index="/reader">充值管理</el-menu-item>
+              <el-menu-item index="/rechargeSet">充值管理</el-menu-item>
               <el-menu-item index="/noticeSet">日常财务</el-menu-item>
             </div>
             <!-- 系统设置 -->
@@ -147,7 +148,7 @@
               <el-menu-item index="/managerInformation">用户管理</el-menu-item>
               <el-menu-item index="/authTbManagerLoginLog">登陆管理</el-menu-item>
               <el-menu-item index="/damageSet">损坏管理</el-menu-item>
-              <el-menu-item index="/rechargeSet">数据字典</el-menu-item>
+              <el-menu-item index="/dataDictionary">数据字典</el-menu-item>
               <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
             </div>
             <!-- 选中之后的样式 -->

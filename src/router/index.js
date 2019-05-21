@@ -91,14 +91,33 @@ export default new Router({
         title: '测试首页'
       },
       component: IndexTest,
-      
-      children: [ 
+
+      children: [
         // 1.0 采编管理
-       
+
 
 
         // 2.0 典藏管理
-
+        {
+          path: '/libInfo',
+          component: LibInfo
+        },
+        {
+          path: '/bookType',
+          component: BookType,
+        },
+        {
+          path: '/bookInfo',
+          component: BookInfo
+        },
+        {
+          path: '/bookInfo/:id',
+          component: Detail
+        },
+        {
+          path: '/bookpublishhouse',
+          component: BookPublishHouse
+        },
         // 3.0 流通管理
 
         // 4.0 读者管理
@@ -189,6 +208,44 @@ export default new Router({
           component: resolve => require(['../components/System/notice.vue'], resolve)
         },
         {
+          path: '/LibBookInfo',
+          component: LibBookInfo
+        },
+        {
+          path: '/LibBookInfo/:id',
+          component: LibDetail
+        },
+        {
+          path: '/bookLocation',
+          component: bookLocation
+        },
+        {
+          path: '/libBookType',
+          component: LibBookType
+        },
+        {
+          path: "/bookregistration",
+          component: BookRegistration
+        },
+        {
+          path: '/publishhouse',
+          component: BookPublishHouse
+        },
+        {
+          path: '/BookCollection',
+          meta: {
+            title: '书籍典藏'
+          },
+          component: resolve => require(['../components/Book/BookCollection.vue'], resolve)
+        },
+        {
+          path: '/damageCount',
+          meta: {
+            title: '损坏清点'
+          },
+          component: resolve => require(['../components/Book/damageCount.vue'], resolve)
+        },
+        {
           path: '/damageSet',
           meta: {
             title: '损坏管理'
@@ -201,6 +258,20 @@ export default new Router({
             title: '充值管理'
           },
           component: resolve => require(['../components/System/recharge.vue'], resolve)
+        },
+        {
+          path: '/dataDictionary',
+          meta: {
+            title: '数据字典'
+          },
+          component: resolve => require(['../components/System/dataDictionary.vue'], resolve)
+        },
+        {
+          path: '/refunds',
+          meta: {
+            title: '充值管理'
+          },
+          component: resolve => require(['../components/System/refunds.vue'], resolve)
         },
         {
           path: '/vacationSet',
@@ -229,7 +300,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/article.vue'], resolve)
         },
-        
+
       ]
     },
     {
@@ -249,8 +320,8 @@ export default new Router({
       children: [{
           path: '/systemMode',
           component: TestSystem,
-         
-        }, 
+
+        },
 
         {
           path: '/areaMode',
@@ -268,26 +339,7 @@ export default new Router({
         {
           path: '/bookMode',
           component: TestBook,
-          children: [{
-              path: '/libInfo',
-              component: LibInfo
-            },
-            {
-              path: '/bookType',
-              component: BookType,
-            },
-            {
-              path: '/bookInfo',
-              component: BookInfo
-            },
-            {
-              path: '/bookInfo/:id',
-              component: Detail
-            },
-            {
-              path: '/bookpublishhouse',
-              component: BookPublishHouse
-            },
+          children: [
           ]
         },
         {
@@ -297,31 +349,6 @@ export default new Router({
               path: '/readeradmin',
               component: ReaderAdmin,
             },
-            {
-              path: '/LibBookInfo',
-              component: LibBookInfo
-            },
-            {
-              path: '/LibBookInfo/:id',
-              component: LibDetail
-            },
-            {
-              path: '/bookLocation',
-              component: bookLocation
-            },
-            {
-              path: '/libBookType',
-              component: LibBookType
-            },
-            {
-              path: "/bookregistration",
-              component: BookRegistration
-            },
-            {
-              path: '/publishhouse',
-              component: BookPublishHouse
-            },
-            
             {
               path: '/loanrecorde',
               component: LoanRecorde,

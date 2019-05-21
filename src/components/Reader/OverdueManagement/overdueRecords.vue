@@ -11,24 +11,15 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
-            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
-              </el-form-item>
-              <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
-              </el-form-item>
-              <el-form-item label="书名:" size="160">
-                <el-input v-model="searchForm.bookName" placeholder="请输入书名"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
-              </el-form-item>
-            </el-form>
+            <div class="buttonBox">
+              <button class="blue" @click="deriveBtn">
+                <i class="blueIcon el-icon-share"></i>导出
+              </button>
+            </div>
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table class="tableBorder" id="out-table" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
               <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -92,6 +83,7 @@
 </template>
 
 <script>
+
   import {overdue} from '../../../request/api/base.js'
   export default {
     data() {
@@ -176,6 +168,31 @@
             });
           }
         })
+      },
+      //导出按钮
+      deriveBtn(){
+        /* 从表生成工作簿对象 */
+        var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+        /* 获取二进制字符串作为输出 */
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array"
+        });
+        try {
+          FileSaver.saveAs(
+            //Blob 对象表示一个不可变、原始数据的类文件对象。
+            //Blob 表示的不一定是JavaScript原生格式的数据。
+            //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+            //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+            new Blob([wbout], { type: "application/octet-stream" }),
+            //设置导出文件名称
+            "sheetjs.xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
       },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
@@ -264,6 +281,16 @@
 
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
+  .buttonBox{
+    margin-bottom: 30px;
+  }
+  .buttonBox .blue {
+    background: #31D6FF;
+    border-radius: 10px;
+  }
+  .buttonBox .blue .blueIcon {
+    margin-right: 6px;
+  }
   .edit {
     color: #00d7f0;
     cursor: pointer;
