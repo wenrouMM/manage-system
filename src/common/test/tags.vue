@@ -47,8 +47,9 @@ export default {
         return item.path === route.fullPath;
       });
       if (!isExist) {
-        if (this.tagsList >= 8) {
+        if (this.tagsList.length >= 8) {
           this.tagsList.shift();
+          console.log('您执行了吗')
         }
         this.tagsList.push({
           title: route.meta.title,

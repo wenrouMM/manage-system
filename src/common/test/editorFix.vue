@@ -419,6 +419,9 @@ export default {
 .uploadBox {
   width: 400px;
 }
+.buttonBox {
+  text-align: center;
+}
 </style>
 
 <style>
@@ -428,7 +431,5 @@ export default {
 .editorBox .ql-container.ql-snow {
   height: 400px;
 }
-.buttonBox {
-  text-align: center;
-}
+
 </style>

@@ -105,7 +105,7 @@
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="/borrowingbooks">借书</el-menu-item>
-                  <el-menu-item index="/returnbooks">还书</el-menu-item>
+                  <el-menu-item index="/returnbooks">还书-</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
@@ -345,6 +345,7 @@ body,
   top: 60px;
   left: -30px;
   display: none;
+  z-index: 5;
 }
 .headBox .username:hover .userDrop {
   display: block;
@@ -388,7 +389,7 @@ body,
   position: absolute;
   transition: all 0.5s;
 }
-/*当初这里是被显示挡住了*/
+
 .el-menu-item.activeMenu.is-active::after {
   content: "";
   position: absolute;
@@ -413,6 +414,7 @@ body,
   color: #fff !important;
   background: #0096ff !important;
 }
+/*
 .nav .el-menu-item:hover::after {
   content: "";
   position: absolute;
@@ -421,10 +423,6 @@ body,
   width: 8px;
   height: 55px;
   background: #ffba00;
-}
-.nav .el-menu-item.is-active {
-  color: #fff !important;
-  background: #0096ff !important;
 }
 .nav .el-menu-item.is-active::after {
   content: "";
@@ -435,6 +433,12 @@ body,
   height: 55px;
   background: #ffba00;
 }
+*/
+.nav .el-menu-item.is-active {
+  color: #fff !important;
+  background: #0096ff !important;
+}
+
 .nav .el-menu-item{
   font-size: 16px;
 }

@@ -65,7 +65,7 @@
               <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
               <el-table-column align="center" prop="fkParentRoleCode" label="上级"></el-table-column>
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
-
+              <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="disabled" width="200" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.disabled ==0?'启用':'禁用'}}</span>

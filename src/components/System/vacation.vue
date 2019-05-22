@@ -162,20 +162,23 @@
           disabledDate: time => {
             if (this.addForm.endTime) {
               return (
-                time.getTime() > Date.now() ||
-                time.getTime() > this.addForm.endTime
+                time.getTime() < Date.now() ||
+                time.getTime() > new Date(this.TimeNow.endTime).getTime()
               );
             } else {
-              return time.getTime() > Date.now();
+              return time.getTime() < Date.now();
             }
           }
         },
         pickerOptions1: {
           disabledDate: time => {
-            return (
-              time.getTime() < this.addForm.startTime ||
-              time.getTime() > Date.now()
-            );
+            if(this.addForm.startTime){
+              return (
+                time.getTime() < new Date(this.TimeNow.startTime).getTime() || time.getTime() < Date.now()
+              );
+            } else{
+              return time.getTime() < Date.now();
+            }
           }
         },
         /*初始化 */
@@ -233,6 +236,20 @@
         };
         console.log(newForm);
         return newForm;
+      },
+      // 时间转化
+      TimeNow() {
+        let obj = {
+          startTime:
+            !this.addForm.startTime
+              ? null
+              : moment(this.addForm.startTime).format("YYYY-MM-DD 00:00:00"), //开始时间
+          endTime:
+            !this.addForm.endTime
+              ? null
+              : moment(this.addForm.endTime).format("YYYY-MM-DD 00:00:00") //结束时间
+        }
+        return obj
       }
     },
     methods: {

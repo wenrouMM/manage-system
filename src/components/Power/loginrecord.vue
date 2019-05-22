@@ -59,7 +59,7 @@
             <el-table-column align="center" prop="loginAccount" label="登录账户"></el-table-column>
             <el-table-column align="center" prop="fkLoginCode" label="登录来源">
               <template slot-scope="scope">
-                <span :class="{error: scope.row.loginStatus==1}">{{scope.row.loginStatus == 0?'平台登录':'设备登录'}}</span>
+                <span>{{scope.row.fkLoginCode == 0?'平台登录':'设备登录'}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="loginTime" label="登录时间"></el-table-column>

@@ -3,7 +3,7 @@
 //var url = 'http://192.168.2.31:8088/'
 var url = 'http://192.168.2.121:8088/'
 //var url='http://127.0.0.1:8088/'
-
+//var url = 'http://192.168.2.54:8088/' // 测试环境
 
 var imgurl='http://192.168.2.31:8090/'
 //var imgurl='http://127.0.0.1:8090/'
@@ -17,6 +17,11 @@ export const uploadInt = {
   editorFile:`${fileUrl}filemodule/uploadFile/addEnclosure`,
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
   preimg:`${fileUrl}filemodule/showFile/getShow`
+}
+/*------ 读者管理模块 ------*/
+export const rechargeInt = {
+  juge:`${url}financemodule/depositRecord/vMoney`,
+  deposit:`${url}financemodule/depositRecord/add`
 }
 /*------ 系统设置模块  ------*/
 

@@ -45,6 +45,12 @@ table {
 a{
 	text-decoration: none;
 }
+strong{
+	font-weight: bold;
+}
+em{
+	font-style: italic;
+}
 /*个性化修改elementUI*/
 /*====== 弹框  ======*/
 /*notice 公司统一的弹框 上边距和下边距应该固定一个尺寸 按钮的颜色大小也应有个标准*/
