@@ -1,14 +1,20 @@
+//测试环境
+/*  var url = 'http://192.168.2.54:8088/' 
+var imgurl='http://192.168.2.54:8090/'
+let fileUrl = 'http://192.168.2.54:8090/'  */
+
 // 用来管理接口的域名相关
-//var url = 'http://192.168.2.131:8088/'
+//var url='http://127.0.0.1:8088/'
+
 //var url = 'http://192.168.2.31:8088/'
 var url = 'http://192.168.2.121:8088/'
-//var url='http://127.0.0.1:8088/'
-//var url = 'http://192.168.2.54:8088/' // 测试环境
+
+
 
 var imgurl='http://192.168.2.31:8090/'
-//var imgurl='http://127.0.0.1:8090/'
-/*------ 文件上传模块 ------*/
 let fileUrl = 'http://192.168.2.31:8090/'
+/*------ 文件上传模块 ------*/
+
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,
   backImg:`${fileUrl}filemodule/uploadImg/addBackage`,
