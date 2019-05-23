@@ -133,7 +133,7 @@
             </div>
             <!-- 财务管理 -->
             <div class="navMenu" v-show="Mode == 5">
-              <el-menu-item index="/reader">充值管理</el-menu-item>
+              <el-menu-item index="/rechargeSet">充值管理</el-menu-item>
               <el-menu-item index="/noticeSet">日常财务</el-menu-item>
             </div>
             <!-- 系统设置 -->
@@ -295,7 +295,7 @@ body,
   color: #fff !important;
   background: #2bcbff !important;
   border-bottom: 2px solid #409eff!important;
-  
+
 }
 
 .navBar .el-menu-item.is-active {

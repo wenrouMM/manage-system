@@ -295,4 +295,6 @@ export const collection ={
   isbn:`${url}bookcollectionmodule/collection/selectFromCata`,
   state:`${url}bookcollectionmodule/collection/editState`,
   delete:`${url}bookcollectionmodule/collection/delete`,
+  letLeave:`${url}bookcollectionmodule/collection//letLeave`,
+  harm:`${url}bookcollectionmodule/collection/letLeave_1558431695150`,
 }

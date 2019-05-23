@@ -296,7 +296,7 @@ export default new Router({
         {
           path: '/refunds',
           meta: {
-            title: '充值管理'
+            title: '充值退款管理'
           },
           component: resolve => require(['../components/System/refunds.vue'], resolve)
         },

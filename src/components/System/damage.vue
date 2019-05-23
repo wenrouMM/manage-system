@@ -121,7 +121,7 @@
               <el-input v-model="addForm.damageMothod" placeholder="请输入损坏的方式"></el-input>
             </el-form-item>
             <el-form-item label="赔偿方式 : " prop="payFor">
-              <el-select clearable v-model="addForm.payFor" placeholder="请选择赔偿的方式">
+              <el-select clearable v-model="addForm.payFor" @change="payForMethodCheck(addForm.payFor)" placeholder="请选择赔偿的方式">
                 <el-option
                   v-for="(item,index) of options"
                   :key="index"
@@ -130,8 +130,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="赔偿数目 : " prop="payforNum">
-              <el-input v-model="addForm.payforNum" placeholder="请输入损坏的数目"></el-input>
+            <el-form-item :label="title" prop="payforNum" id="titleJ">
+              <el-input v-model="addForm.payforNum" :placeholder="placeholderTitle"></el-input>
             </el-form-item>
             <el-form-item label="备注信息 : " prop="remark">
               <el-input type="textarea" v-model="addForm.remark"  :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入备注信息"></el-input>
@@ -160,6 +160,9 @@
         centerDialogVisible: false, // 删除弹框
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         Dialogtitle: ["修改", "新增"],
+        title:'',
+        placeholderTitle:'',
+        j:null,
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -175,7 +178,7 @@
         rules:{
           damageMothod:[{ required: true, message: "请输入损坏方式", trigger: "blur" }],
           payFor:[{ required: true, message: "请选择赔偿方式", trigger: "change" }],
-          payforNum:[{ required: true, message: "请输入损坏的数目", trigger: "blur" }],
+          payforNum:[{ required: true, message: "请先选择赔偿方式", trigger: "blur" }],
           remark:[{ required: true, message: "请输入备注信息", trigger: "blur" }]
         },
         /*初始化 */
@@ -229,6 +232,19 @@
       }
     },
     methods: {
+      payForMethodCheck(val){
+        console.log('赔偿方式',val)
+        console.log(this.rules.payforNum[0].message)
+        if(val==0){
+          this.title='具体金额:'
+          this.placeholderTitle='请输入具体赔偿金额'
+          this.rules.payforNum[0].message='请输入具体赔偿金额'
+        }else if(val==1){
+          this.title='价格倍数:'
+          this.placeholderTitle='请输入赔偿价格倍数'
+          this.rules.payforNum[0].message='请输入具体价格倍数'
+        }
+      },
       // 删除按钮
       deleteBtn(index, row) {
         this.centerDialogVisible=true
@@ -328,6 +344,8 @@
         this.closeForm()
       },
       closeForm() {
+        this.title=''
+        this.placeholderTitle=''
         let obj = this.addForm;
         this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
         for (var i in obj) {
