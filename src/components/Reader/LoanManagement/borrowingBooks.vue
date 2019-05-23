@@ -38,7 +38,6 @@
                 </el-form-item>
               </el-form>
             </div>
-            
           </div>
           <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
           <div class="userInfo" v-if="userTable.length">
@@ -168,7 +167,7 @@
                   label="书籍编码"
                 ></el-table-column>
                 <el-table-column align="center" prop="start" label="借书开始时间"></el-table-column>
-                <el-table-column align="center" prop="end" label="预计书籍归还时间"></el-table-column>
+                <!-- <el-table-column align="center" prop="end" label="预计书籍归还时间"></el-table-column> -->
                 <el-table-column align="center" prop="state" label="借书状态">
                   <template slot-scope="scope">
                     <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
@@ -196,12 +195,13 @@
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
-                <el-table-column align="center" prop="state" label="借书状态">
+                <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
+                <el-table-column align="center" label="操作">
                   <template slot-scope="scope">
-                    <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
+                    <el-button @click="renewBtn(scope.row)" type="text" size="small">续借</el-button>
+                    <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
               </el-table>
             </section>
           </el-tab-pane>
@@ -236,52 +236,6 @@
         </el-tabs>
       </div>
     </div>
-    <!--
-    <div style="width: 100%;margin-top: 75px">
-      <section style="width:400px;height: 200px;margin:0 auto">
-        <el-form
-          :label-position="labelPosition"
-          label-width="80px"
-          :model="searchForm"
-          ref="searchForm"
-          :rules="rules"
-        >
-          <el-form-item label="卡号" prop="cardNum">
-            <el-input v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
-          </el-form-item>
-          <el-form-item label="书籍编码" prop="bookCode">
-            <el-input v-model="searchForm.bookCode" style="width: 200px" placeholder="请输入书籍编码"></el-input>
-            <el-button
-              type="primary"
-              style="height: 36px;width: 100px;padding-top:10px;margin-left: 15px"
-              @click="selectBtn"
-            >确定</el-button>
-          </el-form-item>
-        </el-form>
-      </section>
-      <section class="text item tablebox">
-        <el-table
-          class="tableBorder"
-          @selection-change="allSelect"
-          :data="borrowTableData"
-          style="width:1000px;margin:0 auto; text-align:center;"
-          :row-style="rowStyle"
-          :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-        >
-          <el-table-column width="100" align="center" type="index" label="序号"></el-table-column>
-          <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
-          <el-table-column align="center" prop="libraryBookCode" label="书籍编码"></el-table-column>
-          <el-table-column align="center" prop="fkTypeName" width="200" label="书籍类型"></el-table-column>
-          <el-table-column align="center" prop="author"  label="作者"></el-table-column>
-        </el-table>
-      </section>
-      <div class="buttonBox">
-        <el-button type="primary" size="120" @click="sellBtn" style="margin-top: 50px;">借书</el-button>
-        <el-button type="warning" size="120" @click="reset">重新扫描</el-button>
-      </div>
-      
-    </div>
-    -->
   </div>
 </template>
 
@@ -310,6 +264,7 @@ export default {
       activeName: "first",
       tabFlag: false,
       tabCard: {},
+      lastCardNum:'',
       /*------ 用户信息 ------*/
       userTable: [],
       /*------ 借书结果配置 ------*/
@@ -347,7 +302,7 @@ export default {
         arr.push(pbj);
       }
       let obj = {
-        cardNum: this.searchForm.cardNum,
+        cardNum: this.lastCardNum,
         list: arr
       };
       return obj;
@@ -415,6 +370,28 @@ export default {
       }
       console.log(this.activeName);
     },
+    // 续借按钮
+    renewBtn(row) {
+      this.$confirm("是否续借该书?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "续借成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消操作"
+          });
+        });
+    },
+    // 报损按钮
+    damageBtn(row) {},
     /*------ API区 ------*/
     // websocker获取RFID
     // 读卡APi
@@ -426,6 +403,8 @@ export default {
           this.userTable = res.data.row;
           this.tabCard = data;
           this.tabFlag = true;
+          this.lastCardNum = this.searchForm.cardNum
+          
           console.log("查询成功的读者卡号", data, this.tabFlag);
           console.log("用户信息", this.userTable);
         } else {
@@ -497,7 +476,7 @@ export default {
         if (res.data.state === true) {
           console.log("借书记录", res.data.row);
           this.endTable = res.data.row.list;
-          this.$message.success('操作成功')
+          this.$message.success("操作成功");
           console.log("现在的借书机理", this.endTable);
         } else {
           this.$message.error(res.data.msg);
@@ -525,6 +504,10 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    // 续借API
+    renewApi(){
+
     },
     /*------ websocket区域 ------*/
     // 建立websocket连接
