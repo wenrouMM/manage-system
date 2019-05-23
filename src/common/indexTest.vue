@@ -106,6 +106,7 @@
                 <el-menu-item-group>
                   <el-menu-item index="/borrowingbooks">借书</el-menu-item>
                   <el-menu-item index="/returnbooks">还书-</el-menu-item>
+                  <el-menu-item index="/returnbooks">续借-</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
