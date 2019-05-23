@@ -15,20 +15,19 @@
         <div style="margin:30px 0px 30px 40px;height: 40px;position: relative">
           <span style="color: #878787;">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;:&nbsp;&nbsp;</span>
           <span>
-              <input type="text" class="inputStyle" style="width: 520px;">
-              <button class="selectButton">查询</button>
+              <input type="text" class="inputStyle" v-model="cardNum" style="width: 520px;">
+              <button class="selectButton" @click="selectInfoCheck">查询</button>
             </span>
         </div>
         <div id="cardTable">
           <div class="flexlayout">
             <p>用户名称 : {{this.cardData.userName}}</p>
-            <p>用户性名 : {{this.cardData.name}}</p>
             <p>用户性别 : {{this.cardData.sex}}</p>
-          </div>
-          <div style="margin-top: 30px" class="flexlayout">
-            <p>注册日期 : {{this.cardData.startTime}}</p>
-            <p>有效期限 : {{this.cardData.vaildTime}}</p>
             <p>读者状态 : {{this.cardData.state}}</p>
+          </div>
+          <div style="margin-top: 30px;" class="flexlayout">
+            <p style="width: 300px">注册日期 : {{this.cardData.startTime}}</p>
+            <p style="margin-right: 40px;width: 300px">有效期限 : {{this.cardData.vaildTime}}</p>
           </div>
         </div>
       </div>
@@ -62,6 +61,7 @@
 </template>
 
 <script>
+  import { bookOperateInt} from "../../request/api/base.js";
   export default {
     data(){
       return {
@@ -94,6 +94,21 @@
           this.refundsInput='充值金额'
         }
         console.log('this.title',this.title)
+      },
+      //查询读者卡信息
+      selectInfoCheck(){
+        console.log('读者卡号',this.cardNum)
+        this.axios.get(bookOperateInt.userInfo,{params:{cardNum:this.cardNum}}).then((res)=>{
+          console.log('读者卡信息',res)
+          if(res.data.state==true) {
+            this.cardData.userName = res.data.row[0].cardFkReaderName
+            this.cardData.money = res.data.row[0].cardGradeDeposit
+            this.cardData.sex = res.data.row[0].sex == 1 ? '男' : '女'
+            this.cardData.vaildTime=res.data.row[0].cardExpireTime
+            this.cardData.startTime=res.data.row[0].cardCreatTime
+            this.cardData.state=res.data.row[0].state
+          }
+        })
       },
       submitDialog(){
 

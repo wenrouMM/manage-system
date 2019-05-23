@@ -21,7 +21,7 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" placeholder="处理方式" style="width: 150px">
+                <el-select v-model="searchForm.makeMethod" clearable placeholder="处理方式" style="width: 150px">
                   <el-option label="押金充值" value="0"></el-option>
                   <el-option label="退款金额" value="1"></el-option>
                 </el-select>
