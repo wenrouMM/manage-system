@@ -17,6 +17,9 @@
             <button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
             </button>
+            <button class="deongaree" @click="rejectBtn">
+              <i class="blueIcon el-icon-delete"></i>剔除
+            </button>
             <button class="green" @click="tunnellingBtn">
               <i class="el-icon-edit"></i>调馆
             </button>
@@ -354,7 +357,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出'],
+        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -496,6 +499,15 @@
       handleSelectionChange(val) {
         console.log('全选按钮之后的数据',val);
         this.tableChecked = val;
+      },
+      //剔除按钮
+      rejectBtn(){
+        if(this.tableChecked.length){
+          this.i=7
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择剔除对象')
+        }
       },
       //导出按钮
       deriveBtn(){
@@ -823,6 +835,11 @@
   .buttonBox .blue {
     background: #31D6FF;
     border-radius: 10px;
+  }
+  .buttonBox .deongaree {
+    background: #4D94FF;
+    border-radius: 10px;
+    margin-left: 10px;
   }
   .buttonBox .blue .blueIcon {
     margin-right: 6px;

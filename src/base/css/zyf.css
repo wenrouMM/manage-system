@@ -30,9 +30,6 @@
   width: 860px;
   border: 1px solid #DCDFE6
 }
-#Book_collection .el-form-item__error{
-  margin-top: 10px;
-}
 #Book_collection .el-form-item{
   margin-bottom: 20px;
 }

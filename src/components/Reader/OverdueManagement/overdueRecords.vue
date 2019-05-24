@@ -239,6 +239,7 @@
         //this.centerDialogVisible=true
         this.i=0
         this.phone=''
+        this.id=row.id
         console.log(row)
         this.axios.get(overdue.phone,{params:{id:row.id}}).then((res)=>{
           console.log(res)
