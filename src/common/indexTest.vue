@@ -33,9 +33,9 @@
           <div class="headiconBox"></div>
           <div class="userBox">
             <div class="username">
-              <!--
+              
               <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
-              -->
+              
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -105,8 +105,8 @@
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="/borrowingbooks">借书</el-menu-item>
-                  <el-menu-item index="/returnbooks">还书-</el-menu-item>
-                  <el-menu-item index="/returnbooks">续借-</el-menu-item>
+                  <el-menu-item index="/returnbooks">还书</el-menu-item>
+                  <el-menu-item index="/renew">续借</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>

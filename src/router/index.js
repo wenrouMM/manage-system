@@ -147,6 +147,13 @@ export default new Router({
           },
           component: ReturnBooks
         },
+        {
+          path:'/renew',
+          meta:{
+            title:'续借'
+          },
+          component:resolve => require(['@/components/Circulate/renew.vue'], resolve)
+        },
         // 4.0 读者管理
         {
           path: '/readercardmanagement',
