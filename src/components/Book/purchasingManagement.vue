@@ -20,7 +20,7 @@
         <div class="right">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="筛选 :">
-              <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
+              <el-select v-model="searchForm.makeMethod" placeholder="采购批次" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
                 <el-option label="索书号" value="0"></el-option>
                 <el-option label="馆藏码" value="1"></el-option>
                 <el-option label="ISBN" value="2"></el-option>
@@ -34,6 +34,56 @@
             </el-form-item>
           </el-form>
         </div>
+      </section>
+      <section class="tableBox">
+        <el-table
+          :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+          empty-text="无数据"
+          style="width: 100%; text-align:center;"
+          :data="tableData"
+          :row-style="{height:'60px'}"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column align="center" type="selection"></el-table-column>
+          <el-table-column align="center" prop="searchNumber" label="采购批次" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column align="center" prop="code" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column align="center" label="操作">
+            <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+            <template slot-scope="scope">
+              <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 4.0 分页 -->
+        <section class="pagination mt_30">
+          <el-pagination
+            style="display: inline-block"
+            background
+            layout="prev, pager, next,total,slot"
+            :total="total"
+            :page-size="pageSize"
+            :current-page="currentPage"
+            @current-change="current_change"
+          >
+            <slot>
+                <span>
+                  前往
+                  <div class="el-input el-pagination__editor is-in-pagination">
+                    <input
+                      ref="text"
+                      type="number"
+                      v-model="pageInput"
+                      autocomplete="off"
+                      min="1"
+                      max="1"
+                      class="compo el-input__inner"
+                    >
+                  </div>页
+                </span>
+            </slot>
+          </el-pagination>
+          <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+        </section>
       </section>
     </div>
   </div>
@@ -49,6 +99,7 @@
           searchData:"",
           currentPage: 0
         },
+        tableData:[]
       }
     },
     mounted(){
@@ -81,7 +132,7 @@
     background-color: white;
   }
   #purchasing{
-    width: 1500px;
+    width: 1400px;
     border: 1px solid gray;
     margin: 70px auto 150px;
   }
