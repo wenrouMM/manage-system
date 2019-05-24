@@ -44,7 +44,12 @@
                 <span>{{scope.row.compensationType ==0?'具体金额':'价格倍数'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="compensationNum" label="赔偿金额"></el-table-column>
+            <el-table-column align="center" prop="distinction" label="区别号">
+              <template slot-scope="scope">
+                <span>{{scope.row.distinction ==0?'损坏':'遗失'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="compensationNum" label="赔偿额度"></el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
             <!-- 自定义插槽 -->
             <el-table-column align="center" label="操作" width="200">
@@ -133,8 +138,14 @@
             <el-form-item :label="title" prop="payforNum" id="titleJ">
               <el-input v-model="addForm.payforNum" :placeholder="placeholderTitle"></el-input>
             </el-form-item>
+            <el-form-item label=" 区 别 号 : " prop="differenceNumber">
+              <el-radio-group v-model="addForm.differenceNumber">
+                <el-radio label="损坏"></el-radio>
+                <el-radio label="遗失"></el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item label="备注信息 : " prop="remark">
-              <el-input type="textarea" v-model="addForm.remark"  :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入备注信息"></el-input>
+              <el-input type="textarea" v-model="addForm.remark" resize="none"  :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入备注信息"></el-input>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item>
@@ -173,13 +184,15 @@
           damageMothod:'',
           payFor:'',
           payforNum:'',
-          remark:''
+          remark:'',
+          differenceNumber:''//区别号
         },
         rules:{
           damageMothod:[{ required: true, message: "请输入损坏方式", trigger: "blur" }],
           payFor:[{ required: true, message: "请选择赔偿方式", trigger: "change" }],
           payforNum:[{ required: true, message: "请先选择赔偿方式", trigger: "blur" }],
-          remark:[{ required: true, message: "请输入备注信息", trigger: "blur" }]
+          remark:[{ required: true, message: "请输入备注信息", trigger: "blur" }],
+          differenceNumber:[{ required: true, message: "请选择区别号", trigger: "change" }],
         },
         /*初始化 */
         options: [
@@ -207,8 +220,9 @@
         let newForm = {
           id:this.id,
           damageName:this.addForm.damageMothod,
-          compensationType:this.addForm.payFor,
+          compensationType:this.addForm.payFor=='按价格倍数赔偿'?1:0,
           compensationNum:this.addForm.payforNum,
+          distinction:this.addForm.differenceNumber=='遗失'?1:0,
           remarks:this.addForm.remark,
         };
         return newForm;
@@ -218,6 +232,7 @@
           damageName:this.addForm.damageMothod,
           compensationType:this.addForm.payFor,
           compensationNum:this.addForm.payforNum,
+          distinction:this.addForm.differenceNumber=='遗失'?1:0,
           remarks:this.addForm.remark,
         };
         return newForm;
@@ -238,11 +253,11 @@
         if(val==0){
           this.title='具体金额:'
           this.placeholderTitle='请输入具体赔偿金额'
-          this.rules.payforNum[0].message='请输入具体赔偿金额'
+          this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
         }else if(val==1){
           this.title='价格倍数:'
           this.placeholderTitle='请输入赔偿价格倍数'
-          this.rules.payforNum[0].message='请输入具体价格倍数'
+          this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
         }
       },
       // 删除按钮
@@ -283,6 +298,7 @@
         console.log('row',row)
         this.addForm.damageMothod=row.damageName
         this.addForm.payFor=row.compensationType==0?'按具体金额赔偿':'按价格倍数赔偿'
+        this.addForm.differenceNumber=row.distinction==0?'损坏':'遗失'
         this.addForm.payforNum=row.compensationNum
         this.addForm.remark=row.remarks
       },

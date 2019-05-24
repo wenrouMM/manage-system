@@ -3,15 +3,11 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">损坏清点</span>
+          <span class="titleName">损坏清点详情</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
-          <div class="buttonBox">
-            <button class="blue" @click="deriveBtn">
-              <i class="blueIcon el-icon-share"></i>导出
-            </button>
-          </div>
+          <div class="buttonBox"></div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="ISBN :">
@@ -39,18 +35,11 @@
             </el-table-column>
             <el-table-column align="center" prop="damageName" label="书名"></el-table-column>
             <el-table-column align="center" prop="damageName" label="ISBN"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="编著者"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="索取号"></el-table-column>
             <el-table-column align="center" prop="damageName" label="出版社"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="总藏馆数量"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="在馆"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="已借"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="注销原因"></el-table-column>
-            <el-table-column align="center" label="操作">
-              <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-              <template slot-scope="scope">
-                <span class="edit" @click="EditBtn(scope.$index, scope.row)">详情</span>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="damageName" label="馆藏地"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="分类号"></el-table-column>
+            <el-table-column align="center" prop="damageName" label="在馆状态"></el-table-column>
           </el-table>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">

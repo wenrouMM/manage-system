@@ -270,6 +270,20 @@ export default new Router({
           component: BookPublishHouse
         },
         {
+          path: '/purchasingManagement',
+          meta: {
+            title: '采购管理'
+          },
+          component: resolve => require(['../components/Book/purchasingManagement.vue'], resolve)
+        },
+        {
+          path: '/BookCataloging',
+          meta: {
+            title: '书籍编目'
+          },
+          component: resolve => require(['../components/Book/BookCataloging.vue'], resolve)
+        },
+        {
           path: '/BookCollection',
           meta: {
             title: '书籍典藏'
@@ -284,6 +298,13 @@ export default new Router({
           component: resolve => require(['../components/Book/damageCount.vue'], resolve)
         },
         {
+          path: '/DamageIinventoryDetails',
+          meta: {
+            title: '损坏清点详情'
+          },
+          component: resolve => require(['../components/Book/DamageIinventoryDetails.vue'], resolve)
+        },
+        {
           path: '/damageSet',
           meta: {
             title: '损坏管理'
@@ -296,6 +317,27 @@ export default new Router({
             title: '充值管理'
           },
           component: resolve => require(['../components/System/recharge.vue'], resolve)
+        },
+        {
+          path: '/OverdueCostCirculation',
+          meta: {
+            title: '逾期费用记录'
+          },
+          component: resolve => require(['../components/System/OverdueCostCirculation.vue'], resolve)
+        },
+        {
+          path: '/Depositflowdirection',
+          meta: {
+            title: '押金流向'
+          },
+          component: resolve => require(['../components/System/Depositflowdirection.vue'], resolve)
+        },
+        {
+          path: '/logOut',
+          meta: {
+            title: '注销记录'
+          },
+          component: resolve => require(['../components/System/logOut.vue'], resolve)
         },
         {
           path: '/dataDictionary',
@@ -425,9 +467,9 @@ export default new Router({
               path: '/publishhouse',
               component: BookPublishHouse
             },
-            
-            
-            
+
+
+
             /*
             {
               path: "/borrowingbooks",

@@ -66,7 +66,7 @@
             </el-form-item>
           </div>
           <el-form-item label="书籍简介 : " prop="bookcontent" :label-width="formLabelWidth" style="margin-left: 50px">
-            <el-input type="textarea" style="width: 500px" v-model="addForm.bookcontent" autocomplete="off"  :autosize="{ minRows: 4, maxRows: 4}" :disabled="disable" placeholder="请输入书籍简介"></el-input>
+            <el-input type="textarea" style="width: 500px" v-model="addForm.bookcontent" resize="none" autocomplete="off"  :autosize="{ minRows: 4, maxRows: 4}" :disabled="disable" placeholder="请输入书籍简介"></el-input>
           </el-form-item>
         </div>
         <!-- 弹框表单按钮  验证失效-->
