@@ -189,7 +189,6 @@
                   </div>
                 </div>
               </div>
-
               <div style="width: 400px;margin:20px auto 0px" class="flexLayout">
                 <el-button type="primary" @click="definiteCheck">确定</el-button>
                 <el-button type="info" style="margin-left: 55px" @click="cancelCheck">取消</el-button>
@@ -278,7 +277,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除'],
+        Dialogtitle: ["修改", "新增",'导出','删除','导入'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -421,18 +420,9 @@
         console.log('全选按钮之后的数据',val);
         this.tableChecked = val;
       },
-      //剔除按钮
-      rejectBtn(){
-        if(this.tableChecked.length){
-          this.i=7
-          this.centerDialogVisible=true
-        } else {
-          this.$message.error('请先选择剔除对象')
-        }
-      },
       //导出按钮
       deriveBtn(){
-        this.i=6
+        this.i=2
         this.centerDialogVisible=true
       },
       //删除按钮
@@ -539,34 +529,22 @@
         this.dialogFormVisible = false
         this.searchApi(this.searchTimeForm)
       },
+      //添加修改确定按钮
+      definiteCheck(){
+
+      },
+      //添加修改取消按钮
+      cancelCheck(){
+        this.closeForm()
+      },
       // 查询按钮
       searchBtn() {
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
-      //报损弹框
-      deleteBtn(index,row){
-        this.i=5
-        this.addForm.id=row.id
-        this.dialogFormVisible=true
-      },
-      //报损弹框确定按钮
-      definiteCheck(){
-
-      },
-      //报损弹框取消按钮
-      cancelCheck(){
-        this.closeForm()
-      },
       //调馆按钮
       tunnellingBtn(){
-        this.i=2
-        this.centerDialogVisible=true
-      },
-      //启用按钮
-      makeBtn(index,row){
         this.i=4
-        this.addForm.id=row.id
         this.centerDialogVisible=true
       },
       submitDialog(){

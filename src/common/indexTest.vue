@@ -68,7 +68,7 @@
                   <span>书籍管理</span>
                 </template>
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
-                <el-menu-item index="/bookInfo">采购管理</el-menu-item>
+                <el-menu-item index="/purchasingManagement">采购管理</el-menu-item>
               </el-submenu>
             </div>
             <!-- 典藏管理 -->

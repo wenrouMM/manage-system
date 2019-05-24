@@ -113,97 +113,97 @@
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <el-form id="Book_collection" v-if="i==0||i==1" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
-              <div class="flexLayout">
-                <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
-                  <el-input v-model="addForm.isbn" style="position: relative" id="isbnInput"></el-input>
-                </el-form-item>
-                <p class="searchButton" @click="isbnData">
-                  <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
-                </p>
-              </div>
-              <div id="haveBottomBorder">
-                <div id="inputDiv1">
-                  <el-form-item label=" 正题名 :" prop="titleProper" label-width="80px" style="">
-                    <div class="flexLayout">
-                      <el-input v-model="addForm.name"></el-input>
-                      <el-checkbox v-model="addForm.bulkBook">散装书</el-checkbox>
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="flexLayout" id="inputDiv2">
-                  <el-form-item label=" 副题名 :" prop="subtitle" label-width="80px" style="">
-                    <el-input v-model="addForm.viceName"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 丛编题名 :" prop="cluster" label-width="100px" style="">
-                    <el-input v-model="addForm.clusterName "></el-input>
-                  </el-form-item>
-                </div>
-                <div class="flexLayout" id="inputDiv3">
-                  <el-form-item label=" 分类号 :" prop="classificationCode" label-width="80px" style="">
-                    <el-input v-model="addForm.searchNumber"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 版　　次 :" prop="edition" label-width="95px" style="">
-                    <el-input v-model="addForm.edition"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 卷册号 :" prop="volumeNumber" label-width="80px" style="">
-                    <el-input v-model="addForm.volumeNumber"></el-input>
-                  </el-form-item>
-                </div>
-                <div class="flexLayout" id="inputDiv4">
-                  <el-form-item label=" 编著者 :" prop="contributors" label-width="80px" style="">
-                    <el-input v-model="addForm.author"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 装订版面 :" prop="bindingLayout" label-width="100px" style="">
-                    <el-input v-model="addForm.layout "></el-input>
-                  </el-form-item>
-                </div>
-                <div class="flexLayout" id="inputDiv5">
-                  <el-form-item label=" 出 版 社 :" prop="publishHouse" label-width="90px" style="">
-                    <el-input v-model="addForm.fkPressName"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 出版时间 :" prop="comeoutTime" label-width="100px" style="">
-                    <el-input v-model="addForm.publishingTime"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 附　　件 :" prop="appendix" label-width="100px" style="">
-                    <el-input v-model="addForm.appendix"></el-input>
-                  </el-form-item>
-                </div>
-                <div class="flexLayout" id="inputDiv6" style="margin-bottom: 20px">
-                  <el-form-item label=" 页　　码 :" prop="pageNumber" label-width="95px" style="">
-                    <el-input v-model="addForm.pageNumber"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 开　　本 :" prop="format" label-width="95px" style="">
-                    <el-input v-model="addForm.openBook"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 价　　格 :" prop="price" label-width="95px" style="">
-                    <el-input v-model="addForm.price"></el-input>
-                  </el-form-item>
-                </div>
-              </div>
-              <div id="formDiv">
-                <div class="flexLayout" style="margin-top: 10px">
-                  <el-form-item label=" 条码号 :" prop="code" label-width="80px" style="">
-                    <el-input v-model="addForm.code"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
-                    <el-input v-model="addForm.searchNumber"></el-input>
-                  </el-form-item>
-                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
-                    <el-input v-model="addForm.place"></el-input>
-                  </el-form-item>
-                </div>
-                <div style="margin-left: 150px">
-                  <el-checkbox v-model="addForm.dailyRent">默认日租金</el-checkbox>
-                  <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 150px">不外借</el-checkbox>
-                  <el-checkbox v-model="addForm.available" style="margin-left: 150px">启用</el-checkbox>
-                </div>
-              </div>
-              <!-- 弹框表单按钮  验证失效-->
-              <el-form-item style="margin:30px auto 0px">
-                <el-button type="primary" @click="submitForm()" >确定</el-button>
-                <el-button type="info" @click="resetForm()" >取消</el-button>
+            <div class="flexLayout">
+              <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
+                <el-input v-model="addForm.isbn" style="position: relative" id="isbnInput"></el-input>
               </el-form-item>
-            </el-form>
+              <p class="searchButton" @click="isbnData">
+                <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
+              </p>
+            </div>
+            <div id="haveBottomBorder">
+              <div id="inputDiv1">
+                <el-form-item label=" 正题名 :" prop="titleProper" label-width="80px" style="">
+                  <div class="flexLayout">
+                    <el-input v-model="addForm.name"></el-input>
+                    <el-checkbox v-model="addForm.bulkBook">散装书</el-checkbox>
+                  </div>
+                </el-form-item>
+              </div>
+              <div class="flexLayout" id="inputDiv2">
+                <el-form-item label=" 副题名 :" prop="subtitle" label-width="80px" style="">
+                  <el-input v-model="addForm.viceName"></el-input>
+                </el-form-item>
+                <el-form-item label=" 丛编题名 :" prop="cluster" label-width="100px" style="">
+                  <el-input v-model="addForm.clusterName "></el-input>
+                </el-form-item>
+              </div>
+              <div class="flexLayout" id="inputDiv3">
+                <el-form-item label=" 分类号 :" prop="classificationCode" label-width="80px" style="">
+                  <el-input v-model="addForm.searchNumber"></el-input>
+                </el-form-item>
+                <el-form-item label=" 版　　次 :" prop="edition" label-width="95px" style="">
+                  <el-input v-model="addForm.edition"></el-input>
+                </el-form-item>
+                <el-form-item label=" 卷册号 :" prop="volumeNumber" label-width="80px" style="">
+                  <el-input v-model="addForm.volumeNumber"></el-input>
+                </el-form-item>
+              </div>
+              <div class="flexLayout" id="inputDiv4">
+                <el-form-item label=" 编著者 :" prop="contributors" label-width="80px" style="">
+                  <el-input v-model="addForm.author"></el-input>
+                </el-form-item>
+                <el-form-item label=" 装订版面 :" prop="bindingLayout" label-width="100px" style="">
+                  <el-input v-model="addForm.layout "></el-input>
+                </el-form-item>
+              </div>
+              <div class="flexLayout" id="inputDiv5">
+                <el-form-item label=" 出 版 社 :" prop="publishHouse" label-width="90px" style="">
+                  <el-input v-model="addForm.fkPressName"></el-input>
+                </el-form-item>
+                <el-form-item label=" 出版时间 :" prop="comeoutTime" label-width="100px" style="">
+                  <el-input v-model="addForm.publishingTime"></el-input>
+                </el-form-item>
+                <el-form-item label=" 附　　件 :" prop="appendix" label-width="100px" style="">
+                  <el-input v-model="addForm.appendix"></el-input>
+                </el-form-item>
+              </div>
+              <div class="flexLayout" id="inputDiv6" style="margin-bottom: 20px">
+                <el-form-item label=" 页　　码 :" prop="pageNumber" label-width="95px" style="">
+                  <el-input v-model="addForm.pageNumber"></el-input>
+                </el-form-item>
+                <el-form-item label=" 开　　本 :" prop="format" label-width="95px" style="">
+                  <el-input v-model="addForm.openBook"></el-input>
+                </el-form-item>
+                <el-form-item label=" 价　　格 :" prop="price" label-width="95px" style="">
+                  <el-input v-model="addForm.price"></el-input>
+                </el-form-item>
+              </div>
+            </div>
+            <div id="formDiv">
+              <div class="flexLayout" style="margin-top: 10px">
+                <el-form-item label=" 条码号 :" prop="code" label-width="80px" style="">
+                  <el-input v-model="addForm.code"></el-input>
+                </el-form-item>
+                <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                  <el-input v-model="addForm.searchNumber"></el-input>
+                </el-form-item>
+                <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
+                  <el-input v-model="addForm.place"></el-input>
+                </el-form-item>
+              </div>
+              <div style="margin-left: 150px">
+                <el-checkbox v-model="addForm.dailyRent">默认日租金</el-checkbox>
+                <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 150px">不外借</el-checkbox>
+                <el-checkbox v-model="addForm.available" style="margin-left: 150px">启用</el-checkbox>
+              </div>
+            </div>
+            <!-- 弹框表单按钮  验证失效-->
+            <el-form-item style="margin:30px auto 0px">
+              <el-button type="primary" @click="submitForm()" >确定</el-button>
+              <el-button type="info" @click="resetForm()" >取消</el-button>
+            </el-form-item>
+          </el-form>
           <el-form  v-if="i==5" id="harm" :rules="rules" :model="harmForm" :ref="harmForm">
             <div class="gray_radio_border" id="harm_noneTopBorder">
               <div class="flexLayout">
