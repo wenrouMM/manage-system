@@ -148,6 +148,10 @@ export default new Router({
           component: ReturnBooks
         },
         {
+          path: "/returnstatus",
+          component: ReturnStatus
+        },
+        {
           path:'/renew',
           meta:{
             title:'续借'
