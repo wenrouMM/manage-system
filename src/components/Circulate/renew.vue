@@ -86,11 +86,11 @@
                 <el-table-column align="center" width="200" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" width="200" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" width="100" prop="renewCount" label="续借次数"></el-table-column>
-                <el-table-column align="center" fixed="right" width="100" label="操作">
+                <!-- <el-table-column align="center" fixed="right" width="100" label="操作">
                   <template slot-scope="scope">
                     <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
               </el-table>
             </section>
             <div class="buttonBox">

@@ -11,9 +11,9 @@
             <button class="add" @click="rechargeBtn">
               <i class="addIcon el-icon-plus"></i>充值
             </button>
-            <button class="delete" @click="drawbackBtn">
+            <!-- <button class="delete" @click="drawbackBtn">
               <i class="deleteIcon el-icon-delete"></i>退款
-            </button>
+            </button> -->
             <button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
             </button>
@@ -214,9 +214,6 @@
       rechargeBtn(){
         this.$router.push({
           path:'/refunds',
-          query: {
-            method: 'recharge'
-          }
         });
       },
       // 查询按钮
