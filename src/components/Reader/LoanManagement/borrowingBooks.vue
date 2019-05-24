@@ -114,21 +114,21 @@
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
               >
                 <el-table-column align="center" label="序号" width="80" type="index"></el-table-column>
-                <el-table-column align="center" prop="name" label="名称"></el-table-column>
+                <el-table-column align="center" width="100" prop="name" label="书籍名称"></el-table-column>
                 <el-table-column
                   align="center"
-                  :show-overflow-tooltip="true"
+                  width="200"
                   prop="code"
-                  label="编码"
+                  label="书籍编码"
                 ></el-table-column>
                 <el-table-column
                   align="center"
-                  :show-overflow-tooltip="true"
+                  width="100"
                   prop="fkTypeName"
-                  label="类型"
+                  label="书籍类型"
                 ></el-table-column>
                 <el-table-column align="center" prop="author" label="作者"></el-table-column>
-                <el-table-column align="center" label="操作">
+                <el-table-column align="center" fixed="right" width="100" label="操作">
                   <template slot-scope="scope">
                     <el-button
                       size="mini"

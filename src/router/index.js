@@ -331,9 +331,17 @@ export default new Router({
         {
           path: '/refunds',
           meta: {
-            title: '充值退款管理'
+            title: '押金充值'
           },
-          component: resolve => require(['../components/System/refunds.vue'], resolve)
+          component: resolve => require(['../components/Finance/refunds.vue'], resolve)
+        },
+        {
+          path:'/refundsEnd/:card',
+          meta:{
+            juge:false,
+            title:'充值结果'
+          },
+          component: resolve => require(['../components/Finance/refundsEnd.vue'], resolve)
         },
         {
           path: '/vacationSet',
