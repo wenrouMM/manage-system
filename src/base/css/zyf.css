@@ -118,4 +118,34 @@
 .errTitle .el-form-item__error {
   margin-left: 95px;
 }
+#book_cataloging #noError .el-form-item{
+  margin-bottom: 10px;
+}
+#book_cataloging #noError .el-form-item__error{
+  display: none;
+}
+#book_cataloging #catalogingInput1 .el-input .el-input__inner {
+  width:371px;
+}
+#book_cataloging #catalogingInput2 .el-input .el-input__inner {
+  width:370px;
+}
+#book_cataloging #catalogingInput5 .el-input .el-input__inner {
+  width:210px;
+}
+#book_cataloging #catalogingInput6 .el-input .el-input__inner {
+  width:210px;
+}
+#book_cataloging #catalogingInput3 .smaillInput .el-input .el-input__inner {
+  width:180px;
+}
+#book_cataloging #catalogingInput4 .el-input .el-input__inner {
+  width:200px;
+}
+#book_cataloging #catalogingInput4 .smaillInput .el-input .el-input__inner {
+  width:180px;
+}
+#book_cataloging #catalogingInput3 .bigInput .el-input .el-input__inner {
+  width:515px;
+}
 

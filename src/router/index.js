@@ -266,6 +266,13 @@ export default new Router({
           component: BookPublishHouse
         },
         {
+          path: '/BookCataloging',
+          meta: {
+            title: '书籍编目'
+          },
+          component: resolve => require(['../components/Book/BookCataloging.vue'], resolve)
+        },
+        {
           path: '/BookCollection',
           meta: {
             title: '书籍典藏'

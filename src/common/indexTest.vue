@@ -33,9 +33,9 @@
           <div class="headiconBox"></div>
           <div class="userBox">
             <div class="username">
-              
+
               <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
-              
+
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span class="dropItem">个人中心</span>
@@ -63,7 +63,13 @@
             <el-menu-item v-show="false" index="/indexTest">首页</el-menu-item>
             <!--采编管理 -->
             <div class="navMenu" v-show="Mode == 1">
-              <el-menu-item index="/reader">采编管理</el-menu-item>
+              <el-submenu index="3">
+                <template slot="title">
+                  <span>书籍管理</span>
+                </template>
+                <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
+                <el-menu-item index="/bookInfo">采购管理</el-menu-item>
+              </el-submenu>
             </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-show="Mode == 2">
