@@ -185,7 +185,7 @@
                 <el-form-item label=" 条码号 :" prop="code" label-width="80px" style="">
                   <el-input v-model="addForm.code"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                <el-form-item label=" 索取号 :" prop="searchNumber" label-width="95px" style="">
                   <el-input v-model="addForm.searchNumber"></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
@@ -268,12 +268,25 @@
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-          <div class="dialogBody">
+          <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6">
             是否{{Dialogtitle[i]}}?
+          </div>
+          <div v-if="this.i==7">
+            <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="92px" class="demo-ruleForm">
+              <el-form-item label=" 剔除原因 :" prop="cause">
+                <el-select v-model="numberValidateForm.cause" clearable placeholder="请选择" style="width: 330px">
+                  <el-option label="未还" value="4"></el-option>
+                  <el-option label="被盗" value="5"></el-option>
+                  <el-option label="陈旧" value="6"></el-option>
+                  <el-option label="破损" value="7"></el-option>
+                  <el-option label="其他" value="8"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
           </div>
           <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton cancel" @click="cancelCheck">取消</span>
           </div>
         </el-dialog>
       </div>
@@ -315,6 +328,9 @@
           format:'',//开本
           price:'',//价格
         },
+        numberValidateForm:{
+          cause:'',//剔除原因
+        },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           titleProper:[{ required: true}],
@@ -341,6 +357,7 @@
           causesDamage:[{ required: true,message: "请选择损坏原因", trigger: "change" }],
           amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "blur" }],
           remarks:[{ required: true,message: "请输入备注", trigger: "blur" }],
+          cause:[{ required: true,message: "请选择剔除原因", trigger: "change" }],
         },
         harmForm:{
           Number:'',//编号
@@ -357,7 +374,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除'],
+        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除设置'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -639,8 +656,12 @@
       },
       //调馆按钮
       tunnellingBtn(){
-        this.i=2
-        this.centerDialogVisible=true
+        if(this.tableChecked.length){
+          this.i=2
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择调馆对象')
+        }
       },
       //启用按钮
       makeBtn(index,row){
@@ -650,9 +671,11 @@
       },
       submitDialog(){
         let idData=[]
+        let bookId=[]
         for (var item of this.tableChecked) {
           console.log('删除id',item.id);
           idData.push({id:item.id})
+          bookId.push(item.id)
         }
         if(this.i==4){
           this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
@@ -706,7 +729,36 @@
               });
             }
           })
+        }else if(this.i==7){
+          this.$refs[this.numberValidateForm].validate((valid) => {
+            if (valid) {
+              this.axios.post(collection.letRemove,{bookId:bookId,remove:this.numberValidateForm.cause}).then((res)=>{
+                if (res.data.state == true){
+                  this.$message({
+                    message: res.data.msg,
+                    type: "success"
+                  });
+                  this.centerDialogVisible=false
+                  this.searchApi(this.searchTimeForm);
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: "error"
+                  });
+                }
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         }
+      },
+      cancelCheck(){
+        if(this.i==7){
+          this.$refs[this.numberValidateForm].resetFields();
+        }
+        this.centerDialogVisible=false
       },
       // 分页按钮
       jumpBtn() {

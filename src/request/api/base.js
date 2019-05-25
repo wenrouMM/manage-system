@@ -1,5 +1,5 @@
 //测试环境
-/*  var url = 'http://192.168.2.54:8088/' 
+/*  var url = 'http://192.168.2.54:8088/'
 var imgurl='http://192.168.2.54:8090/'
 let fileUrl = 'http://192.168.2.54:8090/'  */
 
@@ -24,7 +24,6 @@ export const uploadInt = {
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
   preimg:`${fileUrl}filemodule/showFile/getShow`
 }
-/*------ 书籍典藏模块 ------*/
 /*--- 损坏清点 ---*/
 export const damageInt = {
   outline:`${url}bookcollectionmodule/countDamage/getFristPage`,
@@ -322,4 +321,13 @@ export const collection ={
   delete:`${url}bookcollectionmodule/collection/delete`,
   letLeave:`${url}bookcollectionmodule/collection//letLeave`,
   harm:`${url}bookcollectionmodule/collection/letLeave_1558431695150`,
+  letRemove:`${url}bookcollectionmodule/collection/letRemove`,
+}
+
+//采购管理
+export const purchasing ={
+  select:`${url}bookcollectionmodule/procuremen/select`,
+  add:`${url}bookcollectionmodule/procuremen/add`,
+  delete:`${url}bookcollectionmodule/procuremen/delete`,
+  edit:`${url}bookcollectionmodule/procuremen/edit`,
 }
