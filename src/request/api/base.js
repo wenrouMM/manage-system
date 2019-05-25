@@ -24,6 +24,32 @@ export const uploadInt = {
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
   preimg:`${fileUrl}filemodule/showFile/getShow`
 }
+/*------ 流通管理模块 ------*/
+/*--- 借阅管理 ---*/
+// 借书页面
+
+var borrow = url + 'tibetmuseummodule/bookRFID/'
+export const borrowInt = {
+  selectCode: `${url}borrowmodule/borrow/selectByCode`,
+  selectRfid: `${borrow}borrowmodule/return/selectByrfid`
+}
+export const returnInt = {
+  selectCode: `${url}borrowmodule/return/selectByCode`,
+  selectRfid: `${borrow}borrowmodule/borrow/selectByrfid`
+}
+var bookOperate = url + 'borrowmodule/'
+export const bookOperateInt = {
+  borrow: `${bookOperate}borrow/out`,
+  sell: `${bookOperate}return/in`,
+  renew:`${url}equipmentmodule/bookinfo/renewBooks`,
+  userInfo:`${url}borrowmodule/borrow/getReaderInfo`,
+  return:`${url}borrowmodule/borrow/getReaderLog`,
+  history:`${url}borrowmodule/borrow/getReaderHis`
+}
+// 还书页面
+
+// 续借页面
+
 /*------ 读者管理模块 ------*/
 export const rechargeInt = {
   juge:`${url}financemodule/depositRecord/vMoney`,
@@ -237,21 +263,7 @@ export const cardTypeInt = {
   edit: `${cardType}edit`,
   delete: `${cardType}delete`
 }
-/*------ 借阅管理 ------*/
-var borrow = url + 'tibetmuseummodule/bookRFID/'
-export const borrowInt = {
-  selectCode: `${url}borrowmodule/InAndOutEquipment/selectByCode`,
-  selectRfid: `${borrow}selectOneByRFID`
-}
-var bookOperate = url + 'borrowmodule/'
-export const bookOperateInt = {
-  borrow: `${bookOperate}borrow/out`,
-  sell: `${bookOperate}return/in`,
-  renew:`${url}equipmentmodule/bookinfo/renewBooks`,
-  userInfo:`${url}borrowmodule/borrow/getReaderInfo`,
-  return:`${url}borrowmodule/borrow/getReaderLog`,
-  history:`${url}borrowmodule/borrow/getReaderHis`
-}
+
 /*------ 通用接口 ------*/
 // 办卡接口
 //通用接口
