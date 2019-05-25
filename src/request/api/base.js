@@ -24,6 +24,12 @@ export const uploadInt = {
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
   preimg:`${fileUrl}filemodule/showFile/getShow`
 }
+/*------ 书籍典藏模块 ------*/
+/*--- 损坏清点 ---*/
+export const damageInt = {
+  outline:`${url}bookcollectionmodule/countDamage/getFristPage`,
+  detail:`${url}bookcollectionmodule/countDamage/getSecondPage`
+}
 /*------ 流通管理模块 ------*/
 /*--- 借阅管理 ---*/
 // 借书页面

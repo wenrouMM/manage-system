@@ -298,7 +298,7 @@ export default new Router({
           component: resolve => require(['../components/Book/damageCount.vue'], resolve)
         },
         {
-          path: '/DamageIinventoryDetails',
+          path: '/checkDetails/:id',
           meta: {
             title: '损坏清点详情'
           },
