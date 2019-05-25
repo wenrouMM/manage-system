@@ -20,6 +20,11 @@
           </div>
           <!-- 2.0 表单填写 查询添加 内容需做调整  -->
           <section class="searchBox Posleft">
+            <div class="buttonBox">
+              <button class="add" @click="rechargeBtn">
+                <i class="addIcon el-icon-plus"></i>新增
+              </button>
+            </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="书名:">
                 <el-input size="120" v-model="searchForm.bookName" placeholder="请输入书籍名称"></el-input>
@@ -116,7 +121,41 @@
           </section>
         </div>
       </div>
-      <!-- end弹框组 添加弹框 -->
+      <!-- 新增弹框 -->
+      <div class="addEditDialog">
+        <!-- Form -->
+        <el-dialog @close="closeForm" width="650px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
+          <el-form :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
+            <div class="flexLayout">
+              <el-form-item label=" 索 书 号 :" prop="bookIndex" label-width="85px" style="">
+                <el-input v-model="addForm.bookIndex"></el-input>
+              </el-form-item>
+              <el-form-item label=" 馆 藏 吗 :" prop="libNumber" label-width="85px" style="">
+                <el-input v-model="addForm.libNumber "></el-input>
+              </el-form-item>
+            </div>
+            <div class="flexLayout">
+              <el-form-item label=" 馆藏数量 :" prop="libQuantity" label-width="92px" style="">
+                <el-input v-model="addForm.libQuantity"></el-input>
+              </el-form-item>
+              <el-form-item label=" 借出数量 :" prop="returnQuantity" label-width="92px" style="">
+                <el-input v-model="addForm.returnQuantity "></el-input>
+              </el-form-item>
+            </div>
+            <el-form-item label=" 状　　态 :" prop="state" label-width="92px">
+              <el-radio-group v-model="addForm.state">
+                <el-radio label="在架"></el-radio>
+                <el-radio label="不在架"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <!-- 弹框表单按钮  验证失效-->
+            <el-form-item style="margin:0px auto">
+              <el-button type="primary" @click="submitForm()" >确定</el-button>
+              <el-button type="info" @click="resetForm()" >取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </div>
       <!-- 下架弹框 -->
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
@@ -179,6 +218,22 @@ export default {
         "上架",
         "下架",
       ],
+      addForm:{
+        //添加的数据
+        bookIndex:'',//索书号
+        libNumber:'',//馆藏码
+        libQuantity:'',//馆藏数量
+        returnQuantity:'',//借出数量
+        state:'' //状态
+
+      },
+      rules:{
+        bookIndex:[{ required: true, message: "请输入索书号", trigger: "blur" }],
+        libNumber:[{ required: true, message: "请输入馆藏码", trigger: "blur" }],
+        libQuantity:[{ required: true, message: "请输入馆藏数量", trigger: "blur" }],
+        returnQuantity:[{ required: true, message: "请输入借出数量", trigger: "blur" }],
+        state:[{ required: true, message: "请选择状态", trigger: "change" }],
+      },
       /*====== 2.0表单搜索提交数据项 ======*/
       searchForm: {
         bookName: "",
@@ -297,6 +352,23 @@ export default {
       if(this.zNodes.length!=0){
         $('#typeMessage').fadeIn()
       }
+    },
+    //新增按钮
+    rechargeBtn(){
+      this.i=0
+      this.dialogFormVisible=true
+    },
+    //添加弹框确定按钮
+    submitForm(){
+
+    },
+    //添加弹窗取消按钮
+    resetForm(){
+
+    },
+    //关闭添加弹窗
+    closeForm(){
+
     },
     closeCheck(){
       $('#typeMessage').fadeOut()

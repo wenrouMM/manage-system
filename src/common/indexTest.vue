@@ -103,6 +103,10 @@
                 <el-menu-item-group>
                   <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
                   <el-menu-item index="/loanhistory">还书记录</el-menu-item>
+                  <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
+                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item>
+                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
+                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="userbrowrr">
@@ -126,15 +130,6 @@
                 <el-menu-item-group>
                   <el-menu-item index="/readercardmanagement">读者卡信息</el-menu-item>
                   <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
-                </el-menu-item-group>
-              </el-submenu>
-              <el-submenu index="overdue">
-                <template slot="title">
-                  <span>逾期管理</span>
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
-                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>

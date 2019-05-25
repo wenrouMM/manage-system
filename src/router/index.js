@@ -270,6 +270,20 @@ export default new Router({
           component: BookPublishHouse
         },
         {
+          path: '/AdvanceRecord',
+          meta: {
+            title: '预借记录'
+          },
+          component: resolve => require(['../components/Reader/OverdueManagement/AdvanceRecord.vue'], resolve)
+        },
+        {
+          path: '/EarlyWarningExpire',
+          meta: {
+            title: '预警到期'
+          },
+          component: resolve => require(['../components/Reader/OverdueManagement/EarlyWarningExpire.vue'], resolve)
+        },
+        {
           path: '/purchasingManagement',
           meta: {
             title: '采购管理'
