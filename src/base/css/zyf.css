@@ -148,4 +148,7 @@
 #book_cataloging #catalogingInput3 .bigInput .el-input .el-input__inner {
   width:515px;
 }
+#purchasingMessage .el-input .el-input__inner {
+  width: 340px;
+}
 
