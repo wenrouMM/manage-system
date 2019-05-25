@@ -7,19 +7,35 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期历史记录</span>
+            <span class="titleName">预借记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox" style="margin-left: 750px">
-            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+          <section class="searchBox flexLayout">
+            <div class="buttonBox">
+              <button class="blue" @click="deriveBtn">
+                <i class="blueIcon el-icon-share"></i>导出
+              </button>
+            </div>
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline flexLayout">
               <el-form-item label="用户名:" size="160">
                 <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
               </el-form-item>
-              <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+              <el-form-item label="书籍编码:" size="160">
+                <el-input v-model="searchForm.bookNumber" placeholder="请输入书籍编码"></el-input>
               </el-form-item>
-              <el-form-item label="书名:" size="160">
-                <el-input v-model="searchForm.bookName" placeholder="请输入书名"></el-input>
+              <el-form-item label="创建时间:" size="130">
+                <el-date-picker
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
+                ></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
@@ -29,18 +45,19 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column align="center" prop="index" type="index" label="序号">
+              <el-table-column align="center" prop="index" type="index" width="100" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" label="书名"></el-table-column>
-              <el-table-column align="center" prop="creatTime" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" label="应还书日期"></el-table-column>
-              <el-table-column align="center" prop="overdueTotalDay" label="逾期天数"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" label="书籍名称"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="overdueTotalDay" label="预借申请时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="预计开始日期"></el-table-column>
+              <el-table-column align="center" prop="overdueTotalDay" label="预计截至日期"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="馆藏码"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" label="状态"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
@@ -90,7 +107,30 @@
           // 搜索需要的表单数据
           userName: "",
           cardNum: "",
-          bookName:""
+          bookName:"",
+          bookNumber:'',
+          beginTime:'',
+          endTime:''
+        },
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
+        },
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            );
+          }
         },
         rowStyle: {
           height: "60px"
@@ -134,6 +174,10 @@
       },
     },
     methods: {
+      //导出按钮
+      deriveBtn(){
+
+      },
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
         let page = Math.ceil(this.total / this.pageSize)
@@ -214,6 +258,38 @@
 
 <style scoped>
   /*====== 0.0 初始化部分 ======*/
+  .buttonBox {
+    margin-bottom: 30px;
+  }
+  .buttonBox button {
+    padding-left: 18px;
+    padding-right: 18px;
+    height: 40px;
+    font-size: 16px;
+    color: #fff;
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: none;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    -webkit-transition: 0.1s;
+    transition: 0.1s;
+    font-weight: 500;
+  }
+  .buttonBox .blue {
+    background: #31D6FF;
+    border-radius: 10px;
+  }
+  .buttonBox .blue .blueIcon {
+    margin-right: 6px;
+  }
   .edit {
     color: #00d7f0;
     cursor: pointer;
@@ -327,6 +403,9 @@
     color: #fff;
     font-size: 26px;
     position: relative;
+  }
+  .error{
+    color: #FF6767
   }
   .addDialog .close {
     position: absolute;

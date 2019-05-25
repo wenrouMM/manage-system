@@ -7,7 +7,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">逾期历史记录</span>
+            <span class="titleName">预警到期</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox" style="margin-left: 750px">
@@ -37,10 +37,16 @@
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
               <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
               <el-table-column align="center" prop="fkBookName" label="书名"></el-table-column>
+              <el-table-column align="center" prop="overdueTotalDay" label="手机号码"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="fkShouldReturnTime" label="应还书日期"></el-table-column>
-              <el-table-column align="center" prop="overdueTotalDay" label="逾期天数"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="状态"></el-table-column>
+              <el-table-column align="center" label="操作">
+                <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                <template slot-scope="scope">
+                  <span class="error" @click="EditBtn(scope.$index, scope.row)">提示</span>
+                </template>
+              </el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
@@ -327,6 +333,9 @@
     color: #fff;
     font-size: 26px;
     position: relative;
+  }
+  .error{
+    color: #FF6767
   }
   .addDialog .close {
     position: absolute;

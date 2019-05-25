@@ -20,18 +20,18 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" id="out-table" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
+              <el-table-column align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" width="200" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" width="200" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" width="200" label="书名"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="200" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueAlreadyDay" width="200" label="逾期天数"></el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="fkBookName" label="书名"></el-table-column>
+              <el-table-column align="center" prop="fkShouldReturnTime" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="应还书时间"></el-table-column>
+              <el-table-column align="center" prop="overdueAlreadyDay" label="逾期天数"></el-table-column>
+              <el-table-column align="center" label="操作">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="handleEdit(scope.$index, scope.row)">催还</span>
