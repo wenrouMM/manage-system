@@ -193,7 +193,7 @@ export default {
       console.log(value);
       this.tableLoading = true;
       axios
-        .get(damage.select, {
+        .get(damageInt.outline, {
           params: value
         })
         .then(res => {
