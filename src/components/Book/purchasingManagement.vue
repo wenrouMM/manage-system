@@ -10,7 +10,7 @@
           <button class="add" @click="rechargeBtn">
             <i class="addIcon el-icon-plus"></i>新增
           </button>
-          <button class="delete" @click="drawbackBtn(tableChecked)">
+          <button class="delete" @click="drawbackBtn">
             <i class="deleteIcon el-icon-delete"></i>删除
           </button>
           <button class="blue" @click="deriveBtn">
@@ -159,15 +159,21 @@
     },
     computed:{
       searchTimeForm(){
-        switch (this.searchData/1) {
-          case 0:
-            console.log('采购批次')
-            this.selectSearchForm.batch=this.searchForm.searchData;
-            break;
-          case 1:
-            console.log('备注信息')
-            this.selectSearchForm.remark=this.searchForm.searchData;
-            break;
+        if(this.searchData){
+          switch (this.searchData/1) {
+            case 0:
+              console.log('采购批次')
+              this.selectSearchForm.batch=this.searchForm.searchData;
+              break;
+            case 1:
+              console.log('备注信息')
+              this.selectSearchForm.remark=this.searchForm.searchData;
+              break;
+          }
+        }else{
+          console.log('为空')
+          this.selectSearchForm.batch=''
+          this.selectSearchForm.remark=''
         }
         let newData={
           batch:this.selectSearchForm.batch,
@@ -200,7 +206,7 @@
         this.addForm.remarks=row.remark
       },
       //删除按钮
-      drawbackBtn(val){
+      drawbackBtn(){
         if(this.tableChecked.length){
           this.i=2
           this.centerDialogVisible=true

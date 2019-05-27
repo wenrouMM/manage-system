@@ -380,7 +380,6 @@
           // 接受搜索表单的数据
           makeMethod:'',
           searchData:"",
-          currentPage: 0
         },
         selectSearchForm:{
           searchNumber:'',//索书号
@@ -388,7 +387,6 @@
           isbn:'',//isbn
           bookName:'',//书名
           state:'',//状态
-          currentPage: 0
         },
         searchData:'',
         pickerOptions0: {
@@ -435,34 +433,43 @@
     computed: {
       searchTimeForm(){
         let newState=''
-        switch (this.searchData/1) {
-          case 0:
-            console.log('索书号')
-            this.selectSearchForm.searchNumber=this.searchForm.searchData;
-            break;
-          case 1:
-            console.log('馆藏码')
-            this.selectSearchForm.code=this.searchForm.searchData;
-            break;
-          case 2:
-            console.log('isbn')
-            this.selectSearchForm.isbn=this.searchForm.searchData;
-            break;
-          case 3:
-            console.log('书名')
-            this.selectSearchForm.bookName=this.searchForm.searchData;
-            break;
-          case 4:
-            console.log('状态')
-            this.selectSearchForm.state=this.searchForm.searchData;
-            if(this.selectSearchForm.state=='不外借'){
-              newState=1
-            }else if(this.selectSearchForm.state=='可外借'){
-              newState=0
-            }else{
-              newState=''
-            }
-            break;
+        console.log('this.searchData',this.searchData)
+        if(this.searchData){
+          switch (this.searchData/1) {
+            case 0:
+              console.log('索书号')
+              this.selectSearchForm.searchNumber=this.searchForm.searchData;
+              break;
+            case 1:
+              console.log('馆藏码')
+              this.selectSearchForm.code=this.searchForm.searchData;
+              break;
+            case 2:
+              console.log('isbn')
+              this.selectSearchForm.isbn=this.searchForm.searchData;
+              break;
+            case 3:
+              console.log('书名')
+              this.selectSearchForm.bookName=this.searchForm.searchData;
+              break;
+            case 4:
+              console.log('状态')
+              this.selectSearchForm.state=this.searchForm.searchData;
+              if(this.selectSearchForm.state=='不外借'){
+                newState=1
+              }else if(this.selectSearchForm.state=='可外借'){
+                newState=0
+              }else{
+                newState=''
+              }
+              break;
+          }
+        }else{
+          console.log('为空')
+          this.selectSearchForm.searchNumber=''
+          this.selectSearchForm.code=''
+          this.selectSearchForm.isbn=''
+          this.selectSearchForm.bookName=''
         }
         let newData={
           searchNumber:this.selectSearchForm.searchNumber,
@@ -637,6 +644,7 @@
       },
       // 查询按钮
       searchBtn() {
+        //console.log(this.)
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
@@ -802,12 +810,36 @@
             console.log(error);
           });
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(collection.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("损坏记录", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {
