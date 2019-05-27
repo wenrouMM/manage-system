@@ -10,7 +10,7 @@
           <button class="add" @click="rechargeBtn">
             <i class="addIcon el-icon-plus"></i>新增
           </button>
-          <button class="delete" @click="drawbackBtn(tableChecked)">
+          <button class="delete" @click="drawbackBtn">
             <i class="deleteIcon el-icon-delete"></i>删除
           </button>
           <button class="blue" @click="deriveBtn">
@@ -20,14 +20,11 @@
         <div class="right">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="筛选 :">
-              <el-select v-model="searchForm.makeMethod" placeholder="采购批次" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
-                <el-option label="索书号" value="0"></el-option>
-                <el-option label="馆藏码" value="1"></el-option>
-                <el-option label="ISBN" value="2"></el-option>
-                <el-option label="书名" value="3"></el-option>
-                <el-option label="状态" value="4"></el-option>
+              <el-select v-model="searchForm.makeMethod" placeholder="请选择" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
+                <el-option label="采购批次" value="0"></el-option>
+                <el-option label="备注信息" value="1"></el-option>
               </el-select>
-              <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
+              <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" style="width: 250px"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -45,8 +42,8 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column align="center" type="selection"></el-table-column>
-          <el-table-column align="center" prop="searchNumber" label="采购批次" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column align="center" prop="code" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column align="center" prop="batch" label="采购批次" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column align="center" prop="remark" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column align="center" label="操作">
             <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
             <template slot-scope="scope">
@@ -121,6 +118,8 @@
 </template>
 
 <script>
+  import axios from "axios";
+  import { purchasing } from "../../request/api/base.js";
   export default {
     data(){
       return{
@@ -128,6 +127,13 @@
           // 接受搜索表单的数据
           makeMethod:'',
           searchData:"",
+          currentPage: 0
+        },
+        searchData:'',
+        id:'',
+        selectSearchForm:{
+          batch:'',//批次号
+          remark:'',//备注信息
           currentPage: 0
         },
         rules:{
@@ -151,24 +157,62 @@
         total: 0,
       }
     },
-    mounted(){
-
+    computed:{
+      searchTimeForm(){
+        if(this.searchData){
+          switch (this.searchData/1) {
+            case 0:
+              console.log('采购批次')
+              this.selectSearchForm.batch=this.searchForm.searchData;
+              break;
+            case 1:
+              console.log('备注信息')
+              this.selectSearchForm.remark=this.searchForm.searchData;
+              break;
+          }
+        }else{
+          console.log('为空')
+          this.selectSearchForm.batch=''
+          this.selectSearchForm.remark=''
+        }
+        let newData={
+          batch:this.selectSearchForm.batch,
+          remark:this.selectSearchForm.remark,
+          pageSize: this.pageSize,
+          currentPage: 1,
+        }
+        console.log('搜索数据',newData)
+        return newData
+      },
     },
     methods:{
+      //筛选搜索
+      selectCheck(val){
+        console.log('val',val)
+        this.searchData=val
+      },
       //新增按钮
       rechargeBtn(){
         this.i=1;
         this.dialogFormVisible=true
       },
       //修改按钮
-      EditBtn(){
+      EditBtn(index,row){
+        console.log('修改的数据',row)
+        this.id=row.id
         this.i=0
         this.dialogFormVisible=true
+        this.addForm.PurchaseBatch=row.batch
+        this.addForm.remarks=row.remark
       },
       //删除按钮
-      drawbackBtn(val){
-        this.i=2
-        this.centerDialogVisible=true
+      drawbackBtn(){
+        if(this.tableChecked.length){
+          this.i=2
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择删除对象')
+        }
       },
       //导出按钮
       deriveBtn(){
@@ -176,19 +220,78 @@
       },
       //搜索
       searchBtn(){
-
+        this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
+        this.currentPage = 1;
       },
       //新增修改弹框的确定按钮
       submitForm(){
-
+        if(this.i==1){
+          this.axios.post(purchasing.add,{
+            batch:this.addForm.PurchaseBatch,
+            remark:this.addForm.remarks
+          }).then((res)=>{
+            if (res.data.state == true) {
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+              this.closeForm()
+              this.searchApi(this.searchTimeForm);
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+            }
+          })
+        }else if(this.i==0){
+          this.axios.post(purchasing.edit,{
+            id:this.id,
+            batch:this.addForm.PurchaseBatch,
+            remark:this.addForm.remarks
+          }).then((res)=>{
+            if (res.data.state == true) {
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+              this.closeForm()
+              this.searchApi(this.searchTimeForm);
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+            }
+          })
+        }
       },
       //新增修改弹框的取消按钮
       resetForm(){
-
+        this.closeForm()
       },
       //删除弹框的确定按钮
       submitDialog(){
-
+        let idData=[]
+        for (var item of this.tableChecked) {
+          console.log('删除id',item.id);
+          idData.push({id:item.id})
+        }
+        this.axios.post(purchasing.delete,idData).then((res)=>{
+          if (res.data.state == true){
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+            this.centerDialogVisible=false
+            this.searchApi(this.searchTimeForm);
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
       },
       //批量选择
       handleSelectionChange(val) {
@@ -197,7 +300,36 @@
       },
       //关闭弹窗
       closeForm(){
-
+        this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+        for (var i in this.addForm) {
+          this.addForm[i] = "";
+        }
+        this.dialogFormVisible = false
+      },
+      searchApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(purchasing.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("采购管理", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.currentPage = 1; // 回到第一页显示
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       },
       current_change(currentPage) {
         //分页查询
@@ -222,17 +354,24 @@
         }
       },
     },
+    created() {
+      this.searchApi(this.searchTimeForm); // 调用查询接口获取数据
+    }
   }
 </script>
 
 <style scoped>
+  .edit{
+    color: #00F0ED;
+    cursor: pointer;
+  }
   .borrowbook{
     width: 100%;
     background-color: white;
   }
   #purchasing{
     width: 1400px;
-    margin: 70px auto 150px;
+    margin: 30px auto 70px;
   }
   .searchBox{
     display: flex;

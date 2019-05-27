@@ -185,7 +185,7 @@
                 <el-form-item label=" 条码号 :" prop="code" label-width="80px" style="">
                   <el-input v-model="addForm.code"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                <el-form-item label=" 索取号 :" prop="searchNumber" label-width="95px" style="">
                   <el-input v-model="addForm.searchNumber"></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
@@ -268,12 +268,25 @@
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-          <div class="dialogBody">
+          <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6">
             是否{{Dialogtitle[i]}}?
+          </div>
+          <div v-if="this.i==7">
+            <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="92px" class="demo-ruleForm">
+              <el-form-item label=" 剔除原因 :" prop="cause">
+                <el-select v-model="numberValidateForm.cause" clearable placeholder="请选择" style="width: 330px">
+                  <el-option label="未还" value="4"></el-option>
+                  <el-option label="被盗" value="5"></el-option>
+                  <el-option label="陈旧" value="6"></el-option>
+                  <el-option label="破损" value="7"></el-option>
+                  <el-option label="其他" value="8"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
           </div>
           <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton cancel" @click="cancelCheck">取消</span>
           </div>
         </el-dialog>
       </div>
@@ -315,6 +328,9 @@
           format:'',//开本
           price:'',//价格
         },
+        numberValidateForm:{
+          cause:'',//剔除原因
+        },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           titleProper:[{ required: true}],
@@ -341,6 +357,7 @@
           causesDamage:[{ required: true,message: "请选择损坏原因", trigger: "change" }],
           amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "blur" }],
           remarks:[{ required: true,message: "请输入备注", trigger: "blur" }],
+          cause:[{ required: true,message: "请选择剔除原因", trigger: "change" }],
         },
         harmForm:{
           Number:'',//编号
@@ -357,13 +374,12 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除'],
+        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除设置'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
           makeMethod:'',
           searchData:"",
-          currentPage: 0
         },
         selectSearchForm:{
           searchNumber:'',//索书号
@@ -371,7 +387,6 @@
           isbn:'',//isbn
           bookName:'',//书名
           state:'',//状态
-          currentPage: 0
         },
         searchData:'',
         pickerOptions0: {
@@ -418,34 +433,43 @@
     computed: {
       searchTimeForm(){
         let newState=''
-        switch (this.searchData/1) {
-          case 0:
-            console.log('索书号')
-            this.selectSearchForm.searchNumber=this.searchForm.searchData;
-            break;
-          case 1:
-            console.log('馆藏码')
-            this.selectSearchForm.code=this.searchForm.searchData;
-            break;
-          case 2:
-            console.log('isbn')
-            this.selectSearchForm.isbn=this.searchForm.searchData;
-            break;
-          case 3:
-            console.log('书名')
-            this.selectSearchForm.bookName=this.searchForm.searchData;
-            break;
-          case 4:
-            console.log('状态')
-            this.selectSearchForm.state=this.searchForm.searchData;
-            if(this.selectSearchForm.state=='不外借'){
-              newState=1
-            }else if(this.selectSearchForm.state=='可外借'){
-              newState=0
-            }else{
-              newState=''
-            }
-            break;
+        console.log('this.searchData',this.searchData)
+        if(this.searchData){
+          switch (this.searchData/1) {
+            case 0:
+              console.log('索书号')
+              this.selectSearchForm.searchNumber=this.searchForm.searchData;
+              break;
+            case 1:
+              console.log('馆藏码')
+              this.selectSearchForm.code=this.searchForm.searchData;
+              break;
+            case 2:
+              console.log('isbn')
+              this.selectSearchForm.isbn=this.searchForm.searchData;
+              break;
+            case 3:
+              console.log('书名')
+              this.selectSearchForm.bookName=this.searchForm.searchData;
+              break;
+            case 4:
+              console.log('状态')
+              this.selectSearchForm.state=this.searchForm.searchData;
+              if(this.selectSearchForm.state=='不外借'){
+                newState=1
+              }else if(this.selectSearchForm.state=='可外借'){
+                newState=0
+              }else{
+                newState=''
+              }
+              break;
+          }
+        }else{
+          console.log('为空')
+          this.selectSearchForm.searchNumber=''
+          this.selectSearchForm.code=''
+          this.selectSearchForm.isbn=''
+          this.selectSearchForm.bookName=''
         }
         let newData={
           searchNumber:this.selectSearchForm.searchNumber,
@@ -620,6 +644,7 @@
       },
       // 查询按钮
       searchBtn() {
+        //console.log(this.)
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
@@ -639,8 +664,12 @@
       },
       //调馆按钮
       tunnellingBtn(){
-        this.i=2
-        this.centerDialogVisible=true
+        if(this.tableChecked.length){
+          this.i=2
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择调馆对象')
+        }
       },
       //启用按钮
       makeBtn(index,row){
@@ -650,9 +679,11 @@
       },
       submitDialog(){
         let idData=[]
+        let bookId=[]
         for (var item of this.tableChecked) {
           console.log('删除id',item.id);
           idData.push({id:item.id})
+          bookId.push(item.id)
         }
         if(this.i==4){
           this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
@@ -706,7 +737,36 @@
               });
             }
           })
+        }else if(this.i==7){
+          this.$refs[this.numberValidateForm].validate((valid) => {
+            if (valid) {
+              this.axios.post(collection.letRemove,{bookId:bookId,remove:this.numberValidateForm.cause}).then((res)=>{
+                if (res.data.state == true){
+                  this.$message({
+                    message: res.data.msg,
+                    type: "success"
+                  });
+                  this.centerDialogVisible=false
+                  this.searchApi(this.searchTimeForm);
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: "error"
+                  });
+                }
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         }
+      },
+      cancelCheck(){
+        if(this.i==7){
+          this.$refs[this.numberValidateForm].resetFields();
+        }
+        this.centerDialogVisible=false
       },
       // 分页按钮
       jumpBtn() {
@@ -750,12 +810,36 @@
             console.log(error);
           });
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(collection.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("损坏记录", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {
