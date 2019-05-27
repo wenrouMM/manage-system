@@ -83,7 +83,7 @@
                   <span>{{scope.row.state ===0?'在用':'挂失'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" label="操作" width="300">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="rechargeBtn(scope.$index, scope.row)">充值</span>
@@ -92,6 +92,7 @@
                     class="ban"
                     @click="lostBtn(scope.$index, scope.row)"
                   >{{scope.row.state ===0?'挂失':'取挂'}}</span>
+                  <span class="edit" @click="logoutBtn(scope.$index, scope.row)">注销</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -276,6 +277,7 @@ export default {
         // 新卡号 旧卡号
         newCardNumber: this.changeForm.idCard,
         cardNumber: this.changeForm.cardNumber,
+        reissueCost:56,
         id: this.changeForm.id
       };
       return obj;
@@ -342,7 +344,7 @@ export default {
     addCardBtn() {
       this.i = 1;
       console.log("111");
-      this.changeFormDialog = true;
+      this.changeFormDialog = true; 
     },
     // 查询按钮
     searchBtn() {
@@ -361,30 +363,31 @@ export default {
     },
     // 补办读者卡
     supply(index, row) {
-      if (row.state == 1) {
+      
         this.i = 0;
         this.changeForm.cardNumber = row.cardNumber;
         this.changeForm.id = row.id;
         this.changeFormDialog = true;
-      }
-      if(row.state == 0){
-        this.$message.error('请先挂失再补办')
-      }
 
       console.log(index, row, this.changeForm);
     },
     // 挂失按钮
     lostBtn(index, row) {
-      console.log(index, row); // 当前选中表格的索引和对象
-      if (row.state == 1) {
-        this.i = 3;
+      let obj = {}
+      obj.cardNumber = row.cardNumber
+      console.log(index, row); // 
+      if (row.state == 0) {
+       this.loseApi(obj)
       } else {
-        this.i = 2;
+        this.cancelLoseApi(obj)
       }
-      this.operateData.cardNumber = row.cardNumber;
-      this.operateData.state = row.state;
-      this.deleteDialog = true;
-      console.log("挂失补办的数据", this.operateData, row);
+    },
+    // 注销按钮
+    logoutBtn(index, row){
+      let obj = {}
+      obj.fkCardNumber =  row.cardNumber
+      obj.remarks = ""
+      this.logoutApi(obj)
     },
     /*====== 弹框相关按钮 ======*/
 
@@ -544,10 +547,22 @@ export default {
         }
       });
     },
+    // 注销API
+    logoutApi(data,dialogName){
+      axios.post(rechargeInt.logout, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+          this[dialogName] = false;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
     // 补办API
     suppleApi(data, dialogName) {
       console.log("提交的数据", data);
-      axios.put(cardInfoInt.cardReissue, data).then(res => {
+      axios.put(rechargeInt.supply, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
@@ -558,6 +573,26 @@ export default {
       });
     },
     // 取挂与挂失API
+    loseApi(data){
+      axios.put(rechargeInt.lose, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    cancelLoseApi(data){
+      axios.put(rechargeInt.cancelLost, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("执行成功");
+          this.searchTable();
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
     operateApi(data) {
       axios.put(cardInfoInt.cardReport, data).then(res => {
         console.log(res);

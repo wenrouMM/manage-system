@@ -57,9 +57,14 @@ export const bookOperateInt = {
 // 续借页面
 
 /*------ 读者管理模块 ------*/
+// 押金充值和判断
 export const rechargeInt = {
   juge:`${url}financemodule/depositRecord/vMoney`,
-  deposit:`${url}financemodule/depositRecord/add`
+  deposit:`${url}financemodule/depositRecord/add`,
+  logout:`${url}financemodule/readerTbCardLogout/Logout`, // 注销
+  lose:`${url}readermodule/readerTbCardInfo//cardReport`, // 挂失
+  cancelLost:`${url}readermodule/readerTbCardInfo/cardReportCancel`, // 取消挂失
+  supply:`${url}readermodule/readerTbCardInfo/cardReissue`
 }
 /*------ 系统设置模块  ------*/
 
@@ -243,7 +248,7 @@ export const layerFrame = {
 //读者卡信息
 var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/'
 export const cardInfoInt = {
-  select: `${cardInfo}select`,
+  select: `${url}readermodule/readerTbCardInfo/select`,
   cardReport: `${cardInfo}currency/cardReport`, // 挂失/取办
   cardReissue: `${cardInfo}currency/cardReissue`,// 补办
   cogradient: `${cardInfo}synchronizationReader`, // 登记读者卡
@@ -253,13 +258,12 @@ export const cardInfoInt = {
 }
 export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'
 //读者卡等级
-var cardLevel = url + 'tibetmuseummodule/readerTbCardGradeinfo/'
-export const cardLevelInt = {
-  select: `${cardLevel}select`,
-  add: `${cardLevel}add`,
-  edit: `${cardLevel}edit`,
-  delete: `${cardLevel}delete`,
 
+export const cardLevelInt = {
+  select: `${url}readermodule/readerTbCardGradeinfo/select`,
+  add: `${url}readermodule/readerTbCardGradeinfo/add`,
+  edit: `${url}readermodule/readerTbCardGradeinfo/edit`,
+  delete: `${url}readermodule/readerTbCardGradeinfo/delete`,
 }
 // 读者卡类型
 var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
@@ -272,6 +276,11 @@ export const cardTypeInt = {
 
 /*------ 通用接口 ------*/
 // 办卡接口
+export const addCardInt = {
+  searchId:`${url}readermodule/readerTbCardInfo/selectUserInfoByCard`,
+  validateId:`${url}readermodule/readerTbCardInfo/reissueCost`,
+  addCard:`${url}readermodule/readerTbCardInfo/add`
+} 
 //通用接口
 export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'

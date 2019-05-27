@@ -136,14 +136,14 @@ export default new Router({
         {
           path: "/borrowingbooks",
           meta:{
-            title:'借书'
+            title:'书籍借阅'
           },
           component: BorrowingBooks,
         },
         {
           path: "/returnbooks",
           meta:{
-            title:'还书'
+            title:'书籍归还'
           },
           component: ReturnBooks
         },
@@ -154,9 +154,16 @@ export default new Router({
         {
           path:'/renew',
           meta:{
-            title:'续借'
+            title:'书籍续借'
           },
           component:resolve => require(['@/components/Circulate/renew.vue'], resolve)
+        },
+        {
+          path:'/bookDamage',
+          meta:{
+            title:'书籍报损'
+          },
+          component:resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
         },
         // 4.0 读者管理
         {

@@ -5,7 +5,7 @@
       style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
     >
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-      <div style="font-size: 16px;color: #878787;margin-left:10px;">续借</div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">书籍报损</div>
     </div>
     <div class="borrowMode">
       <div class="borrowBox">
@@ -60,7 +60,7 @@
             </div>
           </div>
         </section>
-        <!--待归还相关 -->
+        <!--报损相关 -->
         <section class="bookSearchBox">
           <div class="borrowTableBox">
             <section class="text item tablebox">
@@ -72,8 +72,9 @@
                 max-height="250"
                 height="250"
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-                
+                @selection-change="selectAll"
               >
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column align="center" label="序号" width="55" type="index"></el-table-column>
                 <el-table-column align="center" width="200" prop="bookName" label="书籍名称"></el-table-column>
                 <el-table-column
@@ -85,15 +86,15 @@
                 <el-table-column align="center" width="200" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" width="200" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" width="100" prop="renewCount" label="续借次数"></el-table-column>
-                <el-table-column align="center" fixed="right" width="100" label="操作">
+                <!-- <el-table-column align="center" fixed="right" width="100" label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="removeBtn(scope.row)" type="text" size="small">移除</el-button>
+                    <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
               </el-table>
             </section>
             <div class="buttonBox">
-              <el-button type="primary" size="120" @click="renewBtn">一键续借</el-button>
+              <el-button type="primary" size="120" @click="renewBtn">一键报损</el-button>
             </div>
           </div>
         </section>
@@ -116,7 +117,7 @@
                  <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column> 
                 <el-table-column align="center" prop="state" label="借书状态">
                   <template slot-scope="scope">
-                    <span>{{scope.row.state === true?'续借成功':'续借失败'}}</span>
+                    <span>{{scope.row.state === true?'报损成功':'报损失败'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column align="center" prop="message" label="提示">
@@ -214,13 +215,9 @@ export default {
     },
     // 续借传递数据
     renewForm() {
-        let arr = []
-        for(let item of this.oweTable){
-          arr.push(item.id)
-        }
         let obj = {
             cardnumber:this.lastCardNum,
-            logids:arr
+            logids:this.renewBox
         }
         return obj
     },
@@ -248,9 +245,6 @@ export default {
       }
       console.log('续借结果',this.renewBox)
       console.log(val);
-    },
-    removeBtn(index,row){
-
     },
     // tab切换功能
     tabBtn() {

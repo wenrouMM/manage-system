@@ -114,9 +114,10 @@
                   <span>借阅管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/borrowingbooks">借书</el-menu-item>
-                  <el-menu-item index="/returnbooks">还书</el-menu-item>
-                  <el-menu-item index="/renew">续借</el-menu-item>
+                  <el-menu-item index="/borrowingbooks">书籍借阅</el-menu-item>
+                  <el-menu-item index="/returnbooks">书籍归还</el-menu-item>
+                  <el-menu-item index="/renew">书籍续借</el-menu-item>
+                  <el-menu-item index="/bookDamage">书籍报损</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
