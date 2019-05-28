@@ -250,7 +250,7 @@
                       filterable
                       remote
                       reserve-keyword
-                      placeholder="请输入关键词"
+                      placeholder="请输入关键词查询"
                       :remote-method="remoteMethod"
                       :loading="loading">
                       <el-option
@@ -541,13 +541,19 @@
       },
       remoteMethod(query){
         console.log('query',query)
-        this.axios.get(collection.harmSelect,{params:{name:query}}).then((res)=>{
-          console.log('搜索损坏的下拉的数据',res.data.row)
-          for(const item of res.data.row){
-            console.log('item',item)
-            this.options.push({label:item.damageName,value:item.id,type:item.compensationType,num:item.compensationNum})
-          }
-        })
+        if(query){
+          this.axios.get(collection.harmSelect,{params:{name:query}}).then((res)=>{
+            console.log('搜索损坏的下拉的数据',res.data.row)
+            this.options.length=0
+            for(const item of res.data.row){
+              console.log('item',item)
+              this.options.push({label:item.damageName,value:item.id,type:item.compensationType,num:item.compensationNum})
+            }
+          })
+        }else{
+          this.options = [];
+        }
+
       },
       //批量选择
       handleSelectionChange(val) {
