@@ -163,9 +163,9 @@
 <script>
 import axios from "axios";
 import {
-  cardInfoInt,
   headUpload,
-  getCardInt
+  cardLevelInt,
+  addCardInt
 } from "../../../request/api/base.js";
 export default {
   name: "getAcard",
@@ -214,13 +214,15 @@ export default {
     addTimeForm() {
       let obj = {
         fkGradeCode:this.addForm.level.code,
-        deposit: this.addForm.level.deposit,
+        balance: this.addForm.level.deposit,
         phone: this.addForm.phoneNumber,
         cardNumber: this.addForm.cardNumber,
         fkReaderCard: this.addForm.id,
         fkReaderName: this.addForm.name,
         readerAddress: this.addForm.address,
-        email:this.addForm.email
+        email:this.addForm.email,
+        reissueCost:10, //补办费用
+        remarks:'' //办卡备注
       };
       return obj;
     },
@@ -241,7 +243,7 @@ export default {
   methods: {
     // 等级选择下拉框
     levelOptionApi() {
-      axios.get(getCardInt).then(res => {
+      axios.get(cardLevelInt.select).then(res => {
         if(res.data.state == true){
           this.optionsData = res.data.row
           console.log('当前下拉框',this.optionsData)
@@ -255,18 +257,10 @@ export default {
     select() {
       let data = this.selectTimeForm;
       console.log(data);
-      /*
-      this.addForm.headerAddress = "";
-      this.addForm.name = "";
-      this.addForm.address = "";
-      this.addForm.phoneNumber = "";
-      this.addForm.sex = "";
-      this.addForm.email = ""
-      */
       if (data.idCard) {
         this.loading = true;
         axios
-          .get(cardInfoInt.selectUser, {
+          .get(addCardInt.searchId, {
             params: data
           })
           .then(res => {
@@ -294,12 +288,13 @@ export default {
       }
       console.log("触发了吗");
     },
+    // 办卡按钮
     submitForm(formName) {
       console.log("提交的数据", this.addTimeForm);
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.uploadImgApi();
-          axios.post(cardInfoInt.add, this.addTimeForm).then(res => {
+          axios.post(addCardInt.addCard, this.addTimeForm).then(res => {
             console.log("返回成功的信息", res);
             if (res.data.state === true) {
               console.log("提交成功");
