@@ -320,8 +320,10 @@ export const collection ={
   state:`${url}bookcollectionmodule/collection/editState`,
   delete:`${url}bookcollectionmodule/collection/delete`,
   letLeave:`${url}bookcollectionmodule/collection//letLeave`,
-  harm:`${url}bookcollectionmodule/collection/letLeave_1558431695150`,
+  harm:`${url}bookcollectionmodule/collection/letLeave`,
   letRemove:`${url}bookcollectionmodule/collection/letRemove`,
+  harmSelect:`${url}systemmodule/damage/select`,
+  damage:`${url}bookcollectionmodule/collection/letDamage`
 }
 
 //采购管理

@@ -44,12 +44,12 @@
                 <span>{{scope.row.compensationType ==0?'具体金额':'价格倍数'}}</span>
               </template>
             </el-table-column>
+            <el-table-column align="center" prop="compensationNum" label="赔偿额度"></el-table-column>
             <el-table-column align="center" prop="distinction" label="区别号">
               <template slot-scope="scope">
                 <span>{{scope.row.distinction ==0?'损坏':'遗失'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="compensationNum" label="赔偿额度"></el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
             <!-- 自定义插槽 -->
             <el-table-column align="center" label="操作" width="200">
@@ -374,6 +374,30 @@
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(damage.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("损坏记录", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
@@ -421,7 +445,7 @@
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {
