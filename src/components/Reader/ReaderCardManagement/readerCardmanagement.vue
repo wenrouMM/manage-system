@@ -1,5 +1,5 @@
 <template>
-  <div class="useradd">
+  <div class="useradd reader-card">
     <el-container>
       <div class="box-card">
         <!-- 估计是第三层路由展示区域 -->
@@ -17,12 +17,12 @@
               <button class="add" @click="conductBtn">
                 <i class="addIcon el-icon-plus"></i>办卡
               </button>
-              <button class="add" @click="depositBtn">
+              <!-- <button class="add" @click="depositBtn">
                 <i class="addIcon el-icon-plus"></i>押金充值
               </button>
               <button class="add" @click="addCardBtn">
                 <i class="addIcon el-icon-tickets"></i>登记读者卡
-              </button>
+              </button>-->
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="卡号:">
@@ -31,8 +31,8 @@
               <el-form-item label="用户名:" size="160">
                 <el-input v-model="searchForm.name" placeholder="请输入用户名"></el-input>
               </el-form-item>
-              <el-form-item label="类型名称:" size="160">
-                <el-select clearable v-model="searchForm.type" placeholder="请选择类型">
+              <el-form-item label="等级名称:" size="160">
+                <el-select clearable v-model="searchForm.type" placeholder="请选择等级名称">
                   <el-option
                     v-for="(option,index) of optionsDataType"
                     :key="index"
@@ -74,8 +74,8 @@
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
               <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
               <el-table-column align="center" prop="balance" width="90" label="押金"></el-table-column>
-              <el-table-column align="center" prop="cardGradeName" label="等级名称"></el-table-column>
-              <el-table-column align="center" prop="fkFromLibraryName" width="100" label="所属地区"></el-table-column>
+              <el-table-column align="center" prop="fkGradeName" label="等级名称"></el-table-column>
+              <!-- <el-table-column align="center" prop="fkFromLibraryName" width="100" label="所属地区"></el-table-column> -->
               <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="state" width="70" label="状态">
@@ -130,12 +130,35 @@
       </div>
       <!-- 禁用弹框/批量删除弹框 -->
       <div class="forbid">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
-          <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer">
-            <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
-            <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
+        <el-dialog title="用户注销" :visible.sync="deleteDialog" width="500px" center>
+          <!-- <div class="dialogBody">是否注销?</div> -->
+          <div class="formBox" style="width:360px">
+            <el-form :model="logOut">
+              <el-form-item labelWidth="60px" label="卡号">
+                <span>{{logOut.fkCardNumber}}</span>
+              </el-form-item>
+              <el-form-item label="备注" labelWidth="60px">
+                <el-input
+                  type="textarea"
+                  resize="none"
+                  :rows="4"
+                  placeholder="请输入备注"
+                  v-model="logOut.remarks"
+                ></el-input>
+              </el-form-item>
+              <el-form-item class="textCenter">
+              <el-button
+                type="primary"
+                @click="subDelete"
+              >确定</el-button>
+              <el-button
+                type="info"
+                @click="deleteDialog = false"
+              >取消</el-button>
+            </el-form-item>
+            </el-form>
           </div>
+          <!-- <p class="tips">注销用户属于敏感操作</p> -->
         </el-dialog>
       </div>
       <!-- 批量删除弹框 -->
@@ -154,6 +177,12 @@
               <el-form-item :label="labelName[i]" prop="idCard">
                 <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
               </el-form-item>
+              <div class="supply">
+                <p>
+                  补卡费用：
+                  <span>{{supplyCost}}</span>
+                </p>
+              </div>
             </div>
             <div v-else-if="i==4">
               <el-form-item label="卡号" prop="cardNumber">
@@ -166,9 +195,7 @@
                 <el-input type="password" v-model="changeForm.password" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="备注" prop="remarks">
-
-                  <el-input type="textarea" :rows="4"  resize="none" v-model="changeForm.remarks"></el-input>
-
+                <el-input type="textarea" :rows="4" resize="none" v-model="changeForm.remarks"></el-input>
               </el-form-item>
             </div>
             <!-- 弹框表单按钮  验证失效-->
@@ -195,8 +222,9 @@ import {
   readerType,
   deposit,
   cardInfoInt,
-  rechargeInt
-} from "../../../request/api/base.js";
+  rechargeInt,
+  bookWordInt
+} from "@request/api/base.js";
 export default {
   data() {
     return {
@@ -238,18 +266,25 @@ export default {
         cardNumber: "",
         deposit: "",
         password: "",
-        remarks:''
+        remarks: ""
       },
       changeRules: {
-        idCard: [{ required: true, message: "新卡号不得为空", trigger: "blur" }],
+        idCard: [
+          { required: true, message: "新卡号不得为空", trigger: "blur" }
+        ],
         cardNumber: [
           { required: true, message: "卡号不得为空", trigger: "blur" }
         ],
         deposit: [{ required: true, message: "押金不得为空", trigger: "blur" }],
-        remarks:[{required: true, message: "备注不得为空", trigger: "blur"}]
+        remarks: [{ required: true, message: "备注不得为空", trigger: "blur" }]
       },
       hide: false, // 是否带密码输入框
-      juge: false //卡号禁用
+      juge: false, //卡号禁用
+      supplyCost: 0,
+      logOut: {
+        fkCardNumber: "",
+        remarks: ""
+      }
     };
   },
   computed: {
@@ -277,7 +312,7 @@ export default {
         // 新卡号 旧卡号
         newCardNumber: this.changeForm.idCard,
         cardNumber: this.changeForm.cardNumber,
-        reissueCost:56,
+        reissueCost: this.supplyCost,
         id: this.changeForm.id
       };
       return obj;
@@ -288,7 +323,7 @@ export default {
         deposit: this.changeForm.deposit,
         cardNumber: this.changeForm.cardNumber,
         operationPassword: this.changeForm.password,
-        remarks:this.changeForm.remarks
+        remarks: this.changeForm.remarks
       };
       return obj;
     },
@@ -344,7 +379,7 @@ export default {
     addCardBtn() {
       this.i = 1;
       console.log("111");
-      this.changeFormDialog = true; 
+      this.changeFormDialog = true;
     },
     // 查询按钮
     searchBtn() {
@@ -355,7 +390,7 @@ export default {
     // 充值快捷按钮
     rechargeBtn(index, row) {
       this.i = 4;
-      this.hide = false
+      this.hide = false;
       this.juge = true;
       this.changeForm.cardNumber = row.cardNumber;
       console.log(row);
@@ -363,37 +398,38 @@ export default {
     },
     // 补办读者卡
     supply(index, row) {
-      
-        this.i = 0;
-        this.changeForm.cardNumber = row.cardNumber;
-        this.changeForm.id = row.id;
-        this.changeFormDialog = true;
+      this.i = 0;
+      this.changeForm.cardNumber = row.cardNumber;
+      this.changeForm.id = row.id;
+      this.changeFormDialog = true;
 
       console.log(index, row, this.changeForm);
     },
     // 挂失按钮
     lostBtn(index, row) {
-      let obj = {}
-      obj.cardNumber = row.cardNumber
-      console.log(index, row); // 
+      let obj = {};
+      obj.cardNumber = row.cardNumber;
+      console.log(index, row); //
       if (row.state == 0) {
-       this.loseApi(obj)
+        this.loseApi(obj);
       } else {
-        this.cancelLoseApi(obj)
+        this.cancelLoseApi(obj);
       }
     },
     // 注销按钮
-    logoutBtn(index, row){
-      let obj = {}
-      obj.fkCardNumber =  row.cardNumber
-      obj.remarks = ""
-      this.logoutApi(obj)
+    logoutBtn(index, row) {
+      this.logOut.fkCardNumber = ''
+      this.logOut.remarks = ''
+      this.logOut.fkCardNumber = row.cardNumber;
+
+      this.deleteDialog = true;
+      //.this.logoutApi(this.logOut);
     },
     /*====== 弹框相关按钮 ======*/
 
-    // g挂失取挂弹框的提交按钮
+    // 
     subDelete() {
-      this.operateApi(this.operateData);
+      this.logoutApi(this.logOut,"deleteDialog");
       console.log("挂失补办触发");
     },
     // 登记读者卡 补办卡弹框确定按钮
@@ -548,7 +584,7 @@ export default {
       });
     },
     // 注销API
-    logoutApi(data,dialogName){
+    logoutApi(data, dialogName) {
       axios.post(rechargeInt.logout, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
@@ -573,7 +609,7 @@ export default {
       });
     },
     // 取挂与挂失API
-    loseApi(data){
+    loseApi(data) {
       axios.put(rechargeInt.lose, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
@@ -583,7 +619,7 @@ export default {
         }
       });
     },
-    cancelLoseApi(data){
+    cancelLoseApi(data) {
       axios.put(rechargeInt.cancelLost, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
@@ -593,6 +629,7 @@ export default {
         }
       });
     },
+    // ???
     operateApi(data) {
       axios.put(cardInfoInt.cardReport, data).then(res => {
         console.log(res);
@@ -605,11 +642,23 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    // 补办费用 数据字典
+    supplyCashApi() {
+      axios.get(bookWordInt.search).then(res => {
+        if (res.data.state) {
+          this.supplyCost = res.data.row.setReissueCost;
+          console.log("接收的数据", res.data.row);
+          console.log("补卡费用", this.supplyCost);
+        } else {
+          // this.$message.error(res.data.msg);
+        }
+      });
     }
   },
   created() {
     this.searchOption();
-    //this.searchOptionType();
+    this.supplyCashApi();
     this.searchTable(this.searchTimeForm);
   }
 };
@@ -933,6 +982,9 @@ export default {
 }
 .readerCard .el-button:last-child {
   margin-right: 0px;
+}
+.reader-card .forbid .el-dialog__body{
+  border-radius: 0px 0px 20px 20px
 }
 </style>
 

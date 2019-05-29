@@ -35,7 +35,7 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆内码"></el-table-column>
             <el-table-column align="center" prop="author" label="编著者"></el-table-column>
             <el-table-column align="center" prop="fkPressName" label="出版社"></el-table-column>
             <el-table-column align="center" prop="available" label="启用状态">
@@ -244,7 +244,13 @@ export default {
         .then(res => {
           console.log("损坏记录", res.data);
           if (res.data.state === true) {
-            this.tableData = res.data.row; //获取返回数据
+            let data = res.data.row
+            for(let item of data){
+              item.filterLend = this.filtersLend(item.lendState)
+              item.filterOther = this.filtersOther(item.otherState)
+            }
+            this.tableData = data; //获取返回数据
+            console.log('过滤后的data',this.tableData)
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             this.tableLoading = false;

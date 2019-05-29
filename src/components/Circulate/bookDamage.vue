@@ -1,5 +1,5 @@
 <template>
-  <div class="borrowbook">
+  <div class="damageBook">
     <div
       class="title"
       style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
@@ -19,6 +19,7 @@
                 :model="searchForm"
                 ref="searchForm"
                 :rules="rules"
+                @submit.native.prevent
               >
                 <el-form-item label="卡　　号" prop="cardNum">
                   <el-input
@@ -72,9 +73,7 @@
                 max-height="250"
                 height="250"
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-                @selection-change="selectAll"
               >
-                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column align="center" label="序号" width="55" type="index"></el-table-column>
                 <el-table-column align="center" width="200" prop="bookName" label="书籍名称"></el-table-column>
                 <el-table-column
@@ -86,15 +85,16 @@
                 <el-table-column align="center" width="200" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" width="200" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" width="100" prop="renewCount" label="续借次数"></el-table-column>
-                <!-- <el-table-column align="center" fixed="right" width="100" label="操作">
+                <el-table-column align="center" fixed="right" width="150" label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
+                    <el-button @click="damageBtn(scope.row,scope.index)" type="text" size="small">报损</el-button>
+                    <el-button @click="removeBtn(scope.row,scope.index)" type="text" size="small">移除</el-button>
                   </template>
-                </el-table-column> -->
+                </el-table-column>
               </el-table>
             </section>
             <div class="buttonBox">
-              <el-button type="primary" size="120" @click="renewBtn">一键报损</el-button>
+              <el-button type="primary" size="120" @click="batchDamageBtn">批量报损</el-button>
             </div>
           </div>
         </section>
@@ -103,7 +103,7 @@
 
       <div class="tabMode">
         <el-tabs v-model="activeName" @tab-click="tabBtn">
-          <el-tab-pane label="续借结果" name="first">
+          <el-tab-pane label="报损结果" name="first">
             <section class="endTable">
               <el-table
                 class="tableBorder"
@@ -112,50 +112,77 @@
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
               >
                 <el-table-column align="center" type="index" width="80" label="序号"></el-table-column>
-                <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
-                <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
-                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column> 
-                <el-table-column align="center" prop="state" label="借书状态">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.state === true?'报损成功':'报损失败'}}</span>
+                <el-table-column align="center" prop="fkBookName" label="书籍名称"></el-table-column>
+                <el-table-column align="center" prop="createTime" label="处理时间"></el-table-column>
+                <el-table-column align="center" prop="state" label="处理金额">
+                  <template>
+                    <span>1</span>
                   </template>
                 </el-table-column>
                 <el-table-column align="center" prop="message" label="提示">
-                    <template slot-scope="scope">
-                    <span>{{scope.row.state === true?'---':scope.row.message}}</span>
+                  <template>
+                    <span>------</span>
                   </template>
                 </el-table-column>
-              </el-table>
-            </section>
-          </el-tab-pane>
-          <el-tab-pane label="历史借阅记录" name="third">
-            <section class="endTable">
-              <el-table
-                class="tableBorder"
-                :data="bookHistory"
-                style="width: 100%; text-align:center;"
-                :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-              >
-                <el-table-column align="center" type="index" width="60" label="序号"></el-table-column>
-                <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
-                <el-table-column
-                  align="center"
-                  prop="libraryBookCode"
-                  :show-overflow-tooltip="true"
-                  label="书籍编码"
-                ></el-table-column>
-                <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
-                <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>
-                <el-table-column align="center" prop="state" label="借书状态">
-                  <template slot-scope="scope">
-                    <span>{{scope.row.state ===0?'借书失败':'借书成功'}}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
               </el-table>
             </section>
           </el-tab-pane>
         </el-tabs>
+      </div>
+      <!-- 报损弹框 -->
+      <div class="damageDialog">
+        <el-dialog title="报损处理" @open="openForm" @close="closeForm" :visible.sync="damageDialog">
+          <div class="formBox">
+            <el-form ref="form" :rules="damageRules" :model="damageForm" label-width="100px">
+              <div class="inputBox">
+                <el-form-item prop="list" label="报损方式">
+                  <el-select
+                    clearable
+                    value-key="id"
+                    v-model="damageForm.list"
+                    placeholder="请选择报损方式"
+                  >
+                    <el-option
+                      v-for="(item,index) of this.optionsData"
+                      :key="index"
+                      :label="item.damageName"
+                      :value="item"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+              <el-form-item label="赔偿金额">
+                <div>{{cash}}</div>
+              </el-form-item>
+              <el-form-item prop="deal" label="当场处理">
+                <el-radio-group v-model="damageForm.deal">
+                  <el-radio label="1" value="1">是</el-radio>
+                  <el-radio label="0" value="0">否</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="备　　注">
+                <div class="textBox">
+                  <el-input
+                    size="medium"
+                    resize="none"
+                    type="textarea"
+                    :rows="4"
+                    v-model="damageForm.remarks"
+                  ></el-input>
+                </div>
+              </el-form-item>
+              <!-- <div class="textCenter anyBox">
+                <el-button type="primary" @click="damageSubmit">确定</el-button>
+                <el-button>取消</el-button>
+              </div>-->
+
+              <el-form-item>
+                <el-button type="primary" @click="damageSubmit">确定</el-button>
+                <el-button type="info" @click="cancelBtn">取消</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -163,7 +190,7 @@
 
 <script>
 import axios from "axios";
-import { bookOperateInt, borrowInt } from "@request/api/base.js";
+import { bookOperateInt, borrowInt, bookDamageInt } from "@request/api/base.js";
 export default {
   data() {
     return {
@@ -176,26 +203,46 @@ export default {
       },
       rules: {
         // 添加的参数验证
-        cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
+        cardNum: [{ required: true, message: "请填写卡号", trigger: "blur" }]
       },
-      codeData: [],
       rowStyle: {
         height: "60px"
       },
       activeName: "first",
       /*------ 全选按钮 ------*/
-      lastCardNum:'',
-      renewBox: [],// 续借按钮
+      lastCardNum: "", // 读卡成功的读者卡
       tabFlag: false,
       tabCard: {}, // 用户卡号？
       /*------ 用户信息 ------*/
       userTable: [],
-      /*------ 续借结果配置 ------*/
+      /*------ 报损结果配置 ------*/
       endTable: [],
-      /*------ 未归还列表配置 ------*/
+      /*------ 损坏列表配置 ------*/
       oweTable: [],
       /*------ 借阅历史记录 ------*/
       bookHistory: [],
+      /*------ 报损表单 ------*/
+      damageForm: {
+        damageId: [],
+        list: null, // 报损对象
+        remarks: "",
+        deal: "",
+        bookId: [],
+        bookCash: [] // 书籍价格
+      },
+      isBatch: false,
+      deleteIndex: 0, // 删除数组
+      damageRules: {
+        deal: [
+          { required: true, message: "请选择是否当场处理", trigger: "change" }
+        ],
+        list: [
+          { required: true, message: "报损方式不得为空", trigger: "change" }
+        ]
+      },
+      firstOpen: true,
+      optionsData: [],
+      damageDialog: false, // 弹框开启和关闭
       /*------ websocket配置 ------*/
       wsValue: null,
       reconnectStatus: false, // 是否重连
@@ -213,14 +260,57 @@ export default {
       };
       return obj;
     },
+    cash() {
+      if (this.damageForm.list != null) {
+        var jude = this.damageForm.list.compensationType;
+      } else {
+        return (number = 0);
+      }
+
+      let number = 0;
+      // 书籍按倍数赔偿 计算所有书籍总价即可
+      let totalBook = 0;
+      for (var item of this.damageForm.bookCash) {
+        totalBook += item;
+      }
+      let allBook = 10;
+      // 书籍按固定金额赔偿 计算总数量即可
+      let bookAmount = this.damageForm.bookCash.length;
+      // 按倍数赔偿
+      switch (jude) {
+        // 按倍数赔偿
+        case 1:
+          number = this.damageForm.list.compensationNum * totalBook;
+          break;
+        // 按固定金额赔偿
+        case 0:
+          number = this.damageForm.list.compensationNum * bookAmount;
+          break;
+        default:
+          number = 0;
+      }
+
+      return number;
+    },
     // 续借传递数据
     renewForm() {
-        let obj = {
-            cardnumber:this.lastCardNum,
-            logids:this.renewBox
-        }
-        return obj
+      let obj = {
+        cardnumber: this.lastCardNum,
+        logids: this.renewBox
+      };
+      return obj;
     },
+    damageTimeForm() {
+      let obj = {
+        damageId: this.damageForm.list.id,
+        num: this.cash,
+        remarks: this.damageForm.remarks,
+        deals: this.damageForm.deal,
+        bookId: this.damageForm.bookId,
+        cardNum: this.lastCardNum
+      };
+      return obj;
+    }
   },
   methods: {
     // 读卡按钮
@@ -238,13 +328,23 @@ export default {
 
       console.log("我就当你读卡了");
     },
-    // 全选按钮
-    selectAll(val) {
-      for (let item of val){
-          this.renewBox.push(item.id)
+    // 批量报损
+    batchDamageBtn() {
+      if (!this.firstOpen) {
+        this.$refs.form.resetFields();
       }
-      console.log('续借结果',this.renewBox)
-      console.log(val);
+      this.damageForm.bookCash = [];
+      for (let item of this.oweTable) {
+        this.damageForm.bookCash.push(item.price);
+        this.damageForm.bookId.push(item.bookId);
+      }
+      this.isBatch = true;
+      this.damageDialog = true;
+      console.log("清除");
+      console.log("此时的书籍", this.damageForm.bookCash);
+    },
+    cancelBtn() {
+      this.damageDialog = fas;
     },
     // tab切换功能
     tabBtn() {
@@ -263,13 +363,33 @@ export default {
       }
       console.log(this.activeName);
     },
-    // 续借按钮
-    renewBtn() {
-      this.renewApi(this.renewForm)
+    // 损坏确定按钮
+    damageSubmit() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.damageApi(this.damageTimeForm);
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     // 报损按钮
-    damageBtn(row) {
-        
+    damageBtn(row, index) {
+      if (!this.firstOpen) {
+        this.$refs.form.resetFields();
+      }
+      this.damageForm.bookCash = [];
+      this.damageForm.bookCash.push(row.price);
+      this.damageForm.bookId.push(row.bookId);
+      this.deleteIndex = index;
+      this.damageDialog = true;
+      this.isBatch = false;
+      console.log(row);
+      console.log("书籍价格", this.damageForm.bookCash);
+    },
+    removeBtn(row, index) {
+      this.oweTable.splice(index, 1);
     },
     /*------ API区 ------*/
     // websocker获取RFID
@@ -281,7 +401,7 @@ export default {
           this.userTable = res.data.row;
           this.tabCard = data;
           this.tabFlag = true;
-          this.lastCardNum = this.searchForm.cardNum
+          this.lastCardNum = this.searchForm.cardNum;
           this.returnBookApi(data);
           console.log("查询成功的读者卡号", data, this.tabFlag);
           console.log("用户信息", this.userTable);
@@ -290,19 +410,43 @@ export default {
         }
       });
     },
-    // 续借Api
-    renewApi(data) {
-      console.log("传递的数据", this.renewForm);
-      axios.post(bookOperateInt.renew, data).then(res => {
+    // 查询损坏方式API
+    searchDamage() {
+      axios.get(bookDamageInt.search).then(res => {
         if (res.data.state === true) {
-          console.log("续借记录", res.data.row);
+          this.optionsData = res.data.row;
+          console.log("损坏列表", res);
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
+    // 报损Api
+    damageApi(data) {
+      console.log("啥数据", this.damageForm);
+      console.log("数据传递", this.damageTimeForm);
+      /* if (this.isBatch) {
+        this.oweTable = [];
+      } else {
+        this.oweTable.splice(this.deleteIndex, 1);
+      }
+      this.damageDialog = false; */
+
+      axios.post(bookDamageInt.damage, data).then(res => {
+        if (res.data.state === true) {
+          this.$message.success("报损成功 请前往报损记录查看");
+          
           this.endTable = res.data.row
           console.log('数据类型测试',typeof(this.endTable[0].state))
           if(this.endTable[0].state === true){
               console.log('比较测试',)
           }
-          
-          this.$message.success("操作成功");
+          if (this.isBatch) {
+            this.oweTable = [];
+          } else {
+            this.oweTable.splice(this.deleteIndex, 1);
+          }
+          this.damageDialog = false;
         } else {
           this.$message.error(res.data.msg);
         }
@@ -329,8 +473,18 @@ export default {
           this.$message.error(res.data.msg);
         }
       });
+    },
+    closeForm() {
+      this.firstOpen = false;
+      this.damageForm.bookId = []
+    },
+    openForm() {
+      this.damageForm.remarks = "";
+      
     }
-    
+  },
+  created() {
+    this.searchDamage();
   }
 };
 </script>
@@ -339,7 +493,7 @@ export default {
 .title {
   margin-bottom: 36px;
 }
-.borrowbook {
+.damageBook {
   width: 100%;
   background-color: white;
   min-height: 852px;
@@ -430,10 +584,33 @@ export default {
   border-bottom: none;
   box-sizing: border-box;
 }
+.textBox {
+  width: 300px;
+}
+.text-align {
+  text-align: center;
+}
+.inputBox {
+  width: 300px;
+}
+.anyBox {
+}
 </style>
 
 <style>
-.borrowbook .searchBox .el-select .el-input--suffix {
+.damageBook .searchBox .el-select .el-input--suffix {
   width: 75px;
+}
+.damageDialog .el-dialog {
+  width: 28%;
+}
+.damageDialog .formBox {
+  width: 100%;
+}
+.damageBook .el-dialog__body {
+  border-radius: 0 0 20px 20px;
+}
+.damageBook .inputBox .el-input__inner {
+  width: 300px;
 }
 </style>

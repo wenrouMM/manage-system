@@ -6,8 +6,8 @@ let fileUrl = 'http://192.168.2.54:8090/'  */
 // 用来管理接口的域名相关
 //var url='http://127.0.0.1:8088/'
 
-var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
 
 
 
@@ -38,12 +38,10 @@ export const borrowInt = {
   selectCode: `${url}borrowmodule/borrow/selectByCode`,
   selectRfid: `${borrow}borrowmodule/return/selectByrfid`
 }
-// 还书页面
 export const returnInt = {
   selectCode: `${url}borrowmodule/return/selectByCode`,
   selectRfid: `${borrow}borrowmodule/borrow/selectByrfid`
 }
-// 续借页面
 var bookOperate = url + 'borrowmodule/'
 export const bookOperateInt = {
   borrow: `${bookOperate}borrow/out`,
@@ -53,13 +51,9 @@ export const bookOperateInt = {
   return:`${url}borrowmodule/borrow/getReaderLog`,
   history:`${url}borrowmodule/borrow/getReaderHis`
 }
-// 报损页面
-export const bookDamageInt = {
-  search:`${url}systemmodule/damage/select`,
-  damage:`${url}bookcollectionmodule/collection/letDamage`
-}
+// 还书页面
 
-
+// 续借页面
 
 /*------ 读者管理模块 ------*/
 // 押金充值和判断
@@ -69,29 +63,7 @@ export const rechargeInt = {
   logout:`${url}financemodule/readerTbCardLogout/Logout`, // 注销
   lose:`${url}readermodule/readerTbCardInfo//cardReport`, // 挂失
   cancelLost:`${url}readermodule/readerTbCardInfo/cardReportCancel`, // 取消挂失
-  supply:`${url}readermodule/readerTbCardInfo/cardReissue`,
-  option:`${url}readermodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
-}
-
-//读者卡信息
-var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/'
-export const cardInfoInt = {
-  select: `${url}readermodule/readerTbCardInfo/select`,
-  cardReport: `${cardInfo}currency/cardReport`, // 挂失/取办
-  cardReissue: `${cardInfo}currency/cardReissue`,// 补办
-  cogradient: `${cardInfo}synchronizationReader`, // 登记读者卡
-  add: `${cardInfo}currency/add`, // 办卡
-  selectUser: `${cardInfo}selectUserInfoByCard`,
-  option:`${url}readermodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
-}
-export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'
-//读者卡等级
-
-export const cardLevelInt = {
-  select: `${url}readermodule/readerTbCardGradeinfo/select`,
-  add: `${url}readermodule/readerTbCardGradeinfo/add`,
-  edit: `${url}readermodule/readerTbCardGradeinfo/edit`,
-  delete: `${url}readermodule/readerTbCardGradeinfo/delete`,
+  supply:`${url}readermodule/readerTbCardInfo/cardReissue`
 }
 /*------ 系统设置模块  ------*/
 
@@ -269,7 +241,29 @@ export const layerFrame = {
 
 
 /*====== 藏馆系统 ======*/
+/*------ 读者卡管理模块 ------*/
+//读者卡信息
 
+//读者卡信息
+var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/'
+export const cardInfoInt = {
+  select: `${url}readermodule/readerTbCardInfo/select`,
+  cardReport: `${cardInfo}currency/cardReport`, // 挂失/取办
+  cardReissue: `${cardInfo}currency/cardReissue`,// 补办
+  cogradient: `${cardInfo}synchronizationReader`, // 登记读者卡
+  add: `${cardInfo}currency/add`, // 办卡
+  selectUser: `${cardInfo}selectUserInfoByCard`,
+  option:`${url}tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
+}
+export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'
+//读者卡等级
+
+export const cardLevelInt = {
+  select: `${url}readermodule/readerTbCardGradeinfo/select`,
+  add: `${url}readermodule/readerTbCardGradeinfo/add`,
+  edit: `${url}readermodule/readerTbCardGradeinfo/edit`,
+  delete: `${url}readermodule/readerTbCardGradeinfo/delete`,
+}
 // 读者卡类型
 var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
 export const cardTypeInt = {
