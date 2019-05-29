@@ -277,6 +277,13 @@ export default new Router({
           component: BookPublishHouse
         },
         {
+          path: '/BookLocationInformation',
+          meta: {
+            title: '图书位置信息'
+          },
+          component: resolve => require(['../components/Reader/libraryManage/BookLocationInformation.vue'], resolve)
+        },
+        {
           path: '/AdvanceRecord',
           meta: {
             title: '预借记录'

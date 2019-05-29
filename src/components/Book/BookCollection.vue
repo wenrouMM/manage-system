@@ -70,7 +70,7 @@
             <el-table-column align="center" label="操作">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
-                <span class="green" @click="makeBtn(scope.$index, scope.row)">启用</span>
+                <span class="green" @click="makeBtn(scope.$index, scope.row)">{{scope.row.available ==0?'启用':'停用'}}</span>
                 <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
                 <span class="ban" @click="deleteBtn(scope.$index, scope.row)">报损</span>
               </template>
@@ -237,26 +237,41 @@
                 </el-form-item>
               </div>
             </div>
-            <div style="margin-top: 20px;padding: 0px 20px" id="selectInput">
+            <div style="margin-top: 20px;padding: 0px 20px;width: 100%" id="selectInput">
               <div class="flexLayout">
-                <el-form-item label=" 损坏原因 :" style="width: 400px" prop="causesDamage" class="errTitle">
-                  <el-select v-model="harmForm.causesDamage" clearable  @change="selectCheck(searchForm.makeMethod)">
-                    <el-option label="索书号" value="0"></el-option>
-                    <el-option label="馆藏码" value="1"></el-option>
-                    <el-option label="ISBN" value="2"></el-option>
-                    <el-option label="书名" value="3"></el-option>
-                    <el-option label="状态" value="4"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="95px" style="margin-left: 100px">
-                  <el-input v-model="harmForm.amountCompensation "></el-input>
-                </el-form-item>
+                <div>
+                  <el-form-item label=" 卡　　号 :" prop="cardNumber" label-width="95px">
+                    <el-input v-model="harmForm.cardNumber "></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle">
+                    <el-select
+                      @change="selectCheck(harmForm.causesDamage)"
+                      v-model="harmForm.causesDamage"
+                      filterable
+                      remote
+                      reserve-keyword
+                      placeholder="请输入关键词查询"
+                      :remote-method="remoteMethod"
+                      :loading="loading">
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="95px">
+                    <el-input v-model="harmForm.amountCompensation "></el-input>
+                  </el-form-item>
+                </div>
+                <div id="remarks">
+                  <el-form-item label=" 备　　注 :" prop="remarks" style="width: 450px"  class="errTitle">
+                    <el-input type="textarea" v-model="harmForm.remarks" style="width: 300px" :autosize="{ minRows:8, maxRows: 8}" resize="none"></el-input>
+                  </el-form-item>
+                </div>
               </div>
-              <div id="remarks">
-                <el-form-item label=" 备　　注 :" prop="remarks" style="width: 900px;" class="errTitle">
-                  <el-input type="textarea" v-model="harmForm.remarks" style="width: 809px;" resize="none"></el-input>
-                </el-form-item>
-              </div>
+
               <div style="width: 400px;margin:30px auto">
                 <el-button type="primary" @click="definiteCheck">确定</el-button>
                 <el-button type="info" style="margin-left: 55px" @click="cancelCheck">取消</el-button>
@@ -268,7 +283,7 @@
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-          <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6">
+          <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6||this.i==8">
             是否{{Dialogtitle[i]}}?
           </div>
           <div v-if="this.i==7">
@@ -286,7 +301,7 @@
           </div>
           <div slot="footer">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="cancelCheck">取消</span>
+            <span class="dialogButton cancel" @click="cancelDialog">取消</span>
           </div>
         </el-dialog>
       </div>
@@ -297,12 +312,14 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { collection } from "../../request/api/base.js";
+  import { collection } from "@request/api/base.js";
 
   export default {
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        loading: false,
+        options:[],
         addForm:{
           id:'',
           isbn:'',
@@ -332,6 +349,7 @@
           cause:'',//剔除原因
         },
         rules:{
+          cardNumber:[{ required: true, message: "请输入卡号", trigger: "blur" }],
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           titleProper:[{ required: true}],
           subtitle:[{ required: true}],
@@ -355,11 +373,12 @@
           libAdress:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
           putTime:[{ required: true,message: "请输入出版时间", trigger: "blur" }],
           causesDamage:[{ required: true,message: "请选择损坏原因", trigger: "change" }],
-          amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "blur" }],
+          amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "change" }],
           remarks:[{ required: true,message: "请输入备注", trigger: "blur" }],
           cause:[{ required: true,message: "请选择剔除原因", trigger: "change" }],
         },
         harmForm:{
+          cardNumber:'',//卡号
           Number:'',//编号
           bookIndex:'',//索取号
           libAdress:'',//馆藏地
@@ -374,7 +393,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除设置'],
+        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出','剔除设置','停用'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -409,17 +428,6 @@
             );
           }
         },
-        /*初始化 */
-        options: [
-          {
-            value: "0",
-            label: "按具体金额赔偿"
-          },
-          {
-            value: "1",
-            label: "按价格倍数赔偿"
-          },
-        ],
         tableLoading: true,
         currentPage: 1,
         pageInput: 1,
@@ -428,6 +436,8 @@
         tableData: [],
         id:'',
         tableChecked: [], // 全选绑定的数据
+        damageId:'',
+        bookId:''
       };
     },
     computed: {
@@ -459,8 +469,6 @@
                 newState=1
               }else if(this.selectSearchForm.state=='可外借'){
                 newState=0
-              }else{
-                newState=''
               }
               break;
           }
@@ -470,6 +478,7 @@
           this.selectSearchForm.code=''
           this.selectSearchForm.isbn=''
           this.selectSearchForm.bookName=''
+          newState=''
         }
         let newData={
           searchNumber:this.selectSearchForm.searchNumber,
@@ -514,10 +523,37 @@
       }
     },
     methods: {
-      //筛选搜索
+      findCherries(fruit) {
+        return fruit.value ===this.damageId;
+      },
       selectCheck(val){
-        console.log('val',val)
-        this.searchData=val
+        let harmData=[]
+        console.log('更改的数据',val)
+        this.damageId=val
+        harmData=this.options.find(this.findCherries)
+        console.log('type',harmData.type)
+        console.log('num',harmData.num)
+        if(harmData.type==1){
+          this.harmForm.amountCompensation=harmData.num*this.harmForm.price
+        }else{
+          this.harmForm.amountCompensation=harmData.num
+        }
+      },
+      remoteMethod(query){
+        console.log('query',query)
+        if(query){
+          this.axios.get(collection.harmSelect,{params:{name:query}}).then((res)=>{
+            console.log('搜索损坏的下拉的数据',res.data.row)
+            this.options.length=0
+            for(const item of res.data.row){
+              console.log('item',item)
+              this.options.push({label:item.damageName,value:item.id,type:item.compensationType,num:item.compensationNum})
+            }
+          })
+        }else{
+          this.options = [];
+        }
+
       },
       //批量选择
       handleSelectionChange(val) {
@@ -587,7 +623,6 @@
         }
       },
       addApi(value){
-
         this.axios.post(collection.add,value).then((res)=>{
           if (res.data.state == true) {
             this.$message({
@@ -652,15 +687,40 @@
       deleteBtn(index,row){
         this.i=5
         this.addForm.id=row.id
+        this.bookId=row.id
         this.dialogFormVisible=true
+        console.log('报损按钮数据',row)
+        this.harmForm.bookIndex=row.callNumber
+        this.harmForm.libAdress=row.place
+        this.harmForm.isbn=row.isbn
+        this.harmForm.bookName=row.name
+        this.harmForm.price=row.price
+        this.harmForm.pageNumber=row.pageNumber
+        this.harmForm.putTime=row.publishingTime
       },
       //报损弹框确定按钮
       definiteCheck(){
-
-      },
-      //报损弹框取消按钮
-      cancelCheck(){
-        this.closeForm()
+        this.axios.post(collection.damage,{
+          damageId:this.damageId,
+          remarks:this.harmForm.remarks,
+          bookId:[this.bookId],
+          cardNum:this.harmForm.cardNumber,
+        }).then((res)=>{
+          console.log('报损后的处理',res)
+          if (res.data.state == true) {
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+            this.cancelCheck()
+            this.searchApi(this.searchTimeForm);
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
       },
       //调馆按钮
       tunnellingBtn(){
@@ -673,7 +733,12 @@
       },
       //启用按钮
       makeBtn(index,row){
-        this.i=4
+        console.log(row.available)
+        if(row.available==0){
+          this.i=4
+        }else if(row.available==1){
+          this.i=8
+        }
         this.addForm.id=row.id
         this.centerDialogVisible=true
       },
@@ -687,6 +752,22 @@
         }
         if(this.i==4){
           this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
+            if (res.data.state == true) {
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+              this.centerDialogVisible=false
+              this.searchApi(this.searchTimeForm);
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+            }
+          })
+        }else if(this.i==8){
+          this.axios.post(collection.state,{id:this.addForm.id,available:0}).then((res)=>{
             if (res.data.state == true) {
               this.$message({
                 message: res.data.msg,
@@ -763,9 +844,14 @@
         }
       },
       cancelCheck(){
-        if(this.i==7){
-          this.$refs[this.numberValidateForm].resetFields();
-        }
+          this.$refs[this.harmForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+          for (var i in this.harmForm) {
+            this.harmForm[i] = "";
+          }
+        this.dialogFormVisible=false
+        this.searchApi(this.searchTimeForm)
+      },
+      cancelDialog(){
         this.centerDialogVisible=false
       },
       // 分页按钮
