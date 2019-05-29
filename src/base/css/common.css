@@ -139,6 +139,16 @@ body{
 .renewalBtn{
   background:rgba(154,155,224,1);
 }
+/*通用文字处理*/
+.textCenter{
+  text-align: center;
+}
+.textLeft{
+  text-align: left;
+}
+.textRight{
+  text-align: right;
+}
 /*动画样式*/
 .move-enter-active,
 .move-leave-active {

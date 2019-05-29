@@ -73,25 +73,12 @@
             </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-show="Mode == 2">
-              <el-submenu index="4">
-                <template slot="title">
-                  <span>图书管理</span>
-                </template>
-                <el-menu-item index="/bookType">图书类型</el-menu-item>
-                <el-menu-item index="/bookInfo">图书信息</el-menu-item>
-                <el-menu-item index="/bookpublishhouse">图书出版社</el-menu-item>
-              </el-submenu>
-              <el-submenu background-color="#545c64" index="2">
-                <template slot="title">
-                  <span>藏馆管理</span>
-                </template>
                 <el-menu-item index="/LibBookInfo">馆内图书信息</el-menu-item>
-                <el-menu-item index="/libBookType">馆内图书类型</el-menu-item>
                 <el-menu-item index="/publishhouse">馆内图书出版社</el-menu-item>
-                <el-menu-item index="/bookregistration">图书登记</el-menu-item>
+                <!-- <el-menu-item index="/bookregistration">图书登记</el-menu-item> -->
                 <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
                 <el-menu-item index="/BookLocationInformation">图书位置信息</el-menu-item>
-              </el-submenu>
+              
               <el-menu-item index="/BookCollection">书籍典藏</el-menu-item>
               <el-menu-item index="/damageCount">损坏清点</el-menu-item>
             </div>

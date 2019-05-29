@@ -22,15 +22,10 @@
               </button>
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="等级:" size="160">
-                <el-select clearable v-model="searchForm.grade" placeholder="请选择等级">
-                  <el-option
-                    v-for="(option,index) of optionsData"
-                    :key="index"
-                    :label="option.name"
-                    :value="option.code"
-                  ></el-option>
-                </el-select>
+              <el-form-item label="等级名称:" size="160">
+                <div class="inputBox">
+                  <el-input clearable v-model="searchForm.name" placeholder="请输入读者卡等级名称"></el-input>
+                </div>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="searchBtn">查询</el-button>
@@ -123,7 +118,7 @@
         >
           <el-form ref="changeForm" :model="changeForm" :rules="addRules">
             <!-- 表单域 -->
-            <el-form-item label="等级名称" prop="name" :label-width="formLabelWidth">
+            <el-form-item  label="等级名称" prop="name" :label-width="formLabelWidth">
               <el-input v-model="changeForm.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="续借次数" prop="renewNum" :label-width="formLabelWidth">
@@ -168,7 +163,7 @@ export default {
       optionsData: [
       ],
       searchForm: {
-        grade: "" //等级
+        name: "" //等级
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
       Allseclet: [], // 全选
@@ -226,8 +221,8 @@ export default {
   computed:{
     searchTimeForm() {
       let obj = {
-        gradeCode:this.searchForm.grade,
-        currentPage:this.currentPage,
+        name:this.searchForm.name,
+        currentPage:1,
         pageSize:this.pageSize
       }
       return obj
@@ -426,16 +421,6 @@ export default {
         }
       })
     },
-    searchOption() {
-      axios.get(selectAllDrop).then((res) => {
-        if (res.data.state === true) {
-           this.optionsData = res.data.row
-            console.log("下拉框数据", res);
-          } else {
-            this.$message.error(res.data.msg);
-          }
-      })
-    },
     // 添加编辑API
     addApi(data,dialogName) {
       console.log("提交的数据", data)
@@ -443,7 +428,6 @@ export default {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
-          this.searchOption()
           this[dialogName] = false;
         } else {
           this.$message.error(res.data.msg);
@@ -495,7 +479,6 @@ export default {
     }
   },
   created() {
-    this.searchOption()
     this.searchTable(this.searchTimeForm)
   }
 };

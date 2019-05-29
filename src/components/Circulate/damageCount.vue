@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">登录列表</span>
+          <span class="titleName">报损记录</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
@@ -102,7 +102,7 @@
 <script>
   import axios from 'axios'
   import moment from 'moment'
-  import {login_record} from '../../request/api/base.js'
+  import {login_record} from '@request/api/base.js'
 
   export default {
     data () {

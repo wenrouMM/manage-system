@@ -116,6 +116,10 @@
               </el-select>
             <span>押金金额￥：{{addForm.level.deposit}}</span>
           </el-form-item>
+          <el-form-item v-if="isSupply" label="补办费用" :label-width="formLabelWidth">
+            <span class="supply">{{supplyCost}}</span>
+            <span class="all">合计金额: {{allCash}}</span>
+          </el-form-item>
           <el-form-item class="buttonBox">
             <el-button
               type="primary"
@@ -165,8 +169,9 @@ import axios from "axios";
 import {
   headUpload,
   cardLevelInt,
-  addCardInt
-} from "../../../request/api/base.js";
+  addCardInt,
+  bookWordInt
+} from "@request/api/base.js";
 export default {
   name: "getAcard",
   data() {
@@ -207,11 +212,15 @@ export default {
         level: [{ required: true, message: "请选择金额", trigger: "change" }],
         address: [{ required: true, message: "请输入地址", trigger: "blur" }],
         email:[{required: true, message: "请输入邮箱", trigger: "blur" }]
-      }
+      },
+      supplyCost:0,// 补办费用
+      isSupply:false,// 是否补办
+
     };
   },
   computed: {
     addTimeForm() {
+      let cost =  this.isSupply?this.supplyCost:0
       let obj = {
         fkGradeCode:this.addForm.level.code,
         balance: this.addForm.level.deposit,
@@ -221,7 +230,7 @@ export default {
         fkReaderName: this.addForm.name,
         readerAddress: this.addForm.address,
         email:this.addForm.email,
-        reissueCost:10, //补办费用
+        reissueCost:cost, //补办费用
         remarks:'' //办卡备注
       };
       return obj;
@@ -231,6 +240,18 @@ export default {
         idCard: this.addForm.id
       };
       return obj;
+    },
+    allCash(){
+      let cost =  this.isSupply?this.supplyCost:0
+      let all = 0
+      if(this.addForm.level){
+         all = cost + this.addForm.level.deposit
+      } else{
+        all = cost
+        console.log('走了吗')
+      }
+      
+      return all
     },
     judge() {
       let obj = this.selectData;
@@ -255,13 +276,15 @@ export default {
     },
     // ID查询
     select() {
-      let data = this.selectTimeForm;
-      console.log(data);
-      if (data.idCard) {
+      let value = this.selectTimeForm;
+      let isExist = false
+      console.log(value);
+      if (value.idCard) {
         this.loading = true;
+        
         axios
           .get(addCardInt.searchId, {
-            params: data
+            params: value
           })
           .then(res => {
             console.log("返回的数据", res);
@@ -277,6 +300,8 @@ export default {
                 this.addForm.sex = data.readerSex.toString(); // 应该是初始设置 非要字符串格式才行
                 this.addForm.email = data.email
                 console.log("此时的addform", this.addForm);
+                isExist = true
+                this.isSupplyApi(value)
               }
 
               this.loading = false;
@@ -286,7 +311,25 @@ export default {
             }
           });
       }
+      if(isExist){
+        
+      }
       console.log("触发了吗");
+    },
+    // 查询是否二次办卡
+    isSupplyApi(data){
+      axios.get(addCardInt.validateId,{
+        params:data
+      }).then((res) =>{
+        console.log('是否二次办卡',res)
+        if (res.data.state === true){
+          this.isSupply = true
+        } else{
+          this.$message.info(res.data.msg)
+          this.isSupply = false
+        }
+      })
+
     },
     // 办卡按钮
     submitForm(formName) {
@@ -365,9 +408,22 @@ export default {
           }
         });
       }
+    },
+    // 补办费用获取API
+    supplyCashApi(){
+      axios.get(bookWordInt.search).then(res => {
+        if (res.data.state) {
+          this.supplyCost = res.data.row.setReissueCost
+          console.log("接收的数据", res.data.row);
+          console.log('补卡费用',this.supplyCost)
+        } else {
+         // this.$message.error(res.data.msg);
+        }
+      });
     }
   },
   created() {
+    this.supplyCashApi()
     this.levelOptionApi();
   }
 };
