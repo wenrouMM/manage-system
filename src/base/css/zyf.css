@@ -139,6 +139,12 @@
 #book_cataloging #catalogingInput3 .smaillInput .el-input .el-input__inner {
   width:180px;
 }
+#book_cataloging #catalogingInput3 .mediumInput .el-input .el-input__inner {
+  width:200px;
+}
+#book_cataloging #catalogingInput4 .el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width:200px;
+}
 #book_cataloging #catalogingInput4 .el-input .el-input__inner {
   width:200px;
 }

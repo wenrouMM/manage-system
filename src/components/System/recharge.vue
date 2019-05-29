@@ -11,9 +11,9 @@
             <button class="add" @click="rechargeBtn">
               <i class="addIcon el-icon-plus"></i>充值
             </button>
-            <!-- <button class="delete" @click="drawbackBtn">
-              <i class="deleteIcon el-icon-delete"></i>退款
-            </button> -->
+            <button class="delete" @click="drawbackBtn">
+              <i class="deleteIcon el-icon-delete"></i>注销
+            </button>
             <button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
             </button>
@@ -21,26 +21,14 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" clearable placeholder="处理方式" style="width: 150px">
-                  <el-option label="押金充值" value="0"></el-option>
-                  <el-option label="退款金额" value="1"></el-option>
+                <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
+                  <el-option label="索书号" value="0"></el-option>
+                  <el-option label="馆藏码" value="1"></el-option>
+                  <el-option label="ISBN" value="2"></el-option>
+                  <el-option label="书名" value="3"></el-option>
+                  <el-option label="状态" value="4"></el-option>
                 </el-select>
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 150px"></el-input>
-                <el-input v-model="searchForm.cardNum" placeholder="请输入卡号" style="width: 150px"></el-input>
-                <el-date-picker
-                  v-model="searchForm.startTime"
-                  type="date"
-                  placeholder="开始日期"
-                  :picker-options="pickerOptions0"
-                  style="width: 150px"
-                ></el-date-picker>
-                <el-date-picker
-                  v-model="searchForm.endTime"
-                  type="date"
-                  placeholder="结束日期"
-                  :picker-options="pickerOptions1"
-                  style="width: 150px"
-                ></el-date-picker>
+                <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -76,6 +64,7 @@
             <el-table-column align="center" prop="compensationNum" label="流水标号"></el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
           </el-table>
+          <div style="width: 100%;height: 50px;background-color: #0096FF;line-height: 50px;color: white">&nbsp;&nbsp;&nbsp;合计&nbsp;:&nbsp;{{TotalRecharge}}</div>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
             <el-pagination
@@ -125,6 +114,7 @@
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ["修改", "新增"],
         i: null, // 切换弹框标题
+        TotalRecharge:'',
         searchForm: {
           // 接受搜索表单的数据
           makeMethod:'',
@@ -133,26 +123,6 @@
           startTime:'',
           endTime:'',
           currentPage: 0
-        },
-        pickerOptions0: {
-          disabledDate: time => {
-            if (this.searchForm.endTime) {
-              return (
-                time.getTime() > Date.now() ||
-                time.getTime() > this.searchForm.endTime
-              );
-            } else {
-              return time.getTime() > Date.now();
-            }
-          }
-        },
-        pickerOptions1: {
-          disabledDate: time => {
-            return (
-              time.getTime() < this.searchForm.startTime ||
-              time.getTime() > Date.now()
-            );
-          }
         },
         addForm:{
           damageMothod:'',

@@ -24,7 +24,7 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="ISBN :">
-                <el-input v-model="searchForm.searchData" placeholder="请输入ISBN查询" style="width: 200px"></el-input>
+                <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item label="">
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -48,14 +48,14 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="正题名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="code" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="编著者" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="分类号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="分类名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="出版社" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="出版地" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="语种" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="正题名" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeCode" label="分类号" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeName" label="分类名" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="publishingTime" label="出版时间" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="language" label="语种" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" label="操作">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
@@ -101,66 +101,91 @@
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <el-form id="book_cataloging" :rules="rules" :model="addForm" :ref="addForm" style="">
             <div style="display: flex;flex-direction: column;width: 100%">
-              <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
-                <el-form-item label=" I S B N :" prop="isbn" label-width="80px" >
-                  <el-input v-model="addForm.isbn" style="" id="isbnInput"></el-input>
-                </el-form-item>
-                <p class="searchButton" @click="isbnData">
-                  <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
-                </p>
-              </div>
-              <div style="padding: 0 70px 25px">
-                <el-radio-group v-model="addForm.radio" class="flexLayout">
-                  <el-radio :label="1">本地获取图书</el-radio>
-                  <el-radio :label="2">远程获取图书</el-radio>
-                  <el-radio :label="3">获取数据前先预览</el-radio>
-                </el-radio-group>
+              <div v-if="i==1">
+                <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
+                  <el-form-item label=" I S B N :" prop="isbn" label-width="80px" >
+                    <el-input v-model="addForm.isbn" style="" id="isbnInput"></el-input>
+                  </el-form-item>
+                  <p class="searchButton" @click="isbnData">
+                    <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
+                  </p>
+                </div>
+                <div style="padding: 0 70px 25px">
+                  <el-radio-group v-model="addForm.radio" class="flexLayout">
+                    <el-radio :label="1">本地获取图书</el-radio>
+                    <el-radio :label="2">远程获取图书</el-radio>
+                    <el-radio :label="3">获取数据前先预览</el-radio>
+                  </el-radio-group>
+                </div>
               </div>
               <div id="noError">
                 <div id="catalogingInput2">
                   <div class="flexLayout">
-                    <el-form-item label=" 正 题 名 :" prop="titleProper" label-width="95px" style="">
-                      <el-input v-model="addForm.titleProper"></el-input>
+                    <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
+                      <el-input v-model="addForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item label=" 副 题 名 :" prop="subtitle" label-width="90px" style="">
-                      <el-input v-model="addForm.subtitle "></el-input>
+                    <el-form-item label=" 副 题 名 :" prop="viceName" label-width="90px" style="">
+                      <el-input v-model="addForm.viceName "></el-input>
                     </el-form-item>
                   </div>
                   <div class="flexLayout">
-                    <el-form-item label=" 丛编题名 :" prop="cluster" label-width="95px" style="">
-                      <el-input v-model="addForm.cluster"></el-input>
+                    <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
+                      <el-input v-model="addForm.author "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 编 著 者 :" prop="contributors" label-width="90px" style="">
-                      <el-input v-model="addForm.contributors "></el-input>
+                    <el-form-item label=" 丛编题名 :" prop="clusterName" label-width="95px" style="">
+                      <el-input v-model="addForm.clusterName"></el-input>
+                    </el-form-item>
+                  </div>
+                  <div  class="flexLayout">
+                    <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
+                      <el-input v-model="addForm.searchNumber "></el-input>
+                    </el-form-item>
+                    <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
+                      <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.index"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
                     </el-form-item>
                   </div>
                   <div class="flexLayout" id="catalogingInput3">
-                    <el-form-item label=" 分 类 号 :" prop="titleProper" label-width="95px" class="smaillInput">
+                    <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
                       <div class="flexLayout">
-                        <el-input v-model="addForm.titleProper"></el-input>
-                        <p class="searchButton" @click="isbnData" style="width: 50px;left: 180px">
+                        <el-input v-model="addForm.fkTypeCode"></el-input>
+                        <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
                           <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
                         </p>
                       </div>
                     </el-form-item>
-                    <el-form-item label=" 分 类 名 :" prop="subtitle" label-width="90px" class="bigInput">
-                      <el-input v-model="addForm.subtitle "></el-input>
+                    <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
+                      <el-input v-model="addForm.fkTypeName "></el-input>
                     </el-form-item>
                   </div>
                   <div id="catalogingInput4" class="flexLayout">
-                    <el-form-item label=" 出 版 社 :" prop="publishHouse" label-width="95px" class="smaillInput">
+                    <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
                       <div class="flexLayout">
-                        <el-input v-model="addForm.publishHouse"></el-input>
-                        <p class="searchButton" @click="isbnData" style="width: 50px;left: 180px">
+                        <el-input v-model="addForm.fkPressName"></el-input>
+                        <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
                           <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
                         </p>
                       </div>
                     </el-form-item>
-                    <el-form-item label=" 出 版 地 :" prop="publishAddress" label-width="90px" style="margin-left: 40px">
-                      <el-input v-model="addForm.publishAddress "></el-input>
+                    <el-form-item label=" 出 版 地 :" prop="publishingPleace" label-width="90px" style="margin-left: 60px">
+                      <el-input v-model="addForm.publishingPleace "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 出版日期 :" prop="publishTime" label-width="95px">
-                      <el-input v-model="addForm.publishTime "></el-input>
+                    <el-form-item label=" 出版日期 :" prop="publishingTime" label-width="95px" style="margin-left: 20px">
+                      <el-date-picker
+                        v-model="addForm.publishingTime"
+                        align="right"
+                        type="date"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="yyyy-MM-dd 00:00:00"
+                        placeholder="选择日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
                     </el-form-item>
                   </div>
                   <div class="flexLayout" id="catalogingInput5">
@@ -168,23 +193,23 @@
                       <el-input v-model="addForm.pageNumber"></el-input>
                     </el-form-item>
                     <el-form-item label=" 开　　本 :" prop="format" label-width="95px">
-                      <el-input v-model="addForm.format "></el-input>
+                      <el-input v-model="addForm.openBook "></el-input>
                     </el-form-item>
                     <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
                       <el-input v-model="addForm.price "></el-input>
                     </el-form-item>
                   </div>
                   <div class="flexLayout">
-                    <el-form-item label=" 附　　注 :" prop="notes" label-width="95px">
-                      <el-input v-model="addForm.notes"></el-input>
+                    <el-form-item label=" 附　　注 :" prop="annotations " label-width="95px">
+                      <el-input v-model="addForm.annotations "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 主 题 词 :" prop="themeWord;" label-width="95px">
+                    <el-form-item label=" 主 题 词 :" prop="themeWord" label-width="95px">
                       <el-input v-model="addForm.themeWord "></el-input>
                     </el-form-item>
                   </div>
                   <div>
-                    <el-form-item label=" 备　　注 :" prop="remarks" style="width: 950px;">
-                      <el-input type="textarea" v-model="addForm.remarks" style="width: 850px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
+                    <el-form-item label=" 备　　注 :" prop="renarks" style="width: 950px;">
+                      <el-input type="textarea" v-model="addForm.renarks" style="width: 850px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
                     </el-form-item>
                   </div>
                 </div>
@@ -209,71 +234,107 @@
           </div>
         </el-dialog>
       </div>
+      <!--分类号，出版社树结构弹窗-->
+      <div id="typeMessage" >
+        <div style="position: relative">
+          <p>{{messageName}}</p>
+          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+        </div>
+        <div>
+          <ul id="treeDemo" class="ztree"></ul>
+        </div>
+      </div>
     </el-container>
   </div>
 </template>
 
 <script>
   import axios from "axios";
+  import { catalog } from "@request/api/base.js";
   import moment from "moment";
-  import { collection } from "../../request/api/base.js";
-
   export default {
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        messageName:'',//树弹框的名称
+        setting: {
+          edit: {
+            enable: true,
+            showRemoveBtn: false,
+            addHoverBtn: false,
+            showRenameBtn: false,
+            editNameSelectAll: true
+          },
+          data: {
+            simpleData: {
+              enable: true,
+              idKey: "id",
+              pIdKey: "pId",
+              rootPId: 0
+            }
+          },
+          view: {
+            showLine: false,
+            showIcon: true,
+            dblClickExpand: false,
+            selectedMulti: true,
+          },
+          callback: {
+            onClick: this.zTreeOnClick, //节点点击事件
+            beforeExpand: this.zTreeBeforeExpand,
+          }
+        }, //ztree树加载的配置
+        zNodes: [], //ztree树的数据
         addForm:{
-          id:'',
           isbn:'',
-          radio:'',
-          titleProper:'', //正题名
-          subtitle:'', //副题名
-          cluster:'',//丛编题名
-          contributors:'',//编著者
-          publishHouse:'',//出版社
-          publishAddress:'',//出版地
-          publishTime:'',//出版时间
+          name:'', //正题名
+          viceName:'', //副题名
+          clusterName:'',//丛编题名
+          searchNumber:'',//索书号
+          fkTypeCode:'',//分类号
+          fkTypeName:'',//分类名
+          author:'',//编著者
+          fkPressName:'',//出版社
+          publishingPleace:'',//出版地
+          fkPressCode:'',//出版码
+          publishingTime:'',//出版时间
           pageNumber:'',//页码
-          format:'',//开本
+          openBook:'',//开本
           price:'',//价格
-          languages:'',//语种
-          LiteratureCategory:'',//文献类别
-          BindingLayout:'',//装订版面
-          notes:'',//附注
+          language:'',//语种
+          languageCode:'',
+          annotations:'',//附注
           themeWord:'',//主题词
-          remarks:'',//备注
+          renarks:'',//备注
         },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
-          titleProper:[{ required: true}],
-          subtitle:[{ required: true}],
-          cluster:[{ required: true}],
-          contributors:[{ required: true}],
-          publishHouse:[{ required: true}],
-          publishAddress:[{ required: true}],
-          publishTime:[{ required: true}],
-          pageNumber:[{ required: true}],
-          format:[{ required: true}],
-          price:[{ required: true}],
-          languages:[{ required: true}],
-          LiteratureCategory:[{ required: true}],
-          BindingLayout:[{ required: true}],
-          notes:[{ required: true}],
-          themeWord:[{ required: true}],
-          remarks:[{ required: true}],
-        },
-        harmForm:{
-          Number:'',//编号
-          bookIndex:'',//索取号
-          libAdress:'',//馆藏地
-          isbn:'',//isbn
-          bookName:'',//正题名
-          price:'',//价格
-          pageNumber:'',//页码
-          putTime:'',//出版时间
-          causesDamage:'',//损坏原因
-          amountCompensation:'',//赔偿金额
-          remarks:''//备注
+
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
@@ -281,50 +342,10 @@
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
-          makeMethod:'',
-          searchData:"",
-          currentPage: 0
-        },
-        selectSearchForm:{
-          searchNumber:'',//索书号
-          code:'',//馆藏码
-          isbn:'',//isbn
-          bookName:'',//书名
-          state:'',//状态
-          currentPage: 0
-        },
-        searchData:'',
-        pickerOptions0: {
-          disabledDate: time => {
-            if (this.searchForm.endTime) {
-              return (
-                time.getTime() > Date.now() ||
-                time.getTime() > this.searchForm.endTime
-              );
-            } else {
-              return time.getTime() > Date.now();
-            }
-          }
-        },
-        pickerOptions1: {
-          disabledDate: time => {
-            return (
-              time.getTime() < this.searchForm.startTime ||
-              time.getTime() > Date.now()
-            );
-          }
+          isbn:"",
         },
         /*初始化 */
-        options: [
-          {
-            value: "0",
-            label: "按具体金额赔偿"
-          },
-          {
-            value: "1",
-            label: "按价格倍数赔偿"
-          },
-        ],
+        options: [],
         tableLoading: true,
         currentPage: 1,
         pageInput: 1,
@@ -337,42 +358,8 @@
     },
     computed: {
       searchTimeForm(){
-        let newState=''
-        switch (this.searchData/1) {
-          case 0:
-            console.log('索书号')
-            this.selectSearchForm.searchNumber=this.searchForm.searchData;
-            break;
-          case 1:
-            console.log('馆藏码')
-            this.selectSearchForm.code=this.searchForm.searchData;
-            break;
-          case 2:
-            console.log('isbn')
-            this.selectSearchForm.isbn=this.searchForm.searchData;
-            break;
-          case 3:
-            console.log('书名')
-            this.selectSearchForm.bookName=this.searchForm.searchData;
-            break;
-          case 4:
-            console.log('状态')
-            this.selectSearchForm.state=this.searchForm.searchData;
-            if(this.selectSearchForm.state=='不外借'){
-              newState=1
-            }else if(this.selectSearchForm.state=='可外借'){
-              newState=0
-            }else{
-              newState=''
-            }
-            break;
-        }
         let newData={
-          searchNumber:this.selectSearchForm.searchNumber,
-          code:this.selectSearchForm.code,
-          isbn:this.selectSearchForm.isbn,
-          bookName:this.selectSearchForm.bookName,
-          state:newState,
+          isbn:this.searchForm.isbn,
           pageSize: this.pageSize,
           currentPage: 1,
         }
@@ -380,36 +367,107 @@
         return newData
       },
       addFormData(){
-        let newData={
-          fkCataBookId:this.addForm.id,
-          code:this.addForm.barcode,
-          callNumber:this.addForm.searchNumber,
-          place:this.addForm.place,
-          code:this.addForm.code,
-          dailyRent:this.addForm.dailyRent==true?1:0,
-          lendingPermission:this.addForm.lendingPermission==true?1:0,
-          available:this.addForm.available==true?1:0,
-          pageSize: this.pageSize,
-          currentPage: 1,
-        }
+        let newData=this.addForm
         return newData
       },
       editFormData(){
-        let newData={
-          id:this.addForm.id,
-          code:this.addForm.code,
-          callNumber:this.addForm.searchNumber,
-          place:this.addForm.place,
-          dailyRent:this.addForm.dailyRent==true?1:0,
-          lendingPermission:this.addForm.lendingPermission==true?1:0,
-          pageSize: this.pageSize,
-          currentPage: 1,
-        }
-        console.log('newData',newData)
+        let newData=this.addForm
         return newData
       }
     },
     methods: {
+      /*====== 出版社弹窗内容 ======*/
+      publishTreeFun(){
+        this.messageName='请选择出版社名称'
+        this.zNodes.length=0
+        this.freshArea(catalog.publishTree)
+      },
+      /*====== 书籍弹窗内容 ======*/
+      typeTreeFun() {
+        console.log('书籍树状图')
+        this.messageName = '请选择书籍类型'
+        this.zNodes.length = 0
+        this.freshArea(catalog.typeTree)
+      },
+      //树状结构初始化数据
+      async freshArea(value) {
+        let list=[]
+        this.axios.get(value).then((response) => {
+          console.log('树结构的数据',response)
+          if(response.data.state==true){
+            for (let item of response.data.row) {
+              //console.log('ztree树',item)
+              list.push({
+                id: item.id, //节点id
+                pId: item.pid, //节点父id
+                name: item.name, //节点名称
+                code: item.code, //节点编码
+              });
+            }
+            //将数据渲染到ztree树
+            $.fn.zTree.init($("#treeDemo"), this.setting, list);
+            if(list.length>0){
+              $('#typeMessage').fadeIn()
+              this.zNodes=list
+            }
+          }else{
+            this.$message({
+              message: response.data.msg,
+              type: "error"
+            });
+          }
+        })
+      },
+      /*====== zTree保持展开单一路径的实现 ======*/
+      zTreeBeforeExpand(treeId, treeNode) {
+        this.addForm.publishingPleace=treeNode.name
+        this.singlePath(treeNode);
+        return true;
+      },
+      singlePath(currNode) {
+        //console.log(currNode);
+        //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
+        var cLevel = currNode.level;
+        //这里假设id是唯一的
+        var cId = currNode.id;
+        //此对象可以保存起来，没有必要每次查找
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        /**
+         * 展开的所有节点，这是从父节点开始查找（也可以全文查找）
+         * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
+         */
+        var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
+        console.log(expandedNodes);
+        for(var i = expandedNodes.length - 1; i >= 0; i--){
+          var node = expandedNodes[i];
+          var level = node.level;
+          var id = node.id;
+          if (cId != id && level == cLevel) {
+            treeObj.expandNode(node, false);
+          }
+        }
+      },
+      /*====== ztree节点点击添加节点信息 ======*/
+      zTreeOnClick(event, treeId, treeNode){
+        if(this.messageName=='请选择出版社名称'){
+          if(treeNode.code!=null){
+            console.log(treeNode)
+            this.addForm.fkPressName=treeNode.name
+            this.addForm.fkPressCode=treeNode.code
+            $('#typeMessage').fadeOut()
+          }else{
+            this.$message('请选择出版社');
+          }
+        }else{
+          this.addForm.fkTypeName=treeNode.name
+          this.addForm.fkTypeCode=treeNode.code
+          $('#typeMessage').fadeOut()
+        }
+      },
+      //关闭树弹框
+      closeCheck() {
+        $('#typeMessage').fadeOut()
+      },
       //筛选搜索
       selectCheck(val){
         console.log('val',val)
@@ -438,6 +496,19 @@
       rechargeBtn(){
         this.i=1
         this.dialogFormVisible=true
+        this.languageFun()
+      },
+      //语下拉框数据
+      languageFun(){
+        this.axios.get(catalog.language).then((res)=>{
+          console.log('语种下拉框数据',res)
+          if(res.data.state==true){
+            this.options.length=0
+            for(const item of res.data.row){
+              this.options.push({label:item.language,value:item.languageCode})
+            }
+          }
+        })
       },
       //添加isbn数据搜索
       isbnData(){
@@ -455,13 +526,23 @@
       },
       //修改弹框
       EditBtn(index,row){
+        let language=''
         this.i=0
-        console.log(row)
-        console.log('row',row)
         this.addForm=row
-        this.addForm.available=row.available==1?true:false
-        this.addForm.lendingPermission=row.lendingPermission==1?true:false
-        this.addForm.dailyRent=row.dailyRent==1?true:false
+        if(row.languageCode==='CN'){
+          this.addForm.languageCode='汉语'
+        }else if(row.languageCode==='EN'){
+          this.addForm.languageCode='英语'
+        }else if(row.languageCode==='FR'){
+          this.addForm.languageCode='法语'
+        }else if(row.languageCode==='DE'){
+          this.addForm.languageCode='德语'
+        }else if(row.languageCode==='ja'){
+          this.addForm.languageCode='日语'
+        }else if(row.languageCode==='ru'){
+          this.addForm.languageCode='俄语'
+        }
+        this.languageFun()
         this.dialogFormVisible = true;
       },
       // 修改添加弹框确定按钮
@@ -473,9 +554,16 @@
           this.editApi(this.editFormData)
         }
       },
+      //添加修改确定按钮
+      definiteCheck(){
+        if(this.i==1){
+          this.addApi(this.addFormData)
+        }else if(this.i==0){
+          this.editApi(this.editFormData)
+        }
+      },
       addApi(value){
-
-        this.axios.post(collection.add,value).then((res)=>{
+        this.axios.post(catalog.add,value).then((res)=>{
           if (res.data.state == true) {
             this.$message({
               message: res.data.msg,
@@ -492,7 +580,7 @@
         })
       },
       editApi(value){
-        this.axios.post(collection.edit,value).then((res)=>{
+        this.axios.post(catalog.edit,value).then((res)=>{
           if (res.data.state == true) {
             this.$message({
               message: res.data.msg,
@@ -508,30 +596,15 @@
           }
         })
       },
-      //添加修改弹框取消按钮
-      resetForm() {
-        this.closeForm()
-      },
       //添加修改关闭按钮
       closeForm() { // 弹框关闭的时候执行 清空数据
-        if(this.i==4){
-          this.$refs[this.selectSearchForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-          for (var i in this.selectSearchForm) {
-            this.selectSearchForm[i] = "";
-          }
-        }else{
-          this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-          for (var i in this.addForm) {
-            this.addForm[i] = "";
-          }
+        this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+        for (var i in this.addForm) {
+          this.addForm[i] = "";
         }
-
+        $('#typeMessage').fadeOut()
         this.dialogFormVisible = false
         this.searchApi(this.searchTimeForm)
-      },
-      //添加修改确定按钮
-      definiteCheck(){
-
       },
       //添加修改取消按钮
       cancelCheck(){
@@ -551,61 +624,23 @@
         let idData=[]
         for (var item of this.tableChecked) {
           console.log('删除id',item.id);
-          idData.push({id:item.id})
+          idData.push(item.id)
         }
-        if(this.i==4){
-          this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
-            if (res.data.state == true) {
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }else if(this.i==3){
-          console.log('idData',idData)
-          this.axios.post(collection.delete,idData).then((res)=>{
-            if (res.data.state == true){
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }else if(this.i==5){
-          //报损
-        }else if(this.i==2){
-          console.log('idData',idData)
-          this.axios.post(collection.letLeave,idData).then((res)=>{
-            if (res.data.state == true){
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }
+        this.axios.post(catalog.delete,{ids:idData}).then((res)=>{
+          if (res.data.state == true){
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+            this.centerDialogVisible=false
+            this.searchApi(this.searchTimeForm);
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
       },
       // 分页按钮
       jumpBtn() {
@@ -629,19 +664,22 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(collection.select, {
+          .get(catalog.select, {
             params: value
           })
           .then(res => {
-            console.log("书籍典藏", res.data);
+            console.log("书籍编目", res);
             if (res.data.state === true) {
-              this.tableData = res.data.row; //获取返回数据
+              this.tableData = res.data.rows; //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.currentPage = 1; // 回到第一页显示
               this.tableLoading = false;
             } else {
-              this.$message.error(res.data.msg);
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
               this.tableLoading = false;
             }
           })
@@ -809,5 +847,42 @@
     width:25px;
     margin-left:25px;
     margin-top: 7px
+  }
+  #typeMessage{
+    display: none;
+    position: absolute;
+    top: 170px;
+    left:750px;
+    z-index: 30000;
+
+  }
+  #typeMessage div:nth-child(1){
+    width: 400px;
+    height: 50px;
+    background-color: #0096FF;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:2px 2px 10px #909090;
+  }
+  #typeMessage div:nth-child(2){
+    overflow: auto;
+    height:500px ;
+    width: 370px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:2px 2px 10px #909090;
   }
 </style>
