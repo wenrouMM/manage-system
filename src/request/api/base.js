@@ -6,8 +6,8 @@ let fileUrl = 'http://192.168.2.54:8090/'  */
 // 用来管理接口的域名相关
 //var url='http://127.0.0.1:8088/'
 
-var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.31:8088/'
+var url = 'http://192.168.2.121:8088/'
 
 
 
@@ -30,6 +30,13 @@ export const damageInt = {
   detail:`${url}bookcollectionmodule/countDamage/getSecondPage`
 }
 /*------ 流通管理模块 ------*/
+/*--- 流通记录 ---*/
+// 报损记录与历史记录与处理操作
+export const damageCotInt = {
+  search:`${url}borrowmodule/damageLog/select`,
+  deal:`${url}borrowmodule/damageLog/deal`,
+  searchHis:`${url}borrowmodule/damageHis/select`
+}
 /*--- 借阅管理 ---*/
 // 借书页面
 

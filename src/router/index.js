@@ -134,6 +134,20 @@ export default new Router({
           component: LoanHistory,
         },
         {
+          path:'/reimburse',
+          meta:{
+            title:'报损记录'
+          },
+          component:resolve => require(['@/components/Circulate/damageCount'],resolve)
+        },
+        {
+          path:'/reimburseHistory',
+          meta:{
+            title:'报损历史记录'
+          },
+          component:resolve => require(['@/components/Circulate/damageCotHis.vue'],resolve)
+        },
+        {
           path: "/borrowingbooks",
           meta:{
             title:'书籍借阅'

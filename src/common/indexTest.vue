@@ -95,6 +95,8 @@
                   <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item>
                   <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
                   <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
+                  <el-menu-item index="/reimburse">报损记录</el-menu-item>
+                  <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="userbrowrr">
