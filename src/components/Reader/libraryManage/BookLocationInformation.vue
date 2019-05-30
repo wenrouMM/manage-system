@@ -259,7 +259,7 @@
       },
       //下架弹框取消按钮
       cancelCheck(){
-
+        this.centerDialogVisible=false
       },
       //下架弹框确定按钮
       submitDialog(){
