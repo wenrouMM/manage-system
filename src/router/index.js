@@ -196,7 +196,7 @@ export default new Router({
         },
         {
           path: '/overduerecords',
-          component: OverdueRecords,
+          component:resolve => require(['@/components/Circulate/overdueCount.vue'],resolve),
           meta:{
             title:'逾期记录'
           }

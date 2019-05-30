@@ -11,8 +11,8 @@ var url = 'http://192.168.2.121:8088/'
 
 
 
-var imgurl='http://192.168.2.31:8090/'
-let fileUrl = 'http://192.168.2.31:8090/'
+var imgurl='http://192.168.2.121:8090/'
+let fileUrl = 'http://192.168.2.121:8090/'
 /*------ 文件上传模块 ------*/
 
 export const uploadInt = {

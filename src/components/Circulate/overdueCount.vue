@@ -3,11 +3,13 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">报损记录</span>
+          <span class="titleName">逾期记录</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
-          
+          <div class="buttonBox">
+            <el-button type="primary" @click="batchBtn">批量处理</el-button>
+          </div>
           <div class="searchFormBox">
             <el-form :inline="true" :model="searchForm">
               <el-form-item size="130" label="创建时间">
@@ -37,9 +39,9 @@
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"
-            
+            @selection-change="selectAllBtn"
           >
-            
+            <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column width="100" align="center" prop="index" type="index" label="序号">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -53,7 +55,7 @@
             </el-table-column>
             <el-table-column align="center" prop="cardNum" label="卡号">
               <template slot-scope="scope">
-                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardNum}}</span>
+                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardName}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
@@ -61,7 +63,6 @@
             <el-table-column align="center" prop="fkBookName" label="损坏书籍"></el-table-column>
             <el-table-column align="center" prop="fkDamageName" label="赔偿方式"></el-table-column>
             <el-table-column align="center" prop="price" label="赔偿金额"></el-table-column>
-            <el-table-column align="center" prop="price" label="处理人员"></el-table-column>
             <!-- <el-table-column align="center" prop="cardNum" label="操作">
               <template slot-scope="scope">
                 <el-button @click="dealBtn(scope.row,scope.index)" type="text">处理</el-button>
@@ -99,7 +100,26 @@
             <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
-       
+        <div class="dealDialog">
+          <el-dialog  title="报损处理" :visible.sync="dealDialog" width="500px">
+            <div class="FormBox">
+              <el-form :model="dealForm">
+                <el-form-item label="应收金额" label-width="80px">
+                  <span class="text">{{dealCash}}</span>
+                </el-form-item>
+                <el-form-item label="实收金额" label-width="80px">
+                  <el-input v-model="dealForm.dealNum" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <div class="textCenter">
+                    <el-button type="primary" @click="dealFormBtn">确 定</el-button>
+                    <el-button @click="dealDialog = false">取 消</el-button>
+                  </div>
+                </el-form-item>
+              </el-form>
+            </div>
+          </el-dialog>
+        </div>
       </div>
     </el-container>
   </div>
@@ -208,6 +228,32 @@ export default {
       this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1;
     },
+    // 批量处理按钮
+    batchBtn(){
+      if(this.dealArr.length){
+        this.dealForm.dealNum = ''
+        this.dealDialog = true
+      } else{
+        this.$message.error('请先选择批量报损的对象')
+      }
+    },
+    // 批量产生
+    selectAllBtn(val) {
+      for(let item of val){
+        this.dealArr.push(item.id)
+        this.dealCash += parseInt(item.fkBookPrice)
+      }
+      console.log(val)
+      console.log('此时的钱',this.dealArr,this.dealCash)
+    },
+    // 处理按钮
+    dealBtn(row, index) {
+      this.dealForm.dealNum = ''
+      this.dealDialog = true
+      this.dealArr.push(row.id)
+      this.dealCash = row.fkBookPrice
+      console.log(row,this.dealArr);
+    },
     current_change(currentPage) {
       //分页查询
       this.currentPage = currentPage; //点击第几页
@@ -233,14 +279,16 @@ export default {
         this.current_change(num);
       }
     },
- 
-
+    // 弹框
+    dealFormBtn(){
+      this.dealApi(this.dealTimeForm)
+    },
     /*------ API区 ------*/
     searchApi(value) {
       console.log(value);
       this.tableLoading = true;
       axios
-        .get(damageCotInt.searchHis, {
+        .get(damageCotInt.search, {
           params: value
         })
         .then(res => {
@@ -266,7 +314,7 @@ export default {
       console.log(value);
       this.tableLoading = true;
       axios
-        .get(damageCotInt.searchHis, {
+        .get(damageCotInt.search, {
           params: value
         })
         .then(res => {
