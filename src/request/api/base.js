@@ -292,7 +292,7 @@ export const addCardInt = {
   searchId:`${url}readermodule/readerTbCardInfo/selectUserInfoByCard`,
   validateId:`${url}readermodule/readerTbCardInfo/reissueCost`,
   addCard:`${url}readermodule/readerTbCardInfo/add`
-} 
+}
 //通用接口
 export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
@@ -328,9 +328,10 @@ export const vacation={
 
 //充值设置
 export const recharge ={
-  select:`${url}tibetmuseummodule/currency/depositRecord/select`,
-  add:`${url}tibetmuseummodule/currency/depositRecord/add`,
+  select:`${url}financemodule/depositRecord/select`,
+  add:`${url}financemodule/depositRecord/add`,
   edit:`${url}systemmodule/holiday/edit`,
+  logout:`${url}financemodule/readerTbCardLogout/Logout`
 }
 
 //书籍典藏
@@ -354,4 +355,15 @@ export const purchasing ={
   add:`${url}bookcollectionmodule/procuremen/add`,
   delete:`${url}bookcollectionmodule/procuremen/delete`,
   edit:`${url}bookcollectionmodule/procuremen/edit`,
+}
+
+//书籍编目
+export const catalog ={
+  select:`${url}bookcollectionmodule/cataTbBookInfo/select`,
+  add:`${url}bookcollectionmodule/cataTbBookInfo/add`,
+  delete:`${url}bookcollectionmodule/cataTbBookInfo/delete`,
+  edit:`${url}bookcollectionmodule/cataTbBookInfo/edit`,
+  typeTree:`${url}bookcollectionmodule/cataTbBookInfo/selectAllBookType`,
+  publishTree:`${url}bookcollectionmodule/cataTbBookInfo/selectPressTree`,
+  language:`${url}bookcollectionmodule/cataTbBookInfo/getLanguage`
 }

@@ -349,7 +349,7 @@
           cause:'',//剔除原因
         },
         rules:{
-          cardNumber:[{ required: true, message: "请输入卡号", trigger: "blur" }],
+          cardNumber:[{ required: true, message: "请输入卡号", trigger: "change" }],
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           titleProper:[{ required: true}],
           subtitle:[{ required: true}],
