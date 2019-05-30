@@ -37,10 +37,10 @@
           </div>
           <div class="textBox">
             <p>
-              
+
                 注册日期 :
                 <span>{{this.cardData.startTime.substring(0,10)}}</span>
-              
+
             </p>
             <p>
               有效期限 :
@@ -56,7 +56,7 @@
     </div>
     <!--表单提交 -->
     <section class="entryBox">
-      <div class="formBox"> 
+      <div class="formBox">
         <el-form label-width="80px" label-position="left" ref="changeForm" :model="changeForm" :rules="changeRules">
         <el-form-item label="充值金额" prop="deposit">
           <el-input @blur="jugeCash" v-model="changeForm.deposit" autocomplete="off"></el-input>
@@ -139,7 +139,7 @@ export default {
 
       console.log("我就当你读卡了");
     },
-    
+
     // 金额判定按钮
     jugeCash() {
       this.cashJugeApi();
@@ -155,7 +155,7 @@ export default {
     /*------ API ------*/
     // 调查读者卡信息
     readCardApi(data) {
-      
+
       axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
         console.log("用户信息",res);
         if (res.data.state === true) {
@@ -166,7 +166,7 @@ export default {
           this.cardData.startTime = data.cardCreatTime
           this.cardData.vaildTime = data.cardExpireTime
           this.cardData.state = data.state
-          
+
           this.lastCardNum = this.cardInput
         } else {
           this.$message.error(res.data.msg);

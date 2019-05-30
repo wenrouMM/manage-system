@@ -27,7 +27,7 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
+                <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectSearchCheck(searchForm.makeMethod)">
                   <el-option label="索书号" value="0"></el-option>
                   <el-option label="馆藏码" value="1"></el-option>
                   <el-option label="ISBN" value="2"></el-option>
@@ -62,9 +62,13 @@
             <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="lendingPermission" label="状态">
+            <el-table-column align="center" prop="lendState" label="状态">
               <template slot-scope="scope">
-                <span>{{scope.row.lendingPermission ==1?'不外借':'可外借'}}</span>
+                <span v-if="scope.row.lendState==0">不在架</span>
+                <span v-else-if="scope.row.lendState==1">在架</span>
+                <span v-else-if="scope.row.lendState==2">借出</span>
+                <span v-else-if="scope.row.lendState==3">剔除</span>
+                <span v-else="scope.row.lendState==4">损坏</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">
@@ -465,10 +469,16 @@
             case 4:
               console.log('状态')
               this.selectSearchForm.state=this.searchForm.searchData;
-              if(this.selectSearchForm.state=='不外借'){
-                newState=1
-              }else if(this.selectSearchForm.state=='可外借'){
+              if(this.selectSearchForm.state=='不在架'){
                 newState=0
+              }else if(this.selectSearchForm.state=='在架'){
+                newState=1
+              }else if(this.selectSearchForm.state=='借出'){
+                newState=2
+              }else if(this.selectSearchForm.state=='剔除'){
+                newState=3
+              }else if(this.selectSearchForm.state=='损坏'){
+                newState=4
               }
               break;
           }
@@ -523,9 +533,14 @@
       }
     },
     methods: {
+      selectSearchCheck(val){
+        console.log('查询val',val)
+        this.searchData=val
+      },
       findCherries(fruit) {
         return fruit.value ===this.damageId;
       },
+
       selectCheck(val){
         let harmData=[]
         console.log('更改的数据',val)
@@ -888,7 +903,10 @@
               this.currentPage = 1; // 回到第一页显示
               this.tableLoading = false;
             } else {
-              this.$message.error(res.data.msg);
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
               this.tableLoading = false;
             }
           })
@@ -912,7 +930,10 @@
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.tableLoading = false;
             } else {
-              this.$message.error(res.data.msg);
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
               this.tableLoading = false;
             }
           })

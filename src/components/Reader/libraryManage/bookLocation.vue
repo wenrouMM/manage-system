@@ -8,7 +8,7 @@
       <div style="background-color: #ededed;width: 250px;height: 200px"></div>
       <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
-          <el-form-item label="条　　码 :　" prop="barcode">
+          <el-form-item label="馆内图书编码 :　" prop="barcode" label-width="130px">
             <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入条码"></el-input>
           </el-form-item>
           <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
@@ -22,26 +22,19 @@
           <el-form-item label="图书类型 :　" prop="bookType" style="width: 330px">
             <span>{{ruleForm.bookType}}</span>
           </el-form-item>
-          <el-form-item label="馆内图书编码 :" prop="bookCode">
-            <el-input v-model="ruleForm.bookCode" placeholder="请输入馆内图书编码"></el-input>
-          </el-form-item>
-          <el-form-item style="width: 150px">
-            <el-button type="primary" round>生成条形码</el-button>
-          </el-form-item>
-          <el-form-item>
-            <div style="width: 160px;border: 1px solid lightgray;height: 40px;border-radius: 10px"></div>
-          </el-form-item>
-        </div>
-        <div style="display: flex;flex-direction: row;margin-top: 30px">
           <el-form-item label="rfid :" prop="rfid" label-width="60px">
             <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
-          <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
+          <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 100px;" label-width="90px">
             <span>{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
           </el-form-item>
           <span @click="locationMessage" id="locaTion">
             位置选择
           </span>
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 30px">
+          <el-button type="primary" round style="margin-right: 30px">生成条形码</el-button>
+          <div style="width: 160px;border: 1px solid lightgray;height: 40px;border-radius: 10px"></div>
         </div>
         <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
       </el-form>
@@ -109,11 +102,10 @@
           bookIndex:'',
           bookType:'',
           bookTypeCode:'',
-          bookCode:'',
           rfid:'',
           bookLocation:'',
           direction:'',
-          code:''
+          code:'',
         },//添加的数据
         Address:{ //层架绑定的位置信息
           fkStoreId:'',
@@ -171,7 +163,7 @@
       barcodeClick:function(){
         console.log('input框值的变化')
         console.log(this.ruleForm.barcode)
-        this.axios.get(bookLocation.barcode, {params: {barcode: this.ruleForm.barcode}}).then((res) => {
+        this.axios.get(bookLocation.barcode, {params: {code: this.ruleForm.barcode}}).then((res) => {
           //console.log(res.data)
           if (res.data.state == true) {
             console.log('isbn的数据', res.data)
@@ -189,6 +181,7 @@
                 this.ruleForm.bookIndex=item.searchNumber
                 this.ruleForm.bookType=item.fkTypeName
                 this.ruleForm.bookTypeCode=item.fkTypeCode
+                this.ruleForm.id=item.id
               }
             }
           }
@@ -278,14 +271,9 @@
             console.log('submit!');
             this.formLoading=true
             this.axios.post(bookLocation.location,{
-              libraryBookCode:this.ruleForm.bookCode,
-              searchNumber:this.ruleForm.bookIndex,
-              bookName:this.ruleForm.bookName,
-              barcode:this.ruleForm.barcode,
-              fkTypeCode:this.ruleForm.bookTypeCode,
-              fkTypeName:this.ruleForm.bookType,
+              code:this.ruleForm.barcode,
               rfid:this.ruleForm.rfid,
-              fkLocationId:this.ruleForm.code,
+              locationId:this.ruleForm.code,
             }).then((res)=>{
               console.log(res)
               if(res.data.state==true){

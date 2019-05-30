@@ -8,17 +8,22 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="buttonBox">
-            <button class="delete" @click="drawbackBtn(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>批量下架
+            <button class="deongaree" @click="groundingBtn(tableChecked)">
+              批量上架
+            </button>
+            <button class="delete" @click="undercarriageBtn(tableChecked)">
+              批量下架
             </button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
                 <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
-                  <el-option label="ISBN" value="0"></el-option>
-                  <el-option label="索书号" value="1"></el-option>
-                  <el-option label="书名" value="2"></el-option>
+                  <el-option label="索书号" value="0"></el-option>
+                  <el-option label="馆藏码" value="1"></el-option>
+                  <el-option label="isbn" value="2"></el-option>
+                  <el-option label="书名" value="3"></el-option>
+                  <el-option label="状态" value="4"></el-option>
                 </el-select>
                 <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
               </el-form-item>
@@ -48,19 +53,23 @@
             <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="place" label="图书位置" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="录入员" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="上架时间" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="类型" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="lendingPermission" label="状态">
+            <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="author" label="录入员" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="updateTime" label="上架时间" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeName" label="类型" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="lendState" label="状态">
               <template slot-scope="scope">
-                <span>{{scope.row.lendingPermission ==1?'不外借':'可外借'}}</span>
+                <span v-if="scope.row.lendState==0">不在架</span>
+                <span v-else-if="scope.row.lendState==1">在架</span>
+                <span v-else-if="scope.row.lendState==2">借出</span>
+                <span v-else-if="scope.row.lendState==3">剔除</span>
+                <span v-else="scope.row.lendState==4">损坏</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" prop="lendState" label="操作">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
-                <span class="ban" @click="deleteBtn(scope.$index, scope.row)">下架</span>
+                <span class="ban" @click="deleteBtn(scope.$index, scope.row)" >{{scope.row.lendState==0?'上架':'下架'}}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -114,7 +123,7 @@
 
 <script>
   import axios from "axios";
-  import { collection } from "@request/api/base.js";
+  import { bookLocationInfo } from "@request/api/base.js";
 
   export default {
     data() {
@@ -130,9 +139,11 @@
           searchData:"",
         },
         selectSearchForm:{
-          isbn:'',//isbn
           searchNumber:'',//索书号
+          code:'',//馆藏码
+          isbn:'',//isbn
           bookName:'',//书名
+          state:'',//状态
         },
         searchData:'',
         /*初始化 */
@@ -142,6 +153,7 @@
         pageSize: 10,
         total: 0,
         tableData: [],
+        iDs:[],
         id:'',
         tableChecked: [], // 全选绑定的数据
       };
@@ -153,21 +165,41 @@
         if(this.searchData){
           switch (this.searchData/1) {
             case 0:
-              console.log('isbn')
-              this.selectSearchForm.isbn=this.searchForm.searchData;
-              break;
-            case 1:
               console.log('索书号')
               this.selectSearchForm.searchNumber=this.searchForm.searchData;
               break;
+            case 1:
+              console.log('馆藏码')
+              this.selectSearchForm.code=this.searchForm.searchData;
+              break;
             case 2:
+              console.log('isbn')
+              this.selectSearchForm.isbn=this.searchForm.searchData;
+              break;
+            case 3:
               console.log('书名')
               this.selectSearchForm.bookName=this.searchForm.searchData;
+              break;
+            case 4:
+              console.log('状态')
+              this.selectSearchForm.state=this.searchForm.searchData;
+              if(this.selectSearchForm.state=='不在架'){
+                newState=0
+              }else if(this.selectSearchForm.state=='在架'){
+                newState=1
+              }else if(this.selectSearchForm.state=='借出'){
+                newState=2
+              }else if(this.selectSearchForm.state=='剔除'){
+                newState=3
+              }else if(this.selectSearchForm.state=='损坏'){
+                newState=4
+              }
               break;
           }
         }else{
           console.log('为空')
           this.selectSearchForm.searchNumber=''
+          this.selectSearchForm.code=''
           this.selectSearchForm.isbn=''
           this.selectSearchForm.bookName=''
           newState=''
@@ -196,20 +228,34 @@
         console.log('全选按钮之后的数据',val);
         this.tableChecked = val;
       },
-      //批量下架
-      drawbackBtn(){
+      //批量上架
+      groundingBtn(){
         if(this.tableChecked.length){
-          this.i=3
+          this.i=0
           this.centerDialogVisible=true
         } else {
-          this.$message.error('请先选择删除对象')
+          this.$message.error('请先选择上架对象')
+        }
+      },
+      //批量下架
+      undercarriageBtn(){
+        if(this.tableChecked.length){
+          this.i=1
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择下架对象')
         }
       },
       //下架按钮
       deleteBtn(index,row){
-        this.i=5
-        this.addForm.id=row.id
-        this.dialogFormVisible=true
+        console.log('上下架修改',row.id)
+        this.id=row.id
+        if(row.lendState==0){
+          this.i=0
+        }else{
+          this.i=1
+        }
+        this.centerDialogVisible=true
       },
       //下架弹框取消按钮
       cancelCheck(){
@@ -217,7 +263,55 @@
       },
       //下架弹框确定按钮
       submitDialog(){
+        console.log('this.tableChecked',this.tableChecked)
+        this.iDs.length=0
+        if(this.tableChecked.length){
+          for(const item of this.tableChecked){
+            this.iDs.push(item.id)
+          }
+        }else{
+          this.iDs.push(this.id)
+        }
 
+        if(this.i==0){
+          this.axios.post(bookLocationInfo.LendState,{
+            state:1,
+            ids:this.iDs,
+          }).then((res)=>{
+            if(res.data.state==true){
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              });
+              this.centerDialogVisible=false
+              this.searchApi(this.searchTimeForm)
+            }else{
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
+            }
+          })
+        }else{
+          this.axios.post(bookLocationInfo.LendState,{
+            state:0,
+            ids:this.iDs,
+          }).then((res)=>{
+            if(res.data.state==true){
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              });
+              this.centerDialogVisible=false
+              this.searchApi(this.searchTimeForm)
+            }else{
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
+            }
+          })
+        }
       },
       // 分页按钮
       jumpBtn() {
@@ -246,11 +340,11 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(collection.select, {
+          .get(bookLocationInfo.select, {
             params: value
           })
           .then(res => {
-            console.log("书籍典藏", res.data);
+            console.log("图书位置信息", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
@@ -271,11 +365,11 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(collection.select, {
+          .get(bookLocationInfo.select, {
             params: value
           })
           .then(res => {
-            console.log("损坏记录", res.data);
+            console.log("图书位置信息", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
@@ -305,31 +399,9 @@
 </script>
 
 <style scoped>
-  .searchButton{
-    cursor: default;
-    background-color: #0096FF;
-    height:39px ;
-    width: 60px;
-    border-radius: 3px;
-    position: absolute;
-    left: 910px;
-  }
-  .searchButton:hover{
-    background-color: rgba(0,150,255,0.8);
-  }
-  .edit {
-    color: #00d7f0;
-    cursor: pointer;
-    margin-right: 20px;
-  }
   .ban {
     color: #ff5c3c;
     cursor: pointer;
-  }
-  .green{
-    color: #01D793;
-    cursor: pointer;
-    margin-right: 20px;
   }
   .buttonBox {
     margin-bottom: 30px;
@@ -372,6 +444,7 @@
   .buttonBox .delete .deleteIcon {
     margin-right: 6px;
   }
+
   .buttonBox .blue {
     background: #31D6FF;
     border-radius: 10px;
@@ -379,15 +452,7 @@
   .buttonBox .deongaree {
     background: #4D94FF;
     border-radius: 10px;
-    margin-left: 10px;
-  }
-  .buttonBox .blue .blueIcon {
-    margin-right: 6px;
-  }
-  .buttonBox .green {
-    background: #01EECA;
-    border-radius: 10px;
-    margin-left: 10px;
+    margin-right: 10px;
   }
   #Notice {
     background: #ffffff;
@@ -396,57 +461,14 @@
     display: flex;
     justify-content: space-between;
   }
-  .page_div {
-    text-align: center;
-    margin-top: 30px;
-  }
-
-  .confirm_bt {
-    display: inline-block;
-    text-align: center;
-    width: 70px;
-    padding: 8px 8px;
-  }
-  .gray_radio_border{
-    border: 1px solid #DCDCDC;
-    width:100%;
-    border-radius: 5px;
-    padding:10px 20px
-  }
   .button_s {
     width: 90px;
     font-size: 16px;
     text-align: center;
   }
-
-  #loginrecord {
-    background: #ffffff;
-  }
-
-  .time_p {
-    margin-left: 30px;
-  }
-
-  /*.el-select-dropdown__item {*/
-  /*color: #878787;*/
-  /*}*/
-
-  #title {
-    display: inline-block;
-    padding-left: 10px;
-    border-left: 5px solid #1e9eff;
-    color: #878787;
-  }
-
   #loginrecord .el-table {
     border: 1px solid #eaeaea;
     /*border-width: 0 1px 1px 1px ;*/
     border-bottom: 0;
-  }
-  #isbnSearch{
-    width: 25px;
-    width:25px;
-    margin-left: 18px;
-    margin-top: 7px
   }
 </style>
