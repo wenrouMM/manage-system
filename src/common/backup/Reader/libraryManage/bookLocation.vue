@@ -36,7 +36,7 @@
           <el-form-item label="rfid :" prop="rfid" label-width="60px">
             <el-input v-model="ruleForm.rfid" placeholder="请输入rfid"></el-input>
           </el-form-item>
-          <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;margin-right: 70px" label-width="90px">
+          <el-form-item label="图书位置 :" prop="bookLocation" style="margin-left: 70px;" label-width="90px">
             <span>{{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}</span>
           </el-form-item>
           <span @click="locationMessage" id="locaTion">

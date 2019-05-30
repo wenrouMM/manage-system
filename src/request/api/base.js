@@ -7,14 +7,22 @@ let fileUrl = 'http://192.168.2.54:8090/'  */
 //var url='http://127.0.0.1:8088/'
 
 //var url = 'http://192.168.2.31:8088/'
-var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.121:8088/'
 
 
 
+<<<<<<< HEAD
 var imgurl='http://192.168.2.121:8090/'
 let fileUrl = 'http://192.168.2.121:8090/'
+=======
+//var imgurl='http://192.168.2.31:8090/'
+//let fileUrl = 'http://192.168.2.31:8090/'
+import {IP} from '../../../static/config'
+>>>>>>> c21205a03f6eb807ab8d3211b7924d6f5c6b8f89
 /*------ 文件上传模块 ------*/
-
+var url = IP.url
+var imgurl= IP.imgurl
+let fileUrl = IP.fileUrl
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,
   backImg:`${fileUrl}filemodule/uploadImg/addBackage`,
@@ -214,9 +222,14 @@ export const libbookRegist = {
 }
 //图书位置绑定
 export const bookLocation = {
-  location:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/add`, //图书位置绑定
-  barcode:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectOneT`,//图书位置条码
-  tree:`${url}tibetmuseummodule/bindingPagesForBookLocationsInLibraries/selectLocationTree`, //图书位置树
+  location:`${url}bookcollectionmodule/collectionBing/setBing`, //图书位置绑定
+  barcode:`${url}bookcollectionmodule/collectionBing/selectByCode`,//图书位置条码
+  tree:`${url}bookcollectionmodule/collectionBing/selectLocationTree`, //图书位置树
+}
+//图书位置信息
+export const bookLocationInfo = {
+  LendState:`${url}bookcollectionmodule/infoPage/editLendState`, //上架修改
+  select:`${url}bookcollectionmodule/infoPage/select`,//分页查询
 }
 //藏馆信息
 export const libnews = {

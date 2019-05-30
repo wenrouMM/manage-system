@@ -396,6 +396,13 @@ export default new Router({
           component: resolve => require(['../components/Finance/refunds.vue'], resolve)
         },
         {
+          path: '/logoff',
+          meta: {
+            title: '注销页面'
+          },
+          component: resolve => require(['../components/Finance/logoff.vue'], resolve)
+        },
+        {
           path:'/refundsEnd/:card',
           meta:{
             juge:false,

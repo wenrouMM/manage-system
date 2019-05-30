@@ -20,16 +20,17 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
-                  <el-option label="索书号" value="0"></el-option>
-                  <el-option label="馆藏码" value="1"></el-option>
-                  <el-option label="ISBN" value="2"></el-option>
-                  <el-option label="书名" value="3"></el-option>
-                  <el-option label="状态" value="4"></el-option>
-                </el-select>
-                <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
+              <el-form-item label="用户名 :" placeholder="请输入用户名">
+                <el-input v-model="searchForm.name"></el-input>
               </el-form-item>
+              <el-form-item label="处理方式 :">
+                <el-select v-model="searchForm.method" clearable placeholder="请选择处理方式">
+                  <el-option label="充值" value="0"></el-option>
+                  <el-option label="退款" value="1"></el-option>
+                  <el-option label="全部" value=""></el-option>
+                </el-select>
+              </el-form-item>
+
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
               </el-form-item>
@@ -56,15 +57,15 @@
                 <span>{{scope.row.state ==1?'退款金额':'押金充值'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="cardNumber" label="读者卡号"></el-table-column>
+            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
             <el-table-column align="center" prop="momentum" label="金额"></el-table-column>
-            <el-table-column align="center" prop="createTime" label="处理日期"></el-table-column>
+            <el-table-column align="center" prop="createTime" label="处理日期" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkHandleModeName" label="操作用户"></el-table-column>
-            <el-table-column align="center" prop="compensationNum" label="流水标号"></el-table-column>
+            <el-table-column align="center" prop="serialNumber" label="流水标号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
           </el-table>
-          <div style="width: 100%;height: 50px;background-color: #0096FF;line-height: 50px;color: white">&nbsp;&nbsp;&nbsp;合计&nbsp;:&nbsp;{{TotalRecharge}}</div>
+          <div style="width: 100%;height: 50px;background-color: #0096FF;line-height: 50px;color: white">&nbsp;&nbsp;&nbsp;合计&nbsp;:&nbsp;￥{{TotalRecharge}}元</div>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
             <el-pagination
@@ -104,7 +105,7 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { recharge } from "../../request/api/base.js";
+  import { recharge } from "@request/api/base.js";
 
   export default {
     data() {
@@ -117,12 +118,8 @@
         TotalRecharge:'',
         searchForm: {
           // 接受搜索表单的数据
-          makeMethod:'',
-          userName:'',
-          cardNum:'',
-          startTime:'',
-          endTime:'',
-          currentPage: 0
+          name:'',
+          method:"",
         },
         addForm:{
           damageMothod:'',
@@ -159,7 +156,8 @@
     computed: {
       searchTimeForm(){
         let newSearch={
-          name:this.searchForm.damageMothod,
+          state:this.searchForm.method,
+          name:this.searchForm.name,
           pageSize: this.pageSize,
           currentPage: 1,
         }
@@ -174,9 +172,9 @@
       //退款按钮
       drawbackBtn(){
         this.$router.push({
-          path:'/refunds',
+          path:'/logoff',
           query: {
-            method: 'drawback'
+            title: '注销'
           }
         });
       },
@@ -184,6 +182,9 @@
       rechargeBtn(){
         this.$router.push({
           path:'/refunds',
+          query: {
+            title:'充值'
+          }
         });
       },
       // 查询按钮
@@ -220,9 +221,35 @@
             console.log("充值记录", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
+              this.TotalRecharge=res.data.money
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.currentPage = 1; // 回到第一页显示
+              this.tableLoading = false;
+            } else {
+              this.$message.error(res.data.msg);
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(recharge.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("充值管理", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.TotalRecharge=res.data.money
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.tableLoading = false;
             } else {
               this.$message.error(res.data.msg);
@@ -238,7 +265,7 @@
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {
