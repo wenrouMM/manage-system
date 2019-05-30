@@ -95,6 +95,10 @@
 }
 #harm #harm_noneTopBorder .el-form-item__error{
   margin-top: 0px;
+  display: none;
+}
+#cardErr .el-form-item__error{
+  display: none;
 }
 #harm #harm_noneTopBorder .el-input .el-input__inner{
   border: none;
