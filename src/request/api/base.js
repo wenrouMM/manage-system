@@ -7,12 +7,17 @@ let fileUrl = 'http://192.168.2.54:8090/'  */
 //var url='http://127.0.0.1:8088/'
 
 //var url = 'http://192.168.2.31:8088/'
-var url = 'http://192.168.2.121:8088/'
+//var url = 'http://192.168.2.121:8088/'
 
 
 
-var imgurl='http://192.168.2.121:8090/'
-let fileUrl = 'http://192.168.2.121:8090/'
+//var imgurl='http://192.168.2.31:8090/'
+//let fileUrl = 'http://192.168.2.31:8090/'
+import {IP} from '../../../static/config'
+/*------ 文件上传模块 ------*/
+var url = IP.url
+var imgurl= IP.imgurl
+let fileUrl = IP.fileUrl
 /*------ 文件上传模块 ------*/
 
 export const uploadInt = {
@@ -372,4 +377,12 @@ export const catalog ={
   typeTree:`${url}bookcollectionmodule/cataTbBookInfo/selectAllBookType`,
   publishTree:`${url}bookcollectionmodule/cataTbBookInfo/selectPressTree`,
   language:`${url}bookcollectionmodule/cataTbBookInfo/getLanguage`
+}
+
+//个人中心
+export const PersonalCentre={
+  userInfo:`${url}authmodule/managerInformation/getNowUser`,
+  editPassword:`${url}authmodule/loginInformation/currency/edit`,
+  editUsername:`${url}authmodule/managerInformation/editPersonalCenterName`,
+  resetPassword:`${url}authmodule/loginInformation/edit`
 }

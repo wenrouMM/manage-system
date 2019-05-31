@@ -21,31 +21,30 @@
       <div class="infoList">
         <div class="rowList">
           <div class="text">用户名:</div>
-          <div class="content">a384713827@qq.com</div>
+          <div class="content">{{userName}}</div>
           <div class="fix" @click="userBtn">修改</div>
         </div>
         <div class="rowList">
           <div class="text">邮箱:</div>
-          <div class="content">a384713827@qq.com</div>
-          <div class="fix">修改</div>
+          <div class="content">{{userEmail}}</div>
         </div>
 
         <div class="rowList">
           <div class="text">电话:</div>
-          <div class="content">a384713827@qq.com</div>
+          <div class="content">{{userPhone}}</div>
         </div>
         <div class="rowList">
           <div class="text">身份证:</div>
-          <div class="content">a384713827@qq.com</div>
+          <div class="content">{{userCard}}</div>
         </div>
         <div class="rowList">
           <div class="text">密码:</div>
-          <div class="content">******</div>
+          <div class="content">{{hidePassword}}</div>
           <div class="fix" @click="pwdBtn">修改</div>
         </div>
         <div class="rowList">
           <div class="text">角色等级:</div>
-          <div class="content">a384713827@qq.com</div>
+          <div class="content">{{userGrade}}</div>
         </div>
       </div>
     </section>
@@ -84,7 +83,7 @@
         <div class="foot">
           <div class="buttonBox">
             <span class="cancel" @click="appear = false">取消</span>
-            <span class="confrim">确定</span>
+            <span class="confrim" @click="editnameFun">确定</span>
           </div>
         </div>
       </div>
@@ -118,7 +117,7 @@
         <div class="foot">
           <div class="buttonBox">
             <span class="cancel" @click="pwdDialog = false">取消</span>
-            <span class="confrim">确定</span>
+            <span class="confrim" @click="editpasswordFun">确定</span>
           </div>
         </div>
       </div>
@@ -128,7 +127,7 @@
 </template>
 
 <script>
-import {uploadInt} from '@/request/api/base.js'
+import {uploadInt , PersonalCentre} from '@/request/api/base.js'
 import myUpload from "vue-image-crop-upload";
 export default {
   data() {
@@ -144,14 +143,42 @@ export default {
       changeInput:'',//正常输入框
       oldInput:'', //旧密码输入框
       newInput:'', // 新密码输入框
+      id:'',
+      userName:'',
+      userEmail:'',
+      userPhone:'',
+      userCard:'',
+      userPassword:'',
+      userGrade:'',
+      hidePassword:''
     };
   },
+  mounted(){
+    this.InitializationFun()
+  },
   methods: {
+    //初始化信息
+    InitializationFun(){
+      this.axios.get(PersonalCentre.userInfo).then((res)=>{
+        console.log(res)
+        this.id=res.data.row.id;
+        this.userName=res.data.row.username;
+        this.userEmail=res.data.row.email;
+        this.userPhone=res.data.row.phone;
+        this.userCard=res.data.row.idCard;
+        this.userPassword=res.data.row.operationPassword;
+        this.userGrade=res.data.row.fkRoleNames;
+        this.hidePassword=''
+        for(var i=0;i<=this.userPassword.length;i++){
+          this.hidePassword+='*'
+        }
+      })
+    },
     toggleShow() {
       this.show = !this.show;
     },
     // 重要弹框
-    
+
     back() {
       this.$router.push({ path: "/" });
     },
@@ -159,11 +186,56 @@ export default {
     userBtn(){
       this.appear = true
     },
+    //修改用户名确定按钮
+    editnameFun(){
+      console.log("修改的数组",{id:this.id,username:this.changeInput})
+      this.axios.put(PersonalCentre.editUsername,{id:this.id,username:this.changeInput}).then((res)=>{
+        console.log('修改用户名结果',res)
+        if(res.data.state==true){
+          this.$message({
+            message:res.data.msg,
+            type: 'success'
+          });
+          //this.InitializationFun()
+          this.userName=this.changeInput
+          this.appear=false
+        }else{
+          this.$message({
+            message:res.data.msg,
+            type: 'error'
+          });
+        }
+      })
+    },
     // 修改密码
     pwdBtn(){
-      this.oldInput = ''
+      this.oldInput = this.userPassword
       this.newInput = ''
       this.pwdDialog = true
+    },
+    //修改密码确定按钮
+    editpasswordFun(){
+      this.axios.put(PersonalCentre.editPassword,{password:this.oldInput,newPassword:this.newInput}).then((res)=>{
+        console.log('修改密码后的结果',res)
+        if(res.data.state==true){
+          this.$message({
+            message:res.data.msg,
+            type: 'success'
+          });
+          //this.InitializationFun()
+          this.hidePassword=''
+          this.userPassword=this.newInput
+          for(var i=0;i<=this.userPassword.length;i++){
+            this.hidePassword+='*'
+          }
+          this.pwdDialog=false
+        }else{
+          this.$message({
+            message:res.data.msg,
+            type: 'error'
+          });
+        }
+      })
     },
     /*------ 图片上传相关 ------*/
     cropSuccess(imgDataUrl, field) {
@@ -177,14 +249,13 @@ export default {
       console.log(jsonData);
       console.log("field: " + field);
       this.imgDataUrl = this.cutimgUrl;
-      
     },
     cropUploadFail(status, field) {
       console.log("-------- upload fail --------");
       console.log(status);
       console.log("field: " + field);
     },
-    
+
   },
   components:{
     myUpload
@@ -235,6 +306,9 @@ export default {
   line-height: 60px;
   font-size: 20px;
   cursor: pointer;
+}
+.fix:hover{
+  color: #878787;
 }
 .headIcon {
   width: 140px;
@@ -324,10 +398,10 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 5;
   width: 605px;
-  padding-top:30px; 
+  padding-top:30px;
 	padding-bottom: 30px;
 	background-color: #ffffff;
-	box-shadow: 0px 0px 21px 0px 
+	box-shadow: 0px 0px 21px 0px
     rgba(134, 185, 255, 0.4);
   box-sizing: border-box;
 }
@@ -397,9 +471,15 @@ export default {
   cursor: pointer;
   margin-right: 20px;
 }
+.cancel:hover{
+  color: #91959b;
+}
 .confrim{
   cursor: pointer;
   color: #0072ff;
   line-height: 24px;
+}
+.confrim:hover{
+  color:#81b0e9
 }
 </style>
