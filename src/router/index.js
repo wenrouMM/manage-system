@@ -36,8 +36,8 @@ import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCard
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 import LoanRecorde from '../components/Circulate/loanRecords.vue'
 import LoanHistory from '../components/Circulate/loanHistory.vue'
-import BorrowingBooks from '../components/Reader/LoanManagement/borrowingBooks.vue'
-import BorrowingStatus from '../components/Reader/LoanManagement/borrowingStatus.vue'
+import BorrowingBooks from '../components/Circulate/borrowingBooks.vue'
+
 import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
 import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
 import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
@@ -48,9 +48,7 @@ import DepositDetails from '../components/Reader/RechargeManagement/depositDetai
 import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
 import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
 import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
-import IncreditRecord from '../components/Reader/IncreditManagement/increditRecord.vue'
-import IncreditHistory from '../components/Reader/IncreditManagement/incredithistory.vue'
-import IncreditSetting from '../components/Reader/IncreditManagement/increditsettings.vue'
+
 import DishonestyRecords from '../components/Reader/DishonestyManagement/dishonestyRecords'
 import DishonestyHistory from '../components/Reader/DishonestyManagement/dishonestyHistory'
 import Login from '@/components/login.vue'
@@ -509,27 +507,6 @@ export default new Router({
               path: '/publishhouse',
               component: BookPublishHouse
             },
-
-
-
-            /*
-            {
-              path: "/borrowingbooks",
-              component: BorrowingBooks
-            },
-            {
-              path: "/borrowingstatus",
-              component: BorrowingStatus
-            },
-            {
-              path: "/returnbooks",
-              component: ReturnBooks
-            },
-            {
-              path: "/returnstatus",
-              component: ReturnStatus
-            },
-            */
             
            
           ]

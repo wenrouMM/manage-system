@@ -11,7 +11,7 @@
     <!-- 用户信息卡查询 -->
     <div class="cardData">
       <div class="selectForm">
-        <p class="balance">当前余额:￥{{this.cardData.money==''?0:this.cardData.money}}</p>
+        <p class="balance">当前余额:￥{{this.cardData.balance==''|| this.cardData.balance == null?0:this.cardData.balance}}</p>
         <div class="searchBox">
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
@@ -87,7 +87,7 @@ export default {
       lastCardNum: "", // 暂存卡号
       // 读者卡信息
       cardData: {
-        money: "",
+        balance: "",
         userName: "",
         type: "",
         sex: "",
@@ -166,7 +166,7 @@ export default {
           this.cardData.startTime = data.cardCreatTime
           this.cardData.vaildTime = data.cardExpireTime
           this.cardData.state = data.state
-
+          this.cardData.balance = data.balance
           this.lastCardNum = this.cardInput
         } else {
           this.$message.error(res.data.msg);
