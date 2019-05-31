@@ -237,7 +237,7 @@
         }
       },
     },
-    mounted () {
+    created () {
       this.login_recod(this.searchTimeForm) // 调用查询接口获取数据
     }
   }

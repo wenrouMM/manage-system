@@ -2,12 +2,11 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
-        <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">借阅历史记录</span>
+            <span class="titleName">借阅记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -20,14 +19,16 @@
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
-                  v-model="searchForm.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  :picker-options="pickerOptions"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -37,26 +38,19 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table
-              class="tableBorder"
-              :data="tableData"
-              style="width: 100%; text-align:center;"
-              :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-            >
-              <el-table-column width="110" align="center" prop="index" type="index" label="序号">
+            <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+              <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="170" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="170" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" width="200" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" width="200" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="200" label="书籍编码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
-              <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
-              <el-table-column align="center" prop="realityReturnTime" width="200" label="实际归还时间"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="200" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="createTime" width="200" label="预计归还时间"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
@@ -88,7 +82,7 @@
 </template>
 
 <script>
-  import {loan} from '../../../request/api/base.js'
+  import {loan} from '@request/api/base.js'
   import moment from "moment";
   export default {
     data() {
@@ -109,9 +103,24 @@
         rowStyle: {
           height: "60px"
         },
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
+        },
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            );
           }
         },
         total: 0,
@@ -122,7 +131,8 @@
           // 搜索需要的表单数据
           userName: "",
           cardNum: "",
-          date:[]
+          beginTime: "",
+          endTime: "",
         },
         tableLoading:false,
         tableData: [
@@ -141,20 +151,15 @@
         let searchForm = {
           pageSize: this.pageSize,
           currentPage: 1,
-          hisCardNum:this.searchForm.cardNum,
-          hisName:this.searchForm.userName,
-          hisStartTime: null,
-          hisEndTime: null
+          logCardNum:this.searchForm.cardNum,
+          logName:this.searchForm.userName,
+          logStartTime: !this.searchForm.beginTime
+            ? null
+            : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
+          logEndTime:!this.searchForm.endTime
+            ? null
+            : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
         };
-        if (date != null && date != "") {
-          searchForm.hisStartTime = moment(this.searchForm.date[0]).format(
-            "YYYY-MM-DD"
-          ); //开始时间
-          searchForm.hisEndTime = moment(this.searchForm.date[1]).format(
-            "YYYY-MM-DD"
-          );
-        }
-
         return searchForm;
       },
     },
@@ -163,13 +168,15 @@
         // v-mode绑定好像会默认转数据类型
         let page = Math.ceil(this.total / this.pageSize)
         page ==0?1:page;
-        if(this.pageInput>page){
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
           this.pageInput = 1
           this.$nextTick(()=>{
             this.$refs.text.value = 1 // hack方法
             console.log('Vmode绑定值',this.pageInput)
           })
         }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
           let num = parseInt(this.pageInput)
           this.current_change(num)
         }
@@ -193,7 +200,7 @@
         //获取登录记录 或者说是加载数据 这里应该请求的时候加状态动画
         this.tableLoading= true; // 加载前控制加载状态
         this.axios
-          .get(loan.history, {
+          .get(loan.table, {
             params: value
           })
           .then(res => {

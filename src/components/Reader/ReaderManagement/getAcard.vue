@@ -25,7 +25,7 @@
               style="width:100px; height:100px; border-radius:50%;position: relative"
             >
               <img
-                src="../../../../src/base/img/menu/tbhs.png"
+                src="../../../base/img/normalHead.jpg"
                 style="position: absolute;top: 0;left: 0;width:100px; height:100px; border-radius:50%;"
                 v-if="!addForm.preloading"
               >

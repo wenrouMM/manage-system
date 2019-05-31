@@ -22,7 +22,7 @@
             <section class="searchBox">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" >
                 <el-form-item label="角色名称:" size="160">
-                  <el-input size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
+                  <el-input clearable size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间:" size="130">
                   <el-date-picker
@@ -251,19 +251,21 @@ export default {
 
   methods: {
     jumpBtn() {
-      // v-mode绑定好像会默认转数据类型
-      let page = Math.ceil(this.total / this.pageSize)
-      page ==0?1:page;
-      if(this.pageInput>page){
-        this.pageInput = 1
-        this.$nextTick(()=>{
-          this.$refs.text.value = 1 // hack方法
-          console.log('Vmode绑定值',this.pageInput)
-        })
-      }else{
-        let num = parseInt(this.pageInput)
-        this.current_change(num)
-      }
+     console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
+        }
     },
     /*====== 2.0 表单提交相关函数 ======*/
     handleSelectionChange(val) {

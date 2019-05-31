@@ -60,11 +60,11 @@
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" label="操作" >
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="editBtn(scope.$index, scope.row)">编辑</span>
-                  <span class="ban" @click="banBtn(scope.$index, scope.row)">禁用</span>
+                  <!-- <span class="ban" @click="banBtn(scope.$index, scope.row)">禁用</span> -->
                 </template>
               </el-table-column>
             </el-table>
@@ -79,16 +79,23 @@
                 @current-change="current_change"
               >
                 <slot>
-              <span>
-                前往
-                <div class="el-input el-pagination__editor is-in-pagination">
-                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
-                </div>
-                页
-              </span>
+                  <span>
+                    前往
+                    <div class="el-input el-pagination__editor is-in-pagination">
+                      <input
+                        ref="text"
+                        type="number"
+                        v-model="pageInput"
+                        autocomplete="off"
+                        min="1"
+                        max="1"
+                        class="compo el-input__inner"
+                      >
+                    </div>页
+                  </span>
                 </slot>
               </el-pagination>
-              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
+              <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
           <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
@@ -99,7 +106,7 @@
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="deleteDialog" width="500px" center>
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
-          <div slot="footer" >
+          <div slot="footer">
             <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
             <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
           </div>
@@ -118,7 +125,7 @@
         >
           <el-form ref="changeForm" :model="changeForm" :rules="addRules">
             <!-- 表单域 -->
-            <el-form-item  label="等级名称" prop="name" :label-width="formLabelWidth">
+            <el-form-item label="等级名称" prop="name" :label-width="formLabelWidth">
               <el-input v-model="changeForm.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="续借次数" prop="renewNum" :label-width="formLabelWidth">
@@ -130,21 +137,27 @@
             <el-form-item label="借书数量" prop="bookNum" :label-width="formLabelWidth">
               <el-input v-model="changeForm.bookNum" autocomplete="off"></el-input>
             </el-form-item>
-            
-            <el-form-item  label="押金金额" prop="deposit" :label-width="formLabelWidth">
+
+            <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
               <el-input :disabled="editJude" v-model="changeForm.deposit" autocomplete="off"></el-input>
             </el-form-item>
-            
+
             <el-form-item class="select" prop="disabled" label="状　　态">
               <el-radio-group v-model="changeForm.disabled">
-                <el-radio label="1" value='1'>禁用</el-radio>
-                <el-radio label="0" value='0'>启用</el-radio>
+                <el-radio label="1" value="1">禁用</el-radio>
+                <el-radio label="0" value="0">启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="submitForm('changeForm','changeFormDialog')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('changeForm','changeFormDialog')">取消</el-button>
+              <el-button
+                class="buttonTrueColor"
+                @click="submitForm('changeForm','changeFormDialog')"
+              >确定</el-button>
+              <el-button
+                class="buttonCancelColor"
+                @click="resetForm('changeForm','changeFormDialog')"
+              >取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -154,20 +167,23 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {selectEffect,selectAllDrop,cardLevelInt} from '@request/api/base.js'
+import axios from "axios";
+import {
+  selectEffect,
+  selectAllDrop,
+  cardLevelInt
+} from "@request/api/base.js";
 export default {
   data() {
     return {
       /*====== 2.0查询功能配置项 ======*/
-      optionsData: [
-      ],
+      optionsData: [],
       searchForm: {
         name: "" //等级
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
       Allseclet: [], // 全选
-      deleteParams:[], // 删除所需数据
+      deleteParams: [], // 删除所需数据
       /*====== 4.0表格设置项 ======*/
       rowStyle: {
         height: "60px"
@@ -176,14 +192,14 @@ export default {
       // 分页器设置
       total: 0,
       pageSize: 10,
-      pageInput:1,
+      pageInput: 1,
       currentPage: 1,
       paginationForm: {},
       /*====== 弹框配置项 ======*/
       Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
       deleteDialog: false, // 禁用弹框,
-      deleteArr:{},
-      banData:{},
+      deleteArr: {},
+      banData: {},
       // 添加编辑
       i: 0, // 切换弹框标题
       changeFormDialog: false, // // 添加弹框的展示和消失
@@ -195,9 +211,9 @@ export default {
         bookNum: "", // 借阅数量
         deposit: "", //押金金额
         disabled: "", // 状态
-        id:'' // ID
+        id: "" // ID
       },
-      editJude:false,//押金输入框锁定
+      editJude: false, //押金输入框锁定
       addRules: {
         name: [{ required: true, message: "请输入等级名称", trigger: "blur" }],
         renewNum: [
@@ -209,126 +225,125 @@ export default {
         bookNum: [
           { required: true, message: "请输入借阅数量", trigger: "blur" }
         ],
-        
+
         deposit: [
           { required: true, message: "请输入押金金额", trigger: "blur" }
         ],
-        
+
         disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
-      },
+      }
     };
   },
-  computed:{
+  computed: {
     searchTimeForm() {
       let obj = {
-        name:this.searchForm.name,
-        currentPage:1,
-        pageSize:this.pageSize
-      }
-      return obj
+        name: this.searchForm.name,
+        currentPage: 1,
+        pageSize: this.pageSize
+      };
+      return obj;
     },
     addTimeForm() {
       let obj = {
         name: this.changeForm.name,
-        renewNumber:this.changeForm.renewNum,
+        renewNumber: this.changeForm.renewNum,
         borrowTime: this.changeForm.readerTime,
-        borrowNumber:this.changeForm.bookNum,
-        deposit:this.changeForm.deposit,
-        disabled:this.changeForm.disabled
-      }
-      return obj
+        borrowNumber: this.changeForm.bookNum,
+        deposit: this.changeForm.deposit,
+        disabled: this.changeForm.disabled
+      };
+      return obj;
     },
     editTimeForm() {
       let obj = {
         name: this.changeForm.name,
-        renewNumber:this.changeForm.renewNum,
+        renewNumber: this.changeForm.renewNum,
         borrowTime: this.changeForm.readerTime,
-        borrowNumber:this.changeForm.bookNum,
-        deposit:this.changeForm.deposit,
-        id:this.changeForm.id,
-        disabled:this.changeForm.disabled
-      }
-      return obj
+        borrowNumber: this.changeForm.bookNum,
+        deposit: this.changeForm.deposit,
+        id: this.changeForm.id,
+        disabled: this.changeForm.disabled
+      };
+      return obj;
     },
-    deleteTimeForm() {
-
-    }
+    deleteTimeForm() {}
   },
   methods: {
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
-      let page = Math.ceil(this.total / this.pageSize)
-      page ==0?1:page;
-      if(this.pageInput>page){
-        this.pageInput = 1
-        this.$nextTick(()=>{
-          this.$refs.text.value = 1 // hack方法
-          console.log('Vmode绑定值',this.pageInput)
-        })
-      }else{
-        let num = parseInt(this.pageInput)
-        this.current_change(num)
+      let page = Math.ceil(this.total / this.pageSize);
+      page == 0 ? 1 : page;
+      if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
+        this.pageInput = 1;
+        this.$nextTick(() => {
+          this.$refs.text.value = 1; // hack方法
+          console.log("Vmode绑定值", this.pageInput);
+        });
+      } else {
+        this.pageInput = parseInt(this.pageInput);
+        this.$refs.text.value = parseInt(this.pageInput);
+        let num = parseInt(this.pageInput);
+        this.current_change(num);
       }
     },
     /*====== 2.0 启动按钮组 ======*/
     // 全选按钮
     selectAllBtn(val) {
       this.Allseclet = val;
-      console.log('全选后的数据',this.Allseclet)
+      console.log("全选后的数据", this.Allseclet);
     },
     // 批量删除按钮
     deleteBtn() {
-      this.deleteParams = []
-      if(this.Allseclet.length){
+      this.deleteParams = [];
+      if (this.Allseclet.length) {
         this.i = 1;
-        let arr = this.Allseclet
-        console.log(arr)
+        let arr = this.Allseclet;
+        console.log(arr);
         for (let item of arr) {
-          this.deleteParams.push({id:item.id})
+          this.deleteParams.push({ id: item.id });
         }
-        console.log('删除数据', this.deleteParams)
+        console.log("删除数据", this.deleteParams);
         this.deleteDialog = true;
       } else {
-        this.$message.error('请先选择删除对象')
+        this.$message.error("请先选择删除对象");
       }
     },
     // 添加按钮
     addBtn() {
       this.i = 3;
-      this.editJude = false
+      this.editJude = false;
       this.changeFormDialog = true;
     },
     // 查询按钮
     searchBtn() {
       this.searchTable(this.searchTimeForm);
-      console.log('当前查询',this.searchTimeForm);
+      console.log("当前查询", this.searchTimeForm);
     },
     // 编辑按钮
     editBtn(index, row) {
       this.i = 2;
-      this.changeForm.name = row.name
-      this.changeForm.renewNum = row.renewNumber
-      this.changeForm.readerTime = row.borrowTime
-      this.changeForm.bookNum = row.borrowNumber
-      this.changeForm.deposit = row.deposit
-      this.changeForm.id = row.id
-      this.changeForm.disabled = row.disabled.toString()
-      this.editJude = true
+      this.changeForm.name = row.name;
+      this.changeForm.renewNum = row.renewNumber;
+      this.changeForm.readerTime = row.borrowTime;
+      this.changeForm.bookNum = row.borrowNumber;
+      this.changeForm.deposit = row.deposit;
+      this.changeForm.id = row.id;
+      this.changeForm.disabled = row.disabled.toString();
+      this.editJude = true;
       this.changeFormDialog = true;
-      console.log(index, row,this.changeForm);
+      console.log(index, row, this.changeForm);
     },
     // 禁用按钮
     banBtn(index, row) {
       console.log(index, row); // 当前选中表格的索引和对象
-      if(row.disabled ==1){
-        this.$message.error('该用户已被禁用')
-      } else{
+      if (row.disabled == 1) {
+        this.$message.error("该用户已被禁用");
+      } else {
         this.i = 0;
-        this.banData.id = row.id
-        this.banData.disabled = 1
+        this.banData.id = row.id;
+        this.banData.disabled = 1;
         this.deleteDialog = true;
       }
-
     },
     /*====== 弹框相关按钮 ======*/
 
@@ -347,15 +362,15 @@ export default {
     },
     // 编辑 添加弹框按钮
     submitForm(formName, dialogName) {
-      let flag = this.i
+      let flag = this.i;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          switch(flag) {
+          switch (flag) {
             case 2:
-            this.editApi(this.editTimeForm,dialogName)
-            break
+              this.editApi(this.editTimeForm, dialogName);
+              break;
             case 3:
-            this.addApi(this.addTimeForm,dialogName)
+              this.addApi(this.addTimeForm, dialogName);
           }
           this.changeFormDialog = true; // 关闭弹框
         } else {
@@ -371,11 +386,10 @@ export default {
     // 弹框关闭的时候执行 清空数据
     closeForm(formName) {
       this.$refs[formName].resetFields();
-      let obj = this.changeForm
-      for(let i in obj ) {
-        obj[i] = ''
+      let obj = this.changeForm;
+      for (let i in obj) {
+        obj[i] = "";
       }
-
     },
     // 分页查询按钮
     current_change: function(currentPage) {
@@ -387,44 +401,48 @@ export default {
     /*====== API部分 ======*/
     pagationTable(data) {
       console.log("初始化查询", this.searchTimeForm);
-      axios.get(cardLevelInt.select,{
-        params:data
-      }).then((res) => {
-        if (res.data.state === true){
-          console.log(res)
-          // 获取数据进行过滤
-          this.tableData = res.data.row
-          this.total = res.data.total; //总条目数
-          this.paginationForm = Object.assign({}, data);
-          console.log("保存当前查询", this.paginationForm);
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      })
+      axios
+        .get(cardLevelInt.select, {
+          params: data
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            console.log(res);
+            // 获取数据进行过滤
+            this.tableData = res.data.row;
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, data);
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
     searchTable(data) {
       console.log("初始化查询", this.searchTimeForm);
-      axios.get(cardLevelInt.select,{
-        params:data
-      }).then((res) => {
-        if (res.data.state === true){
-          console.log(res)
-          // 获取数据进行过滤
-          this.tableData = res.data.row
-          this.total = res.data.total; //总条目数
-          this.paginationForm = Object.assign({}, data);
-          this.currentPage = 1
-          console.log("保存当前查询", this.paginationForm);
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      })
+      axios
+        .get(cardLevelInt.select, {
+          params: data
+        })
+        .then(res => {
+          if (res.data.state === true) {
+            console.log(res);
+            // 获取数据进行过滤
+            this.tableData = res.data.row;
+            this.total = res.data.total; //总条目数
+            this.paginationForm = Object.assign({}, data);
+            this.currentPage = 1;
+            console.log("保存当前查询", this.paginationForm);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     // 添加编辑API
-    addApi(data,dialogName) {
-      console.log("提交的数据", data)
-      axios.post(cardLevelInt.add,data).then((res) => {
+    addApi(data, dialogName) {
+      console.log("提交的数据", data);
+      axios.post(cardLevelInt.add, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
@@ -432,11 +450,11 @@ export default {
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     },
-    editApi(data,dialogName){
-      console.log("提交的数据", data)
-      axios.put(cardLevelInt.edit,data).then((res) => {
+    editApi(data, dialogName) {
+      console.log("提交的数据", data);
+      axios.put(cardLevelInt.edit, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("执行成功");
           this.searchTable();
@@ -444,19 +462,19 @@ export default {
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     },
     // 禁用删除API
     deleteApi(data) {
       console.log("提交的删除数据", data);
       let deleterStr = {
-        deleteParams:data
-      }
-      axios.delete(cardLevelInt.delete, {data:deleterStr}).then(res => {
+        deleteParams: data
+      };
+      axios.delete(cardLevelInt.delete, { data: deleterStr }).then(res => {
         if (res.data.state === true) {
           this.$message.success("删除成功");
-          this.searchTable()
-          this.searchOption()
+          this.searchTable();
+          this.searchOption();
           this.deleteDialog = false;
           console.log(res);
         } else {
@@ -465,21 +483,21 @@ export default {
       });
     },
     banApi(data) {
-      console.log('禁用的数据',data)
-      axios.put(cardLevelInt.edit,data).then((res) => {
+      console.log("禁用的数据", data);
+      axios.put(cardLevelInt.edit, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("禁用成功");
-          this.searchTable()
+          this.searchTable();
           this.deleteDialog = false;
           console.log(res);
         } else {
           this.$message.error(res.data.msg);
         }
-      })
+      });
     }
   },
   created() {
-    this.searchTable(this.searchTimeForm)
+    this.searchTable(this.searchTimeForm);
   }
 };
 </script>
@@ -630,7 +648,7 @@ export default {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 .ban {
   color: #ff5c3c;

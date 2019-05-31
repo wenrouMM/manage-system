@@ -30,7 +30,9 @@
 
         <!-- 用户头像模块 点击交互功能尚未完成 小图标添加及相应功能 -->
         <div class="headBox">
-          <div class="headiconBox"></div>
+          <div class="headiconBox">
+            <img :src="headSrc" class="avatarImg">
+          </div>
           <div class="userBox">
             <div class="username">
 
@@ -38,8 +40,10 @@
 
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
-                <span class="dropItem">个人中心</span>
+                <span @click="toCenter" class="dropItem">个人中心</span>
                 <span @click="loginOut" class="dropItem">切换账户</span>
+                <span @click="loginOut" class="dropItem">押金充值</span>
+                <span @click="loginOut" class="dropItem">卡号注销</span>
               </div>
             </div>
             <i class="notice"></i>
@@ -169,7 +173,9 @@ export default {
       Mode: 6,
       navRouter: [],
       menuLo: [{}],
-      userLo: null
+      userLo: null,
+      nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
+      settingHead: "",
     };
   },
   methods: {
@@ -184,6 +190,9 @@ export default {
     skip() {
       this.$router.push({ path: "/" });
     },
+    toCenter(){
+      this.$router.push({path:'/userInfo'})
+    },
     loginOut() {
       this.$store.commit("removeToken");
       this.$store.commit("deleteUserInfo");
@@ -194,6 +203,13 @@ export default {
   computed: {
     onRoutes() {
       return this.$route.path.replace("/", ""); // 把斜杠都替换为空白
+    },
+    headSrc() {
+      let src =
+        this.settingHead === "" || this.settingHead === null
+          ? this.nomalHeader
+          : this.settingHead;
+      return src;
     },
     ...mapGetters(["userInfo", "menu"])
   },
@@ -207,8 +223,6 @@ export default {
   }
 };
 </script>
-<style>
-</style>
 
 <style scoped>
 html,
@@ -311,9 +325,14 @@ body,
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #fff;
+  
   margin-right: 10px;
   cursor: pointer;
+}
+.headBox .headiconBox img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 .headBox .userBox {
   display: flex;

@@ -46,9 +46,10 @@
             <el-table-column align="center" prop="isbn" label="ISBN"></el-table-column>
             <el-table-column align="center" prop="author" label="编著者"></el-table-column>
             <el-table-column align="center" prop="fkPressName" label="出版社"></el-table-column>
-            <el-table-column align="center" prop="sum" label="总藏馆数量"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="在馆"></el-table-column>
-            <el-table-column align="center" prop="damageName" label="已借"></el-table-column>
+            <el-table-column align="center" prop="total" label="总藏馆数量"></el-table-column>
+            <el-table-column align="center" prop="sum" label="在馆"></el-table-column>
+            <el-table-column align="center" prop="lend" label="已借"></el-table-column>
+            <el-table-column align="center" prop="damage" label="损坏"></el-table-column>
             <el-table-column align="center" width="350" prop="damageName" label="注销清点">
               <template slot-scope="scope">
                 <span>被盗:{{scope.row.stolen}}</span>

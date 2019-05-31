@@ -15,7 +15,9 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="损坏方式 :">
-                <el-input v-model="searchForm.damageMothod" placeholder="请输入损坏方式" style="width: 296px"></el-input>
+                <div class="inputBox textLeft" style="width:160px;">
+                  <el-input clearable v-model="searchForm.damageMothod" placeholder="请输入损坏方式"></el-input>
+                </div> 
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -401,17 +403,20 @@
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
-        let page = Math.ceil(this.total / this.pageSize);
-        page == 0 ? 1 : page;
-        if (this.pageInput > page) {
-          this.pageInput = 1;
-          this.$nextTick(() => {
-            this.$refs.text.value = 1; // hack方法
-            console.log("Vmode绑定值", this.pageInput);
-          });
-        } else {
-          let num = parseInt(this.pageInput);
-          this.current_change(num);
+        console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
       },
       /*------ Api ------*/
