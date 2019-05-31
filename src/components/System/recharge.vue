@@ -20,8 +20,8 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item label="用户名 :" placeholder="请输入用户名">
-                <el-input v-model="searchForm.name"></el-input>
+              <el-form-item label="用户名 :">
+                <el-input v-model="searchForm.name" placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="处理方式 :">
                 <el-select v-model="searchForm.method" clearable placeholder="请选择处理方式">

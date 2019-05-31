@@ -58,7 +58,7 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索取号" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
@@ -189,7 +189,7 @@
                 <el-form-item label=" 馆藏码 :" prop="code" label-width="80px" style="">
                   <el-input v-model="addForm.code"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索取号 :" prop="searchNumber" label-width="95px" style="">
+                <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
                   <el-input v-model="addForm.searchNumber"></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
@@ -214,7 +214,7 @@
                 <el-form-item label=" 编　　号 :" label-width="95px" style="">
                   <el-input v-model="harmForm.Number"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索 取 号 :" label-width="95px" style="">
+                <el-form-item label=" 索 书 号 :" label-width="95px" style="">
                   <el-input v-model="harmForm.bookIndex "></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆 藏 地 :" label-width="95px" style="">
@@ -254,7 +254,7 @@
                       filterable
                       remote
                       reserve-keyword
-                      placeholder="请输入关键词查询"
+                      placeholder="请输入关键词查询相关损坏原因"
                       :remote-method="remoteMethod"
                       :loading="loading">
                       <el-option
@@ -852,7 +852,6 @@
             this.harmForm[i] = "";
           }
         this.dialogFormVisible=false
-        this.searchApi(this.searchTimeForm)
       },
       cancelDialog(){
         this.centerDialogVisible=false
@@ -1017,13 +1016,13 @@
     background: #31D6FF;
     border-radius: 10px;
   }
+  .buttonBox .blue .blueIcon {
+    margin-right: 6px;
+  }
   .buttonBox .deongaree {
     background: #4D94FF;
     border-radius: 10px;
     margin-left: 10px;
-  }
-  .buttonBox .blue .blueIcon {
-    margin-right: 6px;
   }
   .buttonBox .green {
     background: #01EECA;

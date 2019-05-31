@@ -158,7 +158,11 @@
                     <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style>
                       <el-input v-model="addForm.name"></el-input>
                     </el-form-item>
+<<<<<<< HEAD
                     <el-form-item label=" 副 题 名 :" prop="viceName" label-width="90px" style>
+=======
+                    <el-form-item label=" 副 题 名 :" label-width="90px" style="">
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
                       <el-input v-model="addForm.viceName "></el-input>
                     </el-form-item>
                   </div>
@@ -166,7 +170,11 @@
                     <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style>
                       <el-input v-model="addForm.author "></el-input>
                     </el-form-item>
+<<<<<<< HEAD
                     <el-form-item label=" 丛编题名 :" prop="clusterName" label-width="95px" style>
+=======
+                    <el-form-item label=" 丛编题名 :" label-width="95px" style="">
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
                       <el-input v-model="addForm.clusterName"></el-input>
                     </el-form-item>
                   </div>
@@ -255,12 +263,16 @@
                     >
                       <el-input v-model="addForm.publishingPleace "></el-input>
                     </el-form-item>
+<<<<<<< HEAD
                     <el-form-item
                       label=" 出版日期 :"
                       prop="publishingTime"
                       label-width="95px"
                       style="margin-left: 20px"
                     >
+=======
+                    <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
                       <el-date-picker
                         v-model="addForm.publishingTime"
                         align="right"
@@ -273,10 +285,10 @@
                     </el-form-item>
                   </div>
                   <div class="flexLayout" id="catalogingInput5">
-                    <el-form-item label=" 页　　码 :" prop="pageNumber" label-width="95px">
+                    <el-form-item label=" 页　　码 :" label-width="95px">
                       <el-input v-model="addForm.pageNumber"></el-input>
                     </el-form-item>
-                    <el-form-item label=" 开　　本 :" prop="format" label-width="95px">
+                    <el-form-item label=" 开　　本 :" label-width="95px">
                       <el-input v-model="addForm.openBook "></el-input>
                     </el-form-item>
                     <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
@@ -284,14 +296,15 @@
                     </el-form-item>
                   </div>
                   <div class="flexLayout">
-                    <el-form-item label=" 附　　注 :" prop="annotations " label-width="95px">
+                    <el-form-item label=" 附　　注 :" label-width="95px">
                       <el-input v-model="addForm.annotations "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 主 题 词 :" prop="themeWord" label-width="95px">
+                    <el-form-item label=" 主 题 词 :" label-width="95px">
                       <el-input v-model="addForm.themeWord "></el-input>
                     </el-form-item>
                   </div>
                   <div>
+<<<<<<< HEAD
                     <el-form-item label=" 备　　注 :" prop="renarks" style="width: 950px;">
                       <el-input
                         type="textarea"
@@ -300,6 +313,10 @@
                         :autosize="{ minRows: 5, maxRows: 5}"
                         resize="none"
                       ></el-input>
+=======
+                    <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
+                      <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
                     </el-form-item>
                   </div>
                 </div>
@@ -393,6 +410,43 @@ export default {
             pIdKey: "pId",
             rootPId: 0
           }
+<<<<<<< HEAD
+=======
+        }, //ztree树加载的配置
+        zNodes: [], //ztree树的数据
+        addForm:{
+          isbn:'',
+          name:'', //正题名
+          viceName:'', //副题名
+          clusterName:'',//丛编题名
+          searchNumber:'',//索书号
+          fkTypeCode:'',//分类号
+          fkTypeName:'',//分类名
+          author:'',//编著者
+          fkPressName:'',//出版社
+          publishingPleace:'',//出版地
+          fkPressCode:'',//出版码
+          publishingTime:'',//出版时间
+          pageNumber:'',//页码
+          openBook:'',//开本
+          price:'',//价格
+          language:'',//语种
+          languageCode:'',
+          annotations:'',//附注
+          themeWord:'',//主题词
+          renarks:'',//备注
+        },
+        rules:{
+          isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
+          searchNumber:[{required:true,message:'索书号不能为空',trigger:'blur'}],
+          name:[{required:true,message:'正题名不能为空',trigger:'blur'}],
+          author:[{required:true,message:'编著者不能为空',trigger:'blur'}],
+          fkTypeCode:[{required:true,message:'分类号不能为空',trigger:'change'}],
+          fkTypeName:[{required:true,message:'分类名不能为空',trigger:'change'}],
+          fkPressName:[{required:true,message:'出版社不能为空',trigger:'change'}],
+          publishingPleace:[{required:true,message:'出版地不能为空',trigger:'change'}],
+          price:[{required:true,message:'价格不能为空',trigger:'blur'}],
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
         },
         view: {
           showLine: false,
@@ -801,9 +855,92 @@ export default {
             this.tableLoading = false;
           }
         })
+<<<<<<< HEAD
         .catch(error => {
           console.log(error);
         });
+=======
+      },
+      // 分页按钮
+      jumpBtn() {
+        // v-mode绑定好像会默认转数据类型
+        let page = Math.ceil(this.total / this.pageSize);
+        page == 0 ? 1 : page;
+        if (this.pageInput > page) {
+          this.pageInput = 1;
+          this.$nextTick(() => {
+            this.$refs.text.value = 1; // hack方法
+            console.log("Vmode绑定值", this.pageInput);
+          });
+        } else {
+          let num = parseInt(this.pageInput);
+          this.current_change(num);
+        }
+      },
+      /*------ Api ------*/
+      searchApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(catalog.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("书籍编目", res);
+            if (res.data.state === true) {
+              this.tableData = res.data.rows; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.currentPage = 1; // 回到第一页显示
+              this.tableLoading = false;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(catalog.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("书籍编目", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.rows; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      current_change(currentPage) {
+        //分页查询
+        this.currentPage = currentPage; //点击第几页
+        this.paginationForm.currentPage = currentPage;
+        console.log("保存当前查询", this.paginationForm, this.currentPage);
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+      }
+>>>>>>> aa4e1645b7b028308d6864992e6152c34a06c6f4
     },
     current_change(currentPage) {
       //分页查询

@@ -10,17 +10,31 @@
             <span class="titleName">逾期记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
+          <section class="searchBox flexLayout">
             <div class="buttonBox">
               <button class="blue" @click="deriveBtn">
                 <i class="blueIcon el-icon-share"></i>导出
               </button>
             </div>
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+              <el-form-item label="用户名:" size="160">
+                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
+              </el-form-item>
+              <el-form-item label="卡号:">
+                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+              </el-form-item>
+              <el-form-item label="书名:" size="160">
+                <el-input v-model="searchForm.bookName" placeholder="请输入书名"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
+              </el-form-item>
+            </el-form>
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table class="tableBorder" id="out-table" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column align="center" prop="index" type="index" label="序号">
+              <el-table-column align="center" prop="index" type="index" label="序号" width="100">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>

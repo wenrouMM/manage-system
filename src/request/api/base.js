@@ -188,9 +188,9 @@ export const bookModeInt = {
 }
 //图书出版社页面
 export const bookpublish = {
-  select:`${url}tibetmuseummodule/libraryPressManagementPage/select`,//图书出版社初始化查询接口
-  city:`${url}bookmodule/bookTbPress/selectCity `, //图书出版社城市信息
-  add:`${url}tibetmuseummodule/libraryPressManagementPage/add`, //图书出版社添加信息
+  select:`${url}bookcollectionmodule/libraryPressManagementPage/select`,//图书出版社初始化查询接口
+  city:`${url}bookcollectionmodule/libraryPressManagementPage/selectCity `, //图书出版社城市信息
+  add:`${url}bookcollectionmodule/libraryPressManagementPage/add`, //图书出版社添加信息
 }
 //图书类型查询
 export const booktype = url + 'bookmodule/bookTbType/select' // 预览图片前缀
@@ -237,9 +237,9 @@ export const deposit = {
 }
 //逾期记录
 export const overdue = {
-  table:`${url}tibetmuseummodule/currency/expectLog/select`, //逾期查询表格
+  table:`${url}borrowmodule/expectLog/select`, //逾期查询表格
   phone:`${url}tibetmuseummodule/currency/expectLog/selectUserPhone`, //逾期催还电话
-  history:`${url}tibetmuseummodule/currency/expectHistoryLog/select`, //逾期历史记录查询表格
+  history:`${url}borrowmodule/expectHistoryLog/select`, //逾期历史记录查询表格
   money:`${url}tibetmuseummodule/currency/expectLog/overdueMon`, //逾期金额查询
   make:`${url}tibetmuseummodule/currency/expectLog/handle` //逾期金额处理
 }
