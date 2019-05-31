@@ -49,7 +49,7 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName"width="170" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" width="170" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
               <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="170" label="书籍编码"></el-table-column>

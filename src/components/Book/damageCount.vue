@@ -16,10 +16,20 @@
         <div class="right">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="书籍名称 :">
-              <el-input clearable v-model="searchForm.bookName" placeholder="请输入书籍名称" style="width: 200px"></el-input>
+              <el-input
+                clearable
+                v-model="searchForm.bookName"
+                placeholder="请输入书籍名称"
+                style="width: 200px"
+              ></el-input>
             </el-form-item>
             <el-form-item label="ISBN :">
-              <el-input clearable v-model="searchForm.isbn" placeholder="请输入相关的ISBN" style="width: 200px"></el-input>
+              <el-input
+                clearable
+                v-model="searchForm.isbn"
+                placeholder="请输入相关的ISBN"
+                style="width: 200px"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -142,9 +152,9 @@ export default {
     // 导出按钮
     deriveBtn() {},
     // 详情按钮
-    detailBtn(index,row) {
+    detailBtn(index, row) {
       let bookId = row.id;
-      console.log(row)
+      console.log(row);
       this.$router.push({ path: `/checkDetails/${bookId}` });
     },
     // 分页按钮
@@ -152,13 +162,15 @@ export default {
       // v-mode绑定好像会默认转数据类型
       let page = Math.ceil(this.total / this.pageSize);
       page == 0 ? 1 : page;
-      if (this.pageInput > page) {
+      if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
         this.pageInput = 1;
         this.$nextTick(() => {
           this.$refs.text.value = 1; // hack方法
           console.log("Vmode绑定值", this.pageInput);
         });
       } else {
+        this.pageInput = parseInt(this.pageInput);
+        this.$refs.text.value = parseInt(this.pageInput);
         let num = parseInt(this.pageInput);
         this.current_change(num);
       }
@@ -253,35 +265,35 @@ export default {
   justify-content: space-between;
 }
 .buttonBox .blue {
-    background: #31D6FF;
-    border-radius: 10px;
+  background: #31d6ff;
+  border-radius: 10px;
 }
 .buttonBox button {
-    padding-left: 18px;
-    padding-right: 18px;
-    height: 40px;
-    font-size: 16px;
-    color: #fff;
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: none;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    -webkit-transition: 0.1s;
-    transition: 0.1s;
-    font-weight: 500;
+  padding-left: 18px;
+  padding-right: 18px;
+  height: 40px;
+  font-size: 16px;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
 }
 /*------ 表格 ------*/
 .tableBorder {
   border: 1px solid #ebeef5;
-  border-bottom:none;
+  border-bottom: none;
 }
 .page_div {
   text-align: center;
@@ -304,7 +316,7 @@ export default {
   font-size: 16px;
   text-align: center;
 }
-.detail{
+.detail {
   cursor: pointer;
   color: #00d7f0;
 }

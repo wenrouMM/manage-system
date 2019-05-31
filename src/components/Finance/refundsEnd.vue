@@ -11,7 +11,7 @@
     <!-- 用户信息卡查询 -->
     <div class="cardData">
       <div class="selectForm">
-        <p class="balance">当前余额:￥{{this.cardData.money==''?0:this.cardData.money}}</p>
+        <p class="balance">当前余额:￥{{this.cardData.balance==''|| this.cardData.balance == null?0:this.cardData.balance}}</p>
         <div class="cardTable">
           <div class="textBox mb_50">
             <p>
@@ -23,7 +23,7 @@
               <span>{{this.cardData.sex}}</span>
             </p>
             <p>
-              读者角色 :
+              角色等级 :
               <span>{{this.cardData.type}}</span>
             </p>
           </div>
@@ -86,6 +86,7 @@ export default {
     //查询读者卡信息
     readCardBtn() {
       let value = this.$route.params.card;
+      console.log(value)
       let obj = {
         cardNum: value
       };
@@ -106,12 +107,12 @@ export default {
         if (res.data.state === true) {
           let data = res.data.row[0]
           this.cardData.userName = data.cardFkReaderName
-          this.cardData.sex = data.sex
+          this.cardData.sex = data.sex == 1?'男':'女'
           this.cardData.type = data.cardGradeName
           this.cardData.startTime = data.cardCreatTime
           this.cardData.vaildTime = data.cardExpireTime
           this.cardData.state = data.state
-          
+          this.cardData.balance = data.balance
           this.lastCardNum = this.cardInput
         } else {
           this.$message.error(res.data.msg);

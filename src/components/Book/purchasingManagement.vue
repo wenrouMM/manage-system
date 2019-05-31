@@ -20,7 +20,13 @@
         <div class="right">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="筛选 :">
-              <el-select v-model="searchForm.makeMethod" placeholder="请选择" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
+              <el-select
+                v-model="searchForm.makeMethod"
+                placeholder="请选择"
+                clearable
+                style="width: 150px"
+                @change="selectCheck(searchForm.makeMethod)"
+              >
                 <el-option label="采购批次" value="0"></el-option>
                 <el-option label="备注信息" value="1"></el-option>
               </el-select>
@@ -63,20 +69,20 @@
             @current-change="current_change"
           >
             <slot>
-                <span>
-                  前往
-                  <div class="el-input el-pagination__editor is-in-pagination">
-                    <input
-                      ref="text"
-                      type="number"
-                      v-model="pageInput"
-                      autocomplete="off"
-                      min="1"
-                      max="1"
-                      class="compo el-input__inner"
-                    >
-                  </div>页
-                </span>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input
+                    ref="text"
+                    type="number"
+                    v-model="pageInput"
+                    autocomplete="off"
+                    min="1"
+                    max="1"
+                    class="compo el-input__inner"
+                  >
+                </div>页
+              </span>
             </slot>
           </el-pagination>
           <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
@@ -86,14 +92,31 @@
     <!-- 新增弹框 -->
     <div class="addEditDialog">
       <!-- Form -->
-      <el-dialog @close="closeForm" width="500px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
-        <el-form :rules="rules" :model="addForm" id="purchasingMessage" :ref="addForm" style="display: flex;flex-direction: column">
+      <el-dialog
+        @close="closeForm"
+        width="500px"
+        :title="Dialogtitle[i]"
+        :visible.sync="dialogFormVisible"
+      >
+        <el-form
+          :rules="rules"
+          :model="addForm"
+          id="purchasingMessage"
+          :ref="addForm"
+          style="display: flex;flex-direction: column"
+        >
           <!-- 弹框表单按钮  验证失效-->
-          <el-form-item label=" 采购批次 :" prop="PurchaseBatch" label-width="95px" style="">
+          <el-form-item label=" 采购批次 :" prop="PurchaseBatch" label-width="95px" style>
             <el-input v-model="addForm.PurchaseBatch" style="width: 340px"></el-input>
           </el-form-item>
           <el-form-item label=" 备注信息 :" prop="remarks" label-width="95px">
-            <el-input type="textarea" v-model="addForm.remarks" style="width: 340px" :autosize="{ minRows: 7, maxRows: 7}" resize="none"></el-input>
+            <el-input
+              type="textarea"
+              v-model="addForm.remarks"
+              style="width: 340px"
+              :autosize="{ minRows: 7, maxRows: 7}"
+              resize="none"
+            ></el-input>
           </el-form-item>
           <el-form-item style="margin:0px auto">
             <el-button type="primary" @click="submitForm()" style="margin-left: 20px">确定</el-button>
@@ -105,9 +128,7 @@
     <!--'删除'-->
     <div class="forbid">
       <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-        <div class="dialogBody">
-          是否{{Dialogtitle[i]}}?
-        </div>
+        <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
         <div slot="footer">
           <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
           <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
@@ -118,124 +139,128 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import { purchasing } from "../../request/api/base.js";
-  export default {
-    data(){
-      return{
-        searchForm: {
-          // 接受搜索表单的数据
-          makeMethod:'',
-          searchData:"",
-          currentPage: 0
-        },
-        searchData:'',
-        id:'',
-        selectSearchForm:{
-          batch:'',//批次号
-          remark:'',//备注信息
-          currentPage: 0
-        },
-        rules:{
-          PurchaseBatch:[{ required: true,message: "请输入采购批次", trigger: "blur" }],
-          remarks:[{ required: true,message: "请输入备注信息", trigger: "blur" }],
-        },
-        addForm:{
-          //添加修改的数据
-          PurchaseBatch:'',//采购批次
-          remarks:'',//备注信息
-        },
-        tableData:[],
-        dialogFormVisible: false, // // 新增修改弹框的展示和消失
-        centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'删除'],
-        i: null, // 切换弹框标题
-        tableChecked: [], // 批量选择的的数据
-        currentPage: 1,
-        pageInput: 1,
-        pageSize: 10,
-        total: 0,
+import axios from "axios";
+import { purchasing } from "@request/api/base.js";
+export default {
+  data() {
+    return {
+      searchForm: {
+        // 接受搜索表单的数据
+        makeMethod: "",
+        searchData: "",
+        currentPage: 0
+      },
+      searchData: "",
+      id: "",
+      selectSearchForm: {
+        batch: "", //批次号
+        remark: "", //备注信息
+        currentPage: 0
+      },
+      rules: {
+        PurchaseBatch: [
+          { required: true, message: "请输入采购批次", trigger: "blur" }
+        ],
+        remarks: [
+          { required: true, message: "请输入备注信息", trigger: "blur" }
+        ]
+      },
+      addForm: {
+        //添加修改的数据
+        PurchaseBatch: "", //采购批次
+        remarks: "" //备注信息
+      },
+      tableData: [],
+      dialogFormVisible: false, // // 新增修改弹框的展示和消失
+      centerDialogVisible: false, // 删除弹框
+      Dialogtitle: ["修改", "新增", "删除"],
+      i: null, // 切换弹框标题
+      tableChecked: [], // 批量选择的的数据
+      currentPage: 1,
+      pageInput: 1,
+      pageSize: 10,
+      total: 0
+    };
+  },
+  computed: {
+    searchTimeForm() {
+      if (this.searchData) {
+        switch (this.searchData / 1) {
+          case 0:
+            console.log("采购批次");
+            this.selectSearchForm.batch = this.searchForm.searchData;
+            break;
+          case 1:
+            console.log("备注信息");
+            this.selectSearchForm.remark = this.searchForm.searchData;
+            break;
+        }
+      } else {
+        console.log("为空");
+        this.selectSearchForm.batch = "";
+        this.selectSearchForm.remark = "";
+      }
+      let newData = {
+        batch: this.selectSearchForm.batch,
+        remark: this.selectSearchForm.remark,
+        pageSize: this.pageSize,
+        currentPage: 1
+      };
+      console.log("搜索数据", newData);
+      return newData;
+    }
+  },
+  methods: {
+    //筛选搜索
+    selectCheck(val) {
+      console.log("val", val);
+      this.searchData = val;
+    },
+    //新增按钮
+    rechargeBtn() {
+      this.i = 1;
+      this.dialogFormVisible = true;
+    },
+    //修改按钮
+    EditBtn(index, row) {
+      console.log("修改的数据", row);
+      this.id = row.id;
+      this.i = 0;
+      this.dialogFormVisible = true;
+      this.addForm.PurchaseBatch = row.batch;
+      this.addForm.remarks = row.remark;
+    },
+    //删除按钮
+    drawbackBtn() {
+      if (this.tableChecked.length) {
+        this.i = 2;
+        this.centerDialogVisible = true;
+      } else {
+        this.$message.error("请先选择删除对象");
       }
     },
-    computed:{
-      searchTimeForm(){
-        if(this.searchData){
-          switch (this.searchData/1) {
-            case 0:
-              console.log('采购批次')
-              this.selectSearchForm.batch=this.searchForm.searchData;
-              break;
-            case 1:
-              console.log('备注信息')
-              this.selectSearchForm.remark=this.searchForm.searchData;
-              break;
-          }
-        }else{
-          console.log('为空')
-          this.selectSearchForm.batch=''
-          this.selectSearchForm.remark=''
-        }
-        let newData={
-          batch:this.selectSearchForm.batch,
-          remark:this.selectSearchForm.remark,
-          pageSize: this.pageSize,
-          currentPage: 1,
-        }
-        console.log('搜索数据',newData)
-        return newData
-      },
+    //导出按钮
+    deriveBtn() {},
+    //搜索
+    searchBtn() {
+      this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
+      this.currentPage = 1;
     },
-    methods:{
-      //筛选搜索
-      selectCheck(val){
-        console.log('val',val)
-        this.searchData=val
-      },
-      //新增按钮
-      rechargeBtn(){
-        this.i=1;
-        this.dialogFormVisible=true
-      },
-      //修改按钮
-      EditBtn(index,row){
-        console.log('修改的数据',row)
-        this.id=row.id
-        this.i=0
-        this.dialogFormVisible=true
-        this.addForm.PurchaseBatch=row.batch
-        this.addForm.remarks=row.remark
-      },
-      //删除按钮
-      drawbackBtn(){
-        if(this.tableChecked.length){
-          this.i=2
-          this.centerDialogVisible=true
-        } else {
-          this.$message.error('请先选择删除对象')
-        }
-      },
-      //导出按钮
-      deriveBtn(){
-
-      },
-      //搜索
-      searchBtn(){
-        this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
-        this.currentPage = 1;
-      },
-      //新增修改弹框的确定按钮
-      submitForm(){
-        if(this.i==1){
-          this.axios.post(purchasing.add,{
-            batch:this.addForm.PurchaseBatch,
-            remark:this.addForm.remarks
-          }).then((res)=>{
+    //新增修改弹框的确定按钮
+    submitForm() {
+      if (this.i == 1) {
+        this.axios
+          .post(purchasing.add, {
+            batch: this.addForm.PurchaseBatch,
+            remark: this.addForm.remarks
+          })
+          .then(res => {
             if (res.data.state == true) {
               this.$message({
                 message: res.data.msg,
                 type: "success"
               });
-              this.closeForm()
+              this.closeForm();
               this.searchApi(this.searchTimeForm);
             } else {
               this.$message({
@@ -243,19 +268,21 @@
                 type: "error"
               });
             }
+          });
+      } else if (this.i == 0) {
+        this.axios
+          .post(purchasing.edit, {
+            id: this.id,
+            batch: this.addForm.PurchaseBatch,
+            remark: this.addForm.remarks
           })
-        }else if(this.i==0){
-          this.axios.post(purchasing.edit,{
-            id:this.id,
-            batch:this.addForm.PurchaseBatch,
-            remark:this.addForm.remarks
-          }).then((res)=>{
+          .then(res => {
             if (res.data.state == true) {
               this.$message({
                 message: res.data.msg,
                 type: "success"
               });
-              this.closeForm()
+              this.closeForm();
               this.searchApi(this.searchTimeForm);
             } else {
               this.$message({
@@ -388,69 +415,69 @@
 </script>
 
 <style scoped>
-  .edit{
-    color: #00F0ED;
-    cursor: pointer;
-  }
-  .borrowbook{
-    width: 100%;
-    background-color: white;
-  }
-  #purchasing{
-    width: 1400px;
-    margin: 30px auto 70px;
-  }
-  .searchBox{
-    display: flex;
-    justify-content: space-between;
-  }
-  .buttonBox {
-    margin-bottom: 30px;
-  }
-  .buttonBox button {
-    padding-left: 18px;
-    padding-right: 18px;
-    height: 40px;
-    font-size: 16px;
-    color: #fff;
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: none;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    -webkit-transition: 0.1s;
-    transition: 0.1s;
-    font-weight: 500;
-  }
-  .buttonBox .add {
-    background: rgba(255, 146, 49, 1);
-    border-radius: 10px;
-    margin-right:10px;
-  }
-  .buttonBox .add .addIcon {
-    margin-right: 6px;
-  }
-  .buttonBox .delete {
-    background: rgba(255, 92, 60, 1);
-    border-radius: 10px;
-    margin-right:10px;
-  }
-  .buttonBox .delete .deleteIcon {
-    margin-right: 6px;
-  }
-  .buttonBox .blue {
-    background: #31D6FF;
-    border-radius: 10px;
-  }
+.edit {
+  color: #00f0ed;
+  cursor: pointer;
+}
+.borrowbook {
+  width: 100%;
+  background-color: white;
+}
+#purchasing {
+  width: 1400px;
+  margin: 30px auto 70px;
+}
+.searchBox {
+  display: flex;
+  justify-content: space-between;
+}
+.buttonBox {
+  margin-bottom: 30px;
+}
+.buttonBox button {
+  padding-left: 18px;
+  padding-right: 18px;
+  height: 40px;
+  font-size: 16px;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
+}
+.buttonBox .add {
+  background: rgba(255, 146, 49, 1);
+  border-radius: 10px;
+  margin-right: 10px;
+}
+.buttonBox .add .addIcon {
+  margin-right: 6px;
+}
+.buttonBox .delete {
+  background: rgba(255, 92, 60, 1);
+  border-radius: 10px;
+  margin-right: 10px;
+}
+.buttonBox .delete .deleteIcon {
+  margin-right: 6px;
+}
+.buttonBox .blue {
+  background: #31d6ff;
+  border-radius: 10px;
+}
 
-  .buttonBox .blue .blueIcon {
-    margin-right: 6px;
-  }
+.buttonBox .blue .blueIcon {
+  margin-right: 6px;
+}
 </style>

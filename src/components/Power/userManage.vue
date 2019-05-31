@@ -319,9 +319,9 @@ import {
   headUpload,
   headimg,
   photoUrl
-} from "../../request/api/base.js";
+} from "@request/api/base.js";
 import moment from "moment";
-import axios from "../../request/http.js";
+import axios from "axios";
 export default {
   created() {
     let route = this.$route.path;
@@ -1052,7 +1052,7 @@ export default {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 }
 .ban {
   color: #ff5c3c;

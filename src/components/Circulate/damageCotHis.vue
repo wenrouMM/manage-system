@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">报损记录</span>
+          <span class="titleName">报损历史记录</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
@@ -61,7 +61,7 @@
             <el-table-column align="center" prop="fkBookName" label="损坏书籍"></el-table-column>
             <el-table-column align="center" prop="fkDamageName" label="赔偿方式"></el-table-column>
             <el-table-column align="center" prop="price" label="赔偿金额"></el-table-column>
-            <el-table-column align="center" prop="price" label="处理人员"></el-table-column>
+            <el-table-column align="center" prop="person" label="处理人员"></el-table-column>
             <!-- <el-table-column align="center" prop="cardNum" label="操作">
               <template slot-scope="scope">
                 <el-button @click="dealBtn(scope.row,scope.index)" type="text">处理</el-button>

@@ -11,7 +11,7 @@
     <!-- 用户信息卡查询 -->
     <div class="cardData">
       <div class="selectForm">
-        <p class="balance">当前押金:￥{{this.cardData.money==''?0:this.cardData.money}}</p>
+        <p class="balance">当前押金:￥{{this.cardData.balance==''|| this.cardData.balance == null?0:this.cardData.balance}}</p>
         <div class="searchBox">
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
@@ -57,10 +57,7 @@
     <!--表单提交 -->
     <section class="entryBox">
       <div class="formBox">
-        <el-form label-width="80px" label-position="left" ref="changeForm" :model="changeForm" :rules="changeRules">
-          <el-form-item label="退款金额" prop="deposit">
-            <el-input v-model="changeForm.deposit" autocomplete="off"></el-input>
-          </el-form-item>
+        <el-form label-width="80px" label-position="left" ref="changeForm" :model="changeForm">
           <el-form-item label="备注" prop="remarks">
             <el-input type="textarea" :rows="4" resize="none" v-model="changeForm.remarks"></el-input>
           </el-form-item>
@@ -96,26 +93,23 @@
         lastCardNum: "", // 暂存卡号
         // 读者卡信息
         cardData: {
-          money: "",
+          
           userName: "",
           type: "",
           sex: "",
           startTime: "",
           vaildTime: "",
-          state: ""
+          state: "",
+          balance:''
         },
         readerData:{},
         hide:false,
         // 押金金额
         changeForm:{
-          deposit:'',
-          password:'',
+          
           remarks:'',
         },
-        changeRules: {
-          deposit: [{ required: true, message: "押金不得为空", trigger: "blur" }],
-          remarks:[{required: true, message: "备注不得为空", trigger: "blur"}]
-        },
+        
       };
     },
     computed:{
@@ -173,13 +167,13 @@
           if (res.data.state === true) {
             let data = res.data.row[0]
             this.cardData.userName = data.cardFkReaderName
-            this.cardData.sex = data.sex
+            this.cardData.sex = data.sex == 1?'男':'女'
             this.cardData.type = data.cardGradeName
             this.cardData.startTime = data.cardCreatTime
             this.cardData.vaildTime = data.cardExpireTime
             this.cardData.state = data.state
             this.changeForm.deposit=data.cardGradeDeposit
-            this.cardData.money=data.cardGradeDeposit
+            this.cardData.balance=data.balance
             this.lastCardNum = this.cardInput
           } else {
             this.$message.error(res.data.msg);
@@ -194,8 +188,10 @@
           if (res.data.state === true) {
             this.$message.success("注销成功");
             this.centerDialogVisible=false
+            this.$router.push({path:'/logoffEnd'})
           } else {
             this.$message.error(res.data.msg);
+            this.centerDialogVisible=false
           }
         });
       },

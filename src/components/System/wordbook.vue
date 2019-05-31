@@ -57,18 +57,17 @@ export default {
           {
             required: true,
             message: "公告置顶条数不得为空",
-            trigger: "blur",
-            type: "number"
+            trigger: "blur"
           }
         ],
         recharge: [
-          { required: true, message: "充值验证额度", trigger: "blur" }
+          { required: true, message: "充值验证额度不得为空", trigger: "blur" }
         ],
         assist: [
-          { required: true, message: "补办费用设置", trigger: "blur" }
+          { required: true, message: "补办费用设置不得为空", trigger: "blur" }
         ],
         cardCost: [
-          { required: true, message: "读者卡有效时间", trigger: "blur" }
+          { required: true, message: "读者卡有效时间不得为空", trigger: "blur" }
         ]
       }
     };
@@ -94,15 +93,22 @@ export default {
       });
     },
     editApi(value) {
-      axios({
-        method: "put",
-        url: bookWordInt.edit,
-        data: value
-      }).then(res => {
-        if (res.data.state) {
-          this.$message.success("修改成功");
+      this.$refs.changeForm.validate(valid => {
+        if (valid) {
+          axios({
+            method: "put",
+            url: bookWordInt.edit,
+            data: value
+          }).then(res => {
+            if (res.data.state) {
+              this.$message.success("修改成功");
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
         } else {
-          this.$message.error(res.data.msg);
+          console.log("error submit!!");
+          return false;
         }
       });
     }

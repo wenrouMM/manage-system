@@ -36,8 +36,8 @@ import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCard
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 import LoanRecorde from '../components/Circulate/loanRecords.vue'
 import LoanHistory from '../components/Circulate/loanHistory.vue'
-import BorrowingBooks from '../components/Reader/LoanManagement/borrowingBooks.vue'
-import BorrowingStatus from '../components/Reader/LoanManagement/borrowingStatus.vue'
+import BorrowingBooks from '../components/Circulate/borrowingBooks.vue'
+
 import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
 import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
 import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
@@ -48,9 +48,7 @@ import DepositDetails from '../components/Reader/RechargeManagement/depositDetai
 import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
 import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
 import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
-import IncreditRecord from '../components/Reader/IncreditManagement/increditRecord.vue'
-import IncreditHistory from '../components/Reader/IncreditManagement/incredithistory.vue'
-import IncreditSetting from '../components/Reader/IncreditManagement/increditsettings.vue'
+
 import DishonestyRecords from '../components/Reader/DishonestyManagement/dishonestyRecords'
 import DishonestyHistory from '../components/Reader/DishonestyManagement/dishonestyHistory'
 import Login from '@/components/login.vue'
@@ -353,6 +351,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/damage.vue'], resolve)
         },
+        /*------ 财务管理 ------*/
         {
           path: '/rechargeSet',
           meta: {
@@ -381,6 +380,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/logOut.vue'], resolve)
         },
+        
         {
           path: '/refunds',
           meta: {
@@ -394,6 +394,14 @@ export default new Router({
             title: '注销页面'
           },
           component: resolve => require(['../components/Finance/logoff.vue'], resolve)
+        },
+        {
+          path:'/logoffEnd',
+          meta:{
+            title:'注销结果',
+            details:true
+          },
+          component:resolve => require(['../components/Finance/logoffEnd.vue'],resolve)
         },
         {
           path:'/refundsEnd/:card',
@@ -509,27 +517,6 @@ export default new Router({
               path: '/publishhouse',
               component: BookPublishHouse
             },
-
-
-
-            /*
-            {
-              path: "/borrowingbooks",
-              component: BorrowingBooks
-            },
-            {
-              path: "/borrowingstatus",
-              component: BorrowingStatus
-            },
-            {
-              path: "/returnbooks",
-              component: ReturnBooks
-            },
-            {
-              path: "/returnstatus",
-              component: ReturnStatus
-            },
-            */
             
            
           ]

@@ -17,7 +17,6 @@
             <i class="blueIcon el-icon-share"></i>导出
           </button>
         </div>
-        
       </section>
       <!-- 3.0表格数据 -->
       <section class="tableBox">
@@ -40,14 +39,11 @@
             <el-table-column align="center" prop="fkPressName" label="出版社"></el-table-column>
             <el-table-column align="center" prop="available" label="启用状态">
               <template slot-scope="scope">
-                <span class="">{{scope.row.available == 1 ?'启用':'停用'}}</span>
+                <span class>{{scope.row.available == 1 ?'启用':'停用'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="filterLend" label="在馆状态">
-            </el-table-column>
-            <el-table-column align="center" prop="filterOther" label="其他状态">
-
-            </el-table-column>
+            <el-table-column align="center" prop="filterLend" label="在馆状态"></el-table-column>
+            <el-table-column align="center" prop="filterOther" label="其他状态"></el-table-column>
           </el-table>
         </div>
         <!-- 4.0 分页 -->
@@ -125,9 +121,9 @@ export default {
     // 导出按钮
     deriveBtn() {},
     // 详情按钮
-    detailBtn(index,row) {
+    detailBtn(index, row) {
       let bookId = row.id;
-      console.log(row)
+      console.log(row);
       this.$router.push({ path: `/checkDetails/${bookId}` });
     },
     // 分页按钮
@@ -135,71 +131,73 @@ export default {
       // v-mode绑定好像会默认转数据类型
       let page = Math.ceil(this.total / this.pageSize);
       page == 0 ? 1 : page;
-      if (this.pageInput > page) {
+      if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
         this.pageInput = 1;
         this.$nextTick(() => {
           this.$refs.text.value = 1; // hack方法
           console.log("Vmode绑定值", this.pageInput);
         });
       } else {
+        this.pageInput = parseInt(this.pageInput);
+        this.$refs.text.value = parseInt(this.pageInput);
         let num = parseInt(this.pageInput);
         this.current_change(num);
       }
     },
     // 状态过滤函数
     filtersOther(value) {
-      let str = ''
-      switch(value){
+      let str = "";
+      switch (value) {
         case 0:
-          str = '无特殊状态'
-          break
+          str = "无特殊状态";
+          break;
         case 1:
-          str = '损坏'
-          break
+          str = "损坏";
+          break;
         case 2:
-          str = '遗失'
-          break
+          str = "遗失";
+          break;
         case 3:
-          str = '调馆'
-          break
+          str = "调馆";
+          break;
         case 4:
-          str = '未还'
-          break
+          str = "未还";
+          break;
         case 5:
-          str = '被盗'
-          break
+          str = "被盗";
+          break;
         case 6:
-          str = '陈旧'
-          break
+          str = "陈旧";
+          break;
         case 7:
-          str = '破损'
-          break
+          str = "破损";
+          break;
         case 8:
-          str = '其他'
-          break
+          str = "其他";
+          break;
       }
-      return str
+      return str;
     },
     filtersLend(value) {
-      let str = ''
-      switch(value){
+      let str = "";
+      switch (value) {
         case 0:
-          str = '不在架'
-          break
+          str = "不在架";
+          break;
         case 1:
-          str = '在架'
-          break
+          str = "在架";
+          break;
         case 2:
-          str = '借出'
-          break
+          str = "借出";
+          break;
         case 3:
-          str = '剔除'
-          break
+          str = "剔除";
+          break;
         case 4:
-          str = '损坏'
-          break
+          str = "损坏";
+          break;
       }
-      return str
+      return str;
     },
     /*------ Api ------*/
     searchApi(value) {
@@ -213,13 +211,13 @@ export default {
         .then(res => {
           console.log("损坏记录", res.data);
           if (res.data.state === true) {
-            let data = res.data.row
-            for(let item of data){
-              item.filterLend = this.filtersLend(item.lendState)
-              item.filterOther = this.filtersOther(item.otherState)
+            let data = res.data.row;
+            for (let item of data) {
+              item.filterLend = this.filtersLend(item.lendState);
+              item.filterOther = this.filtersOther(item.otherState);
             }
             this.tableData = data; //获取返回数据
-            console.log('过滤后的data',this.tableData)
+            console.log("过滤后的data", this.tableData);
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             this.currentPage = 1; // 回到第一页显示
@@ -244,13 +242,13 @@ export default {
         .then(res => {
           console.log("损坏记录", res.data);
           if (res.data.state === true) {
-            let data = res.data.row
-            for(let item of data){
-              item.filterLend = this.filtersLend(item.lendState)
-              item.filterOther = this.filtersOther(item.otherState)
+            let data = res.data.row;
+            for (let item of data) {
+              item.filterLend = this.filtersLend(item.lendState);
+              item.filterOther = this.filtersOther(item.otherState);
             }
             this.tableData = data; //获取返回数据
-            console.log('过滤后的data',this.tableData)
+            console.log("过滤后的data", this.tableData);
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
             this.tableLoading = false;
@@ -272,9 +270,9 @@ export default {
     }
   },
   created() {
-    let obj = {}
-    obj.fkCataBookId = this.$route.params.id
-    console.log(this.$route.params)
+    let obj = {};
+    obj.fkCataBookId = this.$route.params.id;
+    console.log(this.$route.params);
 
     this.searchApi(obj); // 调用查询接口获取数据
   }
@@ -288,19 +286,19 @@ export default {
 #damageCount .commonMode .sonTitle {
   margin-bottom: 0 !important;
 }
-.spect{
+.spect {
   display: flex;
   justify-content: space-between;
 }
-.back{
+.back {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.back:hover{
+.back:hover {
   color: #0096ff;
 }
-.textback{
+.textback {
   margin-left: 10px;
 }
 .anthoerBox {
@@ -322,35 +320,35 @@ export default {
   justify-content: space-between;
 }
 .buttonBox .blue {
-    background: #31D6FF;
-    border-radius: 10px;
+  background: #31d6ff;
+  border-radius: 10px;
 }
 .buttonBox button {
-    padding-left: 18px;
-    padding-right: 18px;
-    height: 40px;
-    font-size: 16px;
-    color: #fff;
-    display: inline-block;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    background: #fff;
-    border: none;
-    -webkit-appearance: none;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 0;
-    margin: 0;
-    -webkit-transition: 0.1s;
-    transition: 0.1s;
-    font-weight: 500;
+  padding-left: 18px;
+  padding-right: 18px;
+  height: 40px;
+  font-size: 16px;
+  color: #fff;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  -webkit-appearance: none;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: 500;
 }
 /*------ 表格 ------*/
 .tableBorder {
   border: 1px solid #ebeef5;
-  border-bottom:none;
+  border-bottom: none;
 }
 .page_div {
   text-align: center;
@@ -373,7 +371,7 @@ export default {
   font-size: 16px;
   text-align: center;
 }
-.detail{
+.detail {
   cursor: pointer;
   color: #00d7f0;
 }
