@@ -104,8 +104,8 @@ export default {
         remarks:'',
       },
       changeRules: {
-        deposit: [{ required: true, message: "押金不得为空", trigger: "blur" }],
-        remarks:[{required: true, message: "备注不得为空", trigger: "blur"}]
+        deposit: [{ required: true, message: "充值金额不得为空", trigger: "blur" }],
+        
       },
     };
   },
@@ -161,7 +161,7 @@ export default {
         if (res.data.state === true) {
           let data = res.data.row[0]
           this.cardData.userName = data.cardFkReaderName
-          this.cardData.sex = data.sex
+          this.cardData.sex = data.sex == 1?'男':'女'
           this.cardData.type = data.cardGradeName
           this.cardData.startTime = data.cardCreatTime
           this.cardData.vaildTime = data.cardExpireTime

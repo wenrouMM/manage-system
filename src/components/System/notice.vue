@@ -125,7 +125,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-import { editorInt } from "../../request/api/base.js";
+import { editorInt } from "@request/api/base.js";
 
 export default {
   data() {
@@ -207,6 +207,8 @@ export default {
       };
       return searchForm;
     },
+    // 判定提示语
+    
     cancelTimeForm(){
 
     }
@@ -338,7 +340,7 @@ export default {
         data:value
       }).then((res)=>{
         if(res.data.state == true){
-          this.$message.success('撤销成功')
+          this.$message.success('修改公告成功')
           this.searchApi(this.searchTimeForm)
         } else{
           this.$message.error(res.data.msg)
@@ -354,7 +356,7 @@ export default {
         data:value
       }).then((res)=>{
         if(res.data.state == true){
-          this.$message.success('置顶成功')
+          this.$message.success('修改公告成功')
           this.searchApi(this.searchTimeForm)
         } else{
           this.$message.error(res.data.msg)

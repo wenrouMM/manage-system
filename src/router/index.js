@@ -351,6 +351,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/damage.vue'], resolve)
         },
+        /*------ 财务管理 ------*/
         {
           path: '/rechargeSet',
           meta: {
@@ -379,6 +380,7 @@ export default new Router({
           },
           component: resolve => require(['../components/System/logOut.vue'], resolve)
         },
+        
         {
           path: '/refunds',
           meta: {
@@ -392,6 +394,14 @@ export default new Router({
             title: '注销页面'
           },
           component: resolve => require(['../components/Finance/logoff.vue'], resolve)
+        },
+        {
+          path:'/logoffEnd',
+          meta:{
+            title:'注销结果',
+            details:true
+          },
+          component:resolve => require(['../components/Finance/logoffEnd.vue'],resolve)
         },
         {
           path:'/refundsEnd/:card',

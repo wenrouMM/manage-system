@@ -342,7 +342,7 @@ export default {
         this.i = 1;
         this.centerDialogVisible = true;
       } else {
-        this.$message.error('请先选择删除对象')
+        this.$message.error('请先选择被删除的数据')
       }
 
     },

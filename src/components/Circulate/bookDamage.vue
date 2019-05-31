@@ -135,12 +135,12 @@
           <div class="formBox">
             <el-form ref="form" :rules="damageRules" :model="damageForm" label-width="100px">
               <div class="inputBox">
-                <el-form-item prop="list" label="报损方式">
+                <el-form-item prop="list" label="报损原因">
                   <el-select
                     clearable
                     value-key="id"
                     v-model="damageForm.list"
-                    placeholder="请选择报损方式"
+                    placeholder="请选择报损原因"
                   >
                     <el-option
                       v-for="(item,index) of this.optionsData"

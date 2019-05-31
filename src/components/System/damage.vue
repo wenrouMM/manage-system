@@ -124,8 +124,8 @@
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
           >
-            <el-form-item label="损坏方式 : " prop="damageMothod" >
-              <el-input v-model="addForm.damageMothod" placeholder="请输入损坏的方式"></el-input>
+            <el-form-item label="损坏原因 : " prop="damageMothod" >
+              <el-input v-model="addForm.damageMothod" placeholder="请输入损坏的原因"></el-input>
             </el-form-item>
             <el-form-item label="赔偿方式 : " prop="payFor">
               <el-select clearable v-model="addForm.payFor" @change="payForMethodCheck(addForm.payFor)" placeholder="请选择赔偿的方式">

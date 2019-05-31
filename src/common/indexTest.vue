@@ -42,8 +42,8 @@
               <div class="userDrop">
                 <span @click="toCenter" class="dropItem">个人中心</span>
                 <span @click="loginOut" class="dropItem">切换账户</span>
-                <span @click="loginOut" class="dropItem">押金充值</span>
-                <span @click="loginOut" class="dropItem">卡号注销</span>
+                <span @click="rechargeBtn" class="dropItem">押金充值</span>
+                <span @click="cardBtn" class="dropItem">卡号注销</span>
               </div>
             </div>
             <i class="notice"></i>
@@ -198,6 +198,12 @@ export default {
       this.$store.commit("deleteUserInfo");
       this.$store.commit("deleteMenu");
       this.$router.push("/login");
+    },
+    rechargeBtn(){
+      this.$router.push("/refunds");
+    },
+    cardBtn(){
+      this.$router.push('/logoff')
     }
   },
   computed: {
