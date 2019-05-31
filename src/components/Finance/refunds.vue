@@ -11,7 +11,7 @@
     <!-- 用户信息卡查询 -->
     <div class="cardData">
       <div class="selectForm">
-        <p class="balance">当前余额:￥{{this.cardData.money==''?0:this.cardData.money}}</p>
+        <p class="balance">当前押金:￥{{this.cardData.money==''?0:this.cardData.money}}</p>
         <div class="searchBox">
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">

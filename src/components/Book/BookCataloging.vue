@@ -124,7 +124,7 @@
                     <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
                       <el-input v-model="addForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item label=" 副 题 名 :" prop="viceName" label-width="90px" style="">
+                    <el-form-item label=" 副 题 名 :" label-width="90px" style="">
                       <el-input v-model="addForm.viceName "></el-input>
                     </el-form-item>
                   </div>
@@ -132,7 +132,7 @@
                     <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
                       <el-input v-model="addForm.author "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 丛编题名 :" prop="clusterName" label-width="95px" style="">
+                    <el-form-item label=" 丛编题名 :" label-width="95px" style="">
                       <el-input v-model="addForm.clusterName"></el-input>
                     </el-form-item>
                   </div>
@@ -176,7 +176,7 @@
                     <el-form-item label=" 出 版 地 :" prop="publishingPleace" label-width="90px" style="margin-left: 60px">
                       <el-input v-model="addForm.publishingPleace "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 出版日期 :" prop="publishingTime" label-width="95px" style="margin-left: 20px">
+                    <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
                       <el-date-picker
                         v-model="addForm.publishingTime"
                         align="right"
@@ -189,10 +189,10 @@
                     </el-form-item>
                   </div>
                   <div class="flexLayout" id="catalogingInput5">
-                    <el-form-item label=" 页　　码 :" prop="pageNumber" label-width="95px">
+                    <el-form-item label=" 页　　码 :" label-width="95px">
                       <el-input v-model="addForm.pageNumber"></el-input>
                     </el-form-item>
-                    <el-form-item label=" 开　　本 :" prop="format" label-width="95px">
+                    <el-form-item label=" 开　　本 :" label-width="95px">
                       <el-input v-model="addForm.openBook "></el-input>
                     </el-form-item>
                     <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
@@ -200,16 +200,16 @@
                     </el-form-item>
                   </div>
                   <div class="flexLayout">
-                    <el-form-item label=" 附　　注 :" prop="annotations " label-width="95px">
+                    <el-form-item label=" 附　　注 :" label-width="95px">
                       <el-input v-model="addForm.annotations "></el-input>
                     </el-form-item>
-                    <el-form-item label=" 主 题 词 :" prop="themeWord" label-width="95px">
+                    <el-form-item label=" 主 题 词 :" label-width="95px">
                       <el-input v-model="addForm.themeWord "></el-input>
                     </el-form-item>
                   </div>
                   <div>
-                    <el-form-item label=" 备　　注 :" prop="renarks" style="width: 950px;">
-                      <el-input type="textarea" v-model="addForm.renarks" style="width: 850px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
+                    <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
+                      <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
                     </el-form-item>
                   </div>
                 </div>
@@ -334,7 +334,14 @@
         },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
-
+          searchNumber:[{required:true,message:'索书号不能为空',trigger:'blur'}],
+          name:[{required:true,message:'正题名不能为空',trigger:'blur'}],
+          author:[{required:true,message:'编著者不能为空',trigger:'blur'}],
+          fkTypeCode:[{required:true,message:'分类号不能为空',trigger:'change'}],
+          fkTypeName:[{required:true,message:'分类名不能为空',trigger:'change'}],
+          fkPressName:[{required:true,message:'出版社不能为空',trigger:'change'}],
+          publishingPleace:[{required:true,message:'出版地不能为空',trigger:'change'}],
+          price:[{required:true,message:'价格不能为空',trigger:'blur'}],
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
@@ -687,12 +694,39 @@
             console.log(error);
           });
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(catalog.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("书籍编目", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.rows; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {

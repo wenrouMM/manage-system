@@ -17,65 +17,91 @@
               <div class="sonTitle">
                 <span class="titleName">图书出版社</span>
               </div>
-              <div style="display: flex;flex-direction: row">
+              <div class="flexLayout">
                 <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
                 <div class="buttonBox">
                   <button class="add" @click="addDialogOpen">
                     <i class="addIcon el-icon-plus"></i>添加
                   </button>
+                  <button class="blue" @click="deriveBtn">
+                    <i class="blueIcon el-icon-share"></i>导出
+                  </button>
+                </div>
+                <div class="right">
+                  <el-form :inline="true" :model="searchForm">
+                    <el-form-item label="出版社名称 :">
+                      <el-input v-model="searchForm.publishingName" placeholder="请输入出版社名称" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
+                    </el-form-item>
+                  </el-form>
                 </div>
               </div>
               <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-                <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
-                  <el-table
-                    class="tableBorder"
-                    :data="tableData"
-                    empty-text="无数据"
-                    style="width: 100%; text-align:center;"
-                    type="index"
-                    :row-style="rowStyle"
-                    :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
-                  >
-                  <el-table-column align="center" prop="index" width="250" label="序号">
+              <section class="tableBox">
+                <el-table
+                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+                  empty-text="无数据"
+                  style="width: 1260px; text-align:center;"
+                  :data="tableData"
+                  :row-style="{height:'60px'}"
+                >
+                  <el-table-column align="center" prop="index" type="index" width="100" label="序号">
                     <template slot-scope="scope">
                       <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="name" width="260" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="address" width="250" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="contacts" width="250" label="联系人"></el-table-column>
-                  <el-table-column align="center" prop="telephone" width="250" label="联系电话"></el-table-column>
+                  <el-table-column align="center" prop="name" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="address" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="contacts" label="联系人" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="telephone" label="联系电话" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" label="操作">
+                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                    <template slot-scope="scope">
+                      <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
+                      <span class="ban" @click="deleteBtn(scope.$index, scope.row)">删除</span>
+                    </template>
+                  </el-table-column>
                 </el-table>
-                  <!-- 5.0 分页内容 分页提交刷新页面 前进后退 点击以及调转四个事件传递数值-->
-                  <section class="pagination mt_30">
-                    <el-pagination
-                      style="display: inline-block"
-                      background
-                      layout="prev, pager, next,total,slot"
-                      :total="total"
-                      :page-size="pageSize"
-                      :current-page="currentPage"
-                      @current-change="current_change"
+                <!-- 4.0 分页 -->
+                <section class="pagination mt_30">
+                  <el-pagination
+                    style="display: inline-block"
+                    background
+                    layout="prev, pager, next,total,slot"
+                    :total="total"
+                    :page-size="pageSize"
+                    :current-page="currentPage"
+                    @current-change="current_change"
+                  >
+                    <slot>
+                <span>
+                  前往
+                  <div class="el-input el-pagination__editor is-in-pagination">
+                    <input
+                      ref="text"
+                      type="number"
+                      v-model="pageInput"
+                      autocomplete="off"
+                      min="1"
+                      max="1"
+                      class="compo el-input__inner"
                     >
-                      <slot>
-              <span>
-                前往
-                <div class="el-input el-pagination__editor is-in-pagination">
-                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
-                </div>
-                页
-              </span>
-                      </slot>
-                    </el-pagination>
-                    <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
-                  </section>
+                  </div>页
+                </span>
+                    </slot>
+                  </el-pagination>
+                  <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+                </section>
               </section>
+
             </div>
           </div>
           <!-- 添加弹框 -->
           <div class="addEditDialog">
             <!-- Form -->
-            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[0]" :visible.sync="dialogFormVisible">
+            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
               <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
                   <el-input v-model="addForm.publishName"></el-input>
@@ -95,6 +121,17 @@
                   <el-button type="info" @click="resetForm()" >取消</el-button>
                 </el-form-item>
               </el-form>
+            </el-dialog>
+          </div>
+          <div class="forbid">
+            <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+              <div class="dialogBody">
+                是否{{Dialogtitle[i]}}?
+              </div>
+              <div slot="footer">
+                <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+                <span class="dialogButton cancel" @click="centerDialogVisible=false">取消</span>
+              </div>
             </el-dialog>
           </div>
         </el-container>
@@ -168,7 +205,7 @@
         paginationForm: {},
         zTree:{},
         centerDialogVisible: false, // 禁用弹框
-        Dialogtitle: ["添加"],
+        Dialogtitle: ["添加",'修改','删除'],
         i: 0, // 切换弹框标题
         dialogFormVisible: false, // // 添加弹框的展示和消失
         addForm: {
@@ -188,6 +225,9 @@
         },
         formLabelWidth: "120px",
         /*====== 2.0表单提交数据项 ======*/
+        searchForm:{
+          publishingName:'',
+        },
         search: "", // 存储搜索完成后的2.0表单数据 用于调用分页接口
 
         /*====== 3.0添加 批量删除所需数据 ======*/
@@ -235,9 +275,31 @@
           this.current_change(num)
         }
       },
+      //搜索按钮
+      searchBtn(){
+
+      },
+      //导出按钮
+      deriveBtn(){
+
+      },
+      //修改按钮
+      EditBtn(){
+        this.i=1
+        this.dialogFormVisible=true
+      },
+      //删除按钮
+      deleteBtn(){
+        this.i=2
+        this.centerDialogVisible=true
+      },
+      //删除确定按钮
+      submitDialog(){
+
+      },
       /*====== 3.0添加相关操作 ======*/
       addDialogOpen() {
-        console.log(this.zTree.code)
+        this.i=0
         this.dialogFormVisible = true;
       },
       /*====== 3.1ztree城市树状图 ======*/
@@ -289,18 +351,22 @@
       // 编辑弹框
       submitForm() {
         console.log('ztree树节点信息',this.zTree.code)
-        this.$refs[this.addForm].validate((valid) => {
-          if (valid) {
-            if(this.zTree.code==undefined){
-              this.formApi('北京市','bj_jing')
-            }else{
-              this.formApi(this.zTree.name,this.zTree.code)
+        if(this.i==0){
+          this.$refs[this.addForm].validate((valid) => {
+            if (valid) {
+              if(this.zTree.code==undefined){
+                this.formApi('北京市','bj_jing')
+              }else{
+                this.formApi(this.zTree.name,this.zTree.code)
+              }
+            } else {
+              console.log('error submit!!');
+              return false;
             }
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+          });
+        }else if(this.i==1){
+          console.log('修改操作')
+        }
       },
       formApi(ztreeName,ztreeCode){
         var addStr=[{
@@ -442,10 +508,18 @@
   .text {
     font-size: 14px;
   }
+  .edit {
+    color: #00d7f0;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+  .ban {
+    color: #ff5c3c;
+    cursor: pointer;
+  }
   /* 按钮 */
   .buttonBox {
     margin-bottom: 30px;
-    margin-right: 800px;
   }
   .buttonBox button {
     padding-left: 18px;
@@ -472,16 +546,16 @@
   .buttonBox .add {
     background: rgba(255, 146, 49, 1);
     border-radius: 10px;
-    margin-right: 30px;
+    margin-right: 10px;
   }
   .buttonBox .add .addIcon {
     margin-right: 6px;
   }
-  .buttonBox .delete {
-    background: rgba(255, 92, 60, 1);
+  .buttonBox .blue {
+    background: #31D6FF;
     border-radius: 10px;
   }
-  .buttonBox .delete .deleteIcon {
+  .buttonBox .blue .blueIcon {
     margin-right: 6px;
   }
 </style>
