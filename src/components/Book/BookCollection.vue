@@ -354,6 +354,7 @@
         },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
+          name:[{ required: true, message: "请输入正题名", trigger: "blur" }],
           code:[{ required: true,message: "请输入馆藏码", trigger: "blur" }],
           searchNumber:[{ required: true,message: "请输入索取号", trigger: "blur" }],
           place:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],

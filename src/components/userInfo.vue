@@ -39,7 +39,7 @@
         </div>
         <div class="rowList">
           <div class="text">密码:</div>
-          <div class="content">{{hidePassword}}</div>
+          <div class="content">******</div>
           <div class="fix" @click="pwdBtn">修改</div>
         </div>
         <div class="rowList">
@@ -196,8 +196,7 @@ export default {
             message:res.data.msg,
             type: 'success'
           });
-          //this.InitializationFun()
-          this.userName=this.changeInput
+          this.InitializationFun()
           this.appear=false
         }else{
           this.$message({
@@ -209,7 +208,7 @@ export default {
     },
     // 修改密码
     pwdBtn(){
-      this.oldInput = this.userPassword
+      this.oldInput = ''
       this.newInput = ''
       this.pwdDialog = true
     },
@@ -222,12 +221,7 @@ export default {
             message:res.data.msg,
             type: 'success'
           });
-          //this.InitializationFun()
-          this.hidePassword=''
-          this.userPassword=this.newInput
-          for(var i=0;i<=this.userPassword.length;i++){
-            this.hidePassword+='*'
-          }
+          this.InitializationFun()
           this.pwdDialog=false
         }else{
           this.$message({
