@@ -114,7 +114,7 @@
 
 <script>
 import axios from 'axios'
-import { uploadInt, editorInt } from "../../request/api/base.js";
+import { uploadInt, editorInt } from "@request/api/base.js";
 import { editorData } from "../editor.js";
 import { Quill, quillEditor } from "vue-quill-editor";
 import ImageResize from "quill-image-resize-module";
@@ -254,7 +254,7 @@ export default {
       }
     },
     fileError(res, file, fileList) {
-      this.$message.error("文件大小不得超过50M");
+      this.$message.error("文件上传失败");
     },
     fileChange(file, fileList) {
       this.fileList = fileList.slice(-3);

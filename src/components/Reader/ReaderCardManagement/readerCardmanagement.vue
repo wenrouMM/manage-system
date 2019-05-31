@@ -147,15 +147,9 @@
                 ></el-input>
               </el-form-item>
               <el-form-item class="textCenter">
-              <el-button
-                type="primary"
-                @click="subDelete"
-              >确定</el-button>
-              <el-button
-                type="info"
-                @click="deleteDialog = false"
-              >取消</el-button>
-            </el-form-item>
+                <el-button type="primary" @click="subDelete">确定</el-button>
+                <el-button type="info" @click="deleteDialog = false">取消</el-button>
+              </el-form-item>
             </el-form>
           </div>
           <!-- <p class="tips">注销用户属于敏感操作</p> -->
@@ -337,13 +331,15 @@ export default {
       // v-mode绑定好像会默认转数据类型
       let page = Math.ceil(this.total / this.pageSize);
       page == 0 ? 1 : page;
-      if (this.pageInput > page) {
+      if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
         this.pageInput = 1;
         this.$nextTick(() => {
           this.$refs.text.value = 1; // hack方法
           console.log("Vmode绑定值", this.pageInput);
         });
       } else {
+        this.pageInput = parseInt(this.pageInput);
+        this.$refs.text.value = parseInt(this.pageInput);
         let num = parseInt(this.pageInput);
         this.current_change(num);
       }
@@ -418,8 +414,8 @@ export default {
     },
     // 注销按钮
     logoutBtn(index, row) {
-      this.logOut.fkCardNumber = ''
-      this.logOut.remarks = ''
+      this.logOut.fkCardNumber = "";
+      this.logOut.remarks = "";
       this.logOut.fkCardNumber = row.cardNumber;
 
       this.deleteDialog = true;
@@ -427,9 +423,9 @@ export default {
     },
     /*====== 弹框相关按钮 ======*/
 
-    // 
+    //
     subDelete() {
-      this.logoutApi(this.logOut,"deleteDialog");
+      this.logoutApi(this.logOut, "deleteDialog");
       console.log("挂失补办触发");
     },
     // 登记读者卡 补办卡弹框确定按钮
@@ -983,8 +979,8 @@ export default {
 .readerCard .el-button:last-child {
   margin-right: 0px;
 }
-.reader-card .forbid .el-dialog__body{
-  border-radius: 0px 0px 20px 20px
+.reader-card .forbid .el-dialog__body {
+  border-radius: 0px 0px 20px 20px;
 }
 </style>
 

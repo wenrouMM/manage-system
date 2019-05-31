@@ -272,7 +272,7 @@ export default {
       PieColors: ["#00A2FF", "#FC32F0", "#00D2FF", "#ff5c3c", "#ff9231"],
       PieSetting: {
         // 饼图设置
-        roseType: "radius", // 玫瑰图配置项
+        //roseType: "radius", // 玫瑰图配置项
         // 引导线
         labelLine: {
           show: false

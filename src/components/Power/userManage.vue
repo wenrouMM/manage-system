@@ -10,7 +10,7 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
-            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+            <el-form  :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
                 <el-input size="120" v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
               </el-form-item>
@@ -36,15 +36,18 @@
               <el-form-item label="手机号码:" size="160">
                 <el-input v-model="searchForm.userPhone" placeholder="请输入手机号码"></el-input>
               </el-form-item>
-              <el-form-item label="创建时间:" size="130">
+              <el-form-item size="130">
                 <el-date-picker
-                  v-model="searchForm.date"
-                  type="daterange"
-                  align="right"
-                  range-separator="至"
-                  :picker-options="pickerOptions"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -131,7 +134,7 @@
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
-                  <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span>
+                  <!-- <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span> -->
                 </template>
               </el-table-column>
             </el-table>
@@ -148,16 +151,23 @@
                 @current-change="current_change"
               >
                 <slot>
-              <span>
-                前往
-                <div class="el-input el-pagination__editor is-in-pagination">
-                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
-                </div>
-                页
-              </span>
+                  <span>
+                    前往
+                    <div class="el-input el-pagination__editor is-in-pagination">
+                      <input
+                        ref="text"
+                        type="number"
+                        v-model="pageInput"
+                        autocomplete="off"
+                        min="1"
+                        max="1"
+                        class="compo el-input__inner"
+                      >
+                    </div>页
+                  </span>
                 </slot>
               </el-pagination>
-              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
+              <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
         </div>
@@ -240,7 +250,11 @@
             </el-form-item>
             <!-- 表单域 -->
             <el-form-item label="姓　　名" prop="username" :label-width="formLabelWidth">
-              <el-input :disabled="addForm.username && i==2?true:false" v-model="addForm.username" autocomplete="off"></el-input>
+              <el-input
+                :disabled="addForm.username && i==2?true:false"
+                v-model="addForm.username"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
             <el-form-item label="角色类型" prop="authTbRoles" :label-width="formLabelWidth">
               <el-select
@@ -259,8 +273,12 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item  label="身份证号" prop="idCard" :label-width="formLabelWidth">
-              <el-input :disabled="addForm.idCard && i==2?true:false" v-model="addForm.idCard" autocomplete="off"></el-input>
+            <el-form-item label="身份证号" prop="idCard" :label-width="formLabelWidth">
+              <el-input
+                :disabled="addForm.idCard && i==2?true:false"
+                v-model="addForm.idCard"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
             <el-form-item label="注册邮箱" prop="email" :label-width="formLabelWidth">
               <el-input v-model="addForm.email" autocomplete="off"></el-input>
@@ -273,8 +291,8 @@
             </el-form-item>
             <el-form-item class="select" prop="isLock" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
-                <el-radio :label="1" >禁用</el-radio>
-                <el-radio :label="0" >启用</el-radio>
+                <el-radio :label="1">禁用</el-radio>
+                <el-radio :label="0">启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
@@ -315,52 +333,52 @@ export default {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
   },
   data() {
-    var checkPhone = (rule, value, callback) =>{
-      if(!value){
-        return callback(new Error('请输入手机号'))
+    var checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入手机号"));
       } else {
-        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
-        console.log('正则验证',reg.test(value))
-        if(reg.test(value)) {
-          callback()
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        console.log("正则验证", reg.test(value));
+        if (reg.test(value)) {
+          callback();
         } else {
-          return callback(new Error('请输入正确的手机号'))
+          return callback(new Error("请输入正确的手机号"));
         }
       }
-    }
-    var checkEmail = (rule, value, callback) =>{
-      if(!value){
-        return callback(new Error('请输入邮箱'))
+    };
+    var checkEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入邮箱"));
       } else {
-        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-        if(reg.test(value)) {
-          callback()
+        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        if (reg.test(value)) {
+          callback();
         } else {
-          return callback(new Error('请输入正确的邮箱'))
+          return callback(new Error("请输入正确的邮箱"));
         }
       }
-    }
-    var checkId = (rule,value, callback) =>{
-      if(!value){
-        return callback(new Error('请输入身份证'))
+    };
+    var checkId = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入身份证"));
       } else {
-        const reg18 = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
-        if(reg18.test(value)) {
-          callback()
+        const reg18 = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (reg18.test(value)) {
+          callback();
         } else {
-          return callback(new Error('请输入正确的身份证'))
+          return callback(new Error("请输入正确的身份证"));
         }
       }
-    }
+    };
     return {
       /*------ bugHack ------*/
-      formFlag:false,
+      formFlag: false,
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
       Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
       i: 0, // 切换弹框标题
       defaultImg: " ", // 上传头像默认头像
-      preloadImg:'',
+      preloadImg: "",
       dialogFormVisible: false, // // 添加弹框的展示和消失
       files: null,
       addForm: {
@@ -383,17 +401,15 @@ export default {
         authTbRoles: [
           { required: true, message: "请选择用户类型", trigger: "change" }
         ],
-        idCard: [
-          { validator: checkId,required: true, trigger: "blur" }
-        ],
+        idCard: [{ validator: checkId, required: true, trigger: "blur" }],
         address: [
           { required: true, message: "请输入居住地址", trigger: "blur" }
         ],
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
         ],
-        phone: [{validator: checkPhone, required: true,  trigger: "blur" }],
+        phone: [{ validator: checkPhone, required: true, trigger: "blur" }],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
       formLabelWidth: "100px",
@@ -401,6 +417,27 @@ export default {
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
+        }
+      },
+
+      pickerOptions0: {
+        disabledDate: time => {
+          if (this.searchForm.endTime) {
+            return (
+              time.getTime() > Date.now() ||
+              time.getTime() > this.searchForm.endTime
+            );
+          } else {
+            return time.getTime() > Date.now();
+          }
+        }
+      },
+      pickerOptions1: {
+        disabledDate: time => {
+          return (
+            time.getTime() < this.searchForm.beginTime ||
+            time.getTime() > Date.now()
+          );
         }
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
@@ -419,6 +456,7 @@ export default {
       tableData: [
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
       ],
+
       /*====== 5.0 分页相关 搜索相关设置项 ======*/
       searchLoading: false,
 
@@ -434,7 +472,8 @@ export default {
         userType: "",
         userId: "",
         userPhone: "",
-        date: [] // 选择日期
+        beginTime: '',
+        endTime: '',
       },
       paginationForm: {},
       /*===== 6.0弹框初始化数据 ======*/
@@ -446,38 +485,33 @@ export default {
   },
   computed: {
     // 图片上传
-    srcPre(){
-      let src=''
-      if(this.addForm.headerAddress!=null &&this.addForm.headerAddress!=''){
-        src = this.addForm.preUrl
-        console.log(this.addForm.preUrl)
-        console.log('真就不执行了？')
-      } else{
-        src = '/static/img/timg.38262dc.jpg'
+    srcPre() {
+      let src = "";
+      if (
+        this.addForm.headerAddress != null &&
+        this.addForm.headerAddress != ""
+      ) {
+        src = this.addForm.preUrl;
+        console.log(this.addForm.preUrl);
+        console.log("真就不执行了？");
+      } else {
+        src = "/static/img/timg.38262dc.jpg";
       }
-      return src
+      return src;
     },
     searchTimeForm() {
       // 计算属性 真正传递的数据
       let date = this.searchForm.date;
       let searchForm = {
         pageSize: this.pageSize,
-        currentPage:1,
+        currentPage: 1,
         name: this.searchForm.userName,
         fkRoleCode: this.searchForm.userType, // 只是给了一个code
-        idCard:this.searchForm.userId,
-        phone:this.searchForm.userPhone,
-        beginTime: null,
-        endTime: null
+        idCard: this.searchForm.userId,
+        phone: this.searchForm.userPhone,
+        beginTime: !this.searchForm.beginTime ? null : moment(this.searchForm.beginTime).format('YYYY-MM-DD'), //开始时间
+          endTime: !this.searchForm.endTime ? null : moment(this.searchForm.endTime).format('YYYY-MM-DD') //结束时间
       };
-      if (date != null && date != "") {
-        searchForm.beginTime = moment(this.searchForm.date[0]).format(
-          "YYYY-MM-DD"
-        ); //开始时间
-        searchForm.endTime = moment(this.searchForm.date[1]).format(
-          "YYYY-MM-DD"
-        );
-      }
 
       return searchForm;
     },
@@ -499,31 +533,34 @@ export default {
       }
       return data;
     },
-    banForm(){
-      let ban = null
+    banForm() {
+      let ban = null;
     }
   },
   methods: {
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
-      let page = Math.ceil(this.total / this.pageSize)
-      page ==0?1:page;
-      if(this.pageInput>page){
-        this.pageInput = 1
-        this.$nextTick(()=>{
-          this.$refs.text.value = 1 // hack方法
-          console.log('Vmode绑定值',this.pageInput)
-        })
-      }else{
-        let num = parseInt(this.pageInput)
-        this.current_change(num)
+      console.log("数据类型检测", this.pageInput);
+      let page = Math.ceil(this.total / this.pageSize);
+      page == 0 ? 1 : page;
+      if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
+        this.pageInput = 1;
+        this.$nextTick(() => {
+          this.$refs.text.value = 1; // hack方法
+          console.log("Vmode绑定值", this.pageInput);
+        });
+      } else {
+        this.pageInput = parseInt(this.pageInput);
+        this.$refs.text.value = parseInt(this.pageInput);
+        let num = parseInt(this.pageInput);
+        this.current_change(num);
       }
     },
     /*====== 3.0添加删除相关操作 ======*/
     addDialogOpen() {
       // 添加按钮
       let obj = this.addForm;
-      if(this.formFlag){
+      if (this.formFlag) {
         this.$refs.addForm.resetFields();
       }
       for (var i in obj) {
@@ -531,7 +568,7 @@ export default {
       }
       obj.authTbRoles = [];
       this.i = 3;
-      this.preloadImg =""
+      this.preloadImg = "";
       this.dialogFormVisible = true;
     },
     handleSelectionChange(selection) {
@@ -613,20 +650,20 @@ export default {
     },
     handleEdit(index, row) {
       // 编辑    点击这个的时候 把row对象的数据给予弹框中的对象数据
-      this.formFlag = true
-      this.preloadImg =""
+      this.formFlag = true;
+      this.preloadImg = "";
       this.i = 2;
       this.addForm.id = row.id;
       this.addForm.username = row.username;
       this.addForm.idCard = row.idCard;
       this.addForm.address = row.address;
       this.addForm.phone = row.phone;
-       this.addForm.email = row.email
+      this.addForm.email = row.email;
       this.addForm.headerAddress = row.headerAddress;
-      this.addForm.isLock = row.isLock
-      this.addForm.preUrl = row.preUrl
+      this.addForm.isLock = row.isLock;
+      this.addForm.preUrl = row.preUrl;
       this.dialogFormVisible = true;
-      console.log(index, row,typeof(this.addForm.isLock));
+      console.log(index, row, typeof this.addForm.isLock);
       console.log("编辑后的表单", this.addForm);
       console.log("提交的数据", this.addEdit);
     },
@@ -655,7 +692,7 @@ export default {
       this.SearchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1; // 并把结果返回给第一页
     },
-    paginationApi(value){
+    paginationApi(value) {
       this.tableLoading = true; // 加载前控制加载状态
       axios
         .get(userManageInterface.select, {
@@ -665,13 +702,13 @@ export default {
           if (res.data.state === true) {
             let nomol = res.data.row;
             for (let item of nomol) {
-               let id = item.idCard
-               let tel = item.phone
-               item.idShow = id.substr(0,5) + "********" + id.substr(13)
-               item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-               if(item.headerAddress !=null && item.headerAddress !=''){
-                 item.preUrl = uploadInt.preimg + item.headerAddress
-               }
+              let id = item.idCard;
+              let tel = item.phone;
+              item.idShow = id.substr(0, 5) + "********" + id.substr(13);
+              item.phoneShow = tel.substr(0, 3) + "****" + tel.substr(7);
+              if (item.headerAddress != null && item.headerAddress != "") {
+                item.preUrl = uploadInt.preimg + item.headerAddress;
+              }
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -701,14 +738,13 @@ export default {
           if (res.data.state === true) {
             let nomol = res.data.row;
             for (let item of nomol) {
-               let id = item.idCard
-               let tel = item.phone
-               item.idShow = id.substr(0,5) + "********" + id.substr(13)
-               item.phoneShow = tel.substr(0,3) + "****" + tel.substr(7)
-               if(item.headerAddress !=null && item.headerAddress !=''){
-                 item.preUrl = uploadInt.preimg + item.headerAddress
-               }
-
+              let id = item.idCard;
+              let tel = item.phone;
+              item.idShow = id.substr(0, 5) + "********" + id.substr(13);
+              item.phoneShow = tel.substr(0, 3) + "****" + tel.substr(7);
+              if (item.headerAddress != null && item.headerAddress != "") {
+                item.preUrl = uploadInt.preimg + item.headerAddress;
+              }
             }
             this.tableData = nomol; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -758,7 +794,7 @@ export default {
       let url = "";
       let method = "";
       let data = this.addEdit;
-       // 头像上传的文件 在编辑框中保存
+      // 头像上传的文件 在编辑框中保存
 
       if (i == 2) {
         url = userManageInterface.edit;
@@ -798,7 +834,7 @@ export default {
           // 执行结束后 解开锁屏
         } else {
           // 未填完不准通过
-          console.log('验证不过')
+          console.log("验证不过");
           return false;
         }
       });
@@ -825,7 +861,7 @@ export default {
 
       if (!e || !window.FileReader) return; // 看支持不支持FileReader
       let reader = new FileReader(); // 定义 fileReader对象
-      _this.uPphotoApi()
+      _this.uPphotoApi();
       reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
       reader.onloadend = function() {
         _this.preloadImg = this.result; // 此时this指向的fileReader对象
@@ -834,50 +870,51 @@ export default {
     },
     closeForm() {
       // 弹框关闭的时候执行 清空数据
-      this.formFlag = true
+      this.formFlag = true;
       console.log("关闭测试");
-
+      let obj = this.addForm
+      for (var i in obj) {
+        obj[i] = "";
+      }
       this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-
 
       this.files = null;
       //this.preloadImg = ''
-      console.log('更改了吗',this.addForm);
+      console.log("更改了吗", this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;
     },
     uPphotoApi() {
       let files = this.files;
       if (files != null) {
-            // 检测是否有文件 有就意味着被更改了
-            var formdatas = new FormData();
-            formdatas.append("file", files);
-            //console.log(formdatas.get('file'))
-            this.axios({
-              method: "post",
-              url: headUpload,
-              data: formdatas,
-              //cache: false,//上传文件无需缓存
-              processData: false, //用于对data参数进行序列化处理 这里必须false
-              contentType: false, //
-              dataType: "JSON",
-              ContentType: "multipart/form-data",
-              xhrFields: {
-                withCredentials: true
-              },
-              crossDomain: true
-            }).then(request => {
-              // 如果是编辑 更换图片失败后
-              if (request.data.state == true) {
-                this.addForm.headerAddress = request.data.row
-                console.log('是否图片',this.addForm)
-                console.log('图片上传成功',request.data.row,this.addEdit)
-              } else{
-                this.$message.error(request.data.msg);
-              }
-            });
+        // 检测是否有文件 有就意味着被更改了
+        var formdatas = new FormData();
+        formdatas.append("file", files);
+        //console.log(formdatas.get('file'))
+        this.axios({
+          method: "post",
+          url: headUpload,
+          data: formdatas,
+          //cache: false,//上传文件无需缓存
+          processData: false, //用于对data参数进行序列化处理 这里必须false
+          contentType: false, //
+          dataType: "JSON",
+          ContentType: "multipart/form-data",
+          xhrFields: {
+            withCredentials: true
+          },
+          crossDomain: true
+        }).then(request => {
+          // 如果是编辑 更换图片失败后
+          if (request.data.state == true) {
+            this.addForm.headerAddress = request.data.row;
+            console.log("是否图片", this.addForm);
+            console.log("图片上传成功", request.data.row, this.addEdit);
+          } else {
+            this.$message.error(request.data.msg);
           }
-
+        });
+      }
     }
   }
 };
@@ -926,7 +963,7 @@ export default {
 /* 可以通过size属性添加一个classname */
 
 .el-form--inline .el-form-item {
-  margin-right: 25px;
+  margin-right: 15px;
 }
 .el-form--inline .el-form-item:last-child {
   margin-right: 0;
@@ -1027,10 +1064,9 @@ export default {
   display: flex;
   justify-content: center;
 }
-.pagination{
+.pagination {
   display: flex;
   justify-content: center;
-
 }
 .pagaButton {
   width: 70px;

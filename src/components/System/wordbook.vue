@@ -1,29 +1,41 @@
 <template>
   <div class="dataError">
     <div class="commonMode normal" style="width:100%">
-        <div class="sonTitle">
-          <span class="titleName">数据字典</span>
-          <p class="tips"></p>
-        </div>
+      <div class="sonTitle">
+        <span class="titleName">数据字典</span>
+        <p class="tips"></p>
+      </div>
     </div>
     <div class="errBox">
-        <el-form ref="form" :model="changeForm" :rules="changeRules" label-width="140px" size="mini">
-          <el-form-item label="公告置顶条数" prop="apex">
+      <el-form ref="form" :model="changeForm" :rules="changeRules" label-width="140px" size="mini">
+        <el-form-item label="公告置顶条数" prop="apex">
+          <div class="inputBox">
             <el-input v-model.number="changeForm.apex"></el-input>
-          </el-form-item>
-          <el-form-item label="充值最大额度" prop="recharge">
-            <el-input v-model.number="changeForm.recharge"></el-input>
-          </el-form-item>
-          <el-form-item label="补办费用设置" prop="assist">
-            <el-input v-model.number="changeForm.assist"></el-input>
-          </el-form-item>
-          <el-form-item label="读者卡有效时间" prop="cardCost">
-            <el-input v-model.number="changeForm.cardCost"></el-input>
-          </el-form-item>
-          <div class="textCenter">
-            <el-button type="primary" @click="editBtn">提交</el-button>
+            <span class="ml_10 text">条</span>
           </div>
-        </el-form> 
+        </el-form-item>
+        <el-form-item label="充值验证额度" prop="recharge">
+          <div class="inputBox">
+            <el-input v-model.number="changeForm.recharge"></el-input>
+            <span class="ml_10 text">元</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="补办费用设置" prop="assist">
+          <div class="inputBox">
+            <el-input v-model.number="changeForm.assist"></el-input>
+            <span class="ml_10 text">元</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="读者卡有效时间" prop="cardCost">
+          <div class="inputBox">
+            <el-input v-model.number="changeForm.cardCost"></el-input>
+            <span class="ml_10 text">天</span>
+          </div>
+        </el-form-item>
+        <div class="textCenter">
+          <el-button type="primary" @click="editBtn">提交</el-button>
+        </div>
+      </el-form>
     </div>
   </div>
 </template>
@@ -40,11 +52,24 @@ export default {
         cardCost: "",
         id: ""
       },
-      changeRules:{
-        apex:[{ required: true, message: '公告置顶条数不得为空', trigger: 'blur',type:'number'}],
-        recharge:[{ required: true, message: '公告置顶条数不得为空', trigger: 'blur'}],
-        assist:[{ required: true, message: '公告置顶条数不得为空', trigger: 'blur'}],
-        cardCost:[{ required: true, message: '公告置顶条数不得为空', trigger: 'blur'}]
+      changeRules: {
+        apex: [
+          {
+            required: true,
+            message: "公告置顶条数不得为空",
+            trigger: "blur",
+            type: "number"
+          }
+        ],
+        recharge: [
+          { required: true, message: "充值验证额度", trigger: "blur" }
+        ],
+        assist: [
+          { required: true, message: "补办费用设置", trigger: "blur" }
+        ],
+        cardCost: [
+          { required: true, message: "读者卡有效时间", trigger: "blur" }
+        ]
       }
     };
   },
@@ -110,10 +135,18 @@ export default {
   width: 50%;
   margin: 0 auto;
 }
-.normal{
+.normal {
   margin-bottom: 120px;
 }
-.textCenter{
+.textCenter {
   text-align: center;
+}
+.inputBox {
+  position: relative;
+  display: flex;
+}
+.inputBox .text {
+  margin-left: 10px;
+  line-height: 36px;
 }
 </style>

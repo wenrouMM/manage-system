@@ -7,30 +7,23 @@ let fileUrl = 'http://192.168.2.54:8090/'  */
 //var url='http://127.0.0.1:8088/'
 
 //var url = 'http://192.168.2.31:8088/'
-//var url = 'http://192.168.2.121:8088/'
+var url = 'http://192.168.2.121:8088/'
 
 
 
-<<<<<<< HEAD
 var imgurl='http://192.168.2.121:8090/'
 let fileUrl = 'http://192.168.2.121:8090/'
-=======
-//var imgurl='http://192.168.2.31:8090/'
-//let fileUrl = 'http://192.168.2.31:8090/'
-import {IP} from '../../../static/config'
->>>>>>> c21205a03f6eb807ab8d3211b7924d6f5c6b8f89
 /*------ 文件上传模块 ------*/
-var url = IP.url
-var imgurl= IP.imgurl
-let fileUrl = IP.fileUrl
+
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,
   backImg:`${fileUrl}filemodule/uploadImg/addBackage`,
-  menuImg:`${fileUrl}filemodule/uploadImg/addMenu:8090`,
+  menuImg:`${fileUrl}filemodule/uploadImg/addMenu`,
   editorImg:`${fileUrl}filemodule/uploadImg/addEditorImg`,
   editorFile:`${fileUrl}filemodule/uploadFile/addEnclosure`,
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
-  preimg:`${fileUrl}filemodule/showFile/getShow`
+  preimg:`${fileUrl}filemodule/showFile/getShow`,
+  showFile:`${fileUrl}filemodule/showFile/getFile`
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {

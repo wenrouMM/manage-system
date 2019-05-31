@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { editorInt } from "@/request/api/base.js";
+import { editorInt,uploadInt } from "@/request/api/base.js";
 export default {
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
             this.fileList = data.sysTbEnclosures;
             for (let item of this.fileList) {
               item.fileDown =
-                "http://192.168.2.31:8090/filemodule/showFile/getFile" +
+                uploadInt.showFile +
                 item.fileAddress +
                 "?fileName=" +
                 item.fileName;

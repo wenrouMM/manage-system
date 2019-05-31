@@ -34,17 +34,17 @@ import bookLocation from '../components/Reader/libraryManage/bookLocation'
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
 import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
-import LoanRecorde from '../components/Reader/LoanManagement/loanRecords.vue'
-import LoanHistory from '../components/Reader/LoanManagement/loanHistory.vue'
+import LoanRecorde from '../components/Circulate/loanRecords.vue'
+import LoanHistory from '../components/Circulate/loanHistory.vue'
 import BorrowingBooks from '../components/Reader/LoanManagement/borrowingBooks.vue'
 import BorrowingStatus from '../components/Reader/LoanManagement/borrowingStatus.vue'
 import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
 import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
 import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
 import DepositRecord from '../components/Reader/RechargeManagement/depositRecord.vue'
-import PaymentRecord from '../components/Reader/RechargeManagement/paymentRecord.vue'
+
 import DepositDetails from '../components/Reader/RechargeManagement/depositDetails.vue'
-import PaymentDetails from '../components/Reader/RechargeManagement/paymentDetails.vue'
+
 import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
 import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
 import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
@@ -382,13 +382,6 @@ export default new Router({
           component: resolve => require(['../components/System/logOut.vue'], resolve)
         },
         {
-          path: '/dataDictionary',
-          meta: {
-            title: '数据字典'
-          },
-          component: resolve => require(['../components/System/dataDictionary.vue'], resolve)
-        },
-        {
           path: '/refunds',
           meta: {
             title: '押金充值'
@@ -537,50 +530,8 @@ export default new Router({
               component: ReturnStatus
             },
             */
-            {
-              path: "/chargemoney",
-              component: ChargeMoney
-            },
-            {
-              path: "/depositrecord",
-              component: DepositRecord
-            },
-            {
-              path: "/paymentrecord",
-              component: PaymentRecord
-            },
-            {
-              path: '/depositdetails',
-              component: DepositDetails
-            },
-            {
-              path: "/paymentdetails",
-              component: PaymentDetails
-            },
-            {
-              path: "/overduesetting",
-              component: OverdueSetting
-            },
-            {
-              path: "/increditrecord",
-              component: IncreditRecord
-            },
-            {
-              path: '/incredithistory',
-              component: IncreditHistory
-            },
-            {
-              path: '/IncreditSetting',
-              component: IncreditSetting
-            },
-            {
-              path: '/DishonestyRecords',
-              component: DishonestyRecords
-            },
-            {
-              path: '/DishonestyHistory',
-              component: DishonestyHistory
-            },
+            
+           
           ]
         }
       ]
