@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import {uploadInt} from '@request/api/base.js'
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
 import { mapGetters } from "vuex";
@@ -229,6 +230,7 @@ export default {
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     this.userLo = userInfo;
+    this.settingHead = uploadInt.preimg + userInfo.headerAddress
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {
