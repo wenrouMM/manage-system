@@ -14,15 +14,22 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item label="筛选 :">
-                <el-select v-model="searchForm.makeMethod" placeholder="处理方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
-                  <el-option label="索书号" value="0"></el-option>
-                  <el-option label="馆藏码" value="1"></el-option>
-                  <el-option label="ISBN" value="2"></el-option>
-                  <el-option label="书名" value="3"></el-option>
-                  <el-option label="状态" value="4"></el-option>
-                </el-select>
-                <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
+              <el-form-item label="创建时间:" size="130">
+                <el-date-picker
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="用户名">
+                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -44,13 +51,11 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="处理方式" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="code" label="读者卡号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="用户名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="创建时间" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="注销时间" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="操作用户" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="状态" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkUserName" label="用户名" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="refundAmount" label="注销金额" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="creatTime" label="注销时间" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="username" label="操作用户" :show-overflow-tooltip="true"></el-table-column>
           </el-table>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
@@ -103,108 +108,43 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { collection } from "../../request/api/base.js";
+  import { logOut } from "../../request/api/base.js";
 
   export default {
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
-        addForm:{
-          id:'',
-          isbn:'',
-          code:'',//条码
-          searchNumber:'',//索书号
-          place:'',//藏馆地
-          dailyRent:'',//默认日租金
-          lendingPermission:'',//不外借
-          available:'',//启用
-          titleProper:'', //正题名
-          bulkBook:'', //套装书
-          subtitle:'', //副题名
-          cluster:'', //丛编题名
-          classificationCode:'',//分类号
-          edition:'',//版次
-          volumeNumber:'',//卷册号
-          contributors:'',//编著者
-          bindingLayout:'',//装订版面
-          publishHouse:'',//出版社
-          comeoutTime:'',//出版时间
-          appendix:'',//附件
-          pageNumber:'',//页码
-          format:'',//开本
-          price:'',//价格
-        },
-        rules:{
-          isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
-          titleProper:[{ required: true}],
-          subtitle:[{ required: true}],
-          cluster:[{ required: true}],
-          classificationCode:[{ required: true}],
-          edition:[{ required: true}],
-          volumeNumber:[{ required: true}],
-          contributors:[{ required: true}],
-          bindingLayout:[{ required: true}],
-          publishHouse:[{ required: true}],
-          comeoutTime:[{ required: true}],
-          appendix:[{ required: true}],
-          pageNumber:[{ required: true,message: "请输入页码", trigger: "blur" }],
-          format:[{ required: true}],
-          price:[{ required: true,message: "请输入价格", trigger: "blur" }],
-          code:[{ required: true,message: "请输入条码号", trigger: "blur" }],
-          searchNumber:[{ required: true,message: "请输入索书号", trigger: "blur" }],
-          place:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
-          Number:[{ required: true,message: "请输入编号", trigger: "blur" }],
-          bookIndex:[{ required: true,message: "请输入索取号", trigger: "blur" }],
-          libAdress:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
-          putTime:[{ required: true,message: "请输入出版时间", trigger: "blur" }],
-          causesDamage:[{ required: true,message: "请选择损坏原因", trigger: "change" }],
-          amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "blur" }],
-          remarks:[{ required: true,message: "请输入备注", trigger: "blur" }],
-        },
-        harmForm:{
-          Number:'',//编号
-          bookIndex:'',//索取号
-          libAdress:'',//馆藏地
-          isbn:'',//isbn
-          bookName:'',//正题名
-          price:'',//价格
-          pageNumber:'',//页码
-          putTime:'',//出版时间
-          causesDamage:'',//损坏原因
-          amountCompensation:'',//赔偿金额
-          remarks:''//备注
-        },
         depositSum:'',//押金合计
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'调馆','删除','启用','报损','导出'],
+        Dialogtitle: ['导出'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
-          makeMethod:'',
-          searchData:"",
-          currentPage: 0
+          beginTime:'',
+          endTime:'',
+          userName:"",
         },
-        selectSearchForm:{
-          searchNumber:'',//索书号
-          code:'',//馆藏码
-          isbn:'',//isbn
-          bookName:'',//书名
-          state:'',//状态
-          currentPage: 0
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
         },
-        searchData:'',
-        /*初始化 */
-        options: [
-          {
-            value: "0",
-            label: "按具体金额赔偿"
-          },
-          {
-            value: "1",
-            label: "按价格倍数赔偿"
-          },
-        ],
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            );
+          }
+        },
         tableLoading: true,
         currentPage: 1,
         pageInput: 1,
@@ -217,42 +157,16 @@
     },
     computed: {
       searchTimeForm(){
-        let newState=''
-        switch (this.searchData/1) {
-          case 0:
-            console.log('索书号')
-            this.selectSearchForm.searchNumber=this.searchForm.searchData;
-            break;
-          case 1:
-            console.log('馆藏码')
-            this.selectSearchForm.code=this.searchForm.searchData;
-            break;
-          case 2:
-            console.log('isbn')
-            this.selectSearchForm.isbn=this.searchForm.searchData;
-            break;
-          case 3:
-            console.log('书名')
-            this.selectSearchForm.bookName=this.searchForm.searchData;
-            break;
-          case 4:
-            console.log('状态')
-            this.selectSearchForm.state=this.searchForm.searchData;
-            if(this.selectSearchForm.state=='不外借'){
-              newState=1
-            }else if(this.selectSearchForm.state=='可外借'){
-              newState=0
-            }else{
-              newState=''
-            }
-            break;
-        }
         let newData={
-          searchNumber:this.selectSearchForm.searchNumber,
-          code:this.selectSearchForm.code,
-          isbn:this.selectSearchForm.isbn,
-          bookName:this.selectSearchForm.bookName,
-          state:newState,
+          name:this.searchForm.userName,
+          beginTime:
+            !this.searchForm.beginTime
+              ? null
+              : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
+          endTime:
+            !this.searchForm.endTime
+              ? null
+              : moment(this.searchForm.endTime).format("YYYY-MM-DD"), //结束时间
           pageSize: this.pageSize,
           currentPage: 1,
         }
@@ -261,14 +175,9 @@
       },
     },
     methods: {
-      //筛选搜索
-      selectCheck(val){
-        console.log('val',val)
-        this.searchData=val
-      },
       //导出按钮
       deriveBtn(){
-        this.i=6
+        this.i=0
         this.centerDialogVisible=true
       },
       // 查询按钮
@@ -276,80 +185,27 @@
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
+      //导出弹窗的确定按钮
       submitDialog(){
-        let idData=[]
-        for (var item of this.tableChecked) {
-          console.log('删除id',item.id);
-          idData.push({id:item.id})
-        }
-        if(this.i==4){
-          this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
-            if (res.data.state == true) {
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }else if(this.i==3){
-          console.log('idData',idData)
-          this.axios.post(collection.delete,idData).then((res)=>{
-            if (res.data.state == true){
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }else if(this.i==5){
-          //报损
-        }else if(this.i==2){
-          console.log('idData',idData)
-          this.axios.post(collection.letLeave,idData).then((res)=>{
-            if (res.data.state == true){
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.centerDialogVisible=false
-              this.searchApi(this.searchTimeForm);
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          })
-        }
+
       },
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
-        let page = Math.ceil(this.total / this.pageSize);
-        page == 0 ? 1 : page;
-        if (this.pageInput > page) {
-          this.pageInput = 1;
-          this.$nextTick(() => {
-            this.$refs.text.value = 1; // hack方法
-            console.log("Vmode绑定值", this.pageInput);
-          });
-        } else {
-          let num = parseInt(this.pageInput);
-          this.current_change(num);
+        console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
       },
       /*------ Api ------*/
@@ -358,11 +214,11 @@
         console.log(value);
         this.tableLoading = true;
         axios
-          .get(collection.select, {
+          .get(logOut, {
             params: value
           })
           .then(res => {
-            console.log("书籍典藏", res.data);
+            console.log("注销记录", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
@@ -378,12 +234,39 @@
             console.log(error);
           });
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(logOut, {
+            params: value
+          })
+          .then(res => {
+            console.log("注销记录", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "error"
+              });
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {

@@ -1,7 +1,7 @@
 <template>
   <div id="Notice">
     <el-container>
-      <div class="commonMode" style="width:100%">
+      <div class="commonMode" style="width:100%;overflow: auto">
         <div class="sonTitle">
           <span class="titleName">书籍典藏</span>
         </div>
@@ -92,23 +92,16 @@
               @current-change="current_change"
             >
               <slot>
-                <span>
-                  前往
-                  <div class="el-input el-pagination__editor is-in-pagination">
-                    <input
-                      ref="text"
-                      type="number"
-                      v-model="pageInput"
-                      autocomplete="off"
-                      min="1"
-                      max="1"
-                      class="compo el-input__inner"
-                    >
-                  </div>页
-                </span>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
               </slot>
             </el-pagination>
-            <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+            <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
       </div>
@@ -385,6 +378,7 @@
           makeMethod:'',
           searchData:"",
         },
+        searchData:'',
         selectSearchForm:{
           searchNumber:'',//索书号
           code:'',//馆藏码
@@ -392,7 +386,6 @@
           bookName:'',//书名
           state:'',//状态
         },
-        searchData:'',
         pickerOptions0: {
           disabledDate: time => {
             if (this.searchForm.endTime) {
@@ -860,6 +853,7 @@
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
+        console.log('数据类型检测',this.pageInput)
         let page = Math.ceil(this.total / this.pageSize)
         page ==0?1:page;
         if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){

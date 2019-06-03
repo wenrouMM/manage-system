@@ -301,7 +301,7 @@ export const addCardInt = {
   addCard:`${url}readermodule/readerTbCardInfo/add`
 }
 //通用接口
-export const photoUrl = 'http://192.168.2.31' // 预览图片前缀
+export const photoUrl = 'http://192.168.2.54' // 预览图片前缀
 export const loginInter = url + 'authmodule/index/login'
 export const headUpload = imgurl + 'filemodule/uploadImg/addHead' //
 export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
@@ -382,3 +382,13 @@ export const PersonalCentre={
   editUsername:`${url}authmodule/managerInformation/editPersonalCenterName`,
   resetPassword:`${url}authmodule/loginInformation/edit`
 }
+
+//注销记录
+export const logOut=url+'financemodule/readerTbCardLogout/select'
+
+//逾期费用记录
+export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLog/select'
+
+//个人中心头像修改
+export const editHeadPortrait=url+'authmodule/managerInformation/editPersonalCenterHeade'
+export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow'

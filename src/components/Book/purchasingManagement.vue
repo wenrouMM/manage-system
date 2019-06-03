@@ -4,7 +4,7 @@
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">采购管理</div>
     </div>
-    <div id="purchasing">
+    <div id="purchasing" style="overflow: auto">
       <section class="searchBox">
         <div class="buttonBox">
           <button class="add" @click="rechargeBtn">
@@ -50,7 +50,7 @@
           <el-table-column align="center" type="selection"></el-table-column>
           <el-table-column align="center" prop="batch" label="采购批次" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column align="center" prop="remark" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" >
             <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
             <template slot-scope="scope">
               <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
@@ -72,20 +72,13 @@
               <span>
                 前往
                 <div class="el-input el-pagination__editor is-in-pagination">
-                  <input
-                    ref="text"
-                    type="number"
-                    v-model="pageInput"
-                    autocomplete="off"
-                    min="1"
-                    max="1"
-                    class="compo el-input__inner"
-                  >
-                </div>页
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
               </span>
             </slot>
           </el-pagination>
-          <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+          <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
         </section>
       </section>
     </div>
@@ -393,18 +386,20 @@ export default {
         this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       },
       jumpBtn() {
-        // v-mode绑定好像会默认转数据类型
-        let page = Math.ceil(this.total / this.pageSize);
-        page == 0 ? 1 : page;
-        if (this.pageInput > page) {
-          this.pageInput = 1;
-          this.$nextTick(() => {
-            this.$refs.text.value = 1; // hack方法
-            console.log("Vmode绑定值", this.pageInput);
-          });
-        } else {
-          let num = parseInt(this.pageInput);
-          this.current_change(num);
+        console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
       },
     },

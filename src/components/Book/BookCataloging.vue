@@ -1,7 +1,7 @@
 <template>
   <div id="Notice">
     <el-container>
-      <div class="commonMode" style="width:100%">
+      <div class="commonMode" style="width:100%;overflow: auto">
         <div class="sonTitle">
           <span class="titleName">书籍编目</span>
         </div>
@@ -75,23 +75,16 @@
               @current-change="current_change"
             >
               <slot>
-                <span>
-                  前往
-                  <div class="el-input el-pagination__editor is-in-pagination">
-                    <input
-                      ref="text"
-                      type="number"
-                      v-model="pageInput"
-                      autocomplete="off"
-                      min="1"
-                      max="1"
-                      class="compo el-input__inner"
-                    >
-                  </div>页
-                </span>
+              <span>
+                前往
+                <div class="el-input el-pagination__editor is-in-pagination">
+                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
+                </div>
+                页
+              </span>
               </slot>
             </el-pagination>
-            <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+            <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
       </div>
@@ -100,137 +93,166 @@
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <el-form id="book_cataloging" :rules="rules" :model="addForm" :ref="addForm" style="">
-            <div style="display: flex;flex-direction: column;width: 100%">
-              <div v-if="i==1">
-                <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
-                  <el-form-item label=" I S B N :" prop="isbn" label-width="80px" >
-                    <el-input v-model="addForm.isbn" style="" id="isbnInput"></el-input>
-                  </el-form-item>
-                  <p class="searchButton" @click="isbnData">
-                    <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
-                  </p>
-                </div>
-                <div style="padding: 0 70px 25px">
-                  <el-radio-group v-model="addForm.radio" class="flexLayout">
-                    <el-radio :label="1">本地获取图书</el-radio>
-                    <el-radio :label="2">远程获取图书</el-radio>
-                    <el-radio :label="3">获取数据前先预览</el-radio>
-                  </el-radio-group>
-                </div>
-              </div>
-              <div id="noError">
-                <div id="catalogingInput2">
-                  <div class="flexLayout">
-                    <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
-                      <el-input v-model="addForm.name"></el-input>
+              <div style="display: flex;flex-direction: column;width: 100%">
+                <div>
+                  <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
+                    <el-form-item label=" I S B N :" prop="isbn" label-width="80px" >
+                      <el-input v-model="addForm.isbn" style="" id="isbnInput"></el-input>
                     </el-form-item>
-                    <el-form-item label=" 副 题 名 :" label-width="90px" style="">
-                      <el-input v-model="addForm.viceName "></el-input>
-                    </el-form-item>
+                    <p class="searchButton" @click="isbnData">
+                      <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
+                    </p>
                   </div>
-                  <div class="flexLayout">
-                    <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
-                      <el-input v-model="addForm.author "></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 丛编题名 :" label-width="95px" style="">
-                      <el-input v-model="addForm.clusterName"></el-input>
-                    </el-form-item>
-                  </div>
-                  <div  class="flexLayout">
-                    <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
-                      <el-input v-model="addForm.searchNumber "></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
-                      <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
-                        <el-option
-                          v-for="item in options"
-                          :key="item.index"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </div>
-                  <div class="flexLayout" id="catalogingInput3">
-                    <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
-                      <div class="flexLayout">
-                        <el-input v-model="addForm.fkTypeCode"></el-input>
-                        <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
-                          <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                        </p>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
-                      <el-input v-model="addForm.fkTypeName "></el-input>
-                    </el-form-item>
-                  </div>
-                  <div id="catalogingInput4" class="flexLayout">
-                    <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
-                      <div class="flexLayout">
-                        <el-input v-model="addForm.fkPressName"></el-input>
-                        <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
-                          <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                        </p>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label=" 出 版 地 :" prop="publishingPleace" label-width="90px" style="margin-left: 60px">
-                      <el-input v-model="addForm.publishingPleace "></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
-                      <el-date-picker
-                        v-model="addForm.publishingTime"
-                        align="right"
-                        type="date"
-                        format="yyyy 年 MM 月 dd 日"
-                        value-format="yyyy-MM-dd 00:00:00"
-                        placeholder="选择日期"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
-                    </el-form-item>
-                  </div>
-                  <div class="flexLayout" id="catalogingInput5">
-                    <el-form-item label=" 页　　码 :" label-width="95px">
-                      <el-input v-model="addForm.pageNumber"></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 开　　本 :" label-width="95px">
-                      <el-input v-model="addForm.openBook "></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
-                      <el-input v-model="addForm.price "></el-input>
-                    </el-form-item>
-                  </div>
-                  <div class="flexLayout">
-                    <el-form-item label=" 附　　注 :" label-width="95px">
-                      <el-input v-model="addForm.annotations "></el-input>
-                    </el-form-item>
-                    <el-form-item label=" 主 题 词 :" label-width="95px">
-                      <el-input v-model="addForm.themeWord "></el-input>
-                    </el-form-item>
-                  </div>
-                  <div>
-                    <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
-                      <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
-                    </el-form-item>
+                  <div style="padding: 0 70px 25px">
+                    <el-radio-group v-model="addForm.radio" class="flexLayout" @change="BookInfoFun(addForm.radio)">
+                      <el-radio :label="1">本地获取图书</el-radio>
+                      <el-radio :label="2">远程获取图书</el-radio>
+                      <el-radio :label="3">获取数据前先预览</el-radio>
+                    </el-radio-group>
                   </div>
                 </div>
+                <div id="noError">
+                  <div id="catalogingInput2">
+                    <div class="flexLayout">
+                      <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
+                        <el-input v-model="addForm.name"></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 副 题 名 :" label-width="90px" style="">
+                        <el-input v-model="addForm.viceName "></el-input>
+                      </el-form-item>
+                    </div>
+                    <div class="flexLayout">
+                      <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
+                        <el-input v-model="addForm.author "></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 丛编题名 :" label-width="95px" style="">
+                        <el-input v-model="addForm.clusterName"></el-input>
+                      </el-form-item>
+                    </div>
+                    <div  class="flexLayout">
+                      <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
+                        <el-input v-model="addForm.searchNumber "></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
+                        <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
+                          <el-option
+                            v-for="item in options"
+                            :key="item.index"
+                            :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </div>
+                    <div class="flexLayout" id="catalogingInput3">
+                      <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
+                        <div class="flexLayout">
+                          <el-input v-model="addForm.fkTypeCode"></el-input>
+                          <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
+                            <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
+                          </p>
+                        </div>
+                      </el-form-item>
+                      <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
+                        <el-input v-model="addForm.fkTypeName "></el-input>
+                      </el-form-item>
+                    </div>
+                    <div id="catalogingInput4" class="flexLayout">
+                      <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
+                        <div class="flexLayout">
+                          <el-input v-model="addForm.fkPressName"></el-input>
+                          <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
+                            <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
+                          </p>
+                        </div>
+                      </el-form-item>
+                      <el-form-item label=" 出 版 地 :" prop="publishingPleace" label-width="90px" style="margin-left: 60px">
+                        <el-input v-model="addForm.publishingPleace "></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
+                        <el-date-picker
+                          v-model="addForm.publishingTime"
+                          align="right"
+                          type="date"
+                          format="yyyy 年 MM 月 dd 日"
+                          value-format="yyyy-MM-dd 00:00:00"
+                          placeholder="选择日期"
+                          :picker-options="pickerOptions">
+                        </el-date-picker>
+                      </el-form-item>
+                    </div>
+                    <div class="flexLayout" id="catalogingInput5">
+                      <el-form-item label=" 页　　码 :" label-width="95px">
+                        <el-input v-model="addForm.pageNumber"></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 开　　本 :" label-width="95px">
+                        <el-input v-model="addForm.openBook "></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
+                        <el-input v-model="addForm.price "></el-input>
+                      </el-form-item>
+                    </div>
+                    <div class="flexLayout">
+                      <el-form-item label=" 附　　注 :" label-width="95px">
+                        <el-input v-model="addForm.annotations "></el-input>
+                      </el-form-item>
+                      <el-form-item label=" 主 题 词 :" label-width="95px">
+                        <el-input v-model="addForm.themeWord "></el-input>
+                      </el-form-item>
+                    </div>
+                    <div>
+                      <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
+                        <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                </div>
+                <div style="width: 400px;margin:20px auto 0px" class="flexLayout">
+                  <el-button type="primary" @click="definiteCheck">确定</el-button>
+                  <el-button type="info" style="margin-left: 55px" @click="cancelCheck">取消</el-button>
+                </div>
               </div>
-              <div style="width: 400px;margin:20px auto 0px" class="flexLayout">
-                <el-button type="primary" @click="definiteCheck">确定</el-button>
-                <el-button type="info" style="margin-left: 55px" @click="cancelCheck">取消</el-button>
-              </div>
-            </div>
-          </el-form>
+            </el-form>
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
-      <div class="forbid">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-          <div class="dialogBody">
-            是否{{Dialogtitle[i]}}?
+      <div class="forbid" id="catalogingMessage">
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" :width="messageWidth" center>
+          <div v-if="i==2||i==3||i==4">
+            <div class="dialogBody" style="margin-left: -30px;margin-bottom: 20px">
+              是否{{Dialogtitle[i]}}?
+            </div>
+            <div slot="footer">
+              <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+              <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            </div>
           </div>
-          <div slot="footer">
-            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          <div v-if="i==5" id="bookInfo">
+            <section class="tableBox">
+              <el-table
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
+                empty-text="无数据"
+                style="width: 750px; text-align:center;"
+                :data="tableData"
+                height="250"
+                :row-style="{height:'50px'}"
+              >
+                <el-table-column align="center" prop="name" label="正题名" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column align="center" prop="fkTypeCode" label="分类号" :show-overflow-tooltip="true"></el-table-column>
+                <el-table-column align="center" prop="publishingTime" label="卷宗号" :show-overflow-tooltip="true"></el-table-column>
+              </el-table>
+              <!-- 4.0 分页 -->
+            </section>
+            <div style="margin-left: 20px;margin-top: 30px">
+              <span>筛选 : </span><el-input v-model="selectbookInfo" style="width: 670px"></el-input>
+            </div>
+            <div style="margin: 30px auto;width: 370px">
+              <span class="dialogButton true mr_40" @click="obtainFun">获 取</span>
+              <span class="dialogButton cancel" @click="closeFun">取消</span>
+            </div>
           </div>
         </el-dialog>
       </div>
@@ -255,6 +277,8 @@
   export default {
     data() {
       return {
+        selectbookInfo:'',
+        messageWidth:'',
         /*====== 2.0表单搜索区域 ======*/
         pickerOptions: {
           disabledDate(time) {
@@ -345,7 +369,7 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "新增",'导出','删除','导入'],
+        Dialogtitle: ["修改", "新增",'导出','删除','导入','若列表中没有合适的数据，请点击“取消”按钮进行远程获取'],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -354,10 +378,10 @@
         /*初始化 */
         options: [],
         tableLoading: true,
-        currentPage: 1,
-        pageInput: 1,
-        pageSize: 10,
         total: 0,
+        pageSize: 10,
+        pageInput: 1,
+        currentPage: 1,
         tableData: [],
         id:'',
         tableChecked: [], // 全选绑定的数据
@@ -383,6 +407,23 @@
       }
     },
     methods: {
+      BookInfoFun(value){
+        console.log('获取图书信息',value)
+        if(value==1){
+          this.i=5
+          this.messageWidth='800px'
+          this.centerDialogVisible=true
+        }
+      },
+      //获取数据弹窗的获取按钮
+      obtainFun(){
+
+      },
+      //获取数据弹窗取消按钮
+      closeFun(){
+        this.centerDialogVisible=false
+        this.addForm.radio=''
+      },
       /*====== 出版社弹窗内容 ======*/
       publishTreeFun(){
         this.messageName='请选择出版社名称'
@@ -494,6 +535,7 @@
       drawbackBtn(){
         if(this.tableChecked.length){
           this.i=3
+          this.messageWidth='500px'
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择删除对象')
@@ -652,17 +694,20 @@
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
-        let page = Math.ceil(this.total / this.pageSize);
-        page == 0 ? 1 : page;
-        if (this.pageInput > page) {
-          this.pageInput = 1;
-          this.$nextTick(() => {
-            this.$refs.text.value = 1; // hack方法
-            console.log("Vmode绑定值", this.pageInput);
-          });
-        } else {
-          let num = parseInt(this.pageInput);
-          this.current_change(num);
+        console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
       },
       /*------ Api ------*/
@@ -870,7 +915,9 @@
     border-left: 5px solid #1e9eff;
     color: #878787;
   }
-
+  #bookInfo .el-table th{
+    background-color: #0096FF;
+  }
   #loginrecord .el-table {
     border: 1px solid #eaeaea;
     /*border-width: 0 1px 1px 1px ;*/

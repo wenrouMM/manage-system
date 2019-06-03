@@ -1,7 +1,7 @@
 <template>
   <div id="Notice">
     <el-container>
-      <div class="commonMode" style="width:100%">
+      <div class="commonMode" style="width:100%;overflow: auto">
         <div class="sonTitle">
           <span class="titleName">书籍典藏</span>
         </div>
@@ -316,17 +316,20 @@
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
-        let page = Math.ceil(this.total / this.pageSize);
-        page == 0 ? 1 : page;
-        if (this.pageInput > page) {
-          this.pageInput = 1;
-          this.$nextTick(() => {
-            this.$refs.text.value = 1; // hack方法
-            console.log("Vmode绑定值", this.pageInput);
-          });
-        } else {
-          let num = parseInt(this.pageInput);
-          this.current_change(num);
+        console.log('数据类型检测',this.pageInput)
+        let page = Math.ceil(this.total / this.pageSize)
+        page ==0?1:page;
+        if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
+          this.pageInput = 1
+          this.$nextTick(()=>{
+            this.$refs.text.value = 1 // hack方法
+            console.log('Vmode绑定值',this.pageInput)
+          })
+        }else{
+          this.pageInput = parseInt(this.pageInput)
+          this.$refs.text.value = parseInt(this.pageInput)
+          let num = parseInt(this.pageInput)
+          this.current_change(num)
         }
       },
       //搜索按钮
