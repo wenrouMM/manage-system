@@ -1,8 +1,19 @@
 <template>
   <div class="tagsBox">
     <transition>
-    <ul class="routerBox" v-if="showTags">
-      <li
+    <div class="routerBox" v-if="showTags">
+      <el-tag
+        v-for="(item,index) in tagsList"
+        :key="index"
+        :class="{'labelActive':isActive(item.path)}"
+        class="tags"
+        closable
+        @click="routerLink(item.path)"
+        @close="closeTags(index)"
+      >
+        {{item.title}}
+      </el-tag>
+      <!-- <li
         class="routerButton circularButton"
         v-for="(item,index) in tagsList"
         :class="{'labelActive':isActive(item.path)}"
@@ -12,7 +23,7 @@
         <span class="tags-li-icon" @click="closeTags(index)">
           <i class="el-icon-close point"></i>
         </span>
-      </li>
+      </li> -->
       <div class="tags-close">
         <el-dropdown @command="handleTags">
           <el-button size="mini" type="primary">
@@ -25,7 +36,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-    </ul>
+    </div>
     </transition>
   </div>
 </template>
@@ -79,6 +90,11 @@ export default {
         this.$router.push("/");
       }
     },
+    // 路由跳转
+    routerLink(route){
+      this.$router.push({path:`${route}`})
+      console.log(route)
+    },
     // 标签控制按钮
     handleTags(command) {
       command === "other" ? this.closeOther() : this.closeAll(); // 这个是下拉后选择哪个框把
@@ -122,6 +138,11 @@ export default {
 </script>
 
 <style scoped>
+.tags{
+  margin-right: 5px;
+  cursor: pointer;
+}
+
 .routerBox {
   background-color: #fff;
   min-height: 70px;
@@ -164,4 +185,9 @@ export default {
   color: #fff;
 }
 
+</style>
+<style>
+.labelActive.el-tag .el-icon-close{
+  color: #fff;
+}
 </style>
