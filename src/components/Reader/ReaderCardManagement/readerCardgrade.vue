@@ -473,10 +473,11 @@ export default {
       axios.delete(cardLevelInt.delete, { data: deleterStr }).then(res => {
         if (res.data.state === true) {
           this.$message.success("删除成功");
-          this.searchTable();
-          this.searchOption();
           this.deleteDialog = false;
-          console.log(res);
+          this.searchTable();
+          
+          
+          console.log(this.deleteDialog);
         } else {
           this.$message.error(res.data.msg);
         }

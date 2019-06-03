@@ -131,7 +131,7 @@
             <!-- 财务管理 -->
             <div class="navMenu" v-show="Mode == 5">
               <el-menu-item index="/rechargeSet">充值管理</el-menu-item>
-              <el-menu-item index="/noticeSet">日常财务</el-menu-item>
+             
               <el-menu-item index="/logOut">注销记录</el-menu-item>
               <el-menu-item index="/Depositflowdirection">押金流向</el-menu-item>
               <el-menu-item index="/OverdueCostCirculation">逾期费用记录</el-menu-item>

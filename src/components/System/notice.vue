@@ -197,7 +197,7 @@ export default {
       let searchForm = {
         pageSize: this.pageSize,
         currentPage: 1,
-        name:this.searchForm.name,
+        category:this.searchForm.name,
         beginTime: !this.searchForm.beginTime
           ? null
           : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
