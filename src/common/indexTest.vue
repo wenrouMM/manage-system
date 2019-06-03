@@ -17,6 +17,7 @@
               mode="horizontal"
               @select="handleSelect"
               background-color="#0096ff"
+              :default-active="Mode"
             >
               <el-menu-item id="collect" index="1">采编管理</el-menu-item>
               <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
@@ -171,7 +172,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      Mode: 6,
+      Mode: '',
       navRouter: [],
       menuLo: [{}],
       userLo: null,
@@ -182,6 +183,7 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       this.Mode = key;
+      sessionStorage.setItem("headIndex",key)
       console.log(key, keyPath);
     },
     routerBox(index, indexPath) {
@@ -227,6 +229,22 @@ export default {
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     this.userLo = userInfo;
+    this.Mode = sessionStorage.getItem("headIndex");
+  },
+  watch: {
+    $route(newValue, oldValue) {
+      if (newValue.fullPath == "/indexTest") {
+        return;
+      }
+      if(!newValue.meta.Mode){
+        console.log('????')
+      }else{
+        this.Mode = newValue.meta.Mode
+        sessionStorage.setItem("headIndex",newValue.meta.Mode)
+      }
+      
+      console.log('现在的路由',newValue.meta.Mode)
+    }
   }
 };
 </script>

@@ -92,3 +92,6 @@
 .damageCount .dealDialog .el-input .el-input__inner{
   text-align: left;
 }
+.labelActive.el-tag .el-icon-close{
+  color: #fff;
+}

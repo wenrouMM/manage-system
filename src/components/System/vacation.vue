@@ -117,6 +117,10 @@
                 <el-radio label="停用"></el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item>
+              <p class="textTips">假期设置日期不可重叠</p>
+            </el-form-item>
+            
             <!-- 弹框表单按钮  验证失效-->
             <div class="flexLayout" style="width: 350px;margin: 0 auto">
               <el-button type="primary" @click="submitForm('addForm')" style="margin-left: 20px">确定</el-button>

@@ -181,7 +181,8 @@ export default new Router({
         {
           path: '/readercardmanagement',
           meta:{
-            title:'读者卡管理'
+            title:'读者卡管理',
+            Mode:'4'
           },
           component: ReaderCardManagement,
         },
@@ -225,52 +226,60 @@ export default new Router({
         {
           path:'/guideTest',
           meta:{
-            title:'系统管理引导页'
+            title:'系统管理引导页',
+            Mode:'6'
           },
           component:resolve=> require(['../common/guide/guide.vue'],resolve)
         },
         {
           path: '/menuInformation',
           meta: {
-            title: '菜单管理'
+            title: '菜单管理',
+            Mode:'6'
           },
           component: Menu
         },
         {
           path: '/roleMenuElement',
           meta: {
-            title: '权限管理'
+            title: '权限管理',
+            Mode:'6'
           },
           component: PowerControl
         },
         {
           path: '/roleInformation',
           meta: {
-            title: '角色管理'
+            title: '角色管理',
+            Mode:'6'
           },
           component: UserRole
         },
         {
           path: '/managerInformation',
           meta: {
-            title: '用户管理'
+            title: '用户管理',
+            Mode:'6'
           },
           component: UserManage
         },
         {
           path: '/authTbManagerLoginLog',
           meta: {
-            title: '登录记录'
+            title: '登录记录',
+            Mode:'6'
           },
           component: LoginRecord
         },
         {
           path: '/noticeSet',
           meta: {
-            title: '公告管理'
+            title: '公告管理',
+            Mode:'6'
           },
           component: resolve => require(['../components/System/notice.vue'], resolve)
         },
+        /* */
         {
           path: '/LibBookInfo',
           component: LibBookInfo

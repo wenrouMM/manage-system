@@ -42,7 +42,7 @@
                   :value="item"
                 ></el-option>
               </el-select>
-             <span class="ml_30">押金金额￥：{{changeForm.level.deposit}}</span>
+             <span class="ml_30">押金金额￥：{{changeForm.level.deposit}}元</span>
           </div>
         </el-form-item>
         <div class="textCenter">
