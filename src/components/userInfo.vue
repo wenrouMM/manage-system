@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import {uploadInt , PersonalCentre} from '@/request/api/base.js'
+import {uploadInt , PersonalCentre,editHeadPortrait,editimgFile} from '@/request/api/base.js'
 import myUpload from "vue-image-crop-upload";
 export default {
   data() {
@@ -159,9 +159,12 @@ export default {
   methods: {
     //初始化信息
     InitializationFun(){
+      let imgAddress=""
       this.axios.get(PersonalCentre.userInfo).then((res)=>{
         console.log(res)
         this.id=res.data.row.id;
+        this.nomalHeader=editimgFile+res.data.row.headerAddress;
+        console.log('this.nomalHeader',this.nomalHeader)
         this.userName=res.data.row.username;
         this.userEmail=res.data.row.email;
         this.userPhone=res.data.row.phone;
@@ -239,8 +242,14 @@ export default {
       this.cutimgUrl = imgDataUrl
     },
     cropUploadSuccess(jsonData, field) {
+      let imgFile=''
       console.log("-------- upload success --------");
       console.log(jsonData);
+      console.log('图片地址',jsonData.row)
+      imgFile=jsonData.row
+      this.axios.put(editHeadPortrait,{id:this.id,headerAddress:imgFile}).then((res)=>{
+        console.log('头像上传后返回的数据',res)
+      })
       console.log("field: " + field);
       this.imgDataUrl = this.cutimgUrl;
     },

@@ -161,4 +161,16 @@
 #purchasingMessage .el-input .el-input__inner {
   width: 340px;
 }
-
+#bookInfo .el-table th{
+  background-color: rgb(0, 150, 255);
+}
+#bookInfo .el-table--scrollable-y .el-table__body-wrapper{
+  border: 1px solid rgba(245,247,250,1);
+}
+#catalogingMessage .el-dialog__body{
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+#catalogingMessage .el-dialog__headerbtn {
+  display: none;
+}
