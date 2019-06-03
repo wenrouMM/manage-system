@@ -223,6 +223,13 @@ export default new Router({
           component: Home
         },
         {
+          path:'/guideTest',
+          meta:{
+            title:'系统管理引导页'
+          },
+          component:resolve=> require(['../common/guide/guide.vue'],resolve)
+        },
+        {
           path: '/menuInformation',
           meta: {
             title: '菜单管理'

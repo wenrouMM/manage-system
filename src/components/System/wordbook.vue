@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="errBox">
-      <el-form ref="form" :model="changeForm" :rules="changeRules" label-width="140px" size="mini">
+      <el-form ref="changeForm" :model="changeForm" :rules="changeRules" label-width="140px" size="mini">
         <el-form-item label="公告置顶条数" prop="apex">
           <div class="inputBox">
             <el-input v-model.number="changeForm.apex"></el-input>
@@ -26,10 +26,23 @@
             <span class="ml_10 text">元</span>
           </div>
         </el-form-item>
-        <el-form-item label="读者卡有效时间" prop="cardCost">
+        <el-form-item label="读者卡有效时间" prop="cardValid">
           <div class="inputBox">
-            <el-input v-model.number="changeForm.cardCost"></el-input>
+            <el-input v-model.number="changeForm.cardValid"></el-input>
             <span class="ml_10 text">天</span>
+          </div>
+        </el-form-item>
+        <el-form-item label="办卡机默认等级" prop="cardValid">
+          <div class="inputBox">
+            <el-select @change="test" clearable value-key="code"  v-model="changeForm.level" placeholder="请选择">
+                <el-option
+                  v-for="(item) in optionsData"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item"
+                ></el-option>
+              </el-select>
+             <span class="ml_30">押金金额￥：{{changeForm.level.deposit}}</span>
           </div>
         </el-form-item>
         <div class="textCenter">
@@ -41,7 +54,8 @@
 </template>
 <script>
 import axios from "axios";
-import { bookWordInt } from "@request/api/base.js";
+import { bookWordInt,cardLevelInt } from "@request/api/base.js";
+import { control } from '@/request/api/base';
 export default {
   data() {
     return {
@@ -49,8 +63,9 @@ export default {
         apex: "",
         recharge: "",
         assist: "",
-        cardCost: "",
-        id: ""
+        cardValid: "",
+        id: "",
+        level:{}
       },
       changeRules: {
         apex: [
@@ -66,10 +81,11 @@ export default {
         assist: [
           { required: true, message: "补办费用设置不得为空", trigger: "blur" }
         ],
-        cardCost: [
+        cardValid: [
           { required: true, message: "读者卡有效时间不得为空", trigger: "blur" }
         ]
-      }
+      },
+      optionsData:[]
     };
   },
   methods: {
@@ -82,9 +98,12 @@ export default {
           let data = res.data.row;
           this.changeForm.apex = data.maxPlacingNum;
           this.changeForm.recharge = data.maxRechargeNum;
-          this.changeForm.assist = data.effectiveTime;
-          this.changeForm.cardCost = data.setReissueCost;
+          this.changeForm.assist = data.setReissueCost;
+          this.changeForm.cardValid = data.effectiveTime;
           this.changeForm.id = data.id;
+          this.changeForm.level.code = data.equipmentGardCardCode
+          this.changeForm.level.name = data.equipmentGardCardName
+          this.changeForm.level.deposit = data.equipmentGardCardDeposit
           console.log("接收的数据", res.data.row);
           console.log("回显", this.changeForm);
         } else {
@@ -111,6 +130,20 @@ export default {
           return false;
         }
       });
+    },
+    levelOptionApi() {
+      axios.get(cardLevelInt.select).then(res => {
+        if(res.data.state == true){
+          this.optionsData = res.data.row
+          console.log('当前下拉框',this.optionsData)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+        console.log("查询等级下拉框", res);
+      });
+    },
+    test(){
+      console.log('你是否变化了',this.changeForm)
     }
   },
   computed: {
@@ -118,8 +151,10 @@ export default {
       let obj = {
         maxPlacingNum: this.changeForm.apex,
         maxRechargeNum: this.changeForm.recharge,
-        effectiveTime: this.changeForm.assist,
-        setReissueCost: this.changeForm.cardCost,
+        setReissueCost: this.changeForm.assist,
+        effectiveTime: this.changeForm.cardValid,
+        equipmentGardCardCode:this.changeForm.level.code,
+        equipmentGardCardName:this.changeForm.level.name,
         id: this.changeForm.id
       };
       return obj;
@@ -127,6 +162,8 @@ export default {
   },
   created() {
     this.searchApi();
+    this.levelOptionApi()
+     console.log('你是否变化了',this.changeForm)
   }
 };
 </script>

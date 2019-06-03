@@ -6,7 +6,7 @@
       <el-header class="headmode" style="font-size: 12px">
         <!-- logo模块 logo图片载入 附加路由调转至首页 -->
         <div class="logoNav">
-          <div class="logoBox">
+          <div id="logoBox" class="logoBox">
             <i class="logo"></i>
             <span @click="skip" class="text">图书馆管理平台</span>
           </div>
@@ -18,23 +18,23 @@
               @select="handleSelect"
               background-color="#0096ff"
             >
-              <el-menu-item index="1">采编管理</el-menu-item>
-              <el-menu-item index="2">典藏管理</el-menu-item>
-              <el-menu-item index="3">流通管理</el-menu-item>
-              <el-menu-item index="4">读者管理</el-menu-item>
-              <el-menu-item index="5">财务管理</el-menu-item>
-              <el-menu-item index="6">系统管理</el-menu-item>
+              <el-menu-item id="collect" index="1">采编管理</el-menu-item>
+              <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
+              <el-menu-item id="circle" index="3">流通管理</el-menu-item>
+              <el-menu-item id="reader" index="4">读者管理</el-menu-item>
+              <el-menu-item id="finance" index="5">财务管理</el-menu-item>
+              <el-menu-item id="system" index="6">系统管理</el-menu-item>
             </el-menu>
           </div>
         </div>
 
         <!-- 用户头像模块 点击交互功能尚未完成 小图标添加及相应功能 -->
-        <div class="headBox">
+        <div id="userName" class="headBox">
           <div class="headiconBox">
             <img :src="headSrc" class="avatarImg">
           </div>
-          <div class="userBox">
-            <div class="username">
+          <div  class="userBox">
+            <div  class="username">
 
               <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
 
@@ -137,7 +137,7 @@
             </div>
             <!-- 系统设置 -->
             <div class="navMenu" v-show="Mode == 6">
-              <el-menu-item index="/noticeSet">公告管理</el-menu-item>
+              <el-menu-item index="/guideTest">引导页</el-menu-item>
               <el-menu-item index="/menuInformation">菜单管理</el-menu-item>
               <el-menu-item index="/roleInformation">角色管理</el-menu-item>
               <el-menu-item index="/roleMenuElement">权限管理</el-menu-item>
@@ -145,6 +145,7 @@
               <el-menu-item index="/authTbManagerLoginLog">登陆管理</el-menu-item>
               <el-menu-item index="/damageSet">损坏管理</el-menu-item>
               <el-menu-item index="/wordBook">数据字典</el-menu-item>
+              <el-menu-item index="/noticeSet">公告管理</el-menu-item>
               <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
             </div>
             <!-- 选中之后的样式 -->
@@ -277,6 +278,7 @@ body,
   align-items: center;
   margin-right: 78px;
   cursor: pointer;
+  background-color: #0096ff;
 }
 .headmode .logoBox .logo {
 }
@@ -326,6 +328,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #0096ff;
 }
 .headBox .headiconBox {
   width: 40px;

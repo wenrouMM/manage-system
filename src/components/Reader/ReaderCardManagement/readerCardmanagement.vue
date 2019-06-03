@@ -169,7 +169,7 @@
             <!-- 表单域 -->
             <div v-if="i!=4">
               <el-form-item :label="labelName[i]" prop="idCard">
-                <el-input v-model="changeForm.idCard" autocomplete="off"></el-input>
+                <el-input @keyup.enter.native v-model="changeForm.idCard" autocomplete="off"></el-input>
               </el-form-item>
               <div class="supply">
                 <p>
