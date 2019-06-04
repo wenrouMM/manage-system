@@ -663,6 +663,7 @@ export default {
       this.addForm.isLock = row.isLock;
       this.addForm.preUrl = row.preUrl;
       this.dialogFormVisible = true;
+      this.addForm.authTbRoles = row.authTbRoles
       console.log(index, row, typeof this.addForm.isLock);
       console.log("编辑后的表单", this.addForm);
       console.log("提交的数据", this.addEdit);

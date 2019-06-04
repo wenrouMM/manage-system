@@ -333,18 +333,23 @@ export default {
       if (!this.firstOpen) {
         this.$refs.form.resetFields();
       }
-      this.damageForm.bookCash = [];
-      for (let item of this.oweTable) {
-        this.damageForm.bookCash.push(item.price);
-        this.damageForm.bookId.push(item.bookId);
+      if (this.oweTable.length) {
+        this.damageForm.bookCash = [];
+        for (let item of this.oweTable) {
+          this.damageForm.bookCash.push(item.price);
+          this.damageForm.bookId.push(item.bookId);
+        }
+        this.isBatch = true;
+        this.damageDialog = true;
+      } else{
+        this.$message.error('请先选择一条记录')
       }
-      this.isBatch = true;
-      this.damageDialog = true;
+
       console.log("清除");
       console.log("此时的书籍", this.damageForm.bookCash);
     },
     cancelBtn() {
-      this.damageDialog = fas;
+      this.damageDialog = false;
     },
     // tab切换功能
     tabBtn() {
@@ -435,11 +440,11 @@ export default {
       axios.post(bookDamageInt.damage, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("报损成功 请前往报损记录查看");
-          
-          this.endTable = res.data.row
-          console.log('数据类型测试',typeof(this.endTable[0].state))
-          if(this.endTable[0].state === true){
-              console.log('比较测试',)
+
+          this.endTable = res.data.row;
+          console.log("数据类型测试", typeof this.endTable[0].state);
+          if (this.endTable[0].state === true) {
+            console.log("比较测试");
           }
           if (this.isBatch) {
             this.oweTable = [];
@@ -476,11 +481,10 @@ export default {
     },
     closeForm() {
       this.firstOpen = false;
-      this.damageForm.bookId = []
+      this.damageForm.bookId = [];
     },
     openForm() {
       this.damageForm.remarks = "";
-      
     }
   },
   created() {

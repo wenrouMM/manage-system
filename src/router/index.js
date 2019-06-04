@@ -92,7 +92,14 @@ export default new Router({
 
       children: [
         // 1.0 采编管理
-
+        {
+          path:'/uploadBook',
+          meta:{
+            title:'编目批量导入',
+            Mode:'1'
+          },
+          component:resolve =>require(['../common/upload/upload.vue'],resolve)
+        },
 
 
         // 2.0 典藏管理
