@@ -236,6 +236,7 @@ export default {
       } else{
         this.$message.error('请先选择批量报损的对象')
       }
+      console.log('批量报损？',this.dealArr.length)
     },
     // 批量产生
     selectAllBtn(val) {

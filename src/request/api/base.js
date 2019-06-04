@@ -28,7 +28,13 @@ export const uploadInt = {
   editorFile:`${fileUrl}filemodule/uploadFile/addEnclosure`,
   editorVideo:`${fileUrl}filemodule/uploadVideo/addShortVideo`,
   preimg:`${fileUrl}filemodule/showFile/getShow`,
-  showFile:`${fileUrl}filemodule/showFile/getFile`
+  showFile:`${fileUrl}filemodule/showFile/getFile`,
+  excelFile:`${fileUrl}filemodule/uploadFile/addDataFile`
+}
+/*--- 批量导入书籍编目 ---*/
+export const bookUploadInt ={
+  getFields:`${url}bookcollectionmodule/collection/getFields`,
+  add:`${url}bookcollectionmodule/collection/getFields`
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {
