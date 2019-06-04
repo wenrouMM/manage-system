@@ -15,7 +15,7 @@
         <div class="searchBox">
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
-            <el-input   clearable placeholder="请输入卡号或身份证号" v-model="cardInput" class="input-with-select">
+            <el-input @blur="readCardBtn"   clearable placeholder="请输入卡号或身份证号" v-model="cardInput" class="input-with-select">
               <el-button @click="readCardBtn" slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </div>

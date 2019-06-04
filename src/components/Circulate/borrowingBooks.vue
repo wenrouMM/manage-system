@@ -196,12 +196,12 @@
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
-                <el-table-column align="center" label="操作">
+                <!-- <el-table-column align="center" label="操作">
                   <template slot-scope="scope">
                     <el-button @click="renewBtn(scope.row)" type="text" size="small">续借</el-button>
                     <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
               </el-table>
             </section>
           </el-tab-pane>
@@ -476,7 +476,7 @@ export default {
         if (res.data.state === true) {
           console.log("借书记录", res.data.row);
           this.endTable = res.data.row.list;
-          this.$message.success("操作成功");
+          this.$message.success("操作完成");
           console.log("现在的借书机理", this.endTable);
         } else {
           this.$message.error(res.data.msg);
