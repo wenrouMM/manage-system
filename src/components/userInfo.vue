@@ -22,25 +22,25 @@
         <div class="rowList">
           <div class="text"><i class="userIcon iconyonghuming"></i>用户名:</div>
           <div class="content">{{userName}}</div>
-          <div class="fix" @click="userBtn">修改</div>
+          <div class="fix" @click="userBtn"><i class="userIcon iconbianji"></i>修改</div>
         </div>
         <div class="rowList">
-          <div class="text">邮箱:</div>
+          <div class="text"><i class="userIcon icontubiao209"></i>邮箱:</div>
           <div class="content">{{userEmail}}</div>
         </div>
 
         <div class="rowList">
-          <div class="text">电话:</div>
+          <div class="text"><i class="userIcon icondianhua"></i>电话:</div>
           <div class="content">{{userPhone}}</div>
         </div>
         <div class="rowList">
-          <div class="text">身份证:</div>
+          <div class="text"><i class="userIcon iconshenfenzheng"></i>身份证:</div>
           <div class="content">{{userCard}}</div>
         </div>
         <div class="rowList">
-          <div class="text">密码:</div>
+          <div class="text"><i class="userIcon iconmima"></i>密码:</div>
           <div class="content">******</div>
-          <div class="fix" @click="pwdBtn">修改</div>
+          <div class="fix" @click="pwdBtn"><i class="userIcon iconbianji"></i>修改</div>
         </div>
         <div class="rowList">
           <div class="text">角色等级:</div>
