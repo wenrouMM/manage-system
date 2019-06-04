@@ -30,7 +30,7 @@
                 <div class="right">
                   <el-form :inline="true" :model="searchForm">
                     <el-form-item label="出版社名称 :">
-                      <el-input v-model="searchForm.publishingName" placeholder="请输入出版社名称" style="width: 200px"></el-input>
+                      <el-input v-model="searchForm.publishingName" placeholder="请输入出版社名称" clearable style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item>
                       <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -210,12 +210,16 @@
         dialogFormVisible: false, // // 添加弹框的展示和消失
         addForm: {
           // 添加的数据表单 共8个参数
-          idType:"", //序号
+          idType:"",
           publishName:"", //出版社名称
           componentAddress:"", //公司地址
           contacts:"", //联系人
           contactPhone:"" //联系电话
         },
+        id:'',
+        code:'',
+        cityName:'',
+        cityCode:'',
         addRules: {
           // 添加的参数验证
           publishName: [{ required: true, message: "请输入出版社名称", trigger: "blur" }],
@@ -254,7 +258,8 @@
         let searchForm = {
           pageSize: this.pageSize,
           current:1,
-          cityCode:citynameCode
+          cityCode:citynameCode,
+          fkPressName:this.searchForm.publishingName
         };
         return searchForm;
       },
@@ -280,25 +285,50 @@
       },
       //搜索按钮
       searchBtn(){
-
+        this.SearchApi(this.searchTimeForm)
       },
       //导出按钮
       deriveBtn(){
 
       },
       //修改按钮
-      EditBtn(){
+      EditBtn(index,row){
         this.i=1
         this.dialogFormVisible=true
+        console.log('修改的数据',row)
+        this.addForm.publishName=row.name
+        this.addForm.componentAddress=row.address
+        this.addForm.contacts=row.contacts
+        this.addForm.contactPhone=row.telephone
+        this.code=row.code
+        this.cityName=row.fkCityName
+        this.cityCode=row.fkCityCode
+        this.id=row.id
       },
       //删除按钮
-      deleteBtn(){
+      deleteBtn(index,row){
         this.i=2
         this.centerDialogVisible=true
+        this.id=row.id
       },
       //删除确定按钮
       submitDialog(){
-
+        this.axios.post(bookpublish.delete,[{id:this.id}]).then((res)=>{
+          console.log('删除出版社返回的数据',res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            });
+            this.SearchApi(this.searchTimeForm)
+            this.centerDialogVisible=false
+          }else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            });
+          }
+        })
       },
       /*====== 3.0添加相关操作 ======*/
       addDialogOpen() {
@@ -368,7 +398,33 @@
             }
           });
         }else if(this.i==1){
-          console.log('修改操作')
+          this.axios.post(bookpublish.edit,{
+            id:this.id,
+            name:this.addForm.publishName,
+            code:this.code,
+            fkCityCode:this.cityCode,
+            fkCityName:this.cityName,
+            address:this.addForm.componentAddress,
+            contacts:this.addForm.contacts,
+            telephone:this.addForm.contactPhone
+          }).then((res)=>{
+            console.log('修改图书出版社返回的消息',res)
+            if(res.data.state==true){
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              });
+              this.SearchApi(this.searchTimeForm)
+              this.closeForm()
+              this.$refs[this.addForm].resetFields();
+              this.dialogFormVisible=false
+            }else{
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
+            }
+          })
         }
       },
       formApi(ztreeName,ztreeCode){
@@ -391,6 +447,7 @@
             });
             this.SearchApi(this.searchTimeForm)
             this.closeForm()
+            this.$refs[this.addForm].resetFields();
             this.dialogFormVisible=false
             /*let cityName={cityCode:citynameCode}*/
           }else{
@@ -398,11 +455,10 @@
               message: res.data.msg,
               type: 'error'
             });
-            this.closeForm()
-            this.dialogFormVisible=false
+            //this.closeForm()
+            //this.dialogFormVisible=false
           }
         })
-        this.$refs[this.addForm].resetFields();
       },
       resetForm() {
         this.$refs[this.addForm].resetFields();
@@ -445,7 +501,7 @@
             params: value
           })
           .then(res => {
-            //console.log("当前获取的数据", res.data);
+            console.log("当前获取的数据分页", res.data);
             if (res.data.state === true) {
               let nomol = res.data.row;
               this.tableData = nomol; //获取返回数据

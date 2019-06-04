@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div id="loginrecord">
     <el-container>
       <div class="commonMode" style="width:100%">

@@ -2,7 +2,7 @@
     <div style="display: flex;flex-direction: row;">
       <div style="background-color:white;width:250px;display: flex;flex-direction:column;overflow: paged-y">
         <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">一体化管理系统</div>
-        <div style="overflow-y: auto;background-color:white;">
+        <div style="overflow-y: auto;background-color:white;height:800px">
           <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px" v-loading="fullscreenLoading"></ul>
         </div>
       </div>

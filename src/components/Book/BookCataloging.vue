@@ -18,15 +18,15 @@
               <i class="blueIcon el-icon-share"></i>导出
             </button>
             <button class="green" @click="tunnellingBtn">
-              <i class="el-icon-edit"></i>批量导入
+              <i class="el-icon-edit greenIcon"></i>批量导入
             </button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="ISBN :">
-                <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" style="width: 200px"></el-input>
+                <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" clearable style="width: 200px;position: relative"></el-input>
               </el-form-item>
-              <el-form-item label="">
+              <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
               </el-form-item>
             </el-form>
@@ -407,6 +407,11 @@
       }
     },
     methods: {
+      //清除搜索框数据
+      iconcuowuFun(){
+
+      },
+      //获取图书信息弹窗的单选按钮
       BookInfoFun(value){
         console.log('获取图书信息',value)
         if(value==1){
@@ -804,11 +809,6 @@
     color: #ff5c3c;
     cursor: pointer;
   }
-  .green{
-    color: #01D793;
-    cursor: pointer;
-    margin-right: 20px;
-  }
   .buttonBox {
     margin-bottom: 30px;
   }
@@ -866,6 +866,9 @@
     background: #01EECA;
     border-radius: 10px;
     margin-left: 10px;
+  }
+  .buttonBox .green .greenIcon {
+    margin-right: 6px;
   }
   #Notice {
     background: #ffffff;

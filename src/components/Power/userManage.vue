@@ -12,7 +12,7 @@
           <section class="searchBox">
             <el-form  :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
-                <el-input size="120" v-model="searchForm.userName" placeholder="请输入姓名"></el-input>
+                <el-input size="120" v-model="searchForm.userName" clearable placeholder="请输入姓名"></el-input>
               </el-form-item>
               <el-form-item label="角色名称:" size="160">
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
@@ -31,10 +31,10 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="身份证号:" size="160">
-                <el-input v-model="searchForm.userId" placeholder="请输入身份证号"></el-input>
+                <el-input v-model="searchForm.userId" clearable placeholder="请输入身份证号"></el-input>
               </el-form-item>
               <el-form-item label="手机号码:" size="160">
-                <el-input v-model="searchForm.userPhone" placeholder="请输入手机号码"></el-input>
+                <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码"></el-input>
               </el-form-item>
               <el-form-item size="130">
                 <el-date-picker

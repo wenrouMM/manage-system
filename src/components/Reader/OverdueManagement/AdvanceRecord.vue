@@ -2,7 +2,6 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
-        <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
@@ -18,10 +17,10 @@
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline flexLayout">
               <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="书籍编码:" size="160">
-                <el-input v-model="searchForm.bookNumber" placeholder="请输入书籍编码"></el-input>
+                <el-input v-model="searchForm.bookNumber" clearable placeholder="请输入书籍编码"></el-input>
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker

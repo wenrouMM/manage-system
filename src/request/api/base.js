@@ -7,12 +7,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 //var url='http://127.0.0.1:8088/'
 
 
-//var url = 'http://192.168.2.121:8088/'
-var url = 'http://192.168.2.121:8088/'
+var url = 'http://192.168.2.121:8088/';
+//var url = 'http://192.168.2.31:8088/';
 
 
-var imgurl='http://192.168.2.121:8090/'
-let fileUrl = 'http://192.168.2.121:8090/' 
+var imgurl='http://192.168.2.31:8090/';
+let fileUrl = 'http://192.168.2.31:8090/';
 
 /*------ 文件上传模块 ------*/
 
@@ -42,7 +42,7 @@ export const damageCotInt = {
 /*--- 借阅管理 ---*/
 // 借书页面
 
-var borrow = url + 'tibetmuseummodule/bookRFID/'
+var borrow = url + 'tibetmuseummodule/bookRFID/';
 export const borrowInt = {
   selectCode: `${url}borrowmodule/borrow/selectByCode`,
   selectRfid: `${borrow}borrowmodule/return/selectByrfid`
@@ -53,7 +53,7 @@ export const returnInt = {
   selectRfid: `${borrow}borrowmodule/borrow/selectByrfid`
 }
 // 续借页面
-var bookOperate = url + 'borrowmodule/'
+var bookOperate = url + 'borrowmodule/';
 export const bookOperateInt = {
   borrow: `${bookOperate}borrow/out`,
   sell: `${bookOperate}return/in`,
@@ -68,8 +68,6 @@ export const bookDamageInt = {
   damage:`${url}bookcollectionmodule/collection/letDamage`
 }
 
-
-
 /*------ 读者管理模块 ------*/
 // 押金充值和判断
 export const rechargeInt = {
@@ -83,7 +81,7 @@ export const rechargeInt = {
 }
 
 //读者卡信息
-var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/'
+var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/';
 export const cardInfoInt = {
   select: `${url}readermodule/readerTbCardInfo/select`,
   cardReport: `${cardInfo}currency/cardReport`, // 挂失/取办
@@ -93,7 +91,7 @@ export const cardInfoInt = {
   selectUser: `${cardInfo}selectUserInfoByCard`,
   option:`${url}readermodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
 }
-export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'
+export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox';
 //读者卡等级
 
 export const cardLevelInt = {
@@ -122,7 +120,7 @@ export const bookWordInt = {
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
 }
-export const powerControl=url+'authmodule/roleInformation/select' //权限表格查询
+export const powerControl=url+'authmodule/roleInformation/select';//权限表格查询
 //菜单页面
 export const menu = {
   select:`${url}authmodule/menuInformation/select`,//菜单查询接口
@@ -151,9 +149,9 @@ export const control = {
   add:`${url}authmodule/roleMenuElement/edit`, //权限添加
 }
 
-var userManage = url + 'authmodule/managerInformation/'
-var roleManage = url + 'authmodule/roleInformation/'
-var powerMangae = url + 'authmodule/roleMenuElement/'
+var userManage = url + 'authmodule/managerInformation/';
+var roleManage = url + 'authmodule/roleInformation/';
+var powerMangae = url + 'authmodule/roleMenuElement/';
 
 export const userManageInterface = {
   select: `${userManage}select`,
@@ -174,15 +172,15 @@ export const powerMangaeInt = {
   delete: `${powerMangae}delete`,
   prohibit:`${powerMangae}prohibit`
 }
-export const login_record = url + "authmodule/authTbManagerLoginLog/select" //登录记录接口
-export const role_name = url + 'authmodule/roleInformation/currency/select'//角色名称查询
-export const command_list = url + 'authmodule/roleMenuElement/select'//权限管理列表
-export const prohibit = url + 'authmodule/roleMenuElement/edit'//权限管理禁用
-export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete'//权限管理批量禁用
+export const login_record = url + "authmodule/authTbManagerLoginLog/select"; //登录记录接口
+export const role_name = url + 'authmodule/roleInformation/currency/select';//角色名称查询
+export const command_list = url + 'authmodule/roleMenuElement/select';//权限管理列表
+export const prohibit = url + 'authmodule/roleMenuElement/edit';//权限管理禁用
+export const batch_Prohibit = url + 'authmodule/roleMenuElement/delete';//权限管理批量禁用
 
 
 // 图书模块
-var bookMode = url + 'tibetmuseummodule/libraryInformationManagementPage/'
+var bookMode = url + 'tibetmuseummodule/libraryInformationManagementPage/';
 export const bookModeInt = {
   selectOne:`${bookMode}selectOne`,
   select:`${bookMode}select`
@@ -192,9 +190,11 @@ export const bookpublish = {
   select:`${url}bookcollectionmodule/libraryPressManagementPage/select`,//图书出版社初始化查询接口
   city:`${url}bookcollectionmodule/libraryPressManagementPage/selectCity `, //图书出版社城市信息
   add:`${url}bookcollectionmodule/libraryPressManagementPage/add`, //图书出版社添加信息
+  edit:`${url}bookcollectionmodule/libraryPressManagementPage/edit`, //修改图书出版社
+  delete:`${url}bookcollectionmodule/libraryPressManagementPage/delete`, //删除图书出版社
 }
 //图书类型查询
-export const booktype = url + 'bookmodule/bookTbType/select' // 预览图片前缀
+export const booktype = url + 'bookmodule/bookTbType/select'; // 预览图片前缀
 //图书信息
 export const booknews = {
   table:`${url}bookmodule/bookTbInfo/select`, //图书信息表格接口
@@ -258,7 +258,7 @@ export const dishonesty = {
 //馆内图书类型
 /*------ 区域模块 ------*/
 //库房模块
-var store = url + 'regionmodule/areaManagementPage/store'
+var store = url + 'regionmodule/areaManagementPage/store';
 export const storeInt = {
   select: `${store}select`,
   add: `${store}add`,
@@ -266,7 +266,7 @@ export const storeInt = {
   delete: `${store}delete`
 }
 //区模块
-var region = url + 'regionmodule/areaManagementPage/region'
+var region = url + 'regionmodule/areaManagementPage/region';
 export const regionInt = {
   select: `${region}select`,
   add: `${region}add`,
@@ -285,7 +285,7 @@ export const layerFrame = {
 /*====== 藏馆系统 ======*/
 
 // 读者卡类型
-var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/'
+var cardType = url + 'tibetmuseummodule/readerTbCardTypeinfo/';
 export const cardTypeInt = {
   select: `${cardType}select`,
   add: `${cardType}add`,
@@ -301,23 +301,23 @@ export const addCardInt = {
   addCard:`${url}readermodule/readerTbCardInfo/add`
 }
 //通用接口
-export const photoUrl = 'http://192.168.2.54' // 预览图片前缀
-export const loginInter = url + 'authmodule/index/login'
-export const headUpload = imgurl + 'filemodule/uploadImg/addHead' //
-export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole' // 添加权限管理下拉
-export const selectRoleType = url + 'authmodule/roleInformation/currency/selectRole' // 角色管理下拉
+export const photoUrl = 'http://192.168.2.31'; // 预览图片前缀
+export const loginInter = url + 'authmodule/index/login';
+export const headUpload = imgurl + 'filemodule/uploadImg/addHead'; //
+export const roleType = url + 'authmodule/roleInformation/currency/addSelectRole';// 添加权限管理下拉
+export const selectRoleType = url + 'authmodule/roleInformation/currency/selectRole'; // 角色管理下拉
 
 // 读者卡信息
-export const cardReport = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReport' // 挂失
-export const cardReissue = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReissue' // 补办
+export const cardReport = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReport'; // 挂失
+export const cardReissue = url + 'tibetmuseummodule/readerTbCardInfo/currency/cardReissue'; // 补办
 // 读者卡等级模块
-export const selectEffect = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBox' // 获取未被禁用的 没有被使用的 读者卡等级类型下拉框
-export const selectAllDrop = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox' // 获取所有读者卡等级类型列表下拉框
+export const selectEffect = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBox'; // 获取未被禁用的 没有被使用的 读者卡等级类型下拉框
+export const selectAllDrop = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox'; // 获取所有读者卡等级类型列表下拉框
 
 // 读者卡类型模块
-export const readerType = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectEffectiveDropBox' // 类型 部分
-export const levelOption = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectAllDropBox' //  全部类型
-export const unBanOption = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll'  // 所有的 没被禁用的 等级下拉框
+export const readerType = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectEffectiveDropBox'; // 类型 部分
+export const levelOption = url + 'tibetmuseummodule/readerTbCardTypeinfo/currency/selectAllDropBox'; //  全部类型
+export const unBanOption = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll';  // 所有的 没被禁用的 等级下拉框
 
 //系统管理损坏管理
 export const damage={
@@ -384,11 +384,11 @@ export const PersonalCentre={
 }
 
 //注销记录
-export const logOut=url+'financemodule/readerTbCardLogout/select'
+export const logOut=url+'financemodule/readerTbCardLogout/select';
 
 //逾期费用记录
-export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLog/select'
+export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLog/select';
 
 //个人中心头像修改
-export const editHeadPortrait=url+'authmodule/managerInformation/editPersonalCenterHeade'
-export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow'
+export const editHeadPortrait=url+'authmodule/managerInformation/editPersonalCenterHeade';
+export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow';

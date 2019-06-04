@@ -20,7 +20,7 @@
     <section class="userInfoBox">
       <div class="infoList">
         <div class="rowList">
-          <div class="text">用户名:</div>
+          <div class="text"><i class="userIcon iconyonghuming"></i>用户名:</div>
           <div class="content">{{userName}}</div>
           <div class="fix" @click="userBtn">修改</div>
         </div>

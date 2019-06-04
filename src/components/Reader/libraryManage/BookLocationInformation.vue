@@ -25,7 +25,7 @@
                   <el-option label="书名" value="3"></el-option>
                   <el-option label="状态" value="4"></el-option>
                 </el-select>
-                <el-input v-model="searchForm.searchData" style="width: 200px"></el-input>
+                <el-input v-model="searchForm.searchData" clearable placeholder="请输入相关内容" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>

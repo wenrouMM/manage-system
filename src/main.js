@@ -17,6 +17,7 @@ import "./zTree_v3/js/jquery.ztree.excheck.min.js"
 import './zTree_v3/js/jquery.ztree.exedit.min'
 import './zTree_v3/js/jquery.ztree.exhide.min'
 //css
+import '../src/base/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import './zTree_v3/css/zTreeStyle/zTreeStyle.css'
 //import './zTree_v3/css/metroStyle/metroStyle.css'
@@ -65,7 +66,7 @@ router.beforeEach((to, from, next) => {
         store.commit('setMenu', menu)
       }
       next()
-      
+
     }else{
       Message.error("请先登录");
       next('/login')
@@ -75,7 +76,7 @@ router.beforeEach((to, from, next) => {
   }
 })
 router.afterEach(() => {
-  
+
   NProgress.done()
 })
  //判定依据token起手 废弃

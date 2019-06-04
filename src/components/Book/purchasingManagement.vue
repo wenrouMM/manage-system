@@ -30,7 +30,7 @@
                 <el-option label="采购批次" value="0"></el-option>
                 <el-option label="备注信息" value="1"></el-option>
               </el-select>
-              <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" style="width: 250px"></el-input>
+              <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -100,7 +100,7 @@
         >
           <!-- 弹框表单按钮  验证失效-->
           <el-form-item label=" 采购批次 :" prop="PurchaseBatch" label-width="95px" style>
-            <el-input v-model="addForm.PurchaseBatch" style="width: 340px"></el-input>
+            <el-input v-model="addForm.PurchaseBatch"  style="width: 340px"></el-input>
           </el-form-item>
           <el-form-item label=" 备注信息 :" prop="remarks" label-width="95px">
             <el-input

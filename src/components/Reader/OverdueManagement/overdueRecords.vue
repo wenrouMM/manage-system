@@ -2,7 +2,6 @@
   <div class="useradd">
     <el-container>
       <div class="box-card">
-        <div class="space"></div>
         <!-- 估计是第三层路由展示区域 -->
         <div class="important">
           <!-- 1.0 标题 -->
@@ -98,7 +97,7 @@
 
 <script>
 
-  import {overdue} from '../../../request/api/base.js'
+  import {overdue} from '@request/api/base.js'
   export default {
     data() {
       return {

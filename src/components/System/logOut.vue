@@ -29,7 +29,7 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item label="用户名">
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>

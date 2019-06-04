@@ -26,10 +26,10 @@
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNumber" placeholder="请输入卡号"></el-input>
+                <el-input size="120" v-model="searchForm.cardNumber" clearable placeholder="请输入卡号"></el-input>
               </el-form-item>
               <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.name" placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.name" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="等级名称:" size="160">
                 <el-select clearable v-model="searchForm.type" placeholder="请选择等级名称">
