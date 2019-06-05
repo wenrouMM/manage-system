@@ -110,8 +110,8 @@
                 <el-menu-item-group>
                   <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
                   <el-menu-item index="/loanhistory">还书记录</el-menu-item>
-                  <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
-                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item>
+                  <!-- <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
+                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item> -->
                   <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
                   <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                   <el-menu-item index="/reimburse">报损记录</el-menu-item>
@@ -148,7 +148,7 @@
               <el-menu-item index="/roleInformation"><i class="indexIcon indexIconMax iconjiaoseguanli"></i>角色管理</el-menu-item>
               <el-menu-item index="/roleMenuElement"><i class="indexIcon indexIconMax iconquanxianguanli"></i>权限管理</el-menu-item>
               <el-menu-item index="/managerInformation"><i class="indexIcon indexIconMax iconyonghuguanli"></i>用户管理</el-menu-item>
-              <el-menu-item index="/authTbManagerLoginLog"><i class="indexIcon indexIconMax icondenglujilu"></i>登陆管理</el-menu-item>
+              <el-menu-item index="/authTbManagerLoginLog"><i class="indexIcon indexIconMax icondenglujilu"></i>登录记录</el-menu-item>
               <el-menu-item index="/damageSet"><i class="indexIcon iconsunhuai"></i>损坏管理</el-menu-item>
               <el-menu-item index="/wordBook"><i class="indexIcon iconshujuzidian"></i>数据字典</el-menu-item>
               <el-menu-item index="/noticeSet"><i class="indexIcon indexIconMax icongonggao"></i>公告管理</el-menu-item>

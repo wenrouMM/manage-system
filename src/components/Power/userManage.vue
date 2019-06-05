@@ -10,7 +10,7 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
-            <el-form  :inline="true" :model="searchForm" class="demo-form-inline">
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
                 <el-input size="120" v-model="searchForm.userName" clearable placeholder="请输入姓名"></el-input>
               </el-form-item>
@@ -36,7 +36,7 @@
               <el-form-item label="手机号码:" size="160">
                 <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码"></el-input>
               </el-form-item>
-              <el-form-item size="130">
+              <el-form-item label="创建时间:" size="160">
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   type="date"
@@ -50,15 +50,11 @@
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
-              <el-form-item>
-                <el-button
-                  :loading="searchLoading"
-                  size="15"
-                  type="primary"
-                  @click="searchSubmit"
-                >查询</el-button>
-              </el-form-item>
             </el-form>
+            <div>
+              <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
+            </div>
+            
           </section>
           <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
           <div class="buttonBox">
@@ -73,7 +69,7 @@
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               @selection-change="handleSelectionChange"
-              class="tableBorder"
+              
               :data="tableData"
               empty-text="无数据"
               style="width: 100%; text-align:center;"
@@ -472,8 +468,8 @@ export default {
         userType: "",
         userId: "",
         userPhone: "",
-        beginTime: '',
-        endTime: '',
+        beginTime: "",
+        endTime: ""
       },
       paginationForm: {},
       /*===== 6.0弹框初始化数据 ======*/
@@ -509,8 +505,12 @@ export default {
         fkRoleCode: this.searchForm.userType, // 只是给了一个code
         idCard: this.searchForm.userId,
         phone: this.searchForm.userPhone,
-        beginTime: !this.searchForm.beginTime ? null : moment(this.searchForm.beginTime).format('YYYY-MM-DD'), //开始时间
-          endTime: !this.searchForm.endTime ? null : moment(this.searchForm.endTime).format('YYYY-MM-DD') //结束时间
+        beginTime: !this.searchForm.beginTime
+          ? null
+          : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
+        endTime: !this.searchForm.endTime
+          ? null
+          : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
       };
 
       return searchForm;
@@ -663,7 +663,7 @@ export default {
       this.addForm.isLock = row.isLock;
       this.addForm.preUrl = row.preUrl;
       this.dialogFormVisible = true;
-      this.addForm.authTbRoles = row.authTbRoles
+      this.addForm.authTbRoles = row.authTbRoles;
       console.log(index, row, typeof this.addForm.isLock);
       console.log("编辑后的表单", this.addForm);
       console.log("提交的数据", this.addEdit);
@@ -873,7 +873,7 @@ export default {
       // 弹框关闭的时候执行 清空数据
       this.formFlag = true;
       console.log("关闭测试");
-      let obj = this.addForm
+      let obj = this.addForm;
       for (var i in obj) {
         obj[i] = "";
       }
@@ -923,7 +923,10 @@ export default {
 
 <style scoped>
 /*====== 0.0 初始化部分 ======*/
-
+.searchBox{
+  display: flex;
+  justify-content: space-between;
+}
 .box-card {
   background-color: #fff;
   box-sizing: border-box;

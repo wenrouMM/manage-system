@@ -21,10 +21,10 @@
             </div>
             <section class="searchBox">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" >
-                <el-form-item label="角色名称" size="160">
+                <el-form-item label="角色名称:" size="160">
                   <el-input clearable size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
-                <el-form-item label="创建时间" size="130">
+                <el-form-item label="创建时间:" size="130">
                   <el-date-picker
                     v-model="formInline.beginTime"
                     type="date"
@@ -47,7 +47,7 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              class="tableBorder"
+              
 
               @selection-change="handleSelectionChange"
               :data="tableData"
