@@ -82,7 +82,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" width="200" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" width="200" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
@@ -143,7 +143,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>

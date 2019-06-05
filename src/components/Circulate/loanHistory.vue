@@ -17,16 +17,21 @@
               <el-form-item label="卡号:">
                 <el-input size="120" v-model="searchForm.cardNum" clearable placeholder="请输入卡号"></el-input>
               </el-form-item>
+              <el-form-item label="馆内码:">
+                <el-input size="120" v-model="searchForm.code" clearable placeholder="请输入馆内码"></el-input>
+              </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
-                  v-model="searchForm.date"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  :picker-options="pickerOptions"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -51,7 +56,7 @@
               <el-table-column align="center" prop="fkReaderName" width="170" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="170" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" width="300" label="馆内码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
               <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
@@ -108,9 +113,24 @@
         rowStyle: {
           height: "60px"
         },
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
+        pickerOptions0: {
+          disabledDate: time => {
+            if (this.searchForm.endTime) {
+              return (
+                time.getTime() > Date.now() ||
+                time.getTime() > this.searchForm.endTime
+              );
+            } else {
+              return time.getTime() > Date.now();
+            }
+          }
+        },
+        pickerOptions1: {
+          disabledDate: time => {
+            return (
+              time.getTime() < this.searchForm.beginTime ||
+              time.getTime() > Date.now()
+            );
           }
         },
         total: 0,
@@ -121,7 +141,9 @@
           // 搜索需要的表单数据
           userName: "",
           cardNum: "",
-          date:[]
+          code:'',
+          beginTime: "",
+          endTime: "",
         },
         tableLoading:false,
         tableData: [
@@ -140,10 +162,15 @@
         let searchForm = {
           pageSize: this.pageSize,
           currentPage: 1,
+          code:this.searchForm.code,
           hisCardNum:this.searchForm.cardNum,
           hisName:this.searchForm.userName,
-          hisStartTime: null,
-          hisEndTime: null
+          hisStartTime: !this.searchForm.beginTime
+            ? null
+            : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
+          hisEndTime:!this.searchForm.endTime
+            ? null
+            : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
         };
         if (date != null && date != "") {
           searchForm.hisStartTime = moment(this.searchForm.date[0]).format(

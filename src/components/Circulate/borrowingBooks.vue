@@ -5,7 +5,7 @@
       style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
     >
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-      <div style="font-size: 16px;color: #878787;margin-left:10px;">借书</div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">书籍借阅</div>
     </div>
     <div class="borrowMode">
       <div class="borrowBox">
@@ -74,9 +74,9 @@
                 ref="searchForm"
                 :rules="rules"
               >
-                <el-form-item label="书籍编码:" prop="bookCode">
+                <el-form-item label="馆内码:" prop="bookCode">
                   <el-input
-                    placeholder="请输入书籍编码"
+                    placeholder="请输入馆内码"
                     v-model="searchForm.bookCode"
                     class="input-with-select"
                     @keyup.enter.native="selectBtn"
@@ -121,7 +121,7 @@
                   align="center"
                   width="200"
                   prop="code"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column
                   align="center"
@@ -166,7 +166,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="start" label="借书开始时间"></el-table-column>
                 <!-- <el-table-column align="center" prop="end" label="预计书籍归还时间"></el-table-column> -->
@@ -193,7 +193,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
@@ -222,7 +222,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>
