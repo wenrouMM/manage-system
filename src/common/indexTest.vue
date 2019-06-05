@@ -36,8 +36,8 @@
           </div>
           <div  class="userBox">
             <div  class="username">
-
-              <span class="nameText" v-if="userLo.username!=null && userLo.username!='...'">{{userLo.username}}</span>
+              <span class="nameText" v-if="!userLo">...</span>
+              <span class="nameText" v-if="userLo">{{userLo.username}}</span>
 
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
@@ -171,7 +171,8 @@
 </template>
 
 <script>
-import {uploadInt} from '@request/api/base.js'
+import {uploadInt,PersonalCentre} from '@request/api/base.js'
+import axios from 'axios'
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
 import { mapGetters } from "vuex";
@@ -227,16 +228,22 @@ export default {
           : this.settingHead;
       return src;
     },
-    ...mapGetters(["userInfo", "menu"])
+
   },
   components: {
     NavMenu,
     Tags
   },
   created() {
-    let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-    this.userLo = userInfo;
-    this.settingHead = uploadInt.preimg + userInfo.headerAddress
+    
+    axios.get(PersonalCentre.userInfo).then((res)=>{
+      console.log('看看bug到底在哪里',res)
+       this.userLo = res.data.row;
+       this.settingHead = uploadInt.preimg + res.data.row.headerAddress
+    })
+    console.log('新方法',this.userLo)
+   
+    
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {

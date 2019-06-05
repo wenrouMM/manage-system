@@ -43,12 +43,16 @@ const mutations={
     }
 }
 const actions= {
-    
+    userInfo({commit},data){
+        commit('setUserInfo',data)
+    }
 }
+
 
 export default new Vuex.Store({
     state,
     mutations,
+    actions,
     getters,
     strict: debug,
     plugins: debug ? [createLogger()] : []
