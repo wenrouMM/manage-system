@@ -161,12 +161,13 @@ export const control = {
 var userManage = url + 'authmodule/managerInformation/';
 var roleManage = url + 'authmodule/roleInformation/';
 var powerMangae = url + 'authmodule/roleMenuElement/';
-
+/*--- 用户管理 ---*/
 export const userManageInterface = {
   select: `${userManage}select`,
   add: `${userManage}add`,
   edit: `${userManage}edit`,
   delete: `${userManage}delete`,
+  reset:`${url}authmodule/loginInformation/edit`
 }
 export const roleManageInt = {
   select: `${roleManage}select`,

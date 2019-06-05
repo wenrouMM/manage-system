@@ -60,7 +60,6 @@
           <section class="text item tablebox">
             <el-table
               @selection-change="selectAllBtn"
-             
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
@@ -394,10 +393,14 @@ export default {
     },
     // 补办读者卡
     supply(index, row) {
-      this.i = 0;
-      this.changeForm.cardNumber = row.cardNumber;
-      this.changeForm.id = row.id;
-      this.changeFormDialog = true;
+      if (row.state === 0) {
+        this.$message.error("请先对卡进行挂失处理再补办");
+      } else {
+        this.i = 0;
+        this.changeForm.cardNumber = row.cardNumber;
+        this.changeForm.id = row.id;
+        this.changeFormDialog = true;
+      }
 
       console.log(index, row, this.changeForm);
     },
