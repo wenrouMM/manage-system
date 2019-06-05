@@ -475,7 +475,7 @@
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ["修改", "新增"],
-        catalogtitle:['导出','删除','导入','若列表中没有合适的数据，请点击“取消”按钮进行远程获取','远程数据'],
+        catalogtitle:['删除','导出','导入','若列表中没有合适的数据，请点击“取消”按钮进行远程获取','远程数据'],
         i: null, // 切换弹框标题
         j:null,
         searchForm: {
@@ -670,13 +670,14 @@
       },
       //导出按钮
       deriveBtn(){
-        this.i=2
+        this.j=1
+        this.messageWidth='500px'
         this.centerDialogVisible=true
       },
       //删除按钮
       drawbackBtn(){
         if(this.tableChecked.length){
-          this.i=3
+          this.j=0
           this.messageWidth='500px'
           this.centerDialogVisible=true
         } else {
@@ -816,9 +817,10 @@
         this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
         this.currentPage = 1;
       },
-      //调馆按钮
+      //导入按钮
       tunnellingBtn(){
-        this.i=4
+        this.j=2
+        this.messageWidth='500px'
         this.centerDialogVisible=true
       },
       submitDialog(){
