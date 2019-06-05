@@ -130,7 +130,7 @@
                       </el-form-item>
                     </div>
                     <div  class="flexLayout">
-                      <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
+                      <el-form-item label=" 索 书 号 :" label-width="95px"  class="mediumInput">
                         <el-input v-model="addForm.searchNumber "></el-input>
                       </el-form-item>
                       <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
@@ -766,6 +766,7 @@
               message: res.data.msg,
               type: "success"
             });
+            this.dialogFormVisible = false
             this.closeForm()
             this.searchApi(this.searchTimeForm);
           } else {
@@ -783,6 +784,7 @@
               message: res.data.msg,
               type: "success"
             });
+            this.dialogFormVisible = false
             this.closeForm()
             this.searchApi(this.searchTimeForm);
           } else {
