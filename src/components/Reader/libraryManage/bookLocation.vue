@@ -8,8 +8,8 @@
       <div style="background-color: #ededed;width: 250px;height: 200px"></div>
       <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
-          <el-form-item label="馆内图书编码 :　" prop="barcode" label-width="130px">
-            <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入条码"></el-input>
+          <el-form-item label="馆 藏 码 :　" prop="barcode" label-width="130px">
+            <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入馆藏码"></el-input>
           </el-form-item>
           <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
             <span>{{ruleForm.bookName}}</span>

@@ -1,5 +1,5 @@
 <template>
-  <div id="index" class="index">
+  <div class="index">
     <el-container style="height:100%">
       <!-- 头部组件 -->
       <!-- 1.0头部模块 -->
@@ -7,11 +7,11 @@
         <!-- logo模块 logo图片载入 附加路由调转至首页 -->
         <div class="logoNav">
           <div id="logoBox" class="logoBox">
-            <img :src="logoUrl">
-            <span @click="skip" class="Logotext">图书馆管理平台</span>
+            <i class="logo"></i>
+            <span @click="skip" class="text">图书馆管理平台</span>
           </div>
           <!-- 头部导航模块 路由添加尚未完成 active驻留模块未完成 -->
-          <div id="navBar" class="navBar">
+          <div class="navBar">
             <el-menu
               text-color="#fff"
               mode="horizontal"
@@ -19,10 +19,10 @@
               background-color="#0096ff"
               :default-active="Mode"
             >
-              <el-menu-item id="circle" index="3">流通管理</el-menu-item>
-              <el-menu-item id="reader" index="4">读者管理</el-menu-item>
               <el-menu-item id="collect" index="1">采编管理</el-menu-item>
               <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
+              <el-menu-item id="circle" index="3">流通管理</el-menu-item>
+              <el-menu-item id="reader" index="4">读者管理</el-menu-item>
               <el-menu-item id="finance" index="5">财务管理</el-menu-item>
               <el-menu-item id="system" index="6">系统管理</el-menu-item>
             </el-menu>
@@ -37,26 +37,24 @@
           <div  class="userBox">
             <div  class="username">
 
-              <span class="nameText" v-if="userLo.username!=null && userLo.username!='...'">{{userLo.username}}</span>
+              <span v-if="userLo.username!=null && userLo.username!=''">{{userLo.username}}</span>
 
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span @click="toCenter" class="dropItem">个人中心</span>
-                <router-link to="/borrowingbooks" tag="span" class="dropItem">书籍借阅</router-link>
-                <router-link to="/returnbooks" tag="span" class="dropItem">书籍归还</router-link>
+                <span @click="loginOut" class="dropItem">切换账户</span>
                 <span @click="rechargeBtn" class="dropItem">押金充值</span>
                 <span @click="cardBtn" class="dropItem">卡号注销</span>
-                <span @click="loginOut" class="dropItem">退出</span>
               </div>
             </div>
-            <!-- <i class="notice"></i>
-            <i class="set"></i> -->
+            <i class="notice"></i>
+            <i class="set"></i>
           </div>
         </div>
       </el-header>
       <!-- 2.0 二层路由 导航模块 -->
       <el-container>
-        <el-aside class="nav" width="260px"  style="background-color: #343B4A;">
+        <el-aside class="nav" width="260px" style="background-color: #343B4A">
           <!-- 侧边栏主体 -->
           <el-menu
             @select="routerBox"
@@ -67,12 +65,11 @@
             text-color="#fff"
           >
             <div class="block"></div>
-            <el-menu-item  index="/indexTest"><i  class=" indexIcon indexIconMax iconxiazai45"></i><span style="lineHeight:21px;">首页</span></el-menu-item>
+            <el-menu-item v-show="false" index="/indexTest">首页</el-menu-item>
             <!--采编管理 -->
             <div class="navMenu" v-show="Mode == 1">
               <el-submenu index="3">
                 <template slot="title">
-                  <i style="fontSize:24px;" class=" indexIcon indexIconMax iconwp-sj-3"></i>
                   <span>书籍管理</span>
                 </template>
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
@@ -81,18 +78,33 @@
             </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-show="Mode == 2">
-                <el-menu-item index="/publishhouse"><i class="indexIcon indexIconMax iconchubanshe"></i>图书出版社</el-menu-item>
+
+              <el-menu-item index="/BookCollection">书籍典藏</el-menu-item>
                 <!-- <el-menu-item index="/bookregistration">图书登记</el-menu-item> -->
-                <el-menu-item index="/BookCollection"><i class="indexIcon iconshuji"></i>书籍典藏</el-menu-item>
-                <el-menu-item index="/bookLocation"><i class="indexIcon indexIconMax iconico_yunyingguanli_biangengbangdingjihuashu"></i>图书位置绑定</el-menu-item>
-                <el-menu-item index="/BookLocationInformation"><i class="indexIcon indexIconMax iconziliao"></i>图书位置信息</el-menu-item>
-              <el-menu-item index="/damageCount"><i class="indexIcon iconbaosun"></i>损坏清点</el-menu-item>
+              <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
+              <el-menu-item index="/BookLocationInformation">图书位置信息</el-menu-item>
+              <el-menu-item index="/publishhouse">图书出版社</el-menu-item>
+              <el-menu-item index="/damageCount">损坏清点</el-menu-item>
             </div>
             <!-- 流通管理 -->
             <div class="navMenu" v-show="Mode == 3">
+              <el-submenu index="bookIndex">
+                <template slot="title">
+                  <span>流通记录</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
+                  <el-menu-item index="/loanhistory">还书记录</el-menu-item>
+                  <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
+                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item>
+                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
+                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
+                  <el-menu-item index="/reimburse">报损记录</el-menu-item>
+                  <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
               <el-submenu index="userbrowrr">
                 <template slot="title">
-                  <i class="indexIcon indexIconMax iconjieyuechaxun"></i>
                   <span>借阅管理</span>
                 </template>
                 <el-menu-item-group>
@@ -102,30 +114,12 @@
                   <el-menu-item index="/bookDamage">书籍报损</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-submenu index="bookIndex">
-                <template slot="title">
-                  <i  class=" indexIcon  iconliutong"></i>
-                  <span>流通记录</span>
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
-                  <el-menu-item index="/loanhistory">还书记录</el-menu-item>
-                  <!-- <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
-                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item> -->
-                  <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
-                  <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
-                  <el-menu-item index="/reimburse">报损记录</el-menu-item>
-                  <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
-                </el-menu-item-group>
-              </el-submenu>
-              
             </div>
             <!-- 读者管理 -->
             <div class="navMenu" v-show="Mode == 4">
-              <!-- <el-menu-item index="/reader">读者管理</el-menu-item> -->
+              <el-menu-item index="/reader">读者管理</el-menu-item>
               <el-submenu index="readerCard">
                 <template slot="title">
-                  <i class="indexIcon indexIconMax iconduzheguanli"></i>
                   <span>读者卡管理</span>
                 </template>
                 <el-menu-item-group>
@@ -136,23 +130,23 @@
             </div>
             <!-- 财务管理 -->
             <div class="navMenu" v-show="Mode == 5">
-              <el-menu-item index="/rechargeSet"><i style="fontSize:24px;" class="indexIcon iconchongzhi"></i>充值管理</el-menu-item>
-              <el-menu-item index="/logOut"><i style="fontSize:24px;" class="indexIcon iconzhuxiaojilu"></i>注销记录</el-menu-item>
-              <!-- <el-menu-item index="/Depositflowdirection">押金流向</el-menu-item> -->
-              <el-menu-item index="/OverdueCostCirculation"><i class="indexIcon indexIconMax iconyuqi"></i>逾期费用记录</el-menu-item>
+              <el-menu-item index="/rechargeSet">充值管理</el-menu-item>
+              <el-menu-item index="/logOut">注销记录</el-menu-item>
+              <el-menu-item index="/Depositflowdirection">押金流向</el-menu-item>
+              <el-menu-item index="/OverdueCostCirculation">逾期费用记录</el-menu-item>
             </div>
             <!-- 系统设置 -->
             <div class="navMenu" v-show="Mode == 6">
-              <el-menu-item index="/guideTest"><i class="indexIcon indexIconMax iconyindaoxuqiu"></i>引导页</el-menu-item>
-              <el-menu-item index="/menuInformation"><i class="indexIcon  indexIconMax iconcaidanguanli"></i>菜单管理</el-menu-item>
-              <el-menu-item index="/roleInformation"><i class="indexIcon indexIconMax iconjiaoseguanli"></i>角色管理</el-menu-item>
-              <el-menu-item index="/roleMenuElement"><i class="indexIcon indexIconMax iconquanxianguanli"></i>权限管理</el-menu-item>
-              <el-menu-item index="/managerInformation"><i class="indexIcon indexIconMax iconyonghuguanli"></i>用户管理</el-menu-item>
-              <el-menu-item index="/authTbManagerLoginLog"><i class="indexIcon indexIconMax icondenglujilu"></i>登录记录</el-menu-item>
-              <el-menu-item index="/damageSet"><i class="indexIcon iconsunhuai"></i>损坏管理</el-menu-item>
-              <el-menu-item index="/wordBook"><i class="indexIcon iconshujuzidian"></i>数据字典</el-menu-item>
-              <el-menu-item index="/noticeSet"><i class="indexIcon indexIconMax icongonggao"></i>公告管理</el-menu-item>
-              <el-menu-item index="/vacationSet"><i class="indexIcon indexIconMax iconjiaqi-"></i>假期设置</el-menu-item>
+              <el-menu-item index="/guideTest">引导页</el-menu-item>
+              <el-menu-item index="/menuInformation">菜单管理</el-menu-item>
+              <el-menu-item index="/roleInformation">角色管理</el-menu-item>
+              <el-menu-item index="/roleMenuElement">权限管理</el-menu-item>
+              <el-menu-item index="/managerInformation">用户管理</el-menu-item>
+              <el-menu-item index="/authTbManagerLoginLog">登陆管理</el-menu-item>
+              <el-menu-item index="/damageSet">损坏管理</el-menu-item>
+              <el-menu-item index="/wordBook">数据字典</el-menu-item>
+              <el-menu-item index="/noticeSet">公告管理</el-menu-item>
+              <el-menu-item index="/vacationSet">寒暑假设置</el-menu-item>
             </div>
             <!-- 选中之后的样式 -->
           </el-menu>
@@ -171,7 +165,6 @@
 </template>
 
 <script>
-import {uploadInt} from '@request/api/base.js'
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
 import { mapState } from "vuex";
@@ -183,7 +176,6 @@ export default {
       menuLo: [{}],
       userLo: null,
       nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
-      logoUrl:require("../base/img/logo.png"),
       settingHead: "",
     };
   },
@@ -238,7 +230,6 @@ export default {
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     this.userLo = userInfo;
-    this.settingHead = uploadInt.preimg + userInfo.headerAddress
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {
@@ -394,7 +385,7 @@ body,
   text-align: center;
   color: #fff;
   top: 60px;
-  right: 0px;
+  left: -30px;
   display: none;
   z-index: 5;
 }
@@ -492,7 +483,6 @@ body,
 
 .nav .el-menu-item{
   font-size: 16px;
-  margin: 10px 0;
 }
 .nav .el-submenu__title{
   font-size: 16px;
@@ -505,10 +495,6 @@ body,
   height: 40px;
   margin-right: 9px;
   background-position-y: 10px;
-}
-.Logotext{
-  line-height: 26px;
-  margin-left: 10px;
 }
 .notice {
   background-image: url("../base/img/normal/email-icon.png");
@@ -555,18 +541,5 @@ body,
   opacity: 0;
   transform: translateX(30px);
 }
-.nameText{
-  display:inline-block;
-  max-width: 200px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
 </style>
 
-<style>
-
-#navBar .el-menu-item{
-  margin: 0 10px;
-}
-</style>
