@@ -39,9 +39,11 @@
               </el-form>
             </div>
           </div>
-          <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
+          <div v-if="!userTable.length"><img :src="loadingImg" class="loadingImg"></div>
           <div class="userInfo" v-if="userTable.length">
-            <div class="headBox"></div>
+            <div class="headBox">
+              <img :src="defaultImg" style="width:100%;height:100%;">
+            </div>
             <div class="infoBox">
               <div class="info">
                 <section class="left">
@@ -80,7 +82,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" width="200" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" width="200" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
@@ -141,7 +143,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>
@@ -181,6 +183,8 @@ export default {
       rowStyle: {
         height: "60px"
       },
+      defaultImg:require('../../base/img/normalHead.jpg'),
+      loadingImg:require('../../base/img/Nodata.png'),
       activeName: "first",
       /*------ 全选按钮 ------*/
       lastCardNum:'',

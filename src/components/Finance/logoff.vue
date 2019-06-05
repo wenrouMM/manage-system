@@ -186,9 +186,16 @@
         this.axios.post(rechargeInt.logout, value).then(res => {
           console.log(res);
           if (res.data.state === true) {
-            this.$message.success("注销成功");
-            this.centerDialogVisible=false
-            this.$router.push({path:'/logoffEnd'})
+            this.$message.success("注销成功,注销生成的记录可在财务管理内查看");
+            this.cardInput = ''
+            this.lastCardNum = ''
+            let obj = this.cardData
+            for (var i in obj) {
+              obj[i] = "";
+            }
+              this.centerDialogVisible=false
+
+            //this.$router.push({path:'/logoffEnd'})
           } else {
             this.$message.error(res.data.msg);
             this.centerDialogVisible=false

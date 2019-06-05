@@ -60,7 +60,7 @@
           <section class="text item tablebox">
             <el-table
               @selection-change="selectAllBtn"
-              class="tableBorder"
+             
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"

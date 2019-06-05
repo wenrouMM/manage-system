@@ -159,7 +159,7 @@ body{
 .move-leave-active {
     transition: opacity .5s;
 }
-
+/*用户中心*/
 .move-enter,
 .move-leave {
     opacity: 0;
@@ -178,4 +178,23 @@ body{
 .fade-transform-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+.userIcon{
+  font-family: "iconfont" !important;
+  font-size: 20px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-right: 5px;
+}
+.indexIcon{
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-right: 5px;
+}
+.indexIconMax{
+  font-size: 20px;
 }

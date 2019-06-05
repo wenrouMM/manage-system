@@ -8,11 +8,14 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 
 
 var url = 'http://192.168.2.121:8088/';
-//var url = 'http://192.168.2.31:8088/';
-
-
+var imgurl='http://192.168.2.121:8090/';
+let fileUrl = 'http://192.168.2.121:8090/';
+/* var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';
+let fileUrl = 'http://192.168.2.31:8090/'; */
+/* var url = window.glob.url
+var imgurl = window.glob.imgurl
+var fileUrl = window.glob.fileUrl */
 
 /*------ 文件上传模块 ------*/
 
@@ -144,7 +147,7 @@ export const indexInt = {
   record:`${url}borrowmodule/index/getNewLog`,
   fan:`${url}tibetmuseummodule/index/getHotType`,
   pillar:`${url}borrowmodule/index/selectNearBorrowInfo`,
-  cardOn:`${url}tibetmuseummodule/readerTbCardInfo/currency/handleCardByOneDay`,
+  cardOn:`${url}readermodule/readerTbCardInfo/currency/handleCardByOneDay`,
   notice:`${url}systemmodule/sysTbNoticeInfo/selectLittle`
 }
 

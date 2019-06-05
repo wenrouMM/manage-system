@@ -8,7 +8,7 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <el-form :inline="true" :model="searchForm">
-            <el-form-item label="登录来源" size="160">
+            <el-form-item label="登录来源:" size="160">
               <el-select clearable v-model="searchForm.loginSource" placeholder="请选择">
                 <el-option
                   v-for="item in options"
@@ -282,9 +282,5 @@
     color: #878787;
   }
 
-  #loginrecord .el-table {
-    border: 1px solid #eaeaea;
-    /*border-width: 0 1px 1px 1px ;*/
-    border-bottom: 0;
-  }
+
 </style>

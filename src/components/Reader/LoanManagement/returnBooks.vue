@@ -2,7 +2,7 @@
   <div class="borrowbook">
     <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-      <div style="font-size: 16px;color: #878787;margin-left:10px;">还书</div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">书籍归还</div>
     </div>
     <div style="width: 100%;margin-top: 75px">
       <section style="width:600px;height: 200px;margin:0 auto">
@@ -13,8 +13,8 @@
           ref="searchForm"
           :rules="rules"
         >
-          <el-form-item label="书籍编码" prop="bookCode">
-            <el-input clearable v-model="searchForm.bookCode" placeholder="请输入书籍编码">
+          <el-form-item label="馆内码" prop="bookCode">
+            <el-input clearable v-model="searchForm.bookCode" placeholder="请输入馆内码">
               <el-button
                 slot="append"
                 icon="el-icon-search"
@@ -36,7 +36,7 @@
         >
           <el-table-column width="100" align="center" type="index" label="序号"></el-table-column>
           <el-table-column align="center" prop="name" width="200" label="书籍名称"></el-table-column>
-          <el-table-column align="center" prop="code" label="书籍编码"></el-table-column>
+          <el-table-column align="center" prop="code" label="馆内码"></el-table-column>
           <el-table-column align="center" prop="fkTypeName" width="200" label="书籍类型"></el-table-column>
           <el-table-column align="center" prop="author" label="作者"></el-table-column>
           <el-table-column align="center" fixed="right" width="200" label="操作">

@@ -7,12 +7,12 @@
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
-          <div class="left">
-             <el-button icon="el-icon-plus" type="warning" @click="addBtn">新增</el-button>
+          <div class="left buttonBox">
+            <button @click="addBtn" class="add"><i class="addIcon el-icon-plus">新增</i></button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item size="140" label="发布时间">
+              <el-form-item size="140" label="发布时间:">
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   type="date"
@@ -26,7 +26,7 @@
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
-              <el-form-item label="阅读权限">
+              <el-form-item label="阅读权限:">
                 <el-select size="130" clearable v-model="searchForm.name" placeholder="请选择">
                   <el-option
                     v-for="item in options"
@@ -473,5 +473,32 @@ export default {
   border: 1px solid #eaeaea;
   /*border-width: 0 1px 1px 1px ;*/
   border-bottom: 0;
+}
+.buttonBox .add {
+    background: rgba(255, 146, 49, 1);
+    border-radius: 10px;
+    margin-right: 30px;
+}
+.buttonBox button {
+    padding-left: 18px;
+    padding-right: 18px;
+    height: 40px;
+    font-size: 16px;
+    color: #fff;
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: none;
+    -webkit-appearance: none;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    -webkit-transition: 0.1s;
+    transition: 0.1s;
+    font-weight: 500;
 }
 </style>

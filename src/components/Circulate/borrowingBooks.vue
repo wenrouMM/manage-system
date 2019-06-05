@@ -5,7 +5,7 @@
       style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
     >
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-      <div style="font-size: 16px;color: #878787;margin-left:10px;">借书</div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">书籍借阅</div>
     </div>
     <div class="borrowMode">
       <div class="borrowBox">
@@ -39,9 +39,11 @@
               </el-form>
             </div>
           </div>
-          <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
+          <div v-if="!userTable.length"><img :src="loadingImg" class="loadingImg"></div>
           <div class="userInfo" v-if="userTable.length">
-            <div class="headBox"></div>
+            <div class="headBox">
+              <img :src="defaultImg" style="width:100%;height:100%;">
+            </div>
             <div class="infoBox">
               <div class="info">
                 <section class="left">
@@ -72,9 +74,9 @@
                 ref="searchForm"
                 :rules="rules"
               >
-                <el-form-item label="书籍编码:" prop="bookCode">
+                <el-form-item label="馆内码:" prop="bookCode">
                   <el-input
-                    placeholder="请输入书籍编码"
+                    placeholder="请输入馆内码"
                     v-model="searchForm.bookCode"
                     class="input-with-select"
                     @keyup.enter.native="selectBtn"
@@ -119,7 +121,7 @@
                   align="center"
                   width="200"
                   prop="code"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column
                   align="center"
@@ -164,7 +166,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="start" label="借书开始时间"></el-table-column>
                 <!-- <el-table-column align="center" prop="end" label="预计书籍归还时间"></el-table-column> -->
@@ -191,7 +193,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
@@ -206,7 +208,7 @@
             </section>
           </el-tab-pane>
 
-          <el-tab-pane label="历史借阅记录" name="third">
+          <el-tab-pane label="还书记录" name="third">
             <section class="endTable">
               <el-table
                 class="tableBorder"
@@ -220,7 +222,7 @@
                   align="center"
                   prop="libraryBookCode"
                   :show-overflow-tooltip="true"
-                  label="书籍编码"
+                  label="馆内码"
                 ></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="realityReturnTime" label="实际书籍归还时间"></el-table-column>
@@ -252,6 +254,8 @@ export default {
         bookCode: "",
         selectBook: "1"
       },
+      defaultImg:require('../../base/img/normalHead.jpg'),
+      loadingImg:require('../../base/img/Nodata.png'),
       rules: {
         // 添加的参数验证
         cardNum: [{ required: true, message: "请选择卡号", trigger: "blur" }]
@@ -476,7 +480,7 @@ export default {
         if (res.data.state === true) {
           console.log("借书记录", res.data.row);
           this.endTable = res.data.row.list;
-          this.$message.success("操作完成,请查看下方借书状态");
+          this.$message.success("操作完成,请查看下方借书结果");
           console.log("现在的借书机理", this.endTable);
         } else {
           this.$message.error(res.data.msg);

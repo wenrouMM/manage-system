@@ -17,6 +17,9 @@
               <el-form-item label="卡号:">
                 <el-input size="120" v-model="searchForm.cardNum" clearable placeholder="请输入卡号"></el-input>
               </el-form-item>
+              <el-form-item label="馆内码:">
+                <el-input size="120" v-model="searchForm.code" clearable placeholder="请输入馆内码"></el-input>
+              </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
                   v-model="searchForm.beginTime"
@@ -38,7 +41,7 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table  :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
               <el-table-column width="140" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -47,7 +50,7 @@
               <el-table-column align="center" prop="fkReaderName" width="200" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" width="200" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" width="200" label="书籍名称"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" :show-overflow-tooltip="true" width="200" label="书籍编码"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode"  width="300" label="馆内码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="renewCount" width="200" label="续借次数"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="预计归还时间"></el-table-column>
@@ -133,6 +136,7 @@
           cardNum: "",
           beginTime: "",
           endTime: "",
+          code:''
         },
         tableLoading:false,
         tableData: [
@@ -153,6 +157,7 @@
           currentPage: 1,
           logCardNum:this.searchForm.cardNum,
           logName:this.searchForm.userName,
+          code:this.searchForm.code,
           logStartTime: !this.searchForm.beginTime
             ? null
             : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
