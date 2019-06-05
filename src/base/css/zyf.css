@@ -26,58 +26,77 @@
   font-size: 18px;
   margin-bottom: 25px;
 }
-#Book_collection .el-input #isbnInput{
+#collectionAdd .el-input #isbnInput{
   width: 860px;
   border: 1px solid #DCDFE6
 }
-#Book_collection .el-form-item{
+#collectionAdd .el-form-item{
   margin-bottom: 20px;
 }
-#Book_collection #haveBottomBorder{
+#collectionEdit .el-form-item{
+  margin-bottom: 20px;
+}
+#collectionAdd #haveBottomBorderAdd{
   border: 1px solid #DCDCDC;
   width: 880px;
   border-radius: 5px;
   padding: 10px 30px;
   margin-top: 10px;
 }
-
-#Book_collection #haveBottomBorder .el-input .el-input__inner{
-
+#collectionAdd #haveBottomBorderAdd .el-input .el-input__inner{
   border-radius: 5px;
   height:20px;
   line-height: 20px;
   border: none;
   border-bottom: 1px solid #DCDCDC;
 }
-#Book_collection #haveBottomBorder .el-form-item{
+#collectionEdit #haveBottomBorderEdit .el-input .el-input__inner{
+  border-radius: 5px;
+  height:20px;
+  line-height: 20px;
+  border: none;
+  border-bottom: 1px solid #DCDCDC;
+}
+#collectionAdd #haveBottomBorderAdd .el-form-item{
   margin-bottom: 0px;
 }
-#Book_collection #haveBottomBorder .el-form-item__error{
+#collectionEdit #haveBottomBorderEdit .el-form-item{
+  margin-bottom: 0px;
+}
+#collectionAdd #haveBottomBorderAdd .el-form-item__error{
   display: none;
 }
-#Book_collection #haveBottomBorder #inputDiv1 .el-input .el-input__inner{
+#collectionAdd #haveBottomBorderAdd #inputDiv1 .el-input .el-input__inner{
   width: 730px;
 }
-#Book_collection #haveBottomBorder #inputDiv2 .el-input .el-input__inner{
+#collectionEdit #haveBottomBorderEdit #inputEdit1 .el-input .el-input__inner{
+  width: 320px;
+}
+#collectionAdd #haveBottomBorderAdd #inputDiv2 .el-input .el-input__inner{
   width: 350px;
 }
-#Book_collection #haveBottomBorder #inputDiv3 .el-input .el-input__inner{
+#collectionEdit #haveBottomBorderEdit #inputEdit2 .el-input .el-input__inner{
+  width: 350px;
+}
+#collectionAdd #haveBottomBorderAdd #inputDiv3 .el-input .el-input__inner{
   width: 200px;
 }
-#Book_collection #haveBottomBorder #inputDiv4 .el-input .el-input__inner{
+#collectionEdit #haveBottomBorderEdit #inputEdit3 .el-input .el-input__inner{
   width: 350px;
 }
-#Book_collection #haveBottomBorder #inputDiv5 .el-input .el-input__inner{
+#collectionAdd #haveBottomBorderAdd #inputDiv4 .el-input .el-input__inner{
+  width: 350px;
+}
+#collectionAdd #haveBottomBorderAdd #inputDiv5 .el-input .el-input__inner{
   width: 190px;
 }
-#Book_collection #haveBottomBorder #inputDiv6 .el-input .el-input__inner{
+#collectionAdd #haveBottomBorderAdd #inputDiv6 .el-input .el-input__inner{
   width: 190px;
 }
-#Book_collection #haveBottomBorder .el-checkbox{
-  margin-top: 10px;
+#collectionAdd #haveBottomBorderAdd .el-checkbox{
   height: 30px;
 }
-#Book_collection #haveBottomBorder #oneHalf .el-input .el-input__inner{
+#collectionAdd #haveBottomBorderAdd #oneHalf .el-input .el-input__inner{
   width: 200px;
 }
 #formDiv{
@@ -125,6 +144,33 @@
 #book_cataloging #noError .el-form-item{
   margin-bottom: 10px;
 }
+#catalogingEdit .el-form-item{
+  margin-bottom: 10px;
+}
+#catalogingEdit .el-form-item__error{
+  display: none;
+}
+#catalogingEdit #editCatalogInput1 .el-input .el-input__inner {
+  width:210px;
+}
+#catalogingEdit #editCatalogInput2 .el-input .el-input__inner {
+   width:370px;
+}
+#catalogingEdit #editCatalogInput4 .bigInput .el-input .el-input__inner {
+  width:515px;
+}
+#catalogingEdit #editCatalogInput5 .smaillInput .el-input .el-input__inner {
+  width:180px;
+}
+#catalogingEdit #editCatalogInput6 .el-input .el-input__inner {
+  width:200px;
+}
+#catalogingEdit #editCatalogInput3 .el-input .el-input__inner {
+  width:370px;
+}
+#catalogingEdit #editCatalogInput7 .el-input .el-input__inner {
+  width:370px;
+}
 #book_cataloging #noError .el-form-item__error{
   display: none;
 }
@@ -132,7 +178,7 @@
   width:371px;
 }
 #book_cataloging #catalogingInput2 .el-input .el-input__inner {
-  width:370px;
+  width:360px;
 }
 #book_cataloging #catalogingInput5 .el-input .el-input__inner {
   width:210px;
@@ -161,7 +207,7 @@
 #purchasingMessage .el-input .el-input__inner {
   width: 340px;
 }
-#bookInfo .el-table th{
+.bookInfo .el-table th{
   background-color: rgb(0, 150, 255);
 }
 #bookInfo .el-table--scrollable-y .el-table__body-wrapper{
@@ -170,7 +216,4 @@
 #catalogingMessage .el-dialog__body{
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-}
-#catalogingMessage .el-dialog__headerbtn {
-  display: none;
 }

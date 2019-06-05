@@ -109,7 +109,8 @@
       <div class="addEditDialog">
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
-          <el-form id="Book_collection" v-if="i==0||i==1" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
+          <div v-if="i==1">
+            <el-form id="collectionAdd" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
             <div class="flexLayout">
               <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
                 <el-input v-model="addForm.isbn" style="position: relative" placeholder="请输入ISBN进行搜索选择相关数据" id="isbnInput"></el-input>
@@ -118,87 +119,63 @@
                 <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
               </p>
             </div>
-            <div id="decideTable">
-              <section class="tableBox">
-                <el-table
-                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
-                  empty-text="无数据"
-                  style="width: 950px; text-align:center;"
-                  :data="selectIsbnData"
-                  height="250"
-                  :row-style="{height:'50px'}"
-                >
-                  <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" label="操作">
-                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                    <template slot-scope="scope">
-                      <span class="blue" @click="decideOn(scope.$index, scope.row)">选中</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <!-- 4.0 分页 -->
-              </section>
-            </div>
             <div id="decideForm" style="display: none">
-              <div id="haveBottomBorder">
+              <div id="haveBottomBorderAdd">
                 <div id="inputDiv1">
-                  <el-form-item label=" 正题名 :" label-width="80px" style="">
+                  <el-form-item label=" 正题名 :" label-width="70px" style="">
                     <div class="flexLayout">
-                      <el-input v-model="addForm.name" :disabled="disabled"></el-input>
-                      <el-checkbox v-model="addForm.bulkBook" >散装书</el-checkbox>
+                      <el-input v-model="showData.name" :disabled="disabled"></el-input>
+                      <el-checkbox v-model="addForm.bulkBook" :disabled="disabled">散装书</el-checkbox>
                     </div>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv2">
-                  <el-form-item label=" 副题名 :" label-width="80px" style="">
-                    <el-input v-model="addForm.viceName" :disabled="disabled"></el-input>
+                  <el-form-item label=" 副题名 :" label-width="70px" style="">
+                    <el-input v-model="showData.viceName" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 丛编题名 :" label-width="100px" style="">
-                    <el-input v-model="addForm.clusterName " :disabled="disabled"></el-input>
+                    <el-input v-model="showData.clusterName " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv3">
-                  <el-form-item label=" 分类号 :" label-width="80px" style="">
-                    <el-input v-model="addForm.searchNumber" :disabled="disabled"></el-input>
+                  <el-form-item label=" 分类号 :" label-width="70px" style="">
+                    <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 版　　次 :" label-width="95px" style="">
-                    <el-input v-model="addForm.edition" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.edition" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 卷册号 :" label-width="80px" style="">
-                    <el-input v-model="addForm.volumeNumber" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.volumeNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv4">
-                  <el-form-item label=" 编著者 :" label-width="80px" style="">
-                    <el-input v-model="addForm.author" :disabled="disabled"></el-input>
+                  <el-form-item label=" 编著者 :" label-width="70px" style="">
+                    <el-input v-model="showData.author" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 装订版面 :" label-width="100px" style="">
-                    <el-input v-model="addForm.layout " :disabled="disabled"></el-input>
+                    <el-input v-model="showData.layout " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv5">
-                  <el-form-item label=" 出 版 社 :" label-width="90px" style="">
-                    <el-input v-model="addForm.fkPressName" :disabled="disabled"></el-input>
+                  <el-form-item label=" 出 版 社 :" label-width="78px" style="">
+                    <el-input v-model="showData.fkPressName" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 出版时间 :" label-width="100px" style="">
-                    <el-input v-model="addForm.publishingTime" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.publishingTime" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 附　　件 :" label-width="100px" style="">
-                    <el-input v-model="addForm.appendix" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.appendix" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv6" style="margin-bottom: 20px">
-                  <el-form-item label=" 页　　码 :" label-width="95px" style="">
-                    <el-input v-model="addForm.pageNumber" :disabled="disabled"></el-input>
+                  <el-form-item label=" 页　　码 :" label-width="83px" style="">
+                    <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 开　　本 :" label-width="95px" style="">
-                    <el-input v-model="addForm.openBook" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.openBook" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 价　　格 :" label-width="95px" style="">
-                    <el-input v-model="addForm.price" :disabled="disabled"></el-input>
+                    <el-input v-model="showData.price" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
               </div>
@@ -227,36 +204,151 @@
               </el-form-item>
             </div>
           </el-form>
+            <div id="decideTable">
+              <section class="tableBox bookInfo">
+                <el-table
+                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
+                  empty-text="无数据"
+                  style="width: 950px; text-align:center;"
+                  :data="selectIsbnData"
+                  height="250"
+                  :row-style="{height:'50px'}"
+                >
+                  <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="author" label="作者" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" label="操作">
+                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                    <template slot-scope="scope">
+                      <span class="blue" @click="decideOn(scope.$index, scope.row)">选中</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <!-- 4.0 分页 -->
+              </section>
+            </div>
+          </div>
+          <div v-if="i==0">
+            <el-form :rules="rules" id="collectionEdit" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
+              <div style="width: 900px;border: 1px solid #DCDFE6;border-radius: 5px;padding:0px 10px" id="haveBottomBorderEdit">
+                <div class="flexLayout" id="inputEdit1">
+                  <el-form-item label=" I S B N :" label-width="70px">
+                    <el-input v-model="showData.isbn" style="position: relative" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 正题名 :" label-width="80px" style="">
+                    <div class="flexLayout">
+                      <el-input v-model="showData.name" :disabled="disabled"></el-input>
+                      <el-checkbox v-model="addForm.bulkBook" :disabled="disabled">散装书</el-checkbox>
+                    </div>
+                  </el-form-item>
+                </div>
+                <div class="flexLayout" id="inputEdit2">
+                  <el-form-item label=" 副题名 :" label-width="70px" style="">
+                    <el-input v-model="showData.viceName" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 丛编题名 :" label-width="100px" style="">
+                    <el-input v-model="showData.clusterName " :disabled="disabled"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="flexLayout">
+                  <el-form-item label=" 分类号 :" label-width="70px" style="">
+                    <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 版　　次 :" label-width="95px" style="">
+                    <el-input v-model="showData.edition" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 卷册号 :" label-width="80px" style="">
+                    <el-input v-model="showData.volumeNumber" :disabled="disabled"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="flexLayout" id="inputEdit3">
+                  <el-form-item label=" 编著者 :" label-width="70px" style="">
+                    <el-input v-model="showData.author" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 装订版面 :" label-width="100px" style="">
+                    <el-input v-model="showData.layout " :disabled="disabled"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="flexLayout">
+                  <el-form-item label=" 出版社 :" label-width="70px" style="">
+                    <el-input v-model="showData.fkPressName" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 出版时间 :" label-width="100px" style="">
+                    <el-input v-model="showData.publishingTime" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 附　　件 :" label-width="100px" style="">
+                    <el-input v-model="showData.appendix" :disabled="disabled"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="flexLayout" style="margin-bottom: 20px">
+                  <el-form-item label=" 页　　码 :" label-width="85px" style="">
+                    <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 开　　本 :" label-width="95px" style="">
+                    <el-input v-model="showData.openBook" :disabled="disabled"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 价　　格 :" label-width="95px" style="">
+                    <el-input v-model="showData.price" :disabled="disabled"></el-input>
+                  </el-form-item>
+                </div>
+              </div>
+              <div style="width: 900px;border: 1px solid #DCDFE6;border-radius: 5px;margin-top: 20px;padding:20px 10px">
+                <div class="flexLayout" style="margin-top: 10px">
+                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px" style="">
+                    <el-input v-model="addForm.code"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                    <el-input v-model="addForm.searchNumber"></el-input>
+                  </el-form-item>
+                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
+                    <el-input v-model="addForm.place"></el-input>
+                  </el-form-item>
+                </div>
+                <div style="margin-left: 150px">
+                  <el-checkbox v-model="addForm.dailyRent">默认日租金</el-checkbox>
+                  <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 150px">不外借</el-checkbox>
+                  <el-checkbox v-model="addForm.available" style="margin-left: 150px">启用</el-checkbox>
+                </div>
+              </div>
+              <!-- 弹框表单按钮  验证失效-->
+              <el-form-item style="margin:30px auto 0px;width: 360px">
+                <el-button type="primary" @click="submitForm()" >确定</el-button>
+                <el-button type="info" @click="resetForm()" >取消</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
           <el-form  v-if="i==5" id="harm" :rules="rules" :model="harmForm" :ref="harmForm">
             <div class="gray_radio_border" id="harm_noneTopBorder">
               <div class="flexLayout">
                 <el-form-item label=" 编　　号 :" label-width="95px" style="">
-                  <el-input v-model="harmForm.Number"></el-input>
+                  <el-input v-model="harmForm.Number" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 索 书 号 :" label-width="95px" style="">
-                  <el-input v-model="harmForm.bookIndex "></el-input>
+                  <el-input v-model="harmForm.bookIndex " :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆 藏 地 :" label-width="95px" style="">
-                  <el-input v-model="harmForm.libAdress "></el-input>
+                  <el-input v-model="harmForm.libAdress " :disabled="disabled"></el-input>
                 </el-form-item>
               </div>
               <div class="flexLayout">
                 <el-form-item label=" I S B N :" label-width="85px" style="">
-                  <el-input v-model="harmForm.isbn"></el-input>
+                  <el-input v-model="harmForm.isbn" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 正 题 名 :" label-width="95px" class="harmInput1">
-                  <el-input v-model="harmForm.bookName " style="width: 500px"></el-input>
+                  <el-input v-model="harmForm.bookName " style="width: 500px" :disabled="disabled"></el-input>
                 </el-form-item>
               </div>
               <div class="flexLayout">
                 <el-form-item label=" 价　　格 :" prop="price" label-width="95px" style="">
-                  <el-input v-model="harmForm.price"></el-input>
+                  <el-input v-model="harmForm.price" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 页　　码 :" prop="pageNumber" label-width="95px" style="">
-                  <el-input v-model="harmForm.pageNumber "></el-input>
+                  <el-input v-model="harmForm.pageNumber " :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 出版时间 :" label-width="95px" style="">
-                  <el-input v-model="harmForm.putTime "></el-input>
+                  <el-input v-model="harmForm.putTime " :disabled="disabled"></el-input>
                 </el-form-item>
               </div>
             </div>
@@ -344,14 +436,17 @@
         loading: false,
         options:[],
         addForm:{
-          id:'',
           isbn:'',
-          code:'',//条码
+          code:'',//馆藏码
           searchNumber:'',//索书号
           place:'',//藏馆地
           dailyRent:'',//默认日租金
           lendingPermission:'',//不外借
           available:'',//启用
+        },
+        showData:{
+          id:'',
+          isbn:'',
           titleProper:'', //正题名
           bulkBook:'', //套装书
           subtitle:'', //副题名
@@ -443,7 +538,7 @@
         damageId:'',
         bookId:'',
         decideData:[],
-        selectIsbnData:[],
+        selectIsbnData: [],
         decide:false,
         disabled:false
       };
@@ -508,7 +603,7 @@
       },
       addFormData(){
         let newData={
-          fkCataBookId:this.addForm.id,
+          fkCataBookId:this.showData.id,
           code:this.addForm.barcode,
           callNumber:this.addForm.searchNumber,
           place:this.addForm.place,
@@ -539,10 +634,11 @@
     methods: {
       //选中某条数据的按钮
       decideOn(index,row){
-        console.log('选中的数据',row)
         $('#decideTable').fadeOut()
         $('#decideForm').fadeIn()
-        this.addForm=row
+        this.showData=row
+        this.disabled=true
+        console.log('选中的数据',this.showData)
       },
       selectSearchCheck(val){
         console.log('查询val',val)
@@ -618,12 +714,9 @@
       isbnData(){
         this.axios.get(collection.isbn,{params:{isbn:this.addForm.isbn}}).then((res)=>{
           console.log('isbn的数据',res)
-          if(res.data.state==true){
-            //this.addForm=res.data.row[0]
-            console.log(res.data.row.length)
+          if(res.data.state===true){
             if(res.data.row.length!=0){
-              this.selectIsbnData=res.data.row
-              this.disabled=true
+              this.selectIsbnData = res.data.row
             }else{
               this.$message({
                 message: '没有此ISBN的相关数据，请重新搜索',
@@ -640,14 +733,15 @@
       },
       //修改弹框
       EditBtn(index,row){
+        console.log('修改按钮获取的数据',row)
         this.i=0
-        console.log(row)
-        console.log('row',row)
-        this.addForm=row
-        this.addForm.available=row.available==1?true:false
-        this.addForm.lendingPermission=row.lendingPermission==1?true:false
-        this.addForm.dailyRent=row.dailyRent==1?true:false
         this.dialogFormVisible = true;
+        this.addForm=row
+        this.showData=row
+        this.addForm.dailyRent=row.dailyRent==1?true:false;
+        this.addForm.lendingPermission=row.lendingPermission==1?true:false;
+        this.addForm.available=row.available==1?true:false;
+        this.disabled=true
       },
       // 修改添加弹框确定按钮
       submitForm() {
@@ -711,14 +805,18 @@
           for (var i in this.selectSearchForm) {
             this.selectSearchForm[i] = "";
           }
-        }else{
+        }else if(this.i==1){
           this.$refs[this.addForm].resetFields();
           for (var i in this.addForm) {
             this.addForm[i] = "";
           }
+          for (var i in this.showData) {
+            this.showData[i] = "";
+          }
+          this.disabled=false
           $('#decideTable').fadeIn()
           $('#decideForm').fadeOut()
-          this.selectIsbnData=0
+          this.selectIsbnData.length=0
         }
 
         this.dialogFormVisible = false
@@ -744,6 +842,7 @@
         this.harmForm.price=row.price
         this.harmForm.pageNumber=row.pageNumber
         this.harmForm.putTime=row.publishingTime
+        this.disabled=true
       },
       //报损弹框确定按钮
       definiteCheck(){
@@ -1010,7 +1109,6 @@
   .blue{
     color: #4d94ff;
     cursor: pointer;
-
   }
   .ban {
     color: #ff5c3c;

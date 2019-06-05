@@ -378,7 +378,9 @@ export const catalog ={
   edit:`${url}bookcollectionmodule/cataTbBookInfo/edit`,
   typeTree:`${url}bookcollectionmodule/cataTbBookInfo/selectAllBookType`,
   publishTree:`${url}bookcollectionmodule/cataTbBookInfo/selectPressTree`,
-  language:`${url}bookcollectionmodule/cataTbBookInfo/getLanguage`
+  language:`${url}bookcollectionmodule/cataTbBookInfo/getLanguage`,
+  remoteCataloging:`${url}bookcollectionmodule/cataTbBookInfo/getBookInfoByLongRange`,//远程编目的数据
+  localCataloging:`${url}bookcollectionmodule/cataTbBookInfo/selectFromCata`,//本地编目的数据
 }
 
 //个人中心
