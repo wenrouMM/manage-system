@@ -95,3 +95,6 @@
 .labelActive.el-tag .el-icon-close{
   color: #fff;
 }
+.el-menu{
+  border: none!important;
+}

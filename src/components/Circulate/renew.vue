@@ -39,9 +39,11 @@
               </el-form>
             </div>
           </div>
-          <div v-if="!userTable.length">'没有数据啦'_(:з」∠)_</div>
+          <div v-if="!userTable.length"><img :src="loadingImg" class="loadingImg"></div>
           <div class="userInfo" v-if="userTable.length">
-            <div class="headBox"></div>
+            <div class="headBox">
+              <img :src="defaultImg" style="width:100%;height:100%;">
+            </div>
             <div class="infoBox">
               <div class="info">
                 <section class="left">
@@ -181,6 +183,8 @@ export default {
       rowStyle: {
         height: "60px"
       },
+      defaultImg:require('../../base/img/normalHead.jpg'),
+      loadingImg:require('../../base/img/Nodata.png'),
       activeName: "first",
       /*------ 全选按钮 ------*/
       lastCardNum:'',

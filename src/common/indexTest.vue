@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div id="index" class="index">
     <el-container style="height:100%">
       <!-- 头部组件 -->
       <!-- 1.0头部模块 -->
@@ -7,11 +7,11 @@
         <!-- logo模块 logo图片载入 附加路由调转至首页 -->
         <div class="logoNav">
           <div id="logoBox" class="logoBox">
-            <i class="logo"></i>
-            <span @click="skip" class="text">图书馆管理平台</span>
+            <img :src="logoUrl">
+            <span @click="skip" class="Logotext">图书馆管理平台</span>
           </div>
           <!-- 头部导航模块 路由添加尚未完成 active驻留模块未完成 -->
-          <div class="navBar">
+          <div id="navBar" class="navBar">
             <el-menu
               text-color="#fff"
               mode="horizontal"
@@ -47,14 +47,14 @@
                 <span @click="cardBtn" class="dropItem">卡号注销</span>
               </div>
             </div>
-            <i class="notice"></i>
-            <i class="set"></i>
+            <!-- <i class="notice"></i>
+            <i class="set"></i> -->
           </div>
         </div>
       </el-header>
       <!-- 2.0 二层路由 导航模块 -->
       <el-container>
-        <el-aside class="nav" width="260px" style="background-color: #343B4A">
+        <el-aside class="nav" width="260px"  style="background-color: #343B4A;">
           <!-- 侧边栏主体 -->
           <el-menu
             @select="routerBox"
@@ -165,6 +165,7 @@
 </template>
 
 <script>
+import {uploadInt} from '@request/api/base.js'
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
 import { mapGetters } from "vuex";
@@ -176,6 +177,7 @@ export default {
       menuLo: [{}],
       userLo: null,
       nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
+      logoUrl:require("../base/img/logo.png"),
       settingHead: "",
     };
   },
@@ -228,6 +230,7 @@ export default {
   created() {
     let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     this.userLo = userInfo;
+    this.settingHead = uploadInt.preimg + userInfo.headerAddress
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {
@@ -481,6 +484,7 @@ body,
 
 .nav .el-menu-item{
   font-size: 16px;
+  margin: 10px 0;
 }
 .nav .el-submenu__title{
   font-size: 16px;
@@ -493,6 +497,10 @@ body,
   height: 40px;
   margin-right: 9px;
   background-position-y: 10px;
+}
+.Logotext{
+  line-height: 26px;
+  margin-left: 10px;
 }
 .notice {
   background-image: url("../base/img/normal/email-icon.png");
@@ -541,3 +549,9 @@ body,
 }
 </style>
 
+<style>
+
+#navBar .el-menu-item{
+  margin: 0 10px;
+}
+</style>

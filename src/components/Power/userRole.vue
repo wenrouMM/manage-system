@@ -21,10 +21,10 @@
             </div>
             <section class="searchBox">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" >
-                <el-form-item label="角色名称:" size="160">
+                <el-form-item label="角色名称" size="160">
                   <el-input clearable size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
-                <el-form-item label="创建时间:" size="130">
+                <el-form-item label="创建时间" size="130">
                   <el-date-picker
                     v-model="formInline.beginTime"
                     type="date"
