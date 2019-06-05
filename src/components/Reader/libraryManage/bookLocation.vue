@@ -4,7 +4,7 @@
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">图书位置绑定</div>
     </div>
-    <div style="margin:100px auto;width:1100px">
+    <div style="margin:150px auto;width:1100px">
       <div style="background-color: #ededed;width: 250px;height: 200px"></div>
       <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
@@ -31,10 +31,6 @@
           <span @click="locationMessage" id="locaTion">
             位置选择
           </span>
-        </div>
-        <div style="display: flex;flex-direction: row;margin-top: 30px">
-          <el-button type="primary" round style="margin-right: 30px">生成条形码</el-button>
-          <div style="width: 160px;border: 1px solid lightgray;height: 40px;border-radius: 10px"></div>
         </div>
         <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
       </el-form>
