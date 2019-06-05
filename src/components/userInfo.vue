@@ -43,7 +43,7 @@
           <div class="fix" @click="pwdBtn"><i class="userIcon iconbianji"></i>修改</div>
         </div>
         <div class="rowList">
-          <div class="text">角色等级:</div>
+          <div class="text"><i style="fontSize:24px;" class="userIcon iconhuiyuandengji0101"></i>角色等级:</div>
           <div class="content">{{userGrade}}</div>
         </div>
       </div>

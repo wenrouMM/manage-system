@@ -19,10 +19,10 @@
               background-color="#0096ff"
               :default-active="Mode"
             >
-              <el-menu-item id="collect" index="1">采编管理</el-menu-item>
-              <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
               <el-menu-item id="circle" index="3">流通管理</el-menu-item>
               <el-menu-item id="reader" index="4">读者管理</el-menu-item>
+              <el-menu-item id="collect" index="1">采编管理</el-menu-item>
+              <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
               <el-menu-item id="finance" index="5">财务管理</el-menu-item>
               <el-menu-item id="system" index="6">系统管理</el-menu-item>
             </el-menu>
@@ -42,9 +42,11 @@
               <!-- 下拉点击路由跳转 -->
               <div class="userDrop">
                 <span @click="toCenter" class="dropItem">个人中心</span>
-                <span @click="loginOut" class="dropItem">切换账户</span>
+                <router-link to="/borrowingbooks" tag="span" class="dropItem">书籍借阅</router-link>
+                <router-link to="/returnbooks" tag="span" class="dropItem">书籍归还</router-link>
                 <span @click="rechargeBtn" class="dropItem">押金充值</span>
                 <span @click="cardBtn" class="dropItem">卡号注销</span>
+                <span @click="loginOut" class="dropItem">退出</span>
               </div>
             </div>
             <!-- <i class="notice"></i>
@@ -70,6 +72,7 @@
             <div class="navMenu" v-show="Mode == 1">
               <el-submenu index="3">
                 <template slot="title">
+                  <i class=" iconfont iconwp-sj-3"></i>
                   <span>书籍管理</span>
                 </template>
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
@@ -78,13 +81,12 @@
             </div>
             <!-- 典藏管理 -->
             <div class="navMenu" v-show="Mode == 2">
-                <el-menu-item index="/publishhouse">图书出版社</el-menu-item>
+                <el-menu-item index="/publishhouse"><i class="indexIcon iconchubanshe"></i>图书出版社</el-menu-item>
                 <!-- <el-menu-item index="/bookregistration">图书登记</el-menu-item> -->
-                <el-menu-item index="/bookLocation">图书位置绑定</el-menu-item>
-                <el-menu-item index="/BookLocationInformation">图书位置信息</el-menu-item>
-
-              <el-menu-item index="/BookCollection">书籍典藏</el-menu-item>
-              <el-menu-item index="/damageCount">损坏清点</el-menu-item>
+                <el-menu-item index="/BookCollection"><i class="indexIcon iconshuji"></i>书籍典藏</el-menu-item>
+                <el-menu-item index="/bookLocation"><i class="indexIcon iconchubanshe"></i>图书位置绑定</el-menu-item>
+                <el-menu-item index="/BookLocationInformation"><i class="indexIcon iconchubanshe"></i>图书位置信息</el-menu-item>
+              <el-menu-item index="/damageCount"><i class="indexIcon iconchubanshe"></i>损坏清点</el-menu-item>
             </div>
             <!-- 流通管理 -->
             <div class="navMenu" v-show="Mode == 3">
