@@ -101,3 +101,7 @@
 .el-menu{
   border: none!important;
 }
+
+ .refunds .el-form--label-left .el-form-item__label {
+  text-align: right;
+} 

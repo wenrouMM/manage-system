@@ -31,6 +31,7 @@ import 'quill/dist/quill.bubble.css'
 import '../src/base/css/font.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import {PersonalCentre} from '@/request/api/base.js'
 Vue.config.productionTip = false
 NProgress.configure({ showSpinner: false })
 router.beforeEach((to, from, next) => {
@@ -38,7 +39,14 @@ router.beforeEach((to, from, next) => {
   let token = sessionStorage.getItem('token')
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let menu = JSON.parse(sessionStorage.getItem('menu'))
-
+  if(from.path == '/userInfo'){
+    axios.get(PersonalCentre.userInfo).then((res)=>{
+      console.log('看看bug到底在哪里',res)
+      let fixUser = JSON.stringify(res.data.row)
+      sessionStorage.setItem('userInfo',fixUser)
+      store.commit('setUserInfo',fixUser)
+    })
+  }
   if(to.path === '/login'){
     if(token&&userInfo&&menu){ // token存在的话 如果是刷新的话 应该去本地或者session里面取 这里应该提提示
       if(store.state.token == null){ // 还有个bug

@@ -174,7 +174,7 @@
 import {uploadInt} from '@request/api/base.js'
 import NavMenu from "../common/test/NavMenu";
 import Tags from "../common/test/tags";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -227,7 +227,9 @@ export default {
           : this.settingHead;
       return src;
     },
-    ...mapGetters(["userInfo", "menu"])
+    userInfo(){
+      return this.$store.state.user
+    }
   },
   components: {
     NavMenu,

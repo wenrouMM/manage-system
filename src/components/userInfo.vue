@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import {uploadInt , PersonalCentre,editHeadPortrait,editimgFile} from '@/request/api/base.js'
+import {uploadInt , PersonalCentre,editHeadPortrait} from '@/request/api/base.js'
 import myUpload from "vue-image-crop-upload";
 export default {
   data() {
@@ -153,7 +153,7 @@ export default {
       hidePassword:''
     };
   },
-  mounted(){
+  created(){
     this.InitializationFun()
   },
   methods: {
@@ -163,7 +163,7 @@ export default {
       this.axios.get(PersonalCentre.userInfo).then((res)=>{
         console.log(res)
         this.id=res.data.row.id;
-        this.nomalHeader=editimgFile+res.data.row.headerAddress;
+        this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
         console.log('this.nomalHeader',this.nomalHeader)
         this.userName=res.data.row.username;
         this.userEmail=res.data.row.email;
@@ -201,6 +201,9 @@ export default {
           });
           this.InitializationFun()
           this.appear=false
+          var token = res.data.row.authorization
+          sessionStorage.setItem('token',token)
+          this.$store.commit('setToken',token)
         }else{
           this.$message({
             message:res.data.msg,
@@ -224,8 +227,12 @@ export default {
             message:res.data.msg,
             type: 'success'
           });
+          var token = res.data.row.authorization
+          sessionStorage.setItem('token',token)
+          this.$store.commit('setToken',token)
           this.InitializationFun()
           this.pwdDialog=false
+          
         }else{
           this.$message({
             message:res.data.msg,
@@ -242,16 +249,22 @@ export default {
       this.cutimgUrl = imgDataUrl
     },
     cropUploadSuccess(jsonData, field) {
-      let imgFile=''
+      
       console.log("-------- upload success --------");
       console.log(jsonData);
       console.log('图片地址',jsonData.row)
+      let imgFile=''
       imgFile=jsonData.row
-      this.axios.put(editHeadPortrait,{id:this.id,headerAddress:imgFile}).then((res)=>{
-        console.log('头像上传后返回的数据',res)
-      })
       console.log("field: " + field);
       this.imgDataUrl = this.cutimgUrl;
+      this.axios.put(editHeadPortrait,{id:this.id,headerAddress:imgFile})
+      .then((res)=>{
+        console.log('头像上传后返回的数据',res)
+        var token = res.data.row.authorization
+        sessionStorage.setItem('token',token)
+        this.$store.commit('setToken',token)
+        
+      })
     },
     cropUploadFail(status, field) {
       console.log("-------- upload fail --------");
