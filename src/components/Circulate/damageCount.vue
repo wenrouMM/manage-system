@@ -250,6 +250,8 @@ export default {
     selectAllBtn(val) {
       for(let item of val){
         this.dealArr.push(item.id)
+        item.fkBookPrice=item.fkBookPrice==null|| item.fkBookPrice==''?0:item.fkBookPrice;
+        console.log('钱？',item.fkBookPrice)
         this.dealCash += parseInt(item.fkBookPrice)
       }
       console.log(val)

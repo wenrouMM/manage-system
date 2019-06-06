@@ -78,7 +78,7 @@
         <div class="dialogContent">
           <p class="back">用户名</p>
           <input type="text" v-model="changeInput" />
-          <p class="hr"></p>
+          <p class="userHr"></p>
         </div>
         <div class="foot">
           <div class="buttonBox">
@@ -106,12 +106,12 @@
           <div class="data mb_30">
             <p class="">旧密码</p>
             <input type="text" v-model="oldInput" />
-            <p class="hr"></p>
+            <p class="userHr"></p>
           </div>
           <div class="data">
             <p>新密码</p>
             <input type="text" v-model="newInput" />
-            <p class="hr"></p>
+            <p class="userHr"></p>
           </div>
         </div>
         <div class="foot">
@@ -468,7 +468,7 @@ export default {
     font-family: inherit;
     position: relative;
 }
-.hr{
+.userHr{
   width: 100%;
   background-color: #bde2ff;
   height: 1px;

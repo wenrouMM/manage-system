@@ -57,10 +57,18 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column align="center" prop="fkBookPrice" label="书籍价格"></el-table-column>
+            <el-table-column align="center" prop="fkBookPrice" label="书籍价格">
+              <template slot-scope="scope">
+                <span>{{scope.row.fkBookPrice == null || scope.row.fkBookPrice=='' ?'---':scope.row.fkBookPrice}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="fkBookName" label="损坏书籍"></el-table-column>
             <el-table-column align="center" prop="fkDamageName" label="赔偿方式"></el-table-column>
-            <el-table-column align="center" prop="price" label="赔偿金额"></el-table-column>
+            <el-table-column align="center" prop="price" label="赔偿金额">
+              <template slot-scope="scope">
+                <span>{{scope.row.price == null || scope.row.price=='' ?'---':scope.row.price}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="person" label="处理人员"></el-table-column>
             <!-- <el-table-column align="center" prop="cardNum" label="操作">
               <template slot-scope="scope">

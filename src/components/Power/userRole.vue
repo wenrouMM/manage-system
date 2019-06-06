@@ -61,7 +61,7 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
-              <el-table-column align="center" prop="fkParentRoleCode" label="上级"></el-table-column>
+              <el-table-column align="center" prop="fkParentRoleName" label="上级"></el-table-column>
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="disabled" width="200" label="状态">
@@ -652,7 +652,7 @@ section.pagination {
 .buttonBox .add {
   background: rgba(255, 146, 49, 1);
   border-radius: 10px;
-  margin-right: 30px;
+  margin-right: 10px;
 }
 .buttonBox .add .addIcon {
   margin-right: 6px;

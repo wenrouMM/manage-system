@@ -73,7 +73,7 @@ import {loginInter,login} from '../request/api/base.js'
               sessionStorage.setItem('token',token)
               sessionStorage.setItem('userInfo',userInfo)
               sessionStorage.setItem('menu',menu)
-              sessionStorage.setItem("headIndex",'1')
+              sessionStorage.setItem("headIndex",'3')
               this.$store.commit('setToken',token)
               this.$store.commit('setUserInfo',userInfo)
               this.$store.commit('setMenu',menu)

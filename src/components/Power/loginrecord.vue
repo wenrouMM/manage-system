@@ -54,7 +54,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="loginMessage" label="用户名称"></el-table-column>
+            <!-- <el-table-column align="center" prop="loginMessage" label="用户名称"></el-table-column> -->
             <el-table-column align="center" prop="loginIp" label="登录IP"></el-table-column>
             <el-table-column align="center" prop="loginAccount" label="登录账户"></el-table-column>
             <el-table-column align="center" prop="fkLoginCode" label="登录来源">
