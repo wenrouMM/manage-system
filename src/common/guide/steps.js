@@ -5,22 +5,7 @@ const steps = [{
     description: '点击此图标可以回到首页，在系统设置可以自定义图标',
     position: 'bottom'
   }
-}, {
-    element: '#collect',
-    popover: {
-      title: '采编管理',
-      description: '采编管理你可以完成书籍采编以及采购管理的功能',
-      position: 'bottom'
-    }
-  }, 
-  {
-    element: '#reservation',
-    popover: {
-      title: '典藏管理',
-      description: '流通管理可以完成书籍典藏与书籍报损等操作，完成对书籍从入库到上架的所有操作',
-      position: 'bottom'
-    }
-  }, 
+}, 
   {
     element: '#circle',
     popover: {
@@ -34,6 +19,22 @@ const steps = [{
     popover: {
       title: '读者管理',
       description: '读者管理可以完成读者卡等级的设置以及读者卡的办卡补办注销挂失取挂等功能',
+      position: 'bottom'
+    }
+  }, 
+  {
+    element: '#collect',
+    popover: {
+      title: '采编管理',
+      description: '采编管理你可以完成书籍采编以及采购管理的功能',
+      position: 'bottom'
+    }
+  }, 
+  {
+    element: '#reservation',
+    popover: {
+      title: '典藏管理',
+      description: '流通管理可以完成书籍典藏与书籍报损等操作，完成对书籍从入库到上架的所有操作',
       position: 'bottom'
     }
   }, 
