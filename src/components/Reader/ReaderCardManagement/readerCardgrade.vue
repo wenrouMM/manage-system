@@ -615,7 +615,7 @@ export default {
 .buttonBox .add {
   background: rgba(255, 146, 49, 1);
   border-radius: 10px;
-  margin-right: 30px;
+  margin-right: 10px;
 }
 .buttonBox .add .addIcon {
   margin-right: 6px;
