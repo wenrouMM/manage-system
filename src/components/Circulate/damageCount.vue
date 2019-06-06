@@ -55,7 +55,7 @@
             </el-table-column>
             <el-table-column align="center" prop="cardNum" label="卡号">
               <template slot-scope="scope">
-                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardName}}</span>
+                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardNum}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
@@ -250,9 +250,9 @@ export default {
     selectAllBtn(val) {
       for(let item of val){
         this.dealArr.push(item.id)
-        item.fkBookPrice=item.fkBookPrice==null|| item.fkBookPrice==''?0:item.fkBookPrice;
+        item.price=item.price==null|| item.price==''?0:item.price;
         console.log('钱？',item.fkBookPrice)
-        this.dealCash += parseInt(item.fkBookPrice)
+        this.dealCash += Number(item.price)
       }
       console.log(val)
       console.log('此时的钱',this.dealArr,this.dealCash)
@@ -351,6 +351,7 @@ export default {
         if (res.data.state === true) {
           console.log(res);
           this.searchApi();
+          this.$message.success('报损成功')
           this.dealDialog =false
         } else {
           this.dealDialog =false

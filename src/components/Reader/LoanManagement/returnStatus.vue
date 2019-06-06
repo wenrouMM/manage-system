@@ -5,7 +5,7 @@
     >
       <div>
         <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-        <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">借书结果</div>
+        <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">还书结果</div>
       </div>
       <div>
         <router-link

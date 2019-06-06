@@ -73,6 +73,10 @@ export default new Router({
       redirect: '/indexTest'
     },
     {
+      path:'/test',
+      component:() => import('../common/count/count.vue')
+    },
+    {
       path: '/login',
       component: Login
     },

@@ -64,7 +64,7 @@
           <!-- 4.0 表格展示内容 -->
           <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              class="tableBorder"
+              
               @selection-change="selectAllBtn"
               :data="tableData"
               style="width: 100%;
