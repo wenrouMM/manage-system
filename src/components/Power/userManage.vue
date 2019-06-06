@@ -130,7 +130,7 @@
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
-                  <!-- <span class="ban" @click="handleBan(scope.$index, scope.row)">禁用</span> -->
+                  <span class="ban" @click="resetPsd(scope.$index, scope.row)">重置密码</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -179,7 +179,11 @@
           width="500px"
           center
         >
-          <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
+          <div class="dialogBody">
+            是否{{Dialogtitle[i]}}?
+            <p v-if="i==0">重置过后密码默认为身份证号后6位</p>
+          </div>
+          
           <div slot="footer" class="dialog-footer">
             <span class="dialogButton true mr_40" @click="delteBan">确 定</span>
             <span class="dialogButton cancel" @click="deleteBanCancel">取消</span>
@@ -371,7 +375,7 @@ export default {
       formFlag: false,
       /*====== 0.0初始化弹框数据 ======*/
       centerDialogVisible: false, // 禁用弹框
-      Dialogtitle: ["禁用", "批量删除", "编辑", "添加"],
+      Dialogtitle: ["重置密码", "批量删除", "编辑", "添加"],
       i: 0, // 切换弹框标题
       defaultImg: " ", // 上传头像默认头像
       preloadImg: "",
@@ -438,9 +442,8 @@ export default {
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
       deleteArr: [],
-      banArr: {
-        id: "",
-        isLock: 1
+      resetArr: {
+        idCard: "",
       },
       allseclet: [], // 存储全选框 单选框的数据/索引 用于传递给后台同时 前端用索引号去删除表格内的内容
 
@@ -538,6 +541,16 @@ export default {
     }
   },
   methods: {
+    // 重置密码按钮
+    resetPsd(index, row) {
+      // 禁用按钮 按钮的作用就是获取一切初始化信息
+
+      
+        this.i = 0;
+        this.resetArr.idCard = row.idCard;
+        console.log(index, row, this.resetArr); // 当前选中表格的索引和对
+        this.centerDialogVisible = true;
+    },
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
       console.log("数据类型检测", this.pageInput);
@@ -618,33 +631,22 @@ export default {
         });
     },
     /*====== 4.0表格操作相关 ======*/
-    handleBan(index, row) {
-      // 禁用按钮 按钮的作用就是获取一切初始化信息
-
-      if (row.isLock == 1) {
-        this.$message.error("该用户已被禁用");
-      } else {
-        this.i = 0;
-        this.banArr.id = row.id;
-        console.log(index, row, this.banArr); // 当前选中表格的索引和对
-        this.centerDialogVisible = true;
-      }
-    },
-    banApi(arr) {
-      this.banDeleteLoading = true;
+    
+    resetApi(arr) {
+      
       console.log("禁用的数据", arr); // 正在请求的状态 通过按钮还是文本
-      axios.put(userManageInterface.edit, arr).then(res => {
+      axios.put(userManageInterface.reset, arr).then(res => {
         console.log(res.data);
         if (res.data.state === true) {
           console.log(res.data);
 
-          this.banDeleteLoading = false;
+          
           this.centerDialogVisible = false;
           this.SearchApi(this.paginationForm); // 禁用成功就重新加载一次数据
-          this.$message.success("禁用成功");
+          this.$message.success("重置成功");
         } else {
           this.$message.error(res.data.msg); // 提示删除成功
-          this.banDeleteLoading = false;
+          
         }
       });
     },
@@ -784,7 +786,7 @@ export default {
       if (i == 1) {
         this.deleteApi(this.deleteArr);
       } else {
-        this.banApi(this.banArr);
+        this.resetApi(this.resetArr);
       }
     },
     // 编辑添加弹框

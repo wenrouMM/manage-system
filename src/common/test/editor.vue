@@ -18,7 +18,7 @@
             :model="editForm"
           >
             <el-form-item label="标题" prop="title">
-              <el-input v-model="editForm.title"></el-input>
+              <el-input placeholder="请填写标题" v-model="editForm.title"></el-input>
             </el-form-item>
             <!--
             <el-form-item label="作者">
@@ -153,7 +153,7 @@ export default {
       editorloading: false,
       content: "",
       editorOption: {
-        placeholder: "请输入文字,内容不得少于20字",
+        placeholder: "请输入文字",
         theme: "snow",
         modules: {
           toolbar: {
