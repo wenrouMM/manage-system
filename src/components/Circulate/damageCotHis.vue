@@ -7,7 +7,7 @@
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
-          
+
           <div class="searchFormBox">
             <el-form :inline="true" :model="searchForm">
               <el-form-item size="130" label="创建时间">
@@ -33,13 +33,13 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox" v-loading="tableLoading" element-loading-text="拼命加载中">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"
-            
+
           >
-            
+
             <el-table-column width="100" align="center" prop="index" type="index" label="序号">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -99,7 +99,7 @@
             <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
-       
+
       </div>
     </el-container>
   </div>
@@ -233,7 +233,7 @@ export default {
         this.current_change(num);
       }
     },
- 
+
 
     /*------ API区 ------*/
     searchApi(value) {

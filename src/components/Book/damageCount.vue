@@ -39,28 +39,28 @@
       </section>
       <!-- 3.0表格数据 -->
       <section class="tableBox">
-        <div class="tableBorder">
+        <div>
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
           >
-            <el-table-column align="center" prop="index" type="index" width="100" label="序号">
+            <el-table-column align="center" prop="index" type="index" width="100" label="序号" fixed="left">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="书名"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN"></el-table-column>
-            <el-table-column align="center" prop="author" label="编著者"></el-table-column>
-            <el-table-column align="center" prop="fkPressName" label="出版社"></el-table-column>
-            <el-table-column align="center" prop="total" label="总藏馆数量"></el-table-column>
-            <el-table-column align="center" prop="sum" label="在馆"></el-table-column>
-            <el-table-column align="center" prop="lend" label="已借"></el-table-column>
-            <el-table-column align="center" prop="damage" label="损坏"></el-table-column>
-            <el-table-column align="center" width="350" prop="damageName" label="注销清点">
+            <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true" width="200"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true" width="200"></el-table-column>
+            <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true" width="150"></el-table-column>
+            <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true" width="200"></el-table-column>
+            <el-table-column align="center" prop="total" label="总藏馆数量" :show-overflow-tooltip="true" width="150"></el-table-column>
+            <el-table-column align="center" prop="sum" label="在馆" :show-overflow-tooltip="true" width="150"></el-table-column>
+            <el-table-column align="center" prop="lend" label="已借" :show-overflow-tooltip="true" width="150"></el-table-column>
+            <el-table-column align="center" prop="damage" label="损坏" :show-overflow-tooltip="true" width="150"></el-table-column>
+            <el-table-column align="center" width="200" prop="damageName" label="注销清点" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>被盗:{{scope.row.stolen}}</span>
                 <span>未还:{{scope.row.notReturn}}</span>
@@ -69,7 +69,7 @@
                 <span>其他:{{scope.row.other}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="detail" @click="detailBtn(scope.$index, scope.row)">详情</span>

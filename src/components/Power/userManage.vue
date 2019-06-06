@@ -54,7 +54,7 @@
             <div>
               <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
             </div>
-            
+
           </section>
           <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
           <div class="buttonBox">
@@ -66,26 +66,25 @@
             </button>
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
+          <section class="tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
               @selection-change="handleSelectionChange"
-              
               :data="tableData"
               empty-text="无数据"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
             >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+              <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
 
-              <el-table-column align="center" width="100" prop="headerAddress" label="头像">
+              <el-table-column align="center" width="150" prop="headerAddress" label="头像">
                 <template slot-scope="scope">
-                  <span class="imgDefault" width="30px" height="30px;" style="border-radius: 50%">
+                  <span class="imgDefault" height="30px;" style="border-radius: 50%">
                     <img
                       class="head_pic"
                       v-if="!scope.row.preUrl"
@@ -109,24 +108,24 @@
                 align="center"
                 :show-overflow-tooltip="true"
                 prop="fkRoleNames"
-                width="100"
+                width="150"
                 label="角色名称"
               ></el-table-column>
-              <el-table-column align="center" prop="username" width label="姓名"></el-table-column>
-              <el-table-column align="center" width="100" prop="sex" label="性别">
+              <el-table-column align="center" prop="username" label="姓名" width="150"></el-table-column>
+              <el-table-column align="center" prop="sex" label="性别" width="150">
                 <template slot-scope="scope">
                   <span>{{scope.row.sex ===1?'男':'女'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="idShow" width="200" label="身份证号"></el-table-column>
-              <el-table-column align="center" prop="phoneShow" label="手机号码"></el-table-column>
+              <el-table-column align="center" prop="phoneShow" width="200" label="手机号码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="isLock" width="80" label="状态">
+              <el-table-column align="center" prop="isLock" width="150" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.isLock ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" label="操作" width="200" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
@@ -183,7 +182,7 @@
             是否{{Dialogtitle[i]}}?
             <p v-if="i==0">重置过后密码默认为身份证号后6位</p>
           </div>
-          
+
           <div slot="footer" class="dialog-footer">
             <span class="dialogButton true mr_40" @click="delteBan">确 定</span>
             <span class="dialogButton cancel" @click="deleteBanCancel">取消</span>
@@ -545,7 +544,7 @@ export default {
     resetPsd(index, row) {
       // 禁用按钮 按钮的作用就是获取一切初始化信息
 
-      
+
         this.i = 0;
         this.resetArr.idCard = row.idCard;
         console.log(index, row, this.resetArr); // 当前选中表格的索引和对
@@ -631,22 +630,22 @@ export default {
         });
     },
     /*====== 4.0表格操作相关 ======*/
-    
+
     resetApi(arr) {
-      
+
       console.log("禁用的数据", arr); // 正在请求的状态 通过按钮还是文本
       axios.put(userManageInterface.reset, arr).then(res => {
         console.log(res.data);
         if (res.data.state === true) {
           console.log(res.data);
 
-          
+
           this.centerDialogVisible = false;
           this.SearchApi(this.paginationForm); // 禁用成功就重新加载一次数据
           this.$message.success("重置成功");
         } else {
           this.$message.error(res.data.msg); // 提示删除成功
-          
+
         }
       });
     },
@@ -1058,7 +1057,7 @@ export default {
 .edit {
   color: #00d7f0;
   cursor: pointer;
-  /* margin-right: 20px; */
+  margin-right: 20px;
 }
 .ban {
   color: #ff5c3c;
@@ -1137,6 +1136,11 @@ export default {
 .upload {
   display: flex;
   justify-content: center;
+}
+.tablebox .tableBorder {
+  border: 1px solid #ebeef5;
+  border-bottom: none;
+  font-size: 16px;
 }
 .upload .defultHead {
   position: relative;

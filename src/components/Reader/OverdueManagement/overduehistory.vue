@@ -28,7 +28,7 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table  :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
-              <el-table-column align="center" prop="index" type="index" label="序号" width="100">
+              <el-table-column align="center" prop="index" type="index" label="序号" width="100" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
@@ -37,9 +37,21 @@
               <el-table-column align="center" prop="fkCardNumber" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" label="书名"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueDay" label="已逾期天数"></el-table-column>
-              <el-table-column align="center" prop="overdueExpenses" label="已逾期金额"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="overdueDay" label="已逾期天数">
+                <template slot-scope="scope">
+                  <span>{{scope.row.overdueDay}}天</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="overdueExpenses" label="已逾期金额">
+                <template slot-scope="scope">
+                  <span>{{scope.row.overdueExpenses}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="处理方式">
+                <template slot-scope="scope">
+                  <span>{{scope.row.fkHandleModeName == null || scope.row.fkHandleModeName=='' ?'---':scope.row.fkHandleModeName}}</span>
+                </template>
+              </el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

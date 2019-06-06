@@ -36,31 +36,47 @@
           <section class="text item tablebox">
             <el-table
               @selection-change="selectAllBtn"
-              
+
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column align="center" type="selection" width="100"></el-table-column>
-              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+              <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="name" width label="等级名称"></el-table-column>
-              <el-table-column align="center" prop="renewNumber" width="100" label="续借次数"></el-table-column>
-              <el-table-column align="center" prop="borrowTime" width="200" label="借阅时间"></el-table-column>
-              <el-table-column align="center" prop="borrowNumber" label="借书数量"></el-table-column>
-              <el-table-column align="center" prop="deposit" label="押金金额"></el-table-column>
+              <el-table-column align="center" prop="name" width="200" label="等级名称"></el-table-column>
+              <el-table-column align="center" prop="renewNumber" width="150" label="续借次数">
+                <template slot-scope="scope">
+                  <span>{{scope.row.renewNumber}}次</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="borrowTime" width="200" label="借阅时间">
+                <template slot-scope="scope">
+                  <span>{{scope.row.borrowTime}}天</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="borrowNumber" label="借书数量" width="150">
+                <template slot-scope="scope">
+                  <span>{{scope.row.borrowNumber}}次</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="deposit" label="押金金额" width="150">
+                <template slot-scope="scope">
+                  <span>{{scope.row.deposit}}元</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" width="200" label="修改时间"></el-table-column>
-              <el-table-column align="center" prop="disabled" width="70" label="状态">
+              <el-table-column align="center" prop="disabled" width="150" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" >
+              <el-table-column align="center" label="操作" width="150" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="editBtn(scope.$index, scope.row)">编辑</span>
@@ -475,8 +491,8 @@ export default {
           this.$message.success("删除成功");
           this.deleteDialog = false;
           this.searchTable();
-          
-          
+
+
           console.log(this.deleteDialog);
         } else {
           this.$message.error(res.data.msg);

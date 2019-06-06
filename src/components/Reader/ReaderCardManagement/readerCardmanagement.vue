@@ -65,24 +65,28 @@
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
-              <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+              <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="balance" width="90" label="押金"></el-table-column>
-              <el-table-column align="center" prop="fkGradeName" label="等级名称"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" label="用户名" width="200"></el-table-column>
+              <el-table-column align="center" prop="cardNumber" label="卡号" width="200"></el-table-column>
+              <el-table-column align="center" prop="balance" width="200" label="押金">
+                <template slot-scope="scope">
+                  <span>{{scope.row.balance}}元</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="fkGradeName" label="等级名称" width="200"></el-table-column>
               <!-- <el-table-column align="center" prop="fkFromLibraryName" width="100" label="所属地区"></el-table-column> -->
-              <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
-              <el-table-column align="center" prop="state" width="70" label="状态">
+              <el-table-column align="center" prop="creatTime" label="创建时间" width="200"></el-table-column>
+              <el-table-column align="center" prop="updateTime" label="修改时间" width="200"></el-table-column>
+              <el-table-column align="center" prop="state" label="状态" width="150">
                 <template slot-scope="scope">
                   <span>{{scope.row.state ===0?'在用':'挂失'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="300">
+              <el-table-column align="center" label="操作" width="300" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="rechargeBtn(scope.$index, scope.row)">充值</span>
@@ -91,7 +95,7 @@
                     class="ban"
                     @click="lostBtn(scope.$index, scope.row)"
                   >{{scope.row.state ===0?'挂失':'取挂'}}</span>
-                  <span class="edit" @click="logoutBtn(scope.$index, scope.row)">注销</span>
+                  <span class="edit1" @click="logoutBtn(scope.$index, scope.row)">注销</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -812,6 +816,11 @@ export default {
 }
 .ban {
   color: #ff5c3c;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.edit1 {
+  color: #00d7f0;
   cursor: pointer;
 }
 /*====== 4.0 分页器区域 ======*/

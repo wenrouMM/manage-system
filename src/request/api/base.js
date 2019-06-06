@@ -260,9 +260,9 @@ export const loan = {
 }
 //失信记录
 export const dishonesty = {
-  table:`${url}tibetmuseummodule/loseLog/select`,//失信记录表格查询
-  revoke:`${url}tibetmuseummodule/loseLog/revoke`, //失信撤销操作
-  history:`${url}tibetmuseummodule/loseHistoryLog/select`//失信历史记录
+  table:`${url}readermodule/loseLog/select`,//失信记录表格查询
+  revoke:`${url}readermodule/loseLog/revoke`, //失信撤销操作
+  history:`${url}readermodule/loseHistoryLog/select`//失信历史记录
 }
 //馆内图书类型
 /*------ 区域模块 ------*/

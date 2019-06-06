@@ -45,10 +45,8 @@
             </section>
           </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
+          <section class="tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
-              
-
               @selection-change="handleSelectionChange"
               :data="tableData"
               style="width: 100%;
@@ -806,6 +804,11 @@ section.pagination {
 }
 .defultHead:hover .bgload {
   display: block;
+}
+.tablebox .tableBorder {
+  border: 1px solid #ebeef5;
+  border-bottom: none;
+  font-size: 16px;
 }
 .bgload {
   background-color: rgba(0, 0, 0);

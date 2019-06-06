@@ -210,6 +210,22 @@ export default new Router({
           }
         },
         {
+          path: '/DishonestyRecords',
+          component: DishonestyRecords,
+          meta:{
+            title:'失信记录',
+            Mode:'4'
+          }
+        },
+        {
+          path: '/DishonestyHistory',
+          component: DishonestyHistory,
+          meta:{
+            title:'失信历史记录',
+            Mode:'4'
+          }
+        },
+        {
           path: '/overduerecords',
           component:resolve => require(['@/components/Reader/OverdueManagement/overdueRecords.vue'],resolve),
           meta:{

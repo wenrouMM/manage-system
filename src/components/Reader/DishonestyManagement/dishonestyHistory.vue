@@ -39,17 +39,25 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table class="tableBorder" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table class="tableBorder"
+                      :data="tableData"
+                      v-loading="tableLoading"
+                      style="width: 100%; text-align:center;"
+                      :row-style="rowStyle"
+                      :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'14px'}">
               <el-table-column width="240" align="center" prop="index" type="index" label="序号">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" width="260" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" width="260" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="remarks" width="260" label="备注"></el-table-column>
-              <el-table-column align="center" prop="creatTime" width="260" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" width="260" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" label="用户名">
+                <template slot-scope="scope">
+                  <span>{{scope.row.fkReaderName == null || scope.row.fkReaderName=='' ?'---':scope.row.fkReaderName}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

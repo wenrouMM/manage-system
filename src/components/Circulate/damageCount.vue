@@ -35,14 +35,14 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox" v-loading="tableLoading" element-loading-text="拼命加载中">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"
             @selection-change="selectAllBtn"
           >
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+            <el-table-column align="center" type="selection" fixed="left" width="100"></el-table-column>
+            <el-table-column align="center" prop="index" type="index" label="序号" width="100" fixed="left">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
@@ -55,14 +55,22 @@
             </el-table-column>
             <el-table-column align="center" prop="cardNum" label="卡号">
               <template slot-scope="scope">
-                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardName}}</span>
+                <span>{{scope.row.cardNum == null || scope.row.cardNum=='' ?'---':scope.row.cardNum}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column align="center" prop="fkBookPrice" label="书籍价格"></el-table-column>
+            <el-table-column align="center" prop="fkBookPrice" label="书籍价格">
+              <template slot-scope="scope">
+                <span>{{scope.row.fkBookPrice == null || scope.row.fkBookPrice=='' ?'---':scope.row.fkBookPrice}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="fkBookName" label="损坏书籍"></el-table-column>
             <el-table-column align="center" prop="fkDamageName" label="赔偿方式"></el-table-column>
-            <el-table-column align="center" prop="price" label="赔偿金额"></el-table-column>
+            <el-table-column align="center" prop="price" label="赔偿金额">
+              <template slot-scope="scope">
+                <span>{{scope.row.price == null || scope.row.price=='' ?'---':scope.row.price}}</span>
+              </template>
+            </el-table-column>
             <!-- <el-table-column align="center" prop="cardNum" label="操作">
               <template slot-scope="scope">
                 <el-button @click="dealBtn(scope.row,scope.index)" type="text">处理</el-button>

@@ -45,24 +45,24 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column align="center" type="selection"></el-table-column>
-            <el-table-column align="center" prop="index" type="index" width="100" label="序号">
+            <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
+            <el-table-column align="center" prop="index" type="index" width="100" label="序号" fixed="left">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="lendState" label="状态">
+            <el-table-column align="center" prop="searchNumber" label="索书号" width="300"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="400"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="300"></el-table-column>
+            <el-table-column align="center" prop="lendState" label="状态" width="200">
               <template slot-scope="scope">
                 <span v-if="scope.row.lendState==0">不在架</span>
                 <span v-else-if="scope.row.lendState==1">在架</span>
@@ -71,7 +71,7 @@
                 <span v-else="scope.row.lendState==4">损坏</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="green" @click="makeBtn(scope.$index, scope.row)">{{scope.row.available ==0?'启用':'停用'}}</span>
