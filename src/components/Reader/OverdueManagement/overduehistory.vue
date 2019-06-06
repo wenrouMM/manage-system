@@ -34,11 +34,11 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" label="书名"></el-table-column>
-              <el-table-column align="center" prop="creatTime" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" label="应还书日期"></el-table-column>
-              <el-table-column align="center" prop="overdueTotalDay" label="逾期天数"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="bookName" label="书名"></el-table-column>
+              <el-table-column align="center" prop="creatTime" label="应还书时间"></el-table-column>
+              <el-table-column align="center" prop="overdueDay" label="已逾期天数"></el-table-column>
+              <el-table-column align="center" prop="overdueExpenses" label="已逾期金额"></el-table-column>
               <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
             </el-table>
             <section class="pagination mt_30">

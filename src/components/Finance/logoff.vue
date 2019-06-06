@@ -93,7 +93,7 @@
         lastCardNum: "", // 暂存卡号
         // 读者卡信息
         cardData: {
-          
+
           userName: "",
           type: "",
           sex: "",
@@ -106,10 +106,8 @@
         hide:false,
         // 押金金额
         changeForm:{
-          
           remarks:'',
         },
-        
       };
     },
     computed:{
@@ -161,7 +159,6 @@
       /*------ API ------*/
       // 调查读者卡信息
       readCardApi(data) {
-
         axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
           console.log("用户信息",res);
           if (res.data.state === true) {
@@ -193,8 +190,8 @@
             for (var i in obj) {
               obj[i] = "";
             }
-              this.centerDialogVisible=false
-
+            this.centerDialogVisible=false
+            this.changeForm.remarks=''
             //this.$router.push({path:'/logoffEnd'})
           } else {
             this.$message.error(res.data.msg);

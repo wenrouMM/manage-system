@@ -39,11 +39,11 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="cardNumber" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="fkBookName" label="书名"></el-table-column>
-              <el-table-column align="center" prop="fkShouldReturnTime" label="借书时间"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="bookName" label="书名"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="应还书时间"></el-table-column>
-              <el-table-column align="center" prop="overdueAlreadyDay" label="逾期天数"></el-table-column>
+              <el-table-column align="center" prop="overdueDay" label="已逾期天数"></el-table-column>
+              <el-table-column align="center" prop="overdueExpenses" label="已逾期金额"></el-table-column>
               <el-table-column align="center" label="操作">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
@@ -165,7 +165,7 @@
       },
       submitDialog(){
         console.log(this.id)
-        this.axios.post(overdue.make,{id:this.id}).then((res)=>{
+        this.axios.post(overdue.make,{id:this.id,overdueExpenses:this.overdueMoney}).then((res)=>{
           console.log(res)
           if(res.data.state==true){
             this.$message({
@@ -251,43 +251,17 @@
       handleEdit(index, row){
         //this.centerDialogVisible=true
         this.i=0
-        this.phone=''
+        this.phone=row.phone
+        this.centerDialogVisible=true
         this.id=row.id
         console.log(row)
-        this.axios.get(overdue.phone,{params:{id:row.id}}).then((res)=>{
-          console.log(res)
-          if(res.data.state=true){
-            this.phone=res.data.row.phone
-            console.log(this.phone)
-            if(this.phone!=''){
-              this.centerDialogVisible=true
-            }
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: 'warning'
-            });
-          }
-        })
       },
       handleBan(index, row){
         this.id=row.id
         this.i=1
-        this.overdueMoney=''
-        this.axios.get(overdue.money,{params:{id:row.id}}).then((res)=>{
-          console.log(res)
-          if(res.data.state=true){
-            this.overdueMoney=res.data.row
-            if(this.overdueMoney!=''){
-              this.centerDialogVisible=true
-            }
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: 'warning'
-            });
-          }
-        })
+        console.log('修改获取的数据',row.overdueExpenses)
+        this.centerDialogVisible=true
+        this.overdueMoney=row.overdueExpenses
       }
     }
   };

@@ -146,7 +146,7 @@
     if (!value){
       callback(new Error('请输入电话号码'))
     }else  if (!isvalidPhone(value)){
-      callback(new Error('请输入正确的11位手机号码'))
+      callback(new Error('请输入正确的手机号码'))
     }else {
       callback()
     }
@@ -411,7 +411,7 @@
             console.log('修改图书出版社返回的消息',res)
             if(res.data.state==true){
               this.$message({
-                message: res.data.msg,
+                message: '修改成功',
                 type: 'success'
               });
               this.SearchApi(this.searchTimeForm)

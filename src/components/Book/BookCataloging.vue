@@ -534,6 +534,13 @@
               });
               this.catalogingData=res.data.row
             }
+          },(err)=>{
+            console.log('err',err)
+            this.catalogingData=[]
+            this.$message({
+              message: '网络出错',
+              type: "error"
+            });
           })
         }else if(value==2){
           this.j=4
@@ -550,6 +557,12 @@
               });
               this.catalogingData=res.data.rows
             }
+          },(err)=>{
+            console.log('err',err)
+            this.$message({
+              message: '网络出错',
+              type: "error"
+            });
           })
         }
       },
@@ -716,8 +729,18 @@
               message: '没有ISBN查询无法获取本地数据',
               type: "error"
             });
+            this.centerDialogVisible=true
             this.catalogingData=res.data.row
           }
+        },(err)=>{
+          console.log('err',err)
+          this.j=3
+          this.centerDialogVisible=true
+          this.$message({
+            message: '网络出错',
+            type: "error"
+          });
+          this.catalogingData=[]
         })
       },
       //修改弹框

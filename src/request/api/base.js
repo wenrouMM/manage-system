@@ -250,8 +250,7 @@ export const overdue = {
   table:`${url}borrowmodule/expectLog/select`, //逾期查询表格
   phone:`${url}tibetmuseummodule/currency/expectLog/selectUserPhone`, //逾期催还电话
   history:`${url}borrowmodule/expectHistoryLog/select`, //逾期历史记录查询表格
-  money:`${url}tibetmuseummodule/currency/expectLog/overdueMon`, //逾期金额查询
-  make:`${url}tibetmuseummodule/currency/expectLog/handle` //逾期金额处理
+  make:`${url}borrowmodule/expectLog/handle` //逾期金额处理
 }
 //借阅记录
 export const loan = {
