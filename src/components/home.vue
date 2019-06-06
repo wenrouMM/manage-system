@@ -29,6 +29,7 @@
           <img src="../base/img/index/deal.png">
         </div>
         <div class="sellInfo">
+        
           <p class="text">{{cardNum}}</p>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
@@ -40,7 +41,8 @@
           <img src="../base/img/index/online.png">
         </div>
         <div class="sellInfo">
-          <p class="text">{{bookNum}}</p>
+         
+          <p class="text">{{bookNum}} </p>
           <div class="iconBox">
             <p class="icon">在线图书</p>
           </div>
@@ -134,6 +136,7 @@
 </template>
 
 <script>
+import VeCount from "../common/count/count"
 import VePie from "v-charts/lib/pie.common";
 import VeHis from "v-charts/lib/histogram.common";
 import { indexInt } from "../request/api/base.js";
@@ -142,10 +145,10 @@ export default {
   data() {
     return {
       /*====== 上层展示数据 ======*/
-      borrowNum: "",
-      returnNum: "",
-      bookNum: "",
-      cardNum: "",
+      borrowNum: '',
+      returnNum: '',
+      bookNum: '',
+      cardNum: '',
       /*====== 中层图表战术数据 ======*/
       // 柱形图相关数据
       HisData: {
@@ -442,7 +445,8 @@ export default {
   },
   components: {
     VePie,
-    VeHis
+    VeHis,
+    VeCount
   }
 };
 </script>

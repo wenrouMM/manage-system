@@ -288,12 +288,17 @@
             <el-form-item label="电话号码" prop="phone" :label-width="formLabelWidth">
               <el-input v-model="addForm.phone" autocomplete="off"></el-input>
             </el-form-item>
+            
             <el-form-item class="select" prop="isLock" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
                 <el-radio :label="1">禁用</el-radio>
                 <el-radio :label="0">启用</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item>
+              <p>初始密码为身份证号后6位</p>
+            </el-form-item>
+            
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
               <el-button
