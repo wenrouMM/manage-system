@@ -35,14 +35,14 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox" v-loading="tableLoading" element-loading-text="拼命加载中">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"
             @selection-change="selectAllBtn"
           >
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column width="100" align="center" prop="index" type="index" label="序号">
+            <el-table-column align="center" type="selection" fixed="left" width="100"></el-table-column>
+            <el-table-column align="center" prop="index" type="index" label="序号" width="100" fixed="left">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>

@@ -17,7 +17,7 @@
               <el-form-item label="损坏方式 :">
                 <div class="inputBox textLeft" style="width:160px;">
                   <el-input clearable v-model="searchForm.damageMothod" placeholder="请输入损坏方式"></el-input>
-                </div> 
+                </div>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -26,9 +26,9 @@
           </div>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tableBox">
+        <section class="tablebox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
@@ -458,7 +458,7 @@
             if (res.data.state === true) {
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
-              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果 
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.tableLoading = false;
             } else {
               this.$message.error(res.data.msg);
@@ -551,7 +551,11 @@
     text-align: center;
     margin-left: 30px;
   }
-
+  .tablebox .tableBorder {
+    border: 1px solid #ebeef5;
+    border-bottom: none;
+    font-size: 16px;
+  }
   #loginrecord {
     background: #ffffff;
   }

@@ -41,7 +41,7 @@
               <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
               <section class="tableBox">
                 <el-table
-                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
                   empty-text="无数据"
                   style="width: 1260px; text-align:center;"
                   :data="tableData"

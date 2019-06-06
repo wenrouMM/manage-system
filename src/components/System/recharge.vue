@@ -40,7 +40,7 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
@@ -52,18 +52,26 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="state" label="处理方式">
+            <el-table-column align="center" prop="state" label="处理方式" width="150">
               <template slot-scope="scope">
                 <span>{{scope.row.state ==1?'退款金额':'押金充值'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
-            <el-table-column align="center" prop="momentum" label="金额"></el-table-column>
+            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" width="150" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkReaderName" label="用户名" width="150"  :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="momentum" label="金额" width="150">
+              <template slot-scope="scope">
+                <span>{{scope.row.momentum}}元</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="createTime" label="处理日期" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkHandleModeName" label="操作用户"></el-table-column>
-            <el-table-column align="center" prop="serialNumber" label="流水标号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+            <el-table-column align="center" prop="fkHandleModeName" label="操作用户"  :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="serialNumber" label="流水标号" width="250"></el-table-column>
+            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.remarks == null || scope.row.remarks=='' ?'---':scope.row.remarks}}</span>
+              </template>
+            </el-table-column>
           </el-table>
           <div style="width: 100%;height: 50px;background-color: #0096FF;line-height: 50px;color: white">&nbsp;&nbsp;&nbsp;合计&nbsp;:&nbsp;￥{{TotalRecharge}}元</div>
           <!-- 4.0 分页 -->

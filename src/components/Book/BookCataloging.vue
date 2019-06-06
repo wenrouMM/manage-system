@@ -35,28 +35,28 @@
         <!-- 3.0表格数据 -->
         <section class="tableBox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column align="center" type="selection"></el-table-column>
-            <el-table-column align="center" prop="index" type="index" width="100" label="序号">
+            <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
+            <el-table-column align="center" prop="index" type="index" width="150" label="序号" fixed="left">
               <template slot-scope="scope">
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="正题名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkTypeCode" label="分类号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkTypeName" label="分类名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="publishingTime" label="出版时间" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="language" label="语种" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" prop="name" label="正题名" width="200"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
+            <el-table-column align="center" prop="author" label="编著者" width="200"></el-table-column>
+            <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200"></el-table-column>
+            <el-table-column align="center" prop="fkTypeName" label="分类名" width="200"></el-table-column>
+            <el-table-column align="center" prop="fkPressName" label="出版社" width="200"></el-table-column>
+            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200"></el-table-column>
+            <el-table-column align="center" prop="language" label="语种" width="150"></el-table-column>
+            <el-table-column align="center" label="操作" fixed="right" width="200">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
@@ -105,10 +105,10 @@
                     </p>
                   </div>
                   <div style="margin: 0 auto 25px;width: 600px">
-                    <el-radio-group v-model="radio" class="flexLayout" @change="BookInfoFun(radio)">
-                      <el-radio :label="1">本地获取图书</el-radio>
-                      <el-radio :label="2">远程获取图书</el-radio>
-                    </el-radio-group>
+                    <el-checkbox-group v-model="type" class="flexLayout" @change="BookInfoFun(type)">
+                      <el-checkbox :label="1" name="type">本地获取数据</el-checkbox>
+                      <el-checkbox :label="2" name="type">远程获取数据</el-checkbox>
+                    </el-checkbox-group>
                   </div>
                 </div>
                 <div id="noError">
@@ -130,7 +130,7 @@
                       </el-form-item>
                     </div>
                     <div  class="flexLayout">
-                      <el-form-item label=" 索 书 号 :" label-width="95px"  class="mediumInput">
+                      <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
                         <el-input v-model="addForm.searchNumber "></el-input>
                       </el-form-item>
                       <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
@@ -169,16 +169,8 @@
                       <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 60px">
                         <el-input v-model="addForm.publishingPleace "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
-                        <el-date-picker
-                          v-model="addForm.publishingTime"
-                          align="right"
-                          type="date"
-                          format="yyyy 年 MM 月 dd 日"
-                          value-format="yyyy-MM-dd 00:00:00"
-                          placeholder="选择日期"
-                          :picker-options="pickerOptions">
-                        </el-date-picker>
+                      <el-form-item label=" 出版日期 :" label-width="95px">
+                        <el-input v-model="addForm.publishingTime "></el-input>
                       </el-form-item>
                     </div>
                     <div class="flexLayout" id="catalogingInput5">
@@ -276,16 +268,8 @@
                   <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 60px">
                     <el-input v-model="addForm.publishingPleace "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 出版日期 :" label-width="95px" style="margin-left: 20px">
-                    <el-date-picker
-                      v-model="addForm.publishingTime"
-                      align="right"
-                      type="date"
-                      format="yyyy 年 MM 月 dd 日"
-                      value-format="yyyy-MM-dd 00:00:00"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions">
-                    </el-date-picker>
+                  <el-form-item label=" 出版日期 :" label-width="95px">
+                    <el-input v-model="addForm.publishingTime "></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput6">
@@ -357,6 +341,9 @@
                 </el-table-column>
               </el-table>
             </section>
+            <div style="width: 200px;margin: 20px auto">
+              <span class="dialogButton cancel" @click="decideOut" style="width: 200px">取消</span>
+            </div>
           </div>
         </el-dialog>
       </div>
@@ -384,31 +371,6 @@
         selectbookInfo:'',
         messageWidth:'',
         /*====== 2.0表单搜索区域 ======*/
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date());
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', date);
-            }
-          }]
-        },
         messageName:'',//树弹框的名称
         setting: {
           edit: {
@@ -493,7 +455,7 @@
         catalogingData:[],//编目数据
         id:'',
         tableChecked: [], // 全选绑定的数据
-        radio:''//选择远程或本地的获取数据的按钮
+        type:[]//选择远程或本地的获取数据的按钮
       };
     },
     computed: {
@@ -566,19 +528,36 @@
           })
         }
       },
-      //添加时获取某条数据
-      obtainFun(){
-
-      },
-      //取消获取数据弹框
-      closeFun(){
-
-      },
       //选中某条数据的选中按钮
       decideOn(index,row){
         console.log('选中的数据',row)
         this.addForm=row
         this.centerDialogVisible=false
+      },
+      //取消本地获取，获取远程数据
+      decideOut(){
+        this.type=[2]
+        this.j=4
+        this.centerDialogVisible=true
+        this.messageWidth='800px'
+        this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
+          console.log('远程编目的数据',res)
+          if(res.data.state==true){
+            this.catalogingData=res.data.row
+          }else{
+            this.$message({
+              message: '没有ISBN查询无法获取远程数据',
+              type: "error"
+            });
+            this.catalogingData=res.data.rows
+          }
+        },(err)=>{
+          console.log('err',err)
+          this.$message({
+            message: '网络出错',
+            type: "error"
+          });
+        })
       },
       /*====== 出版社弹窗内容 ======*/
       publishTreeFun(){
@@ -717,7 +696,7 @@
       },
       //添加isbn数据搜索
       isbnData(){
-        this.radio=1
+        this.type=[1,2]
         this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
           console.log('isbn的数据',res)
           if(res.data.state==true){
@@ -825,7 +804,7 @@
           this.addForm[i] = "";
         }
         this.dialogFormVisible = false
-        this.radio=''
+        this.type=''
         this.searchApi(this.searchTimeForm)
         $('#typeMessage').fadeOut()
       },

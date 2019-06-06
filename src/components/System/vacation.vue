@@ -14,12 +14,13 @@
           </div>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tableBox">
+        <section class="tablebox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
-            style="width: 100%; text-align:center;"
+            style="width: 1540px; text-align:center;"
             :data="tableData"
+
             :row-style="{height:'60px'}"
           >
             <el-table-column align="center" prop="holidayName" label="假期名称"></el-table-column>
@@ -120,7 +121,7 @@
             <el-form-item>
               <p class="textTips">假期设置日期不可重叠</p>
             </el-form-item>
-            
+
             <!-- 弹框表单按钮  验证失效-->
             <div class="flexLayout" style="width: 350px;margin: 0 auto">
               <el-button type="primary" @click="submitForm('addForm')" style="margin-left: 20px">确定</el-button>
@@ -483,7 +484,11 @@
     border-left: 5px solid #1e9eff;
     color: #878787;
   }
-
+  .tablebox .tableBorder {
+    border: 1px solid #ebeef5;
+    border-bottom: none;
+    font-size: 16px;
+  }
   #loginrecord .el-table {
     border: 1px solid #eaeaea;
     /*border-width: 0 1px 1px 1px ;*/

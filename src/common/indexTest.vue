@@ -118,7 +118,7 @@
                   <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              
+
             </div>
             <!-- 读者管理 -->
             <div class="navMenu" v-show="Mode == 4">
@@ -131,6 +131,16 @@
                 <el-menu-item-group>
                   <el-menu-item index="/readercardmanagement">读者卡信息</el-menu-item>
                   <el-menu-item index="/readercardgrade">读者卡等级</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
+              <el-submenu index="Dishonesty">
+                <template slot="title">
+                  <i class="indexIcon indexIconMax iconduzheguanli"></i>
+                  <span>失信管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="/DishonestyRecords">失信记录</el-menu-item>
+                  <el-menu-item index="/DishonestyHistory">失信历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </div>
@@ -235,15 +245,15 @@ export default {
     Tags
   },
   created() {
-    
+
     axios.get(PersonalCentre.userInfo).then((res)=>{
       console.log('看看bug到底在哪里',res)
        this.userLo = res.data.row;
        this.settingHead = uploadInt.preimg + res.data.row.headerAddress
     })
     console.log('新方法',this.userLo)
-   
-    
+
+
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {
