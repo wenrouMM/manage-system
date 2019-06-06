@@ -105,12 +105,12 @@
         <div class="dialogContent">
           <div class="data mb_30">
             <p class="">旧密码</p>
-            <input type="text" v-model="oldInput" />
+            <input type="password" v-model="oldInput" />
             <p class="userHr"></p>
           </div>
           <div class="data">
             <p>新密码</p>
-            <input type="text" v-model="newInput" />
+            <input type="password" v-model="newInput" />
             <p class="userHr"></p>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default {
           this.$store.commit('setToken',token)
           this.InitializationFun()
           this.pwdDialog=false
-          
+
         }else{
           this.$message({
             message:res.data.msg,
@@ -249,7 +249,7 @@ export default {
       this.cutimgUrl = imgDataUrl
     },
     cropUploadSuccess(jsonData, field) {
-      
+
       console.log("-------- upload success --------");
       console.log(jsonData);
       console.log('图片地址',jsonData.row)
@@ -263,7 +263,7 @@ export default {
         var token = res.data.row.authorization
         sessionStorage.setItem('token',token)
         this.$store.commit('setToken',token)
-        
+
       })
     },
     cropUploadFail(status, field) {

@@ -49,11 +49,15 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="正题名" width="200"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300">
+              <template slot-scope="scope">
+                <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="author" label="编著者" width="200"></el-table-column>
             <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200"></el-table-column>
             <el-table-column align="center" prop="fkTypeName" label="分类名" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkPressName" label="出版社" width="200"></el-table-column>
+            <el-table-column align="center" prop="fkPressName" label="出版社" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="publishingTime" label="出版时间" width="200"></el-table-column>
             <el-table-column align="center" prop="language" label="语种" width="150"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right" width="200">

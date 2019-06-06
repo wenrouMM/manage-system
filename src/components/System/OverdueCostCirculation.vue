@@ -61,7 +61,11 @@
             <el-table-column align="center" prop="creatTime" label="处理日期" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkHandleModeName" label="操作用户" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="serialNumber" label="流水编号" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.remarks == null || scope.row.remarks=='' ?'---':scope.row.remarks}}</span>
+              </template>
+            </el-table-column>
           </el-table>
           <div style="width: 100%;height: 50px;background-color: #0096FF;line-height: 50px;color: white">&nbsp;&nbsp;&nbsp;费用合计&nbsp;:&nbsp;{{depositSum}}</div>
           <!-- 4.0 分页 -->

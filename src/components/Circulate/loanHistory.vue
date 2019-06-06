@@ -58,7 +58,11 @@
               <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
               <el-table-column align="center" prop="libraryBookCode" width="350" label="馆内码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="150" label="续借次数">
+                <template slot-scope="scope">
+                  <span>{{scope.row.renewCount == null || scope.row.renewCount=='' ?'---':scope.row.renewCount}}次</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
               <el-table-column align="center" prop="realityReturnTime" width="200" label="实际归还时间"></el-table-column>
             </el-table>

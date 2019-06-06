@@ -377,7 +377,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="95px">
-                    <el-input v-model="harmForm.amountCompensation "></el-input>
+                    <div style="border: 1px solid #DCDFE6;width: 270px;height: 36px;border-radius: 5px;padding: 0px 10px 0px">{{harmForm.amountCompensation}}</div>
                   </el-form-item>
                 </div>
                 <div id="remarks">
