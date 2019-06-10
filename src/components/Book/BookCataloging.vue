@@ -60,7 +60,11 @@
             <el-table-column align="center" prop="fkTypeName" label="分类名" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkPressName" label="出版社" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="publishingTime" label="出版时间" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="language" label="语种" width="150" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="language" label="语种" width="150" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.language == null || scope.row.language=='' ?'---':scope.row.language}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" label="操作" fixed="right" width="200">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">

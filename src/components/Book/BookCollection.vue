@@ -59,7 +59,11 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="callNumber" label="索书号" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="callNumber" label="索书号" width="300" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
@@ -123,7 +127,7 @@
             <div id="decideForm" style="display: none">
               <div id="haveBottomBorderAdd">
                 <div id="inputDiv1">
-                  <el-form-item label=" 正题名 :" label-width="70px" style="">
+                  <el-form-item label=" 正题名 :" label-width="70px">
                     <div class="flexLayout">
                       <el-input v-model="showData.name" :disabled="disabled"></el-input>
                       <el-checkbox v-model="addForm.bulkBook" :disabled="disabled">散装书</el-checkbox>
@@ -131,64 +135,64 @@
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv2">
-                  <el-form-item label=" 副题名 :" label-width="70px" style="">
+                  <el-form-item label=" 副题名 :" label-width="70px">
                     <el-input v-model="showData.viceName" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 丛编题名 :" label-width="100px" style="">
+                  <el-form-item label=" 丛编题名 :" label-width="100px">
                     <el-input v-model="showData.clusterName " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv3">
-                  <el-form-item label=" 分类号 :" label-width="70px" style="">
+                  <el-form-item label=" 分类号 :" label-width="70px">
                     <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 版　　次 :" label-width="95px" style="">
+                  <el-form-item label=" 版　　次 :" label-width="95px">
                     <el-input v-model="showData.edition" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 卷册号 :" label-width="80px" style="">
+                  <el-form-item label=" 卷册号 :" label-width="80px">
                     <el-input v-model="showData.volumeNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv4">
-                  <el-form-item label=" 编著者 :" label-width="70px" style="">
+                  <el-form-item label=" 编著者 :" label-width="70px">
                     <el-input v-model="showData.author" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 装订版面 :" label-width="100px" style="">
+                  <el-form-item label=" 装订版面 :" label-width="100px">
                     <el-input v-model="showData.layout " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv5">
-                  <el-form-item label=" 出 版 社 :" label-width="78px" style="">
+                  <el-form-item label=" 出 版 社 :" label-width="78px">
                     <el-input v-model="showData.fkPressName" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 出版时间 :" label-width="100px" style="">
+                  <el-form-item label=" 出版时间 :" label-width="100px">
                     <el-input v-model="showData.publishingTime" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 附　　件 :" label-width="100px" style="">
+                  <el-form-item label=" 附　　件 :" label-width="100px">
                     <el-input v-model="showData.appendix" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv6" style="margin-bottom: 20px">
-                  <el-form-item label=" 页　　码 :" label-width="83px" style="">
+                  <el-form-item label=" 页　　码 :" label-width="83px">
                     <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 开　　本 :" label-width="95px" style="">
+                  <el-form-item label=" 开　　本 :" label-width="95px">
                     <el-input v-model="showData.openBook" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 价　　格 :" label-width="95px" style="">
+                  <el-form-item label=" 价　　格 :" label-width="95px">
                     <el-input v-model="showData.price" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
               </div>
               <div id="formDiv">
                 <div class="flexLayout" style="margin-top: 10px">
-                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px" style="">
+                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px">
                     <el-input v-model="addForm.searchNumber"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
+                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
                     <el-input v-model="addForm.place"></el-input>
                   </el-form-item>
                 </div>
@@ -237,7 +241,7 @@
                   <el-form-item label=" I S B N :" label-width="70px">
                     <el-input v-model="showData.isbn" style="position: relative" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 正题名 :" label-width="80px" style="">
+                  <el-form-item label=" 正题名 :" label-width="80px">
                     <div class="flexLayout">
                       <el-input v-model="showData.name" :disabled="disabled"></el-input>
                       <el-checkbox v-model="addForm.bulkBook" :disabled="disabled">散装书</el-checkbox>
@@ -245,64 +249,64 @@
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputEdit2">
-                  <el-form-item label=" 副题名 :" label-width="70px" style="">
+                  <el-form-item label=" 副题名 :" label-width="70px">
                     <el-input v-model="showData.viceName" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 丛编题名 :" label-width="100px" style="">
+                  <el-form-item label=" 丛编题名 :" label-width="100px">
                     <el-input v-model="showData.clusterName " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout">
-                  <el-form-item label=" 分类号 :" label-width="70px" style="">
+                  <el-form-item label=" 分类号 :" label-width="70px">
                     <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 版　　次 :" label-width="95px" style="">
+                  <el-form-item label=" 版　　次 :" label-width="95px">
                     <el-input v-model="showData.edition" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 卷册号 :" label-width="80px" style="">
+                  <el-form-item label=" 卷册号 :" label-width="80px">
                     <el-input v-model="showData.volumeNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputEdit3">
-                  <el-form-item label=" 编著者 :" label-width="70px" style="">
+                  <el-form-item label=" 编著者 :" label-width="70px">
                     <el-input v-model="showData.author" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 装订版面 :" label-width="100px" style="">
+                  <el-form-item label=" 装订版面 :" label-width="100px">
                     <el-input v-model="showData.layout " :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout">
-                  <el-form-item label=" 出版社 :" label-width="70px" style="">
+                  <el-form-item label=" 出版社 :" label-width="70px">
                     <el-input v-model="showData.fkPressName" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 出版时间 :" label-width="100px" style="">
+                  <el-form-item label=" 出版时间 :" label-width="100px">
                     <el-input v-model="showData.publishingTime" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 附　　件 :" label-width="100px" style="">
+                  <el-form-item label=" 附　　件 :" label-width="100px">
                     <el-input v-model="showData.appendix" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" style="margin-bottom: 20px">
-                  <el-form-item label=" 页　　码 :" label-width="85px" style="">
+                  <el-form-item label=" 页　　码 :" label-width="85px">
                     <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 开　　本 :" label-width="95px" style="">
+                  <el-form-item label=" 开　　本 :" label-width="95px">
                     <el-input v-model="showData.openBook" :disabled="disabled"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 价　　格 :" label-width="95px" style="">
+                  <el-form-item label=" 价　　格 :" label-width="95px">
                     <el-input v-model="showData.price" :disabled="disabled"></el-input>
                   </el-form-item>
                 </div>
               </div>
               <div style="width: 900px;border: 1px solid #DCDFE6;border-radius: 5px;margin-top: 20px;padding:20px 10px">
                 <div class="flexLayout" style="margin-top: 10px">
-                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px" style="">
+                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px" style="">
+                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px">
                     <el-input v-model="addForm.searchNumber"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px" style="">
+                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
                     <el-input v-model="addForm.place"></el-input>
                   </el-form-item>
                 </div>
