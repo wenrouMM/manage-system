@@ -55,8 +55,6 @@ import {loginInter,login} from '../request/api/base.js'
       },
       submit(){ // 提交1.token的获取存储到Vuex和一个地方 2.路由信息的获取存储 3. 菜单信息 动态路由的生成
         console.log('???执行了没')
-        console.log('name',$('#name').val())
-        console.log('pwd',$('#pwd').val())
         if($('#name').val()&&$('#pwd').val()){
           $('#msg').html('');
           console.log('登陆')

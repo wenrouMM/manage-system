@@ -56,7 +56,7 @@
                   <el-table-column align="center" prop="address" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="contacts" label="联系人" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="telephone" label="联系电话" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" label="操作">
+                  <el-table-column align="center" label="操作" fixed="right">
                     <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                     <template slot-scope="scope">
                       <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>

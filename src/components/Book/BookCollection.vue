@@ -805,7 +805,7 @@
           for (var i in this.selectSearchForm) {
             this.selectSearchForm[i] = "";
           }
-        }else if(this.i==1){
+        }else if(this.i==1||this.i==0){
           this.$refs[this.addForm].resetFields();
           for (var i in this.addForm) {
             this.addForm[i] = "";

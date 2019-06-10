@@ -482,54 +482,62 @@
       }
     },
     methods: {
-      //获取图书信息弹窗的单选按钮
+      //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
         console.log('获取图书信息',value)
-        if(value==1){
-          this.j=3
-          this.messageWidth='800px'
-          this.centerDialogVisible=true
-          this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-            console.log('isbn的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
+        console.log('isbn的值',this.addForm.isbn)
+        if(this.addForm.isbn){
+          if(value==1){
+            this.j=3
+            this.messageWidth='800px'
+            this.centerDialogVisible=true
+            this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
+              console.log('isbn的数据',res)
+              if(res.data.state==true){
+                this.catalogingData=res.data.row
+              }else{
+                this.$message({
+                  message: '没有ISBN查询无法获取本地数据',
+                  type: "error"
+                });
+                this.catalogingData=res.data.row
+              }
+            },(err)=>{
+              console.log('err',err)
+              this.catalogingData=[]
               this.$message({
-                message: '没有ISBN查询无法获取本地数据',
+                message: '网络出错',
                 type: "error"
               });
-              this.catalogingData=res.data.row
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.catalogingData=[]
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
-        }else if(value==2){
-          this.j=4
-          this.centerDialogVisible=true
-          this.messageWidth='800px'
-          this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-            console.log('远程编目的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
+            })
+          }else if(value==2){
+            this.j=4
+            this.centerDialogVisible=true
+            this.messageWidth='800px'
+            this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
+              console.log('远程编目的数据',res)
+              if(res.data.state==true){
+                this.catalogingData=res.data.row
+              }else{
+                this.$message({
+                  message: '没有ISBN查询无法获取远程数据',
+                  type: "error"
+                });
+                this.catalogingData=res.data.rows
+              }
+            },(err)=>{
+              console.log('err',err)
               this.$message({
-                message: '没有ISBN查询无法获取远程数据',
+                message: '网络出错',
                 type: "error"
               });
-              this.catalogingData=res.data.rows
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
+            })
+          }
+        }else{
+          this.$message({
+            message: '请先输入搜索相应ISBN获取数据',
+            type: "error"
+          });
         }
       },
       //选中某条数据的选中按钮

@@ -40,8 +40,8 @@
                       v-loading="tableLoading"
                       style="width: 100%; text-align:center;"
                       :row-style="rowStyle"
-                      :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'14px'}">
-              <el-table-column width="300" align="center" prop="index" type="index" label="序号">
+                      :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'15px'}">
+              <el-table-column align="center" prop="index" type="index" label="序号" width="100">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
@@ -49,7 +49,7 @@
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
               <el-table-column align="center" prop="phone" label="电话"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
-              <el-table-column align="center" label="操作">
+              <el-table-column align="center" label="操作" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">撤销</span>
@@ -268,6 +268,7 @@
   .edit {
     color: #00d7f0;
     cursor: pointer;
+    font-size: 14px;
   }
   section.pagination {
     display: flex;

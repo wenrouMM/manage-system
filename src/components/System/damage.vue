@@ -54,7 +54,7 @@
             </el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
             <!-- 自定义插槽 -->
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
