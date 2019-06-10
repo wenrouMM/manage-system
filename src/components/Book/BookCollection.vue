@@ -215,12 +215,11 @@
                   height="250"
                   :row-style="{height:'50px'}"
                 >
-                  <el-table-column align="center" prop="searchNumber" label="索书号" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="author" label="作者" :show-overflow-tooltip="true"></el-table-column>
                   <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" label="操作">
+                  <el-table-column align="center" label="操作" width="150">
                     <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                     <template slot-scope="scope">
                       <span class="blue" @click="decideOn(scope.$index, scope.row)">选中</span>
