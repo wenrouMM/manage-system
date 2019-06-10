@@ -46,11 +46,11 @@
                       type="danger"
                       @click="removeBtn(scope.$index, scope.row)"
                     >移除</el-button>
-                    <el-button
+                    <!-- <el-button
                       size="mini"
                       type="primary"
                       @click="removeBtn(scope.$index, scope.row)"
-                    >报损</el-button>
+                    >报损</el-button> -->
                   </template>
                 </el-table-column>
         </el-table>

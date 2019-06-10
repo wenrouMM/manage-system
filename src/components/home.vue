@@ -7,7 +7,7 @@
           <img src="../base/img/index/borrow.png">
         </div>
         <div class="sellInfo">
-          <p class="text">{{borrowNum}}</p>
+          <p class="text"><span v-if="borrowNum">{{borrowNum}}</span><ve-count v-if="borrowNum"  :end="borrowNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">今日借出</p>
           </div>
@@ -18,7 +18,7 @@
           <img src="../base/img/index/repay.png">
         </div>
         <div class="sellInfo">
-          <p class="text">{{returnNum}}</p>
+          <p class="text"><span v-if="!returnNum">{{returnNum}}</span><ve-count v-if="returnNum"  :end="returnNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">今日归还</p>
           </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="sellInfo">
         
-          <p class="text">{{cardNum}}</p>
+          <p class="text"><span v-if="!cardNum">{{cardNum}}</span><ve-count v-if="cardNum"  :end="cardNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
           </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="sellInfo">
          
-          <p class="text">{{bookNum}} </p>
+          <p class="text"><span v-if="!bookNum">{{bookNum}}</span> <ve-count v-if="bookNum" ref="bookNum" :end="bookNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">在线图书</p>
           </div>
@@ -336,7 +336,9 @@ export default {
     borrowApi() {
       axios.get(indexInt.borrow).then(res => {
         if (res.data.state === true) {
-          this.borrowNum = res.data.row;
+          this.borrowNum = Number(res.data.row);
+          
+          
         } else {
           this.$message.error(res.data.msg);
         }
@@ -358,6 +360,7 @@ export default {
       axios.get(indexInt.book).then(res => {
         if (res.data.state === true) {
           this.bookNum = res.data.row;
+          
         } else {
           this.$message.error(res.data.msg);
         }
@@ -442,6 +445,9 @@ export default {
     this.pillarApi();
     this.cardOnApi()
     this.systemApi()
+  },
+  mounted(){
+    
   },
   components: {
     VePie,
