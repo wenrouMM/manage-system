@@ -7,7 +7,7 @@
           <img src="../base/img/index/borrow.png">
         </div>
         <div class="sellInfo">
-          <p class="text"><span v-if="borrowNum">{{borrowNum}}</span><ve-count v-if="borrowNum"  :end="borrowNum"></ve-count></p>
+          <p class="text"><span v-if="!borrowNum">{{borrowNum}}</span><ve-count v-if="borrowNum"  :end="borrowNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">今日借出</p>
           </div>
