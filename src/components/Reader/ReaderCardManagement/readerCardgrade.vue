@@ -33,10 +33,9 @@
             </el-form>
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox">
+          <section class="text item tablebox" v-loading="tableLoading">
             <el-table
               @selection-change="selectAllBtn"
-              v-loading="tableLoading"
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
@@ -651,9 +650,7 @@ export default {
   margin-right: 6px;
 }
 /*====== 3.0表格区域 ======*/
-.item {
-  margin-bottom: 50px;
-}
+
 .tablebox .tableBorder {
   border: 1px solid #ebeef5;
   border-bottom: none;

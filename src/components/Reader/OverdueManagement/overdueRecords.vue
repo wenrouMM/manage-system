@@ -31,8 +31,8 @@
             </el-form>
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-          <section class="text item tablebox">
-            <el-table id="out-table" :data="tableData" v-loading="tableLoading" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+          <section class="tablebox" v-loading="tableLoading">
+            <el-table id="out-table" :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
               <el-table-column align="center" prop="index" type="index" label="序号" width="100" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -71,16 +71,23 @@
                 @current-change="current_change"
               >
                 <slot>
-              <span>
-                前往
-                <div class="el-input el-pagination__editor is-in-pagination">
-                  <input ref="text" type="number" v-model="pageInput" autocomplete="off" min="1" max="1" class="compo el-input__inner">
-                </div>
-                页
-              </span>
+                <span>
+                  前往
+                  <div class="el-input el-pagination__editor is-in-pagination">
+                    <input
+                      ref="text"
+                      type="number"
+                      v-model="pageInput"
+                      autocomplete="off"
+                      min="1"
+                      max="1"
+                      class="compo el-input__inner"
+                    >
+                  </div>页
+                </span>
                 </slot>
               </el-pagination>
-              <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
+              <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
           <div class="forbid">

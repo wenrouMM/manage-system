@@ -389,7 +389,7 @@ export default {
   width: 90px;
   font-size: 16px;
   text-align: center;
-  margin-left: 30px;
+  margin-left: 10px;
 }
 
 #loginrecord {

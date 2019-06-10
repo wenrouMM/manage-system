@@ -33,13 +33,12 @@
           </div>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tableBox">
+        <section class="tableBox"  v-loading="tableLoading">
           <el-table
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
-            v-loading="tableLoading"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
@@ -222,18 +221,18 @@
                   <el-form-item label=" I S B N :" prop="isbn" label-width="90px" >
                     <el-input v-model="addForm.isbn"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
+                  <el-form-item label=" 正 题 名 :" prop="name" label-width="95px">
                     <el-input v-model="addForm.name"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 副 题 名 :" label-width="90px" style="">
+                  <el-form-item label=" 副 题 名 :" label-width="90px">
                     <el-input v-model="addForm.viceName "></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput2">
-                  <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
+                  <el-form-item label=" 编 著 者 :" prop="author" label-width="95px">
                     <el-input v-model="addForm.author "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 丛编题名 :" label-width="95px" style="">
+                  <el-form-item label=" 丛编题名 :" label-width="95px">
                     <el-input v-model="addForm.clusterName"></el-input>
                   </el-form-item>
                 </div>
@@ -274,7 +273,7 @@
                       </p>
                     </div>
                   </el-form-item>
-                  <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 60px">
+                  <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 45px">
                     <el-input v-model="addForm.publishingPleace "></el-input>
                   </el-form-item>
                   <el-form-item label=" 出版日期 :" label-width="95px">
@@ -350,7 +349,7 @@
                 </el-table-column>
               </el-table>
             </section>
-            <div style="width: 200px;margin: 20px auto">
+            <div style="width: 200px;margin: 20px auto" id="decideShow">
               <span class="dialogButton cancel" @click="decideOut" style="width: 200px">取消</span>
             </div>
           </div>
@@ -497,6 +496,7 @@
         console.log('isbn的值',this.addForm.isbn)
         if(this.addForm.isbn){
           if(value==1){
+            $('#decideShow').show()
             this.j=3
             this.messageWidth='800px'
             this.centerDialogVisible=true
@@ -520,6 +520,7 @@
               });
             })
           }else if(value==2){
+            $('#decideShow').hide()
             this.j=4
             this.centerDialogVisible=true
             this.messageWidth='800px'
@@ -557,6 +558,7 @@
       },
       //取消本地获取，获取远程数据
       decideOut(){
+        $('#decideShow').hide()
         this.type=[2]
         this.j=4
         this.centerDialogVisible=true
@@ -722,6 +724,7 @@
           console.log('isbn的数据',res)
           if(res.data.state==true){
             this.j=3
+            $('#decideShow').show()
             this.centerDialogVisible=true
             this.catalogingData=res.data.row
           }else{

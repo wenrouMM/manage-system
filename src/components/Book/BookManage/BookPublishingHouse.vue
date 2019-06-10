@@ -6,7 +6,7 @@
         <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
       </div>
     </div>
-      <div style="width:1320px;margin-left: 30px;background-color:white;height:952px">
+      <div style="width:1320px;margin-left: 30px;background-color:white;">
         <el-container>
           <div class="box-card">
             <!-- 0.0 面包屑路由导航部分 此处路由导航可以直接跳 属于动态添加渲染出的 -->
@@ -39,12 +39,11 @@
                 </div>
               </div>
               <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-              <section class="tableBox">
+              <section class="tableBox"  v-loading="tableLoading">
                 <el-table
                   :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
                   empty-text="无数据"
                   style="width: 1260px; text-align:center;"
-                  v-loading="tableLoading"
                   :data="tableData"
                   :row-style="{height:'60px'}"
                 >

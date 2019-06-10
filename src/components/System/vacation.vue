@@ -14,13 +14,12 @@
           </div>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tablebox">
+        <section class="tablebox" v-loading="tableLoading">
           <el-table
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 1540px; text-align:center;"
             :data="tableData"
-            v-loading="tableLoading"
             :row-style="{height:'60px'}"
           >
             <el-table-column align="center" prop="holidayName" label="假期名称"></el-table-column>

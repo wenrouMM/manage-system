@@ -38,12 +38,11 @@
           </div>
         </section>
         <!-- 3.0表格数据 -->
-        <section class="tableBox">
+        <section class="tableBox" v-loading="tableLoading">
           <el-table
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
-            v-loading="tableLoading"
             :data="tableData"
             :row-style="{height:'60px'}"
           >
