@@ -61,6 +61,7 @@
             <el-table
               @selection-change="selectAllBtn"
               :data="tableData"
+              v-loading="tableLoading"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
@@ -281,7 +282,8 @@ export default {
       logOut: {
         fkCardNumber: "",
         remarks: ""
-      }
+      },
+      tableLoading:true
     };
   },
   computed: {
@@ -492,6 +494,7 @@ export default {
     /*====== API部分 ======*/
     pagationTable(data) {
       console.log("记录查询", this.searchTimeForm);
+      this.tableLoading=true
       axios
         .get(cardInfoInt.select, {
           params: data
@@ -503,15 +506,18 @@ export default {
             this.tableData = res.data.row;
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, data);
+            this.tableLoading=false
             console.log("保存当前查询", this.paginationForm);
           } else {
             this.$message.error(res.data.msg);
+            this.tableLoading=false
           }
         });
     },
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
     searchTable(data) {
       console.log("初始化查询", this.searchTimeForm);
+      this.tableLoading=true
       axios
         .get(cardInfoInt.select, {
           params: data
@@ -525,8 +531,10 @@ export default {
             this.paginationForm = Object.assign({}, data);
             console.log("保存当前查询", this.paginationForm);
             this.currentPage = 1;
+            this.tableLoading=false
           } else {
             this.$message.error(res.data.msg);
+            this.tableLoading=false
           }
         });
     },

@@ -20,7 +20,7 @@
             empty-text="无数据"
             style="width: 1540px; text-align:center;"
             :data="tableData"
-
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
           >
             <el-table-column align="center" prop="holidayName" label="假期名称"></el-table-column>

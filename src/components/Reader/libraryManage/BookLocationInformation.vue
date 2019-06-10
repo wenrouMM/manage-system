@@ -39,6 +39,7 @@
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             style="width: 100%; text-align:center;"
+            v-loading="tableLoading"
             :data="tableData"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"

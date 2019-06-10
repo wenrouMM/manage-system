@@ -44,6 +44,7 @@
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
           >
             <el-table-column align="center" prop="index" type="index" width="100" label="序号">

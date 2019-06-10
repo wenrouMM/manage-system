@@ -36,7 +36,7 @@
           <section class="text item tablebox">
             <el-table
               @selection-change="selectAllBtn"
-
+              v-loading="tableLoading"
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
@@ -204,6 +204,7 @@ export default {
       rowStyle: {
         height: "60px"
       },
+      tableLoading:true,
       tableData: [],
       // 分页器设置
       total: 0,
@@ -417,6 +418,7 @@ export default {
     /*====== API部分 ======*/
     pagationTable(data) {
       console.log("初始化查询", this.searchTimeForm);
+      this.tableLoading=true
       axios
         .get(cardLevelInt.select, {
           params: data
@@ -428,15 +430,18 @@ export default {
             this.tableData = res.data.row;
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, data);
+            this.tableLoading=false
             console.log("保存当前查询", this.paginationForm);
           } else {
             this.$message.error(res.data.msg);
+            this.tableLoading=false
           }
         });
     },
     // 查询功能API 这里区别就是需要table数组接收 可以单独封装
     searchTable(data) {
       console.log("初始化查询", this.searchTimeForm);
+      this.tableLoading=true
       axios
         .get(cardLevelInt.select, {
           params: data
@@ -449,9 +454,11 @@ export default {
             this.total = res.data.total; //总条目数
             this.paginationForm = Object.assign({}, data);
             this.currentPage = 1;
+            this.tableLoading=false
             console.log("保存当前查询", this.paginationForm);
           } else {
             this.$message.error(res.data.msg);
+            this.tableLoading=false
           }
         });
     },

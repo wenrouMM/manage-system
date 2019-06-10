@@ -37,7 +37,7 @@
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"
-
+            v-loading="tableLoading"
           >
 
             <el-table-column width="100" align="center" prop="index" type="index" label="序号">

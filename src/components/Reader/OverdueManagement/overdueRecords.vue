@@ -130,7 +130,7 @@
           cardNum: "",
           bookName:""
         },
-        tableLoading:false,
+        tableLoading:true,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
         ],

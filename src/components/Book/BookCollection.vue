@@ -49,6 +49,7 @@
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
@@ -58,10 +59,10 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索书号" width="300"></el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="400"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" width="300"></el-table-column>
+            <el-table-column align="center" prop="callNumber" label="索书号" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="lendState" label="状态" width="200">
               <template slot-scope="scope">
                 <span v-if="scope.row.lendState==0">不在架</span>

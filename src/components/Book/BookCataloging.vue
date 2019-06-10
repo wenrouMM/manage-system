@@ -39,6 +39,7 @@
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
@@ -48,18 +49,18 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="正题名" width="200"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300">
+            <el-table-column align="center" prop="name" label="正题名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="author" label="编著者" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkTypeName" label="分类名" width="200"></el-table-column>
+            <el-table-column align="center" prop="author" label="编著者" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeName" label="分类名" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkPressName" label="出版社" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200"></el-table-column>
-            <el-table-column align="center" prop="language" label="语种" width="150"></el-table-column>
+            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="language" label="语种" width="150" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right" width="200">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
@@ -846,9 +847,10 @@
           idData.push(item.id)
         }
         this.axios.post(catalog.delete,{ids:idData}).then((res)=>{
+          console.log('删除后返回的数据',res)
           if (res.data.state == true){
             this.$message({
-              message: res.data.msg,
+              message: '书目信息删除成功',
               type: "success"
             });
             this.centerDialogVisible=false

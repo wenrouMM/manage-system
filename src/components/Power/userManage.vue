@@ -73,7 +73,7 @@
               empty-text="无数据"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
+              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
               <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
               <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
@@ -288,7 +288,7 @@
             <el-form-item label="电话号码" prop="phone" :label-width="formLabelWidth">
               <el-input v-model="addForm.phone" autocomplete="off"></el-input>
             </el-form-item>
-            
+
             <el-form-item class="select" prop="isLock" label="状　　态">
               <el-radio-group v-model="addForm.isLock">
                 <el-radio :label="1">禁用</el-radio>
@@ -298,7 +298,7 @@
             <el-form-item>
               <p>初始密码为身份证号后6位</p>
             </el-form-item>
-            
+
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
               <el-button

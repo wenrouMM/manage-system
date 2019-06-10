@@ -44,6 +44,7 @@
           empty-text="无数据"
           style="width: 100%; text-align:center;"
           :data="tableData"
+          v-loading="tableLoading"
           :row-style="{height:'60px'}"
           @selection-change="handleSelectionChange"
         >
@@ -164,6 +165,7 @@ export default {
         remarks: "" //备注信息
       },
       tableData: [],
+      tableLoading:true,
       dialogFormVisible: false, // // 新增修改弹框的展示和消失
       centerDialogVisible: false, // 删除弹框
       Dialogtitle: ["修改", "新增", "删除"],
