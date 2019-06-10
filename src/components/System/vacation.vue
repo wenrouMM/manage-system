@@ -20,7 +20,7 @@
             empty-text="无数据"
             style="width: 1540px; text-align:center;"
             :data="tableData"
-
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
           >
             <el-table-column align="center" prop="holidayName" label="假期名称"></el-table-column>
@@ -32,7 +32,7 @@
                 <span>{{scope.row.state ==0?'停用':'启用'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>

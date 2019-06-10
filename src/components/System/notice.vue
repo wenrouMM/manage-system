@@ -47,6 +47,7 @@
           <el-table
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
+            v-loading="tableLoading"
             border
             style="width: 1540px; text-align:center;"
             :data="tableData"

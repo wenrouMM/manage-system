@@ -49,6 +49,7 @@
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
@@ -58,10 +59,10 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索书号" width="300"></el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="400"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" width="300"></el-table-column>
+            <el-table-column align="center" prop="callNumber" label="索书号" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="lendState" label="状态" width="200">
               <template slot-scope="scope">
                 <span v-if="scope.row.lendState==0">不在架</span>
@@ -377,7 +378,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="95px">
-                    <el-input v-model="harmForm.amountCompensation "></el-input>
+                    <div style="border: 1px solid #DCDFE6;width: 270px;height: 36px;border-radius: 5px;padding: 0px 10px 0px">{{harmForm.amountCompensation}}</div>
                   </el-form-item>
                 </div>
                 <div id="remarks">
@@ -805,7 +806,7 @@
           for (var i in this.selectSearchForm) {
             this.selectSearchForm[i] = "";
           }
-        }else if(this.i==1){
+        }else if(this.i==1||this.i==0){
           this.$refs[this.addForm].resetFields();
           for (var i in this.addForm) {
             this.addForm[i] = "";

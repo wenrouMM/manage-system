@@ -41,7 +41,10 @@
           </section>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
-            <el-table  :data="tableData" style="width: 100%; text-align:center;" :row-style="rowStyle" :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}">
+            <el-table  :data="tableData" style="width: 100%; text-align:center;"
+                       :row-style="rowStyle"
+                       v-loading="tableLoading"
+                       :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'14px'}">
               <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
                 <template slot-scope="scope">
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -142,7 +145,7 @@
           endTime: "",
           code:''
         },
-        tableLoading:false,
+        tableLoading:true,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
         ]

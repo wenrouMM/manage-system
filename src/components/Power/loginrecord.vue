@@ -43,7 +43,7 @@
                  element-loading-text="拼命加载中">
           <el-table
 
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             empty-text="无数据"
             :data="tableData"
             :row-style="{height:'60px'}"

@@ -69,7 +69,7 @@
               style="width: 100%;
                       text-align:center;"
               :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'14px'}"
+              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
             >
               <!--
               <el-table-column align="center" type="selection" width="100"></el-table-column>
@@ -88,7 +88,7 @@
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200">
+              <el-table-column align="center" label="操作" width="200" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="editButton(scope.$index, scope.row)">授权</span>

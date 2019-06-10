@@ -42,11 +42,11 @@
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="text item tablebox">
             <el-table
-
+              v-loading="tableLoading"
               :data="tableData"
               style="width: 100%; text-align:center;"
               :row-style="rowStyle"
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
+              :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',fontSize:'14px'}"
             >
               <el-table-column width="100" align="center" prop="index" type="index" label="序号" fixed="left">
                 <template slot-scope="scope">
@@ -58,7 +58,11 @@
               <el-table-column align="center" prop="bookName" width="170" label="书籍名称"></el-table-column>
               <el-table-column align="center" prop="libraryBookCode" width="350" label="馆内码"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
-              <el-table-column align="center" prop="renewCount" width="150" label="续借次数"></el-table-column>
+              <el-table-column align="center" prop="renewCount" width="150" label="续借次数">
+                <template slot-scope="scope">
+                  <span>{{scope.row.renewCount == null || scope.row.renewCount=='' ?'---':scope.row.renewCount}}次</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="planReturnTime" width="200" label="预计归还时间"></el-table-column>
               <el-table-column align="center" prop="realityReturnTime" width="200" label="实际归还时间"></el-table-column>
             </el-table>
@@ -145,7 +149,7 @@
           beginTime: "",
           endTime: "",
         },
-        tableLoading:false,
+        tableLoading:true,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
         ]

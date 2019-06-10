@@ -61,7 +61,7 @@
             <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
             <el-table-column align="center" prop="fkBookPrice" label="书籍价格">
               <template slot-scope="scope">
-                <span>{{scope.row.fkBookPrice == null || scope.row.fkBookPrice=='' ?'---':scope.row.fkBookPrice}}</span>
+                <span>{{scope.row.fkBookPrice == null || scope.row.fkBookPrice=='' ?'---':scope.row.fkBookPrice}}元</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="fkBookName" label="损坏书籍"></el-table-column>

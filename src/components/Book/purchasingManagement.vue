@@ -40,19 +40,20 @@
       </section>
       <section class="tableBox">
         <el-table
-          :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'18px',borderRight:'none'}"
+          :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
           empty-text="无数据"
           style="width: 100%; text-align:center;"
           :data="tableData"
+          v-loading="tableLoading"
           :row-style="{height:'60px'}"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column align="center" type="selection"></el-table-column>
+          <el-table-column align="center" type="selection" width="100"></el-table-column>
           <el-table-column align="center" prop="batch" label="采购批次" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column align="center" prop="remark" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column align="center" label="操作" >
+          <el-table-column align="center" label="操作" fixed="right" width="200">
             <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-            <template slot-scope="scope">
+            <template slot-scope="scope" >
               <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
             </template>
           </el-table-column>
@@ -164,6 +165,7 @@ export default {
         remarks: "" //备注信息
       },
       tableData: [],
+      tableLoading:true,
       dialogFormVisible: false, // // 新增修改弹框的展示和消失
       centerDialogVisible: false, // 删除弹框
       Dialogtitle: ["修改", "新增", "删除"],

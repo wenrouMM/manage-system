@@ -28,8 +28,9 @@
         <!-- 3.0表格数据 -->
         <section class="tablebox">
           <el-table
-            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
+            :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px',borderRight:'none'}"
             empty-text="无数据"
+            v-loading="tableLoading"
             style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
@@ -54,7 +55,7 @@
             </el-table-column>
             <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
             <!-- 自定义插槽 -->
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
                 <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>

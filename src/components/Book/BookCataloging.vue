@@ -39,6 +39,7 @@
             empty-text="无数据"
             style="width: 100%; text-align:center;"
             :data="tableData"
+            v-loading="tableLoading"
             :row-style="{height:'60px'}"
             @selection-change="handleSelectionChange"
           >
@@ -48,14 +49,18 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="正题名" width="200"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300"></el-table-column>
-            <el-table-column align="center" prop="author" label="编著者" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkTypeName" label="分类名" width="200"></el-table-column>
-            <el-table-column align="center" prop="fkPressName" label="出版社" width="200"></el-table-column>
-            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200"></el-table-column>
-            <el-table-column align="center" prop="language" label="语种" width="150"></el-table-column>
+            <el-table-column align="center" prop="name" label="正题名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="author" label="编著者" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkTypeName" label="分类名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkPressName" label="出版社" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="language" label="语种" width="150" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" label="操作" fixed="right" width="200">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
               <template slot-scope="scope">
@@ -478,54 +483,62 @@
       }
     },
     methods: {
-      //获取图书信息弹窗的单选按钮
+      //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
         console.log('获取图书信息',value)
-        if(value==1){
-          this.j=3
-          this.messageWidth='800px'
-          this.centerDialogVisible=true
-          this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-            console.log('isbn的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
+        console.log('isbn的值',this.addForm.isbn)
+        if(this.addForm.isbn){
+          if(value==1){
+            this.j=3
+            this.messageWidth='800px'
+            this.centerDialogVisible=true
+            this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
+              console.log('isbn的数据',res)
+              if(res.data.state==true){
+                this.catalogingData=res.data.row
+              }else{
+                this.$message({
+                  message: '没有ISBN查询无法获取本地数据',
+                  type: "error"
+                });
+                this.catalogingData=res.data.row
+              }
+            },(err)=>{
+              console.log('err',err)
+              this.catalogingData=[]
               this.$message({
-                message: '没有ISBN查询无法获取本地数据',
+                message: '网络出错',
                 type: "error"
               });
-              this.catalogingData=res.data.row
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.catalogingData=[]
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
-        }else if(value==2){
-          this.j=4
-          this.centerDialogVisible=true
-          this.messageWidth='800px'
-          this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-            console.log('远程编目的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
+            })
+          }else if(value==2){
+            this.j=4
+            this.centerDialogVisible=true
+            this.messageWidth='800px'
+            this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
+              console.log('远程编目的数据',res)
+              if(res.data.state==true){
+                this.catalogingData=res.data.row
+              }else{
+                this.$message({
+                  message: '没有ISBN查询无法获取远程数据',
+                  type: "error"
+                });
+                this.catalogingData=res.data.rows
+              }
+            },(err)=>{
+              console.log('err',err)
               this.$message({
-                message: '没有ISBN查询无法获取远程数据',
+                message: '网络出错',
                 type: "error"
               });
-              this.catalogingData=res.data.rows
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
+            })
+          }
+        }else{
+          this.$message({
+            message: '请先输入搜索相应ISBN获取数据',
+            type: "error"
+          });
         }
       },
       //选中某条数据的选中按钮
@@ -834,9 +847,10 @@
           idData.push(item.id)
         }
         this.axios.post(catalog.delete,{ids:idData}).then((res)=>{
+          console.log('删除后返回的数据',res)
           if (res.data.state == true){
             this.$message({
-              message: res.data.msg,
+              message: '书目信息删除成功',
               type: "success"
             });
             this.centerDialogVisible=false
