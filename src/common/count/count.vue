@@ -22,7 +22,7 @@ export default {
     };
   },
   mounted() {
-    this.initCountUp();
+    this.initCountUp()
   },
   methods: {
     initCountUp() {

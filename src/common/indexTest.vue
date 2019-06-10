@@ -56,7 +56,7 @@
       </el-header>
       <!-- 2.0 二层路由 导航模块 -->
       <el-container>
-        <el-aside class="nav" width="260px"  style="background-color: #343B4A;">
+        <section class="nav"  style="background-color: #343B4A;">
           <!-- 侧边栏主体 -->
           <el-menu
             @select="routerBox"
@@ -65,15 +65,16 @@
             :default-active="this.$route.path"
             background-color="#343B4A"
             text-color="#fff"
+            :collapse="isCollapse"
           >
-            <div class="block"></div>
+            
             <el-menu-item  index="/indexTest"><i  class=" indexIcon indexIconMax iconxiazai45"></i><span style="lineHeight:21px;">首页</span></el-menu-item>
             <!--采编管理 -->
-            <div class="navMenu" v-show="Mode == 1">
+            <div v-show="Mode == 1">
               <el-submenu index="3">
                 <template slot="title">
                   <i style="fontSize:24px;" class=" indexIcon indexIconMax iconwp-sj-3"></i>
-                  <span>书籍管理</span>
+                  <span slot="title">书籍管理</span>
                 </template>
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
                 <el-menu-item index="/purchasingManagement">采购管理</el-menu-item>
@@ -166,11 +167,12 @@
             </div>
             <!-- 选中之后的样式 -->
           </el-menu>
-        </el-aside>
+        </section>
         <el-main>
-          <Tags></Tags>
-
-          <div class="space"></div>
+          <div class="mb_10 tagsBox" >
+            <Tags></Tags>
+          </div>
+          <!-- <div class="space"></div> -->
           <transition name="fade-transform" mode="out-in">
             <router-view></router-view>
           </transition>
@@ -196,6 +198,7 @@ export default {
       nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
       logoUrl:require("../base/img/logo.png"),
       settingHead: "",
+      isCollapse:false
     };
   },
   methods: {
@@ -207,6 +210,9 @@ export default {
     routerBox(index, indexPath) {
       console.log(index);
       console.log(indexPath);
+    },
+    toggle(){
+      this.isCollapse = !this.isCollapse
     },
     skip() {
       this.$router.push({ path: "/" });
@@ -294,6 +300,9 @@ body,
   /*vh好用 100%不行*/
   min-height: 100vh;
 }
+.content{
+  width: 260px;
+}
 /*====== 头部区域Column  ======*/
 .index .headmode {
   background: #0096ff;
@@ -327,6 +336,7 @@ body,
 }
 /*头部nav区域*/
 .nav {
+  max-width: 260px;
 }
 .block {
   height: 20px;
@@ -445,7 +455,7 @@ body,
 /*====== body部分 ======*/
 /*侧边导航部分*/
 .navMenu {
-  width: 260px;
+  
 }
 .nav .iconpath {
   margin-right: 15px;

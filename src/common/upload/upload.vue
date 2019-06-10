@@ -1,18 +1,18 @@
 <template>
   <div class="uploadBook">
     <div class="title mb_30">
-      <p>批量导入</p>
+      <p>书籍编目-批量导入</p>
       <span class="backBtn" @click="backBtn">
         <i class="el-icon-back"></i>返回
       </span>
     </div>
     <!-- 附件上传 -->
     <el-steps :active="active" finish-status="success">
-      <el-step title="步骤 1" description="上传excel文件">1</el-step>
-      <el-step title="步骤 2" description="选取映射关系">2</el-step>
-      <el-step title="结果" description="">3</el-step>
+      <el-step title="步骤 1" description="上传excel文件"></el-step>
+      <el-step title="步骤 2" description="选取映射关系"></el-step>
+      <el-step title="查看结果" description></el-step>
     </el-steps>
-    
+
     <div v-if="active==0" class="stepOne">
       <section class="upFile mb_30">
         <div class="uploadBox">
@@ -38,16 +38,37 @@
           </el-upload>
         </div>
         <div class="textCenter">
-            <el-button type="primary" @click="submitFile">下一步</el-button>
+          
+          <el-button type="primary" @click="firstStep">下一步</el-button>
         </div>
-        
       </section>
     </div>
-    <div v-if="active==1" class="stepTwo">
-
+    <div v-if="active==1" >
+      <section class="stepTwo">
+        <div class="low" v-for="(item,index) of circleData" :key="index">
+          <el-select clearable @change="changeBtn" v-model="twiceList[index]" placeholder="请选择">
+            <el-option
+              v-for="item in optionData"
+              :key="item"
+              :label="item"
+              :value="item"
+            ></el-option>
+          </el-select>
+          <span class="tips">映射到</span>
+          <span>{{item.value}}</span>
+        </div>
+      </section>
+      <div class="textCenter">
+          <el-button type="primary" @click="prev">上一步</el-button>
+          <el-button type="primary" @click="twiceStep">下一步</el-button>
+        </div>
     </div>
     <div v-if="active==2" class="stepThree">
-        
+      <div class="">
+        <p>批量导入成功</p>
+        <p>继续上传</p>
+        <p>返回书籍编目</p>
+      </div>
     </div>
   </div>
 </template>
@@ -64,17 +85,39 @@ export default {
       fileList: [],
       fileContent: [],
       backUrl: "",
-      active: 0
+      twiceList: [],// 二次选择多选框
+      twiceUrl: "",
+      active: 0,
+      value:'',
+      optionData:[],// 下拉框数据
+      circleData:[] // 循环输出数组
     };
   },
   computed: {
     editTimeForm() {
       let obj = {};
       return obj;
+    },
+    uploadForm(){
+      let arr = []
+      for (let [index,item] of this.circleData.entries()){
+        let obj = {}
+       obj.excelFeild = this.twiceList[index]
+       obj.objFeild =  item.name
+       arr.push(obj)
+      }
+      let obj = {
+        url : this.twiceUrl,
+        relations:arr
+      }
+      return obj
     }
   },
   methods: {
     /*------ ------*/
+    prev() {
+      if (this.active-- < 0) this.active = 0;
+    },
     next() {
       if (this.active++ > 2) this.active = 0;
     },
@@ -82,18 +125,46 @@ export default {
     backBtn() {
       this.$router.push({ path: "/BookCataloging" });
     },
-    submitFile() {
+    firstStep() {
       let obj = {};
       obj.url = this.backUrl;
       this.searchApi(obj);
-      
+    },
+    twiceStep(){
+      this.submitApi(this.uploadForm)
     },
     /*------ API ------*/
     // 获取搜索框
     searchApi(value) {
       axios.post(bookUploadInt.getFields, value).then(res => {
-        console.log("返回的弹框数据", res);
+        if (res.data.state === true) {
+          this.twiceUrl = res.data.row.url;
+          this.optionData = res.data.row.excelHead // 左侧下拉框
+          this.circleData = res.data.row.fields // 右侧固定
+          let length = this.circleData.length
+          console.log(length)
+          for(let i=0;i<length;i++){
+            this.twiceList.push('')
+          }
+          this.next()
+          console.log('安排文件',res,'绑定数据',this.twiceList)
+        } else {
+          this.$message.error(res.data.msg);
+        }
       });
+    },
+    submitApi(value){
+      axios.post(bookUploadInt.add,value).then((res) =>{
+        if(res.data.state){
+          this.$message.success(res.data.msg)
+          this.next()
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    changeBtn(){
+      console.log('选中之后数据是设么',this.twiceList)
     },
     /*------ 上传附件功能 ------*/
     beforefileUpload(file) {
@@ -189,6 +260,13 @@ export default {
 }
 .buttonBox {
   text-align: center;
+}
+/*------ 第二步 ------*/
+.stepTwo{
+  height: 400px;
+  width: 600px;
+  margin: 0 auto;
+  overflow: auto;
 }
 </style>
 

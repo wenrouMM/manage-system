@@ -1,7 +1,7 @@
 
-
+var ip = 'http://192.168.2.31'
 window.glob = {
-  url:'http://192.168.2.31:8088/',
-  imgurl:'http://192.168.2.31:8090/',
-  fileUrl : 'http://192.168.2.31:8090/'
+  url:ip + ':8088/',
+  imgurl:ip +':8090/',
+  fileUrl : ip +  ':8090/'
 }

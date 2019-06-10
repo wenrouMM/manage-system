@@ -105,3 +105,11 @@
  .refunds .el-form--label-left .el-form-item__label {
   text-align: right;
 } 
+
+.el-menu--collapse span, .el-menu--collapse span{
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  visibility: hidden;
+  display: inline-block;
+}
