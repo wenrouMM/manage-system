@@ -38,13 +38,12 @@
           </el-form>
         </div>
       </section>
-      <section class="tableBox">
+      <section class="tableBox"  v-loading="tableLoading">
         <el-table
           :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
           empty-text="无数据"
           style="width: 100%; text-align:center;"
           :data="tableData"
-          v-loading="tableLoading"
           :row-style="{height:'60px'}"
           @selection-change="handleSelectionChange"
         >
@@ -422,7 +421,7 @@ export default {
 }
 #purchasing {
   width: 1400px;
-  margin: 30px auto 70px;
+  margin: 30px auto 30px;
 }
 .searchBox {
   display: flex;
