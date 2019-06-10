@@ -431,7 +431,6 @@ export default {
         //console.log('sObj',sObj)
         if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
           return;
-        console.log(treeNode.tId)
         var addStr =
           "<span class='button add' id='addBtn_" + treeNode.tId + "' title='添加子节点' onfocus='this.blur();'></span>";
         //console.log('addStr',addStr)

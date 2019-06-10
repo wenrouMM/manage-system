@@ -312,7 +312,7 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid" id="catalogingMessage">
-        <el-dialog :title="catalogtitle[j]" :visible.sync="centerDialogVisible" :width="messageWidth" center>
+        <el-dialog :title="catalogtitle[j]" :visible.sync="centerDialogVisible" @close="closeHarm" :width="messageWidth" center>
           <div v-if="j==0||j==1||j==2">
             <div class="dialogBody" style="margin-left: -30px;margin-bottom: 20px">
               是否{{catalogtitle[j]}}?
@@ -483,6 +483,10 @@
       }
     },
     methods: {
+      closeHarm(){
+        console.log('关闭损坏的弹窗')
+        this.type=[]
+      },
       //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
         console.log('获取图书信息',value)

@@ -193,10 +193,10 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1,
 
-        getStartTime: !this.searchForm.beginTime
+        startTime: !this.searchForm.beginTime
           ? null
           : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
-        getLastTime: !this.searchForm.endTime
+        lastTime: !this.searchForm.endTime
           ? null
           : moment(this.searchForm.endTime).format("YYYY-MM-DD") //结束时间
       };

@@ -359,7 +359,7 @@
                   <el-form-item label=" 卡　　号 :" label-width="95px" id="cardErr">
                     <el-input v-model="harmForm.cardNumber "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle">
+                  <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle" label-width="95px">
                     <el-select
                       @change="selectCheck(harmForm.causesDamage)"
                       v-model="harmForm.causesDamage"
@@ -591,7 +591,7 @@
           newState=''
         }
         let newData={
-          searchNumber:this.selectSearchForm.searchNumber,
+          callNumber:this.selectSearchForm.searchNumber,
           code:this.selectSearchForm.code,
           isbn:this.selectSearchForm.isbn,
           bookName:this.selectSearchForm.bookName,
