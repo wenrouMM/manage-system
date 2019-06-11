@@ -21,16 +21,14 @@
               <i class="el-icon-edit greenIcon"></i>批量导入
             </button>
           </div>
-          <div class="right">
-            <el-form :inline="true" :model="searchForm">
-              <el-form-item label="ISBN :">
-                <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" clearable style="width: 200px;position: relative"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+          <el-form :inline="true" :model="searchForm">
+            <el-form-item label="ISBN :">
+              <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" clearable style="width: 200px"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
+            </el-form-item>
+          </el-form>
         </section>
         <!-- 3.0表格数据 -->
         <section class="tableBox"  v-loading="tableLoading">
@@ -1049,7 +1047,9 @@
     text-align: center;
     margin-top: 30px;
   }
-
+  .commonMode .searchBox  .el-input .el-input__inner {
+    text-align: left;
+  }
   .confirm_bt {
     display: inline-block;
     text-align: center;

@@ -228,3 +228,6 @@
   font-size: 24px;
   color: #FFFFFF;
 }
+.commonMode .searchBox  .el-input .el-input__inner {
+  text-align: left;
+}
