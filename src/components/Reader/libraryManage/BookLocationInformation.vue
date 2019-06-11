@@ -53,7 +53,11 @@
             <el-table-column align="center" prop="searchNumber" label="索书号" width="200"></el-table-column>
             <el-table-column align="center" prop="code" label="馆藏码" width="350"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="200"></el-table-column>
-            <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true" width="200"></el-table-column>
+            <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true" width="200">
+              <template slot-scope="scope">
+                <span>{{scope.row.locationNam == null || scope.row.locationNam=='' ?'---':scope.row.locationNam}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="author" label="录入员" width="200"></el-table-column>
             <el-table-column align="center" prop="updateTime" label="上架时间" width="200"></el-table-column>
             <el-table-column align="center" prop="fkTypeName" label="类型" width="200"></el-table-column>

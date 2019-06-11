@@ -5,7 +5,9 @@
       <div style="font-size: 16px;color: #878787;margin-left:10px;">图书位置绑定</div>
     </div>
     <div style="margin:150px auto;width:1100px">
-      <div style="background-color: #ededed;width: 250px;height: 200px"></div>
+      <div style="background-color: #ededed;width: 250px;height: 200px;border-radius: 5px">
+        <img src="../../../base/img/currency/book.png" style="margin-left: 26px">
+      </div>
       <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
           <el-form-item label="馆 藏 码 :　" prop="barcode" label-width="100px">
