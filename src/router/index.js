@@ -164,7 +164,8 @@ export default new Router({
           path: "/borrowingbooks",
           meta:{
             title:'书籍借阅',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component: BorrowingBooks,
         },
@@ -172,7 +173,8 @@ export default new Router({
           path: "/returnbooks",
           meta:{
             title:'书籍归还',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component: () => import('../components/Circulate/returnBooks.vue')
         },
@@ -184,7 +186,8 @@ export default new Router({
           path:'/renew',
           meta:{
             title:'书籍续借',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component:resolve => require(['@/components/Circulate/renew.vue'], resolve)
         },
@@ -192,7 +195,8 @@ export default new Router({
           path:'/bookDamage',
           meta:{
             title:'书籍报损',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component:resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
         },

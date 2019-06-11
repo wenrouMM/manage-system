@@ -113,3 +113,6 @@
   visibility: hidden;
   display: inline-block;
 }
+#bookUpload input.el-input__inner{
+  text-align: center;
+}

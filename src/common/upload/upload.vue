@@ -1,22 +1,27 @@
 <template>
-  <div class="uploadBook">
+  <div class="uploadBook" id="bookUpload">
     <div class="title mb_30">
-      <p>书籍编目-批量导入</p>
-      <span class="backBtn" @click="backBtn">
-        <i class="el-icon-back"></i>返回
-      </span>
+      <div class="sonTitle">
+        <span class="titleName">用户管理列表</span>
+      </div>
     </div>
     <!-- 附件上传 -->
-    <el-steps :active="active" finish-status="success">
+    <el-steps class="line" :active="active" finish-status="success">
       <el-step title="步骤 1" description="上传excel文件"></el-step>
       <el-step title="步骤 2" description="选取映射关系"></el-step>
-      <el-step title="查看结果" description></el-step>
+      <el-step title="结果" description></el-step>
     </el-steps>
 
     <div v-if="active==0" class="stepOne">
-      <section class="upFile mb_30">
+      <section
+        class="upFile mb_30"
+        v-loading="loadingOne"
+        element-loading-text="正在获取映射关系"
+        element-loading-spinner="el-icon-loading"
+      >
         <div class="uploadBox">
           <el-upload
+            ref="upload"
             class="upload-demo"
             drag
             :action="fileUrl"
@@ -37,37 +42,54 @@
             <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
           </el-upload>
         </div>
-        <div class="textCenter">
-          
+        <div class="textCenter firstButton">
           <el-button type="primary" @click="firstStep">下一步</el-button>
         </div>
       </section>
     </div>
-    <div v-if="active==1" >
-      <section class="stepTwo">
-        <div class="low" v-for="(item,index) of circleData" :key="index">
-          <el-select clearable @change="changeBtn" v-model="twiceList[index]" placeholder="请选择">
-            <el-option
-              v-for="item in optionData"
-              :key="item"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-          <span class="tips">映射到</span>
-          <span>{{item.value}}</span>
-        </div>
+    <div v-if="active==1" class="TwoBox">
+      <section class="mb_30">
+        <p class="mustText">提示:{{tipsText}}为必选字段</p>
       </section>
-      <div class="textCenter">
+      <div
+        class="loadingBox"
+        v-loading="loadingTwo"
+        element-loading-text="正在导入数据"
+        element-loading-spinner="el-icon-loading"
+      >
+        <section class="stepTwo">
+          <div class="low">
+            <span class="showText">源字段名</span>
+            <span class="tips">----------</span>
+            <span class="showText">映射字段名</span>
+          </div>
+          <div class="low" v-for="(item,index) of circleData" :key="index">
+            <el-select clearable @change="changeBtn" v-model="twiceList[index]" placeholder="请选择">
+              <el-option v-for="item in optionData" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+            <span class="tips">映射到</span>
+            <span class="showText">{{item.value}}</span>
+          </div>
+        </section>
+        <div class="textCenter twoButton">
           <el-button type="primary" @click="prev">上一步</el-button>
           <el-button type="primary" @click="twiceStep">下一步</el-button>
         </div>
+      </div>
     </div>
     <div v-if="active==2" class="stepThree">
-      <div class="">
-        <p>批量导入成功</p>
-        <p>继续上传</p>
-        <p>返回书籍编目</p>
+      <div class="end">
+        <div class="reflect">
+          <p>
+            <img :src="picUrl" class="imgBox">
+          </p>
+          <p class="Downtext">数据导入成功{{endText}}</p>
+        </div>
+
+        <p>
+          <el-button type="primary" @click="backOne">继续导入书籍</el-button>
+          <el-button type="primary" @click="backBtn">返回书籍编目</el-button>
+        </p>
       </div>
     </div>
   </div>
@@ -85,12 +107,17 @@ export default {
       fileList: [],
       fileContent: [],
       backUrl: "",
-      twiceList: [],// 二次选择多选框
+      twiceList: [], // 二次选择多选框
       twiceUrl: "",
       active: 0,
-      value:'',
-      optionData:[],// 下拉框数据
-      circleData:[] // 循环输出数组
+      value: "",
+      optionData: [], // 下拉框数据
+      circleData: [], // 循环输出数组
+      loadingOne: false,
+      loadingTwo: false,
+      picUrl: require("../../base/img/import.png"),
+      endText: "", // 返回成功文字
+      tipsText: ""
     };
   },
   computed: {
@@ -98,19 +125,19 @@ export default {
       let obj = {};
       return obj;
     },
-    uploadForm(){
-      let arr = []
-      for (let [index,item] of this.circleData.entries()){
-        let obj = {}
-       obj.excelFeild = this.twiceList[index]
-       obj.objFeild =  item.name
-       arr.push(obj)
+    uploadForm() {
+      let arr = [];
+      for (let [index, item] of this.circleData.entries()) {
+        let obj = {};
+        obj.excelFeild = this.twiceList[index];
+        obj.objFeild = item.name;
+        arr.push(obj);
       }
       let obj = {
-        url : this.twiceUrl,
-        relations:arr
-      }
-      return obj
+        url: this.twiceUrl,
+        relations: arr
+      };
+      return obj;
     }
   },
   methods: {
@@ -130,41 +157,61 @@ export default {
       obj.url = this.backUrl;
       this.searchApi(obj);
     },
-    twiceStep(){
-      this.submitApi(this.uploadForm)
+    twiceStep() {
+      this.submitApi(this.uploadForm);
+    },
+    backOne() {
+      this.fileList = []
+      this.backUrl = "";
+      this.active = 0;
     },
     /*------ API ------*/
     // 获取搜索框
     searchApi(value) {
+      this.loadingOne = true;
+      this.circleData = []
+      this.optionData = []
+      this.twiceList = []
       axios.post(bookUploadInt.getFields, value).then(res => {
         if (res.data.state === true) {
           this.twiceUrl = res.data.row.url;
-          this.optionData = res.data.row.excelHead // 左侧下拉框
-          this.circleData = res.data.row.fields // 右侧固定
-          let length = this.circleData.length
-          console.log(length)
-          for(let i=0;i<length;i++){
-            this.twiceList.push('')
+          this.optionData = res.data.row.excelHead; // 左侧下拉框
+          this.circleData = res.data.row.fields; // 右侧固定
+          let length = this.circleData.length;
+          console.log(length);
+          let str = "";
+          for (let item of res.data.row.must) {
+            str += "," + item;
           }
-          this.next()
-          console.log('安排文件',res,'绑定数据',this.twiceList)
+          this.tipsText = str;
+          for (let i = 0; i < length; i++) {
+            this.twiceList.push("");
+          }
+          this.next();
+          this.loadingOne = false;
+          console.log("安排文件", res, "绑定数据", this.twiceList);
         } else {
+          this.loadingOne = false;
           this.$message.error(res.data.msg);
         }
       });
     },
-    submitApi(value){
-      axios.post(bookUploadInt.add,value).then((res) =>{
-        if(res.data.state){
-          this.$message.success(res.data.msg)
-          this.next()
-        }else{
-          this.$message.error(res.data.msg)
+    submitApi(value) {
+      this.loadingTwo = true;
+      axios.post(bookUploadInt.add, value).then(res => {
+        if (res.data.state) {
+          this.$message.success(res.data.msg);
+          this.endText = res.data.msg;
+          this.loadingTwo = false;
+          this.next();
+        } else {
+          this.$message.error(res.data.msg);
+          this.loadingTwo = false;
         }
-      })
+      });
     },
-    changeBtn(){
-      console.log('选中之后数据是设么',this.twiceList)
+    changeBtn() {
+      console.log("选中之后数据是设么", this.twiceList);
     },
     /*------ 上传附件功能 ------*/
     beforefileUpload(file) {
@@ -222,51 +269,99 @@ export default {
 </script>
 
 <style scoped>
-.editor {
-  border: 1px solid rgba(220, 220, 220, 1);
-  background-color: #fff;
+.uploadBook {
+  background-color: #ffffff;
+  min-height: 952px;
+  padding: 30px;
 }
-.title {
-  height: 50px;
-  line-height: 50px;
+.sonTitle {
+  margin-bottom: 33px;
+}
+.sonTitle .titleName {
+  border-left: 4px solid #0096ff;
+  padding-left: 10px;
   font-size: 16px;
-  padding-left: 25px;
-  padding-right: 25px;
-  background-color: #dcdcdc;
-  display: flex;
-  justify-content: space-between;
-}
-.title .backBtn {
-  cursor: pointer;
-}
-/*------ 输入框 ------*/
-.inputBox {
-  width: 590px;
-}
-.limit {
-  padding-left: 25px;
-}
-/*------ 富文本编辑器 ------*/
-.editorBox {
-  padding: 0 37px;
-}
-.upFile {
-  padding-left: 37px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(135, 135, 135, 1);
+  display: inline-block;
 }
 /*------ 上传文件 ------*/
-.uploadBox {
-  width: 400px;
-  margin: 0 auto;
-}
+
 .buttonBox {
   text-align: center;
 }
+/*------ 第一步 ------*/
+.stepOne {
+  padding-top: 100px;
+}
+.upFile {
+  width: 360px;
+  margin: 0 auto;
+}
+.uploadBox {
+  margin-bottom: 50px;
+}
+.firstButton {
+}
+.low {
+  margin-bottom: 25px;
+}
 /*------ 第二步 ------*/
-.stepTwo{
-  height: 400px;
+.mustText {
+  margin: 0 auto;
+  padding-left: 36px;
+  width: 600px;
+}
+.TwoBox {
+  padding-top: 50px;
+}
+.stepTwo {
+  height: 510px;
   width: 600px;
   margin: 0 auto;
   overflow: auto;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.tips {
+  font-size: 16px;
+  color: #f55c4c;
+  line-height: 22px;
+  margin: 0 27px;
+  display: inline-block;
+}
+.showText {
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  color: #8c8c8c;
+  width: 218px;
+  height: 34px;
+  font-size: 14px;
+  line-height: 36px;
+  display: inline-block;
+  text-align: center;
+}
+.twoButton {
+  width: 600px;
+  margin: 0 auto;
+}
+/*------ 结果 ------*/
+.end {
+  padding-top: 100px;
+  text-align: center;
+}
+.reflect {
+  margin-bottom: 20px;
+}
+.imgBox {
+  width: 128px;
+  height: 128px;
+  margin-bottom: 40px;
+}
+.Downtext {
+  font-size: 18px;
+  color: #46dd78;
 }
 </style>
 

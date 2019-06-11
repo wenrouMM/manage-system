@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item label="办卡机默认等级" prop="cardValid">
           <div class="inputBox">
-            <el-select @change="test" clearable value-key="code"  v-model="changeForm.level" placeholder="请选择">
+            <el-select @change="test"  value-key="code"  v-model="changeForm.level" placeholder="请选择">
                 <el-option
                   v-for="(item) in optionsData"
                   :key="item.code"
