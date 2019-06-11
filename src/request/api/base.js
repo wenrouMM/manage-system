@@ -5,9 +5,9 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 
 // 用来管理接口的域名相关
 //var url='http://127.0.0.1:8088/'
-var url = 'http://192.168.2.250:8088/';
+/* var url = 'http://192.168.2.250:8088/';
 var imgurl='http://192.168.2.250:8090/';
-let fileUrl = 'http://192.168.2.250:8090/';
+let fileUrl = 'http://192.168.2.250:8090/'; */
 
 
 /*var url = 'http://192.168.2.121:8088/';
@@ -15,7 +15,7 @@ var imgurl='http://192.168.2.121:8090/';
 let fileUrl = 'http://192.168.2.121:8090/';*/
 var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-let fileUrl = 'http://192.168.2.121:8090/';
+var fileUrl = 'http://192.168.2.121:8090/';
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
 var fileUrl = window.glob.fileUrl*/
@@ -40,7 +40,7 @@ export const bookUploadInt ={
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {
-  outline:`${url}bookcollectionmodule/cataTbBookInfo/getFields`,
+  outline:`${url}bookcollectionmodule/countDamage/getFristPage`,
   detail:`${url}bookcollectionmodule/countDamage/getSecondPage`
 }
 /*------ 流通管理模块 ------*/
