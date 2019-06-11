@@ -38,8 +38,8 @@ import LoanRecorde from '../components/Circulate/loanRecords.vue'
 import LoanHistory from '../components/Circulate/loanHistory.vue'
 import BorrowingBooks from '../components/Circulate/borrowingBooks.vue'
 
-import ReturnBooks from '../components/Reader/LoanManagement/returnBooks.vue'
-import ReturnStatus from '../components/Reader/LoanManagement/returnStatus.vue'
+
+
 import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
 import DepositRecord from '../components/Reader/RechargeManagement/depositRecord.vue'
 
@@ -174,11 +174,11 @@ export default new Router({
             title:'书籍归还',
             Mode:'3'
           },
-          component: ReturnBooks
+          component: () => import('../components/Circulate/returnBooks.vue')
         },
         {
           path: "/returnstatus",
-          component: ReturnStatus
+          component: ()  => import('../components/Circulate/returnStatus.vue')
         },
         {
           path:'/renew',

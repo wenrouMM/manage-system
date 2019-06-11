@@ -1,6 +1,6 @@
 <template>
   <div id="index" class="index">
-    <el-container style="height:100%">
+    <section style="height:100%">
       <!-- 头部组件 -->
       <!-- 1.0头部模块 -->
       <el-header class="headmode" style="font-size: 12px">
@@ -19,10 +19,11 @@
               background-color="#0096ff"
               :default-active="Mode"
             >
-              <el-menu-item id="circle" index="3">流通管理</el-menu-item>
-              <el-menu-item id="reader" index="4">读者管理</el-menu-item>
+              
               <el-menu-item id="collect" index="1">采编管理</el-menu-item>
               <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
+              <el-menu-item id="circle" index="3">流通管理</el-menu-item>
+              <el-menu-item id="reader" index="4">读者管理</el-menu-item>
               <el-menu-item id="finance" index="5">财务管理</el-menu-item>
               <el-menu-item id="system" index="6">系统管理</el-menu-item>
             </el-menu>
@@ -137,7 +138,7 @@
               </el-submenu>
               <el-submenu index="Dishonesty">
                 <template slot="title">
-                  <i class="indexIcon indexIconMax iconduzheguanli"></i>
+                  <i class="indexIcon indexIconMax iconshixin"></i>
                   <span>失信管理</span>
                 </template>
                 <el-menu-item-group>
@@ -179,7 +180,7 @@
           </transition>
         </el-main>
       </el-container>
-    </el-container>
+    </section>
   </div>
 </template>
 

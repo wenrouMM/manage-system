@@ -238,6 +238,7 @@ export default {
     },
     // 批量处理按钮
     batchBtn(){
+      
       if(this.dealArr.length){
         this.dealForm.dealNum = ''
         this.dealDialog = true
@@ -248,6 +249,7 @@ export default {
     },
     // 批量产生
     selectAllBtn(val) {
+      this.dealArr = []
       for(let item of val){
         this.dealArr.push(item.id)
         item.price=item.price==null|| item.price==''?0:item.price;
