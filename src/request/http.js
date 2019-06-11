@@ -26,8 +26,6 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
-
 axios.interceptors.response.use(
   response => { // 回复信息配置 code！=200
     // 还要其他的方法获得权限吗 这样是否有一些缺陷
@@ -35,6 +33,7 @@ axios.interceptors.response.use(
        sessionStorage.removeItem('token')
        store.commit('removeToken')// 清除vuex内token 异步还是同步
        Message.error(response.data.msg);
+       console.log('拦截器')
        console.log('当前页面路径',window.vm.$route.path)
        if(window.vm.$route.path != '/login'){ // 当前页面不是登录页 就进入登录页
         window.vm.$router.push('/login')

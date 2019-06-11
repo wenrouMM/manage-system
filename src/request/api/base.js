@@ -9,13 +9,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-
-/*var url = 'http://192.168.2.121:8088/';
+var url = 'http://192.168.2.31:8088/';
+var imgurl='http://192.168.2.31:8090/';
+let fileUrl = 'http://192.168.2.31:8090/';  
+/* var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-let fileUrl = 'http://192.168.2.121:8090/';*/
-var url = 'http://192.168.2.121:8088/';
-var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/';
+var fileUrl = 'http://192.168.2.121:8090/'; */
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
 var fileUrl = window.glob.fileUrl*/

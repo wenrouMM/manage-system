@@ -480,13 +480,15 @@ export default new Router({
           path: '/refunds',
           meta: {
             title: '押金充值',
+            Mode:'5'
           },
           component: resolve => require(['../components/Finance/refunds.vue'], resolve)
         },
         {
           path: '/logoff',
           meta: {
-            title: '注销页面'
+            title: '注销页面',
+            Mode:'5'
           },
           component: resolve => require(['../components/Finance/logoff.vue'], resolve)
         },

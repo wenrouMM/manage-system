@@ -18,13 +18,13 @@
                 <span @click.stop="deleteStoreBtn(store)">删除</span>
               </div>
             </div>
-            <div class="storeTips">
+            <div  :class="{isMode:activeIndex===index}" class="storeTips">
               <div class="iconBox mb_30">
-                <i class>火图标</i>
+                <i class="iconfont leftFont temp iconwendu"></i>
                 <span class>温度:{{!store.wd?'0':store.wd}}%</span>
               </div>
               <div class="iconBox">
-                <i class>水图标</i>
+                <i class="iconfont leftFont slide iconhumidity"></i>
                 <span class>湿度:{{!store.sd?'0':store.sd}}%</span>
               </div>
             </div>
@@ -41,7 +41,7 @@
         <div  class="areaMode" v-for="(region, index) of regionInfo" :key="index">
           <div class="areaTitleBox">
             <div class="areaTitle">
-              <i class="icon">图标</i>
+              <i class="iconfont iconshuju"></i>
               <span>{{region.regionName}}</span>
             </div>
             <div class="areaOparate">
@@ -263,8 +263,9 @@
 <script>
 import VeHis from "v-charts/lib/histogram.common";
 import Ring from "../../../common/test/cirle";
-import { regionInt, storeInt, headUpload } from "../../../request/api/base.js";
-import axios from "../../../request/http";
+import { regionInt, storeInt, headUpload } from "@request/api/base.js";
+import axios from "../../../request/http.js";
+/*axios的配置开始迷离起来了 */
 export default {
   created() {
     this.searchStore();
@@ -955,6 +956,9 @@ export default {
 .storeModeBox .storeMode {
   border-bottom: 1px solid #eeeeee;
 }
+.leftFont{
+  
+}
 .storeModeTitle:hover {
   background-color: #0096ff;
   color: #fff !important;
@@ -962,6 +966,12 @@ export default {
 .storeModeTitle.isactive {
   background-color: #0096ff;
   color: #fff !important;
+}
+.isMode .temp{
+  color: #ff5c3c;
+}
+.isMode .slide{
+  color: #00d2ff;
 }
 .storeModeBox .storeMode .storeModeTitle {
   display: flex;
