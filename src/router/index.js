@@ -250,6 +250,14 @@ export default new Router({
           }
         },
         {
+          path: '/overduesettings',
+          component:resolve => require(['@/components/Reader/OverdueManagement/overduesettings.vue'],resolve),
+          meta:{
+            title:'逾期设置',
+            Mode:'3'
+          }
+        },
+        {
           path: '/getcard',
           name: "GetCard",
           component: GetCard,

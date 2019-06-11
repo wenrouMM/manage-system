@@ -124,7 +124,8 @@
                   <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
                   <el-menu-item index="/loanhistory">还书记录</el-menu-item>
                   <!-- <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
-                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item>-->
+                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item> -->
+                  <el-menu-item index="/overduesettings">逾期设置</el-menu-item>
                   <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
                   <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                   <el-menu-item index="/reimburse">报损记录</el-menu-item>

@@ -246,12 +246,14 @@ export const deposit = {
   details:`${url}tibetmuseummodule/currency/depositRecord/selectDetails`,//押金记录详情
   money:`${url}tibetmuseummodule/currency/depositRecord/add`, //押金充值
 }
-//逾期记录
+//逾期管路
 export const overdue = {
   table:`${url}borrowmodule/expectLog/select`, //逾期查询表格
   phone:`${url}tibetmuseummodule/currency/expectLog/selectUserPhone`, //逾期催还电话
   history:`${url}borrowmodule/expectHistoryLog/select`, //逾期历史记录查询表格
-  make:`${url}borrowmodule/expectLog/handle` //逾期金额处理
+  make:`${url}borrowmodule/expectLog/handle`, //逾期金额处理
+  setSelect:`${url}readermodule/overdueFunctionSet/select`,//逾期设置查询
+  setEdit:`${url}readermodule/overdueFunctionSet/edit`//逾期设置修改
 }
 //借阅记录
 export const loan = {
