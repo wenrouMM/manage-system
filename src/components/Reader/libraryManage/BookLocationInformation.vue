@@ -25,7 +25,7 @@
                   <el-option label="书名" value="3"></el-option>
                   <el-option label="状态" value="4"></el-option>
                 </el-select>
-                <el-input v-model="searchForm.searchData" clearable placeholder="请输入相关内容" style="width: 200px"></el-input>
+                <el-input v-model="searchForm.searchData" clearable placeholder="请输入相关内容" style="width: 250px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -50,7 +50,11 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="searchNumber" label="索书号" width="200"></el-table-column>
+            <el-table-column align="center" prop="callNumber" label="索书号" width="200">
+              <template slot-scope="scope">
+                <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="code" label="馆藏码" width="350"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="200"></el-table-column>
             <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true" width="200">

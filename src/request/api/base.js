@@ -10,12 +10,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 /*var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
 let fileUrl = 'http://192.168.2.121:8090/';*/
- var url = 'http://192.168.2.31:8088/';
+var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
 let fileUrl = 'http://192.168.2.31:8090/';
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
-var fileUrl = window.glob.fileUrl */
+var fileUrl = window.glob.fileUrl*/
 
 /*------ 文件上传模块 ------*/
 
@@ -118,7 +118,11 @@ export const editorInt = {
   edit:`${url}systemmodule/sysTbNoticeInfo/edit`,
   delete:`${url}systemmodule/sysTbNoticeInfo/delete`,
   detail:`${url}systemmodule/sysTbNoticeInfo/selectOne`,
-  moreDetail:`${url}systemmodule/sysTbNoticeInfo/selectMore`
+  moreDetail:`${url}systemmodule/sysTbNoticeInfo/selectMore`,
+  revoke:`${url}systemmodule/sysTbNoticeInfo/revoke`, //公告撤销
+  cancelRevoke:`${url}systemmodule/sysTbNoticeInfo/cancelRevoke`,//公告取消撤销
+  place:`${url}systemmodule/sysTbNoticeInfo/place`,//公告置顶
+  cancelPlace:`${url}systemmodule/sysTbNoticeInfo/cancelPlace`,//公告取消置顶
 }
 // 数据字典
 export const bookWordInt = {

@@ -217,7 +217,10 @@
   .backBtn {
     cursor: pointer;
   }
-
+  .backBtn:hover {
+    cursor: pointer;
+    color: #0096FF;
+  }
   /*------ 用户信息卡查询 ------*/
   .cardData {
     width: 680px;

@@ -21,10 +21,10 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="用户名 :">
-                <el-input v-model="searchForm.name" clearable placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.name" style="width: 200px" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="处理方式 :">
-                <el-select v-model="searchForm.method" clearable placeholder="请选择处理方式">
+                <el-select v-model="searchForm.method" clearable placeholder="请选择处理方式" style="width: 200px">
                   <el-option label="充值" value="0"></el-option>
                   <el-option label="退款" value="1"></el-option>
                   <el-option label="全部" value=""></el-option>

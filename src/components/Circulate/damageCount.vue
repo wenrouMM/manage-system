@@ -16,12 +16,14 @@
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   type="date"
+                  style="width: 200px"
                   placeholder="开始日期"
                   :picker-options="pickerOptions0"
                 ></el-date-picker>
                 <el-date-picker
                   v-model="searchForm.endTime"
                   type="date"
+                  style="width: 200px"
                   placeholder="结束日期"
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
@@ -238,7 +240,7 @@ export default {
     },
     // 批量处理按钮
     batchBtn(){
-      
+
       if(this.dealArr.length){
         this.dealForm.dealNum = ''
         this.dealDialog = true
@@ -391,7 +393,6 @@ export default {
   width: 90px;
   font-size: 16px;
   text-align: center;
-  margin-left: 10px;
 }
 
 #loginrecord {

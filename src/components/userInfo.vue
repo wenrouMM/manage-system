@@ -150,7 +150,8 @@ export default {
       userCard:'',
       userPassword:'',
       userGrade:'',
-      hidePassword:''
+      hidePassword:'',
+      push:false
     };
   },
   created(){
@@ -224,15 +225,13 @@ export default {
         console.log('修改密码后的结果',res)
         if(res.data.state==true){
           this.$message({
-            message:res.data.msg,
+            message:'修改成功，三秒后返回重新登录',
             type: 'success'
           });
-          var token = res.data.row.authorization
-          sessionStorage.setItem('token',token)
-          this.$store.commit('setToken',token)
-          this.InitializationFun()
           this.pwdDialog=false
-
+          setTimeout(()=>{
+            this.$router.push({ path: "/" });
+          },3000)
         }else{
           this.$message({
             message:res.data.msg,
@@ -240,6 +239,10 @@ export default {
           });
         }
       })
+      if(this.push==true){
+        console.log('跳转')
+        this.timeBack()
+      }
     },
     /*------ 图片上传相关 ------*/
     cropSuccess(imgDataUrl, field) {

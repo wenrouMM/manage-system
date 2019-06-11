@@ -12,22 +12,8 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item size="140" label="发布时间:">
-                <el-date-picker
-                  v-model="searchForm.beginTime"
-                  type="date"
-                  placeholder="开始日期"
-                  :picker-options="pickerOptions0"
-                ></el-date-picker>
-                <el-date-picker
-                  v-model="searchForm.endTime"
-                  type="date"
-                  placeholder="结束日期"
-                  :picker-options="pickerOptions1"
-                ></el-date-picker>
-              </el-form-item>
               <el-form-item label="阅读权限:">
-                <el-select size="130" clearable v-model="searchForm.name" placeholder="请选择">
+                <el-select style="width: 200px" clearable v-model="searchForm.name" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -35,6 +21,22 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item size="180" label="发布时间:">
+                <el-date-picker
+                  v-model="searchForm.beginTime"
+                  type="date"
+                  style="width: 200px"
+                  placeholder="开始日期"
+                  :picker-options="pickerOptions0"
+                ></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.endTime"
+                  type="date"
+                  style="width: 200px"
+                  placeholder="结束日期"
+                  :picker-options="pickerOptions1"
+                ></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -188,7 +190,7 @@ export default {
       pageInput: 1,
       pageSize: 10,
       total: 0,
-      tableData: []
+      tableData: [],
     };
   },
   computed: {
@@ -242,19 +244,23 @@ export default {
     },
     // 撤销按钮
     cancelBtn(index,row){
-      let obj = {}
-      obj.id = row.id
-      obj.disabled = row.disabled ==0?1:0;
+      console.log('是撤销还是取消撤销',row.disabled)
+      this.id = row.id
       console.log('这个数据表是',row)
-      this.cancelApi(obj)
+      if(row.disabled==0){
+        this.revokeApi(row.id)
+      }else if(row.disabled==1){
+        this.cancelRevokeApi(row.id)
+      }
     },
     // 置顶按钮
     apexBtn(index,row){
-      let obj = {}
-      obj.id = row.id
-      obj.state = row.state ==0?1:0;
-      console.log('传递的数据',obj)
-      this.apexApi(obj)
+      console.log('置顶按钮的数据',row)
+      if(row.state==0){
+        this.placeApi(row.id)
+      }else if(row.state==1){
+        this.cancelPlaceApi(row.id)
+      }
     },
 
     // 跳转按钮
@@ -332,12 +338,23 @@ export default {
         }
       })
     },
-    cancelApi(value){
+    revokeApi(value){
+      this.axios.put(editorInt.revoke,{id:value}).then((res)=>{
+        console.log('撤销公告返回的结果',res)
+        if(res.data.state == true){
+          this.$message.success('修改公告成功')
+          this.searchApi(this.searchTimeForm)
+        } else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    cancelRevokeApi(value){
       axios({
-        url:editorInt.edit,
+        url:editorInt.cancelRevoke,
         method:'put',
         headers:{'Content-Type':'application/json'},
-        data:value
+        data:{id:value}
       }).then((res)=>{
         if(res.data.state == true){
           this.$message.success('修改公告成功')
@@ -348,20 +365,24 @@ export default {
         console.log(res)
       })
     },
-    apexApi(value){
-      axios({
-        url:editorInt.edit,
-        method:'put',
-        headers:{'Content-Type':'application/json'},
-        data:value
-      }).then((res)=>{
+    placeApi(value){
+      this.axios.put(editorInt.place,{id:value}).then((res)=>{
         if(res.data.state == true){
-          this.$message.success('修改公告成功')
+          this.$message.success(res.data.msg)
           this.searchApi(this.searchTimeForm)
         } else{
           this.$message.error(res.data.msg)
         }
-        console.log(res)
+      })
+    },
+    cancelPlaceApi(value){
+      this.axios.put(editorInt.cancelPlace,{id:value}).then((res)=>{
+        if(res.data.state == true){
+          this.$message.success(res.data.msg)
+          this.searchApi(this.searchTimeForm)
+        } else{
+          this.$message.error(res.data.msg)
+        }
       })
     },
     paginationApi(value) {
@@ -438,7 +459,6 @@ export default {
   width: 90px;
   font-size: 16px;
   text-align: center;
-  margin-left: 30px;
 }
 
 #loginrecord {

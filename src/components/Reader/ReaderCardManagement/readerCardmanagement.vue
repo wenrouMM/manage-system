@@ -26,13 +26,13 @@
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNumber" clearable placeholder="请输入卡号"></el-input>
+                <el-input v-model="searchForm.cardNumber" style="width: 200px" clearable placeholder="请输入卡号"></el-input>
               </el-form-item>
-              <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.name" clearable placeholder="请输入用户名"></el-input>
+              <el-form-item label="用户名:">
+                <el-input v-model="searchForm.name" style="width: 200px" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
-              <el-form-item label="等级名称:" size="160">
-                <el-select clearable v-model="searchForm.type" placeholder="请选择等级名称">
+              <el-form-item label="等级名称:">
+                <el-select clearable v-model="searchForm.type" style="width: 200px" placeholder="请选择等级名称">
                   <el-option
                     v-for="(option,index) of optionsDataType"
                     :key="index"
@@ -41,8 +41,8 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="状态:" size="160">
-                <el-select clearable v-model="searchForm.state" placeholder="请选择状态">
+              <el-form-item label="状态:">
+                <el-select clearable v-model="searchForm.state" style="width: 200px" placeholder="请选择状态">
                   <el-option
                     v-for="(option,index) of optionsData"
                     :key="index"
@@ -732,7 +732,7 @@ export default {
 /* 可以通过size属性添加一个classname */
 
 .el-form--inline .el-form-item {
-  margin-right: 25px;
+  margin-right: 10px;
 }
 .el-form--inline .el-form-item:last-child {
   margin-right: 0;
