@@ -55,7 +55,7 @@
               </el-table-column>
               <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="处理人员"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

@@ -47,7 +47,7 @@
                   <span>{{scope.row.overdueExpenses}}元</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式">
+              <el-table-column align="center" prop="fkHandleModeName" label="处理人员">
                 <template slot-scope="scope">
                   <span>{{scope.row.fkHandleModeName == null || scope.row.fkHandleModeName=='' ?'---':scope.row.fkHandleModeName}}</span>
                 </template>
