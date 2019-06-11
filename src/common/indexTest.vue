@@ -67,7 +67,7 @@
             text-color="#fff"
             :collapse="isCollapse"
           >
-            
+
             <el-menu-item  index="/indexTest"><i  class=" indexIcon indexIconMax iconxiazai45"></i><span style="lineHeight:21px;">首页</span></el-menu-item>
             <!--采编管理 -->
             <div v-show="Mode == 1">
@@ -113,6 +113,7 @@
                   <el-menu-item index="/loanhistory">还书记录</el-menu-item>
                   <!-- <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
                   <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item> -->
+                  <el-menu-item index="/overduesettings">逾期设置</el-menu-item>
                   <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
                   <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
                   <el-menu-item index="/reimburse">报损记录</el-menu-item>
@@ -455,7 +456,7 @@ body,
 /*====== body部分 ======*/
 /*侧边导航部分*/
 .navMenu {
-  
+
 }
 .nav .iconpath {
   margin-right: 15px;

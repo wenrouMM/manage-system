@@ -7,16 +7,31 @@
       </div>
     </div>
     <div style="width: 350px;height: 350px;margin:200px auto">
-      <el-form :label-position="labelPosition" label-width="80px" :ref="formLabelAlign" :model="formLabelAlign" :rules="rules" ref="formLabelAlign">
-        <el-form-item label="逾期天数" prop="dataNum">
-          <el-input v-model="formLabelAlign.dataNum"></el-input>
-        </el-form-item>
-        <el-form-item label="逾期金额" prop="money">
-          <el-input v-model="formLabelAlign.money"></el-input>
-        </el-form-item>
-        <el-form-item label="催还间隔" prop="space">
-          <el-input v-model="formLabelAlign.space"></el-input>
-        </el-form-item>
+      <el-form :label-position="labelPosition" :ref="formLabelAlign" :model="formLabelAlign" :rules="rules" ref="formLabelAlign">
+        <div class="flexLayout fontStyle">
+          <el-form-item label="逾期天数" prop="dataNum" label-width="80px">
+            <el-input v-model="formLabelAlign.dataNum" style="width: 250px"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <span>天</span>
+          </el-form-item>
+        </div>
+        <div class="flexLayout fontStyle">
+          <el-form-item label="逾期金额" prop="money" label-width="80px">
+            <el-input v-model="formLabelAlign.money" style="width: 250px"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <span>元</span>
+          </el-form-item>
+        </div>
+        <div class="flexLayout fontStyle">
+          <el-form-item label="催还间隔" prop="space" label-width="80px">
+            <el-input v-model="formLabelAlign.space" style="width: 250px"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <span>天</span>
+          </el-form-item>
+        </div>
         <div style="margin-left: 17px;margin-top: 50px">
           <el-button type="primary" style="border-radius: 10px;width: 150px" @click="saveClick">保存</el-button>
           <el-button type="info"  style="border-radius: 10px;width: 150px" @click="clearClick">重置</el-button>
@@ -27,6 +42,7 @@
 </template>
 
 <script>
+  import {overdue} from '@request/api/base.js'
   export default {
     name: "getAcard",
     data(){
@@ -35,11 +51,12 @@
         formLabelAlign: {
           dataNum: '',
           money: '',
-          space: ''
+          space: '',
+          id:''
         },
         rules: {
           dataNum: [{required: true, message: '请输入逾期天数', trigger: 'blur'}],
-          money: [{required: true, message: '请输入逾期金额', trigger: 'blur'}],
+          money: [{required: true, message: '请输入逾期金额(元)', trigger: 'blur'}],
           space: [{required: true, message: '请输入催还间隔', trigger: 'blur'}],
         }
       }
@@ -49,7 +66,26 @@
         this.centerDialogVisible=true
         this.$refs[this.formLabelAlign].validate((valid) => {
           if (valid) {
-            //alert('submit!');
+            this.axios.put(overdue.setEdit,{
+              id:this.formLabelAlign.id,
+              expectDay:this.formLabelAlign.dataNum,
+              expectMoneyF:this.formLabelAlign.money,
+              reminderInterval:this.formLabelAlign.space
+            }).then((res)=>{
+              console.log('逾期设施修改后返回的数据',res)
+              if(res.data.state==true){
+                this.$message({
+                  message:'修改成功',
+                  type: 'success'
+                });
+                this.initializationFun()
+              }else{
+                this.$message({
+                  message:res.data.msg,
+                  type: 'error'
+                });
+              }
+            })
 
           } else {
             console.log('error submit!!');
@@ -59,10 +95,19 @@
       },
       clearClick(){
         this.$refs[this.formLabelAlign].resetFields();
-      }
+      },
+      initializationFun(){
+        this.axios.get(overdue.setSelect).then((res)=>{
+          console.log('初始化逾期设置数据',res)
+          this.formLabelAlign.dataNum=res.data.row.expectDay
+          this.formLabelAlign.money=res.data.row.expectMoneyF
+          this.formLabelAlign.space=res.data.row.reminderInterval
+          this.formLabelAlign.id=res.data.row.id
+        })
+      },
     },
     mounted(){
-
+      this.initializationFun()
     }
   }
 </script>
@@ -73,6 +118,9 @@
     background-color: white;
     height: 852px;
   }
-
+  .fontStyle{
+    font-size: 14px;
+    color: #878787;
+  }
 
 </style>
