@@ -207,7 +207,7 @@
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
-            status-icon
+            
             :model="addForm"
             :rules="addRules"
           >
@@ -259,7 +259,7 @@
               <el-select
                 v-model="addForm.authTbRoles"
                 multiple
-                clearable
+                
                 collapse-tags
                 placeholder="请选择类型"
                 value-key="roleCode"
@@ -655,7 +655,17 @@ export default {
       });
     },
     handleEdit(index, row) {
+      if(this.formFlag){
+        this.$refs.addForm.resetFields();
+      }
+      
+      let obj = this.addForm
+      for (var i in obj) {
+        obj[i] = "";
+      }
+      this.addForm.authTbRoles = []
       // 编辑    点击这个的时候 把row对象的数据给予弹框中的对象数据
+      this.addForm.authTbRoles = []
       this.formFlag = true;
       this.preloadImg = "";
       this.i = 2;
@@ -877,19 +887,20 @@ export default {
     },
     closeForm() {
       // 弹框关闭的时候执行 清空数据
+      
       this.formFlag = true;
       console.log("关闭测试");
+      
       let obj = this.addForm;
-      for (var i in obj) {
-        obj[i] = "";
-      }
-      this.$refs.addForm.resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
-
+      
+       // 调用这个方法进行清除登陆状态 打开的时候再清理？
+      
       this.files = null;
-      //this.preloadImg = ''
-      console.log("更改了吗", this.addForm);
       this.editLoading = false;
       this.banDeleteLoading = false;
+      //this.preloadImg = ''
+      console.log("更改了吗", this.addForm);
+      
     },
     uPphotoApi() {
       let files = this.files;

@@ -97,6 +97,12 @@
               <el-menu-item index="/BookLocationInformation">
                 <i class="indexIcon indexIconMax iconziliao"></i>图书位置信息
               </el-menu-item>
+              <el-menu-item index="/shelfBind">
+                <i class="indexIcon indexIconMax iconziliao"></i>层架绑定
+              </el-menu-item>
+              <el-menu-item index="/stoneroomInfo">
+                <i class="indexIcon indexIconMax iconziliao"></i>库房管理
+              </el-menu-item>
               <el-menu-item index="/damageCount">
                 <i class="indexIcon iconbaosun"></i>损坏清点
               </el-menu-item>

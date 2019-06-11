@@ -126,6 +126,11 @@ export default {
     },
     //查询读者卡信息
     readCardBtn() {
+
+      for(let key in this.cardData){
+        this.cardData[key] = ''
+      }
+      this.lastCardNum = this.cardInput
       let value = this.cardInput;
       let obj = {
         cardNum: value
@@ -155,7 +160,8 @@ export default {
     /*------ API ------*/
     // 调查读者卡信息
     readCardApi(data) {
-
+      
+      
       axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
         console.log("用户信息",res);
         if (res.data.state === true) {
@@ -167,7 +173,7 @@ export default {
           this.cardData.vaildTime = data.cardExpireTime
           this.cardData.state = data.state
           this.cardData.balance = data.balance
-          this.lastCardNum = this.cardInput
+          
         } else {
           this.$message.error(res.data.msg);
         }

@@ -73,19 +73,19 @@ export default new Router({
       redirect: '/indexTest'
     },
     {
-      path:'/test',
-      component:() => import('../common/count/count.vue')
+      path: '/test',
+      component: () => import('../common/count/count.vue')
     },
     {
       path: '/login',
       component: Login
     },
     {
-      path:'/userInfo',
-      meta:{
-        title:'个人中心'
+      path: '/userInfo',
+      meta: {
+        title: '个人中心'
       },
-      component:resolve => require(['../components/userInfo.vue'],resolve)
+      component: resolve => require(['../components/userInfo.vue'], resolve)
     },
     {
       path: '/indexTest',
@@ -97,12 +97,12 @@ export default new Router({
       children: [
         // 1.0 采编管理
         {
-          path:'/uploadBook',
-          meta:{
-            title:'编目批量导入',
-            Mode:'1'
+          path: '/uploadBook',
+          meta: {
+            title: '编目批量导入',
+            Mode: '1'
           },
-          component:resolve =>require(['../common/upload/uploadBook.vue'],resolve)
+          component: resolve => require(['../common/upload/uploadBook.vue'], resolve)
         },
 
 
@@ -127,146 +127,166 @@ export default new Router({
           path: '/bookpublishhouse',
           component: BookPublishHouse
         },
+
+
+        {
+          path: '/stoneroomInfo',
+          meta:{
+            title:'库房管理',
+            Mode:'2'
+          },
+          component: StoneRoomInfo
+        },
+        {
+          path: '/shelfBind',
+          meta:{
+            title:'层架绑定',
+            Mode:'2'
+          },
+          component: ShelfBind
+        },
+
+
         // 3.0 流通管理
         {
           path: '/loanrecorde',
-          meta:{
-            title:'借阅记录',
-            Mode:'3'
+          meta: {
+            title: '借阅记录',
+            Mode: '3'
           },
           component: LoanRecorde,
         },
         {
           path: '/loanhistory',
-          meta:{
-            title:'还书记录',
-            Mode:'3'
+          meta: {
+            title: '还书记录',
+            Mode: '3'
           },
           component: LoanHistory,
         },
         {
-          path:'/reimburse',
-          meta:{
-            title:'报损记录',
-            Mode:'3'
+          path: '/reimburse',
+          meta: {
+            title: '报损记录',
+            Mode: '3'
           },
-          component:resolve => require(['@/components/Circulate/damageCount'],resolve)
+          component: resolve => require(['@/components/Circulate/damageCount'], resolve)
         },
         {
-          path:'/reimburseHistory',
-          meta:{
-            title:'报损历史记录',
-            Mode:'3'
+          path: '/reimburseHistory',
+          meta: {
+            title: '报损历史记录',
+            Mode: '3'
           },
-          component:resolve => require(['@/components/Circulate/damageCotHis.vue'],resolve)
+          component: resolve => require(['@/components/Circulate/damageCotHis.vue'], resolve)
         },
         {
           path: "/borrowingbooks",
-          name:'borrow',
-          meta:{
-            title:'书籍借阅',
-            Mode:'3',
-            isAlive:true
+          name: 'borrow',
+          meta: {
+            title: '书籍借阅',
+            Mode: '3',
+            isAlive: true
           },
           component: BorrowingBooks,
         },
         {
           path: "/returnbooks",
-          name:'return',
-          meta:{
-            title:'书籍归还',
-            Mode:'3',
-            isAlive:true
+          name: 'return',
+          meta: {
+            title: '书籍归还',
+            Mode: '3',
+            isAlive: true
           },
           component: () => import('../components/Circulate/returnBooks.vue')
         },
         {
           path: "/returnstatus",
-          component: ()  => import('../components/Circulate/returnStatus.vue')
+          component: () => import('../components/Circulate/returnStatus.vue')
         },
         {
-          path:'/renew',
-          name:'renew',
-          meta:{
-            title:'书籍续借',
-            Mode:'3',
-            isAlive:true
+          path: '/renew',
+          name: 'renew',
+          meta: {
+            title: '书籍续借',
+            Mode: '3',
+            isAlive: true
           },
-          component:resolve => require(['@/components/Circulate/renew.vue'], resolve)
+          component: resolve => require(['@/components/Circulate/renew.vue'], resolve)
         },
         {
-          path:'/bookDamage',
-          name:'damage',
-          meta:{
-            title:'书籍报损',
-            Mode:'3',
-            isAlive:true
+          path: '/bookDamage',
+          name: 'damage',
+          meta: {
+            title: '书籍报损',
+            Mode: '3',
+            isAlive: true
           },
-          component:resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
+          component: resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
         },
         // 4.0 读者管理
         {
           path: '/readercardmanagement',
-          meta:{
-            title:'读者卡管理',
-            Mode:'4'
+          meta: {
+            title: '读者卡管理',
+            Mode: '4'
           },
           component: ReaderCardManagement,
         },
         {
           path: '/readercardgrade',
           component: ReaderCardGrade,
-          meta:{
-            title:'读者卡等级',
-            Mode:'4'
+          meta: {
+            title: '读者卡等级',
+            Mode: '4'
           }
         },
         {
           path: '/DishonestyRecords',
           component: DishonestyRecords,
-          meta:{
-            title:'失信记录',
-            Mode:'4'
+          meta: {
+            title: '失信记录',
+            Mode: '4'
           }
         },
         {
           path: '/DishonestyHistory',
           component: DishonestyHistory,
-          meta:{
-            title:'失信历史记录',
-            Mode:'4'
+          meta: {
+            title: '失信历史记录',
+            Mode: '4'
           }
         },
         {
           path: '/overduerecords',
-          component:resolve => require(['@/components/Reader/OverdueManagement/overdueRecords.vue'],resolve),
-          meta:{
-            title:'逾期记录',
-            Mode:'3'
+          component: resolve => require(['@/components/Reader/OverdueManagement/overdueRecords.vue'], resolve),
+          meta: {
+            title: '逾期记录',
+            Mode: '3'
           }
         },
         {
           path: "/overduehistory",
           component: OverdueHistory,
-          meta:{
-            title:'逾期历史记录',
-            Mode:'3'
+          meta: {
+            title: '逾期历史记录',
+            Mode: '3'
           }
         },
         {
           path: '/overduesettings',
-          component:resolve => require(['@/components/Reader/OverdueManagement/overduesettings.vue'],resolve),
-          meta:{
-            title:'逾期设置',
-            Mode:'3'
+          component: resolve => require(['@/components/Reader/OverdueManagement/overduesettings.vue'], resolve),
+          meta: {
+            title: '逾期设置',
+            Mode: '3'
           }
         },
         {
           path: '/getcard',
           name: "GetCard",
           component: GetCard,
-          meta:{
-            title:'办卡'
+          meta: {
+            title: '办卡'
           },
         },
         // 6.0系统模块
@@ -278,18 +298,18 @@ export default new Router({
           component: Home
         },
         {
-          path:'/guideTest',
-          meta:{
-            title:'系统管理引导页',
-            Mode:'6'
+          path: '/guideTest',
+          meta: {
+            title: '系统管理引导页',
+            Mode: '6'
           },
-          component:resolve=> require(['../common/guide/guide.vue'],resolve)
+          component: resolve => require(['../common/guide/guide.vue'], resolve)
         },
         {
           path: '/menuInformation',
           meta: {
             title: '菜单管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: Menu
         },
@@ -297,7 +317,7 @@ export default new Router({
           path: '/roleMenuElement',
           meta: {
             title: '权限管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: PowerControl
         },
@@ -305,7 +325,7 @@ export default new Router({
           path: '/roleInformation',
           meta: {
             title: '角色管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: UserRole
         },
@@ -313,7 +333,7 @@ export default new Router({
           path: '/managerInformation',
           meta: {
             title: '用户管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: UserManage
         },
@@ -321,7 +341,7 @@ export default new Router({
           path: '/authTbManagerLoginLog',
           meta: {
             title: '登录记录',
-            Mode:'6'
+            Mode: '6'
           },
           component: LoginRecord
         },
@@ -329,7 +349,7 @@ export default new Router({
           path: '/noticeSet',
           meta: {
             title: '公告管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: resolve => require(['../components/System/notice.vue'], resolve)
         },
@@ -338,7 +358,7 @@ export default new Router({
           path: '/publishhouse',
           meta: {
             title: '图书出版社',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Book/BookManage/BookPublishingHouse.vue'], resolve)
         },
@@ -346,7 +366,7 @@ export default new Router({
           path: '/bookLocation',
           meta: {
             title: '图书位置绑定',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Reader/libraryManage/bookLocation.vue'], resolve)
         },
@@ -354,7 +374,7 @@ export default new Router({
           path: '/BookLocationInformation',
           meta: {
             title: '图书位置信息',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Reader/libraryManage/BookLocationInformation.vue'], resolve)
         },
@@ -362,7 +382,7 @@ export default new Router({
           path: '/AdvanceRecord',
           meta: {
             title: '预借记录',
-            Mode:'3'
+            Mode: '3'
           },
           component: resolve => require(['../components/Reader/OverdueManagement/AdvanceRecord.vue'], resolve)
         },
@@ -370,7 +390,7 @@ export default new Router({
           path: '/EarlyWarningExpire',
           meta: {
             title: '预警到期',
-            Mode:'3'
+            Mode: '3'
           },
           component: resolve => require(['../components/Reader/OverdueManagement/EarlyWarningExpire.vue'], resolve)
         },
@@ -378,7 +398,7 @@ export default new Router({
           path: '/purchasingManagement',
           meta: {
             title: '采购管理',
-            Mode:'1'
+            Mode: '1'
           },
           component: resolve => require(['../components/Book/purchasingManagement.vue'], resolve)
         },
@@ -386,7 +406,7 @@ export default new Router({
           path: '/BookCataloging',
           meta: {
             title: '书籍编目',
-            Mode:'1'
+            Mode: '1'
           },
           component: resolve => require(['../components/Book/BookCataloging.vue'], resolve)
         },
@@ -394,7 +414,7 @@ export default new Router({
           path: '/BookCollection',
           meta: {
             title: '书籍典藏',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Book/BookCollection.vue'], resolve)
         },
@@ -402,7 +422,7 @@ export default new Router({
           path: '/damageCount',
           meta: {
             title: '损坏清点',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Book/damageCount.vue'], resolve)
         },
@@ -410,7 +430,7 @@ export default new Router({
           path: '/checkDetails/:id',
           meta: {
             title: '损坏清点详情',
-            Mode:'2'
+            Mode: '2'
           },
           component: resolve => require(['../components/Book/DamageIinventoryDetails.vue'], resolve)
         },
@@ -418,7 +438,7 @@ export default new Router({
           path: '/damageSet',
           meta: {
             title: '损坏管理',
-            Mode:'6'
+            Mode: '6'
           },
           component: resolve => require(['../components/System/damage.vue'], resolve)
         },
@@ -427,7 +447,7 @@ export default new Router({
           path: '/rechargeSet',
           meta: {
             title: '充值管理',
-            Mode:'5'
+            Mode: '5'
           },
           component: resolve => require(['../components/System/recharge.vue'], resolve)
         },
@@ -435,7 +455,7 @@ export default new Router({
           path: '/OverdueCostCirculation',
           meta: {
             title: '逾期费用记录',
-            Mode:'5'
+            Mode: '5'
           },
           component: resolve => require(['../components/System/OverdueCostCirculation.vue'], resolve)
         },
@@ -443,7 +463,7 @@ export default new Router({
           path: '/Depositflowdirection',
           meta: {
             title: '押金流向',
-            Mode:'5'
+            Mode: '5'
           },
           component: resolve => require(['../components/System/Depositflowdirection.vue'], resolve)
         },
@@ -451,7 +471,7 @@ export default new Router({
           path: '/logOut',
           meta: {
             title: '注销记录',
-            Mode:'5'
+            Mode: '5'
           },
           component: resolve => require(['../components/System/logOut.vue'], resolve)
         },
@@ -471,18 +491,18 @@ export default new Router({
           component: resolve => require(['../components/Finance/logoff.vue'], resolve)
         },
         {
-          path:'/logoffEnd',
-          meta:{
-            title:'注销结果',
-            details:true
+          path: '/logoffEnd',
+          meta: {
+            title: '注销结果',
+            details: true
           },
-          component:resolve => require(['../components/Finance/logoffEnd.vue'],resolve)
+          component: resolve => require(['../components/Finance/logoffEnd.vue'], resolve)
         },
         {
-          path:'/refundsEnd/:card',
-          meta:{
-            juge:false,
-            title:'充值结果'
+          path: '/refundsEnd/:card',
+          meta: {
+            juge: false,
+            title: '充值结果'
           },
           component: resolve => require(['../components/Finance/refundsEnd.vue'], resolve)
         },
@@ -490,7 +510,7 @@ export default new Router({
           path: '/vacationSet',
           meta: {
             title: '寒暑假设置',
-            Mode:'6'
+            Mode: '6'
           },
           component: resolve => require(['../components/System/vacation.vue'], resolve)
         }, {
@@ -515,12 +535,12 @@ export default new Router({
           component: resolve => require(['../components/System/article.vue'], resolve)
         },
         {
-          path:'/wordBook',
-          meta:{
-            title:'数据字典',
-            Mode:'6'
+          path: '/wordBook',
+          meta: {
+            title: '数据字典',
+            Mode: '6'
           },
-          component: resolve => require(['../components/System/wordbook.vue'],resolve)
+          component: resolve => require(['../components/System/wordbook.vue'], resolve)
         }
       ]
     },
@@ -528,8 +548,7 @@ export default new Router({
       path: '/home',
       name: 'index',
       component: Index,
-      children: [
-      ]
+      children: []
     },
     {
       path: '*',
@@ -544,24 +563,11 @@ export default new Router({
 
         },
 
-        {
-          path: '/areaMode',
-          component: TestArea,
-          children: [{
-              path: '/stoneroomInfo',
-              component: StoneRoomInfo
-            },
-            {
-              path: '/shelfBind',
-              component: ShelfBind
-            }
-          ]
-        },
+
         {
           path: '/bookMode',
           component: TestBook,
-          children: [
-          ]
+          children: []
         },
         {
           path: '/readerMode',

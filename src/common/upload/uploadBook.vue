@@ -183,7 +183,8 @@ export default {
           for (let item of res.data.row.must) {
             str += "," + item;
           }
-          this.tipsText = str;
+          
+          this.tipsText = str.substring(1);
           for (let i = 0; i < length; i++) {
             this.twiceList.push("");
           }
