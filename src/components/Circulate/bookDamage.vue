@@ -192,6 +192,7 @@
 import axios from "axios";
 import { bookOperateInt, borrowInt, bookDamageInt } from "@request/api/base.js";
 export default {
+  name:'damage',
   data() {
     return {
       message: "",

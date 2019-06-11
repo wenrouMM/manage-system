@@ -847,9 +847,7 @@
       },
       //导入按钮
       tunnellingBtn(){
-        this.j=2
-        this.messageWidth='500px'
-        this.centerDialogVisible=true
+        this.$router.push({path:'/uploadBook'})
       },
       submitDialog(){
         let idData=[]

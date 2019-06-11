@@ -102,7 +102,7 @@ export default new Router({
             title:'编目批量导入',
             Mode:'1'
           },
-          component:resolve =>require(['../common/upload/upload.vue'],resolve)
+          component:resolve =>require(['../common/upload/uploadBook.vue'],resolve)
         },
 
 
@@ -162,17 +162,21 @@ export default new Router({
         },
         {
           path: "/borrowingbooks",
+          name:'borrow',
           meta:{
             title:'书籍借阅',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component: BorrowingBooks,
         },
         {
           path: "/returnbooks",
+          name:'return',
           meta:{
             title:'书籍归还',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component: () => import('../components/Circulate/returnBooks.vue')
         },
@@ -182,17 +186,21 @@ export default new Router({
         },
         {
           path:'/renew',
+          name:'renew',
           meta:{
             title:'书籍续借',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component:resolve => require(['@/components/Circulate/renew.vue'], resolve)
         },
         {
           path:'/bookDamage',
+          name:'damage',
           meta:{
             title:'书籍报损',
-            Mode:'3'
+            Mode:'3',
+            isAlive:true
           },
           component:resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
         },

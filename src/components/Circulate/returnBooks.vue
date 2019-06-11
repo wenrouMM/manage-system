@@ -67,6 +67,7 @@
 import axios from "axios";
 import { bookOperateInt, returnInt } from "@request/api/base.js";
 export default {
+  name:'return',
   data() {
     return {
       message: "",

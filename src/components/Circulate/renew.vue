@@ -166,6 +166,7 @@
 import axios from "axios";
 import { bookOperateInt, borrowInt } from "@request/api/base.js";
 export default {
+  name:'renew',
   data() {
     return {
       message: "",
