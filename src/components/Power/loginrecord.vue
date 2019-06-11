@@ -8,8 +8,8 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <el-form :inline="true" :model="searchForm">
-            <el-form-item label="登录来源:" size="160">
-              <el-select clearable v-model="searchForm.loginSource" placeholder="请选择">
+            <el-form-item label="登录来源:">
+              <el-select clearable v-model="searchForm.loginSource" placeholder="请选择" style="width: 200px">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -19,17 +19,19 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item size="130">
+            <el-form-item size="130" label="创建时间:">
               <el-date-picker
                 v-model="searchForm.beginTime"
                 type="date"
                 placeholder="开始日期"
+                style="width: 200px"
                 :picker-options="pickerOptions0"
               ></el-date-picker>
               <el-date-picker
                 v-model="searchForm.endTime"
                 type="date"
                 placeholder="结束日期"
+                style="width: 200px"
                 :picker-options="pickerOptions1"
               ></el-date-picker>
             </el-form-item>
@@ -260,7 +262,6 @@
     width: 90px;
     font-size: 16px;
     text-align: center;
-    margin-left: 30px;
   }
 
   #loginrecord {

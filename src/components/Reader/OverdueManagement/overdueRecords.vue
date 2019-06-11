@@ -17,13 +17,13 @@
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名"></el-input>
+                <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号"></el-input>
+                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item label="书名:" size="160">
-                <el-input v-model="searchForm.bookName" placeholder="请输入书名"></el-input>
+                <el-input v-model="searchForm.bookName" placeholder="请输入书名" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
@@ -336,7 +336,7 @@
     font-size: 14px;
   }
   .el-form--inline .el-form-item {
-    margin-right: 25px;
+    margin-right: 10px;
   }
   .el-form--inline .el-form-item:last-child {
     margin-right: 0;

@@ -84,7 +84,7 @@
             :model="addForm"
             :rules="rules"
             :ref="addForm"
-            label-width="100px"
+            label-width="110px"
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
           >
@@ -117,7 +117,7 @@
                 <el-radio label="停用"></el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item>
+            <el-form-item label-width="130px">
               <p class="textTips">假期设置日期不可重叠</p>
             </el-form-item>
 

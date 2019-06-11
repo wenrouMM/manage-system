@@ -42,7 +42,7 @@
                   :value="item"
                 ></el-option>
               </el-select>
-             <span class="ml_30">押金金额￥：{{changeForm.level.deposit}}元</span>
+             <span class="ml_30" style="color: #878787">押金金额￥：{{changeForm.level.deposit}}元</span>
           </div>
         </el-form-item>
         <div class="textCenter">
@@ -191,5 +191,6 @@ export default {
 .inputBox .text {
   margin-left: 10px;
   line-height: 36px;
+  color: #878787;
 }
 </style>

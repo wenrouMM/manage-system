@@ -12,19 +12,21 @@
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名"></el-input>
+              <el-form-item label="用户名:">
+                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名" style="width: 200px"></el-input>
               </el-form-item>
-              <el-form-item label="创建时间:" size="130">
+              <el-form-item label="创建时间:">
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   type="date"
+                  style="width: 200px"
                   placeholder="开始日期"
                   :picker-options="pickerOptions0"
                 ></el-date-picker>
                 <el-date-picker
                   v-model="searchForm.endTime"
                   type="date"
+                  style="width: 200px"
                   placeholder="结束日期"
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
@@ -53,7 +55,7 @@
               </el-table-column>
               <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
               <el-table-column align="center" prop="creatTime" label="创建时间"></el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="处理方式"></el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="处理人员"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination
@@ -306,7 +308,7 @@
     font-size: 14px;
   }
   .el-form--inline .el-form-item {
-    margin-right: 25px;
+    margin-right: 10px;
   }
   .el-form--inline .el-form-item:last-child {
     margin-right: 0;

@@ -12,12 +12,19 @@
           <section class="searchBox">
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="姓名:">
-                <el-input size="120" v-model="searchForm.userName" clearable placeholder="请输入姓名"></el-input>
+                <el-input size="160" v-model="searchForm.userName" clearable placeholder="请输入姓名" style="width: 170px"></el-input>
               </el-form-item>
-              <el-form-item label="角色名称:" size="160">
+              <el-form-item label="身份证号:" size="160">
+                <el-input v-model="searchForm.userId" clearable placeholder="请输入身份证号" style="width: 170px"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号码:" size="160">
+                <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码" style="width: 170px"></el-input>
+              </el-form-item>
+              <el-form-item label="角色名称:">
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
                 <el-select
                   clearable
+                  style="width: 170px"
                   v-model="searchForm.userType"
                   value-key="roleCode"
                   placeholder="请选择角色"
@@ -30,15 +37,10 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="身份证号:" size="160">
-                <el-input v-model="searchForm.userId" clearable placeholder="请输入身份证号"></el-input>
-              </el-form-item>
-              <el-form-item label="手机号码:" size="160">
-                <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码"></el-input>
-              </el-form-item>
               <el-form-item label="创建时间:" size="160">
                 <el-date-picker
                   v-model="searchForm.beginTime"
+                  style="width: 180px"
                   type="date"
                   placeholder="开始日期"
                   :picker-options="pickerOptions0"
@@ -46,15 +48,15 @@
                 <el-date-picker
                   v-model="searchForm.endTime"
                   type="date"
+                  style="width: 180px"
                   placeholder="结束日期"
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
               </el-form-item>
+              <el-form-item>
+                <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
+              </el-form-item>
             </el-form>
-            <div>
-              <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
-            </div>
-
           </section>
           <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
           <div class="buttonBox">
@@ -752,6 +754,7 @@ export default {
           params: value
         })
         .then(res => {
+          console.log('用户管理列表',res)
           if (res.data.state === true) {
             let nomol = res.data.row;
             for (let item of nomol) {
@@ -1039,7 +1042,7 @@ export default {
 .buttonBox .add {
   background: rgba(255, 146, 49, 1);
   border-radius: 10px;
-  margin-right: 30px;
+  margin-right: 10px;
 }
 .buttonBox .add .addIcon {
   margin-right: 6px;

@@ -22,9 +22,9 @@
               </button>
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="等级名称:" size="160">
+              <el-form-item label="等级名称:">
                 <div class="inputBox">
-                  <el-input clearable v-model="searchForm.name" placeholder="请输入读者卡等级名称"></el-input>
+                  <el-input clearable v-model="searchForm.name" placeholder="请输入读者卡等级名称" style="width: 200px"></el-input>
                 </div>
               </el-form-item>
               <el-form-item>
@@ -584,7 +584,7 @@ export default {
 /* 可以通过size属性添加一个classname */
 
 .el-form--inline .el-form-item {
-  margin-right: 25px;
+  margin-right: 10px;
 }
 .el-form--inline .el-form-item:last-child {
   margin-right: 0;

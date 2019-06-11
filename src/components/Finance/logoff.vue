@@ -211,76 +211,79 @@ export default {
 </script>
 
 <style scoped>
-.refunds {
-  background-color: #ffffff;
-  min-height: 810px;
-  padding-bottom: 110px;
-}
-.headerbox {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 60px;
-}
-.backBtn {
-  cursor: pointer;
-}
-
-/*------ 用户信息卡查询 ------*/
-.cardData {
-  width: 680px;
-  margin: 0 auto;
-  padding-top: 30px;
-  padding-bottom: 70px;
-  border: 1px solid rgba(220, 220, 220, 1);
-  margin-bottom: 30px;
-}
-.selectForm {
-  padding: 0 40px;
-}
-.balance {
-  text-align: center;
-  font-size: 20px;
-  color: #ff9231;
-  font-weight: bold;
-  margin-bottom: 60px;
-}
-.searchBox {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 60px;
-}
-.text {
-  font-size: 16px;
-  color: #878787;
-  line-height: 19px;
-}
-.inputBox {
-  width: 520px;
-}
-.textBox {
-  display: flex;
-  flex-direction: row;
-}
-.textBox p {
-  width: 33.3%;
-  display: inline-block;
-  font-size: 16px;
-  color: #878787;
-  line-height: 19px;
-}
-.mb_50 {
-  margin-bottom: 50px;
-}
-/*输入窗口*/
-.entryBox {
-  width: 680px;
-  margin: 0 auto;
-}
-.formBox {
-  margin-bottom: 40px;
-}
-.butonBox {
-  text-align: center;
-}
+  .refunds {
+    background-color: #ffffff;
+    min-height: 810px;
+    padding-bottom: 110px;
+  }
+  .headerbox {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px;
+  }
+  .backBtn {
+    cursor: pointer;
+  }
+  .backBtn:hover {
+    cursor: pointer;
+    color: #0096FF;
+  }
+  /*------ 用户信息卡查询 ------*/
+  .cardData {
+    width: 680px;
+    margin: 0 auto;
+    padding-top: 30px;
+    padding-bottom: 70px;
+    border: 1px solid rgba(220, 220, 220, 1);
+    margin-bottom: 30px;
+  }
+  .selectForm {
+    padding: 0 40px;
+  }
+  .balance {
+    text-align: center;
+    font-size: 20px;
+    color: #ff9231;
+    font-weight: bold;
+    margin-bottom: 60px;
+  }
+  .searchBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+  .text {
+    font-size: 16px;
+    color: #878787;
+    line-height: 19px;
+  }
+  .inputBox {
+    width: 520px;
+  }
+  .textBox {
+    display: flex;
+    flex-direction: row;
+  }
+  .textBox p {
+    width: 33.3%;
+    display: inline-block;
+    font-size: 16px;
+    color: #878787;
+    line-height: 19px;
+  }
+  .mb_50 {
+    margin-bottom: 50px;
+  }
+  /*输入窗口*/
+  .entryBox{
+    width: 680px;
+    margin: 0 auto;
+  }
+  .formBox{
+    margin-bottom: 40px;
+  }
+  .butonBox{
+    text-align: center;
+  }
 </style>

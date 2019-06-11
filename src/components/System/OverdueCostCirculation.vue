@@ -14,22 +14,24 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
+              <el-form-item label="用户名">
+                <el-input v-model="searchForm.userName" style="width: 200px" clearable placeholder="请输入用户名"></el-input>
+              </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   type="date"
                   placeholder="开始日期"
+                  style="width: 200px"
                   :picker-options="pickerOptions0"
                 ></el-date-picker>
                 <el-date-picker
                   v-model="searchForm.endTime"
                   type="date"
                   placeholder="结束日期"
+                  style="width: 200px"
                   :picker-options="pickerOptions1"
                 ></el-date-picker>
-              </el-form-item>
-              <el-form-item label="用户名">
-                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>

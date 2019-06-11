@@ -22,18 +22,20 @@
             <section class="searchBox">
               <el-form :inline="true" :model="formInline" class="demo-form-inline" >
                 <el-form-item label="角色名称:" size="160">
-                  <el-input clearable size="120" v-model="formInline.parent" placeholder="请输入角色名称"></el-input>
+                  <el-input clearable size="120" v-model="formInline.parent" placeholder="请输入角色名称" style="width: 200px"></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间:" size="130">
                   <el-date-picker
                     v-model="formInline.beginTime"
                     type="date"
+                    style="width: 200px"
                     placeholder="开始日期"
                     :picker-options="pickerOptions0"
                   ></el-date-picker>
                   <el-date-picker
                     v-model="formInline.endTime"
                     type="date"
+                    style="width: 200px"
                     placeholder="结束日期"
                     :picker-options="pickerOptions1"
                   ></el-date-picker>
@@ -599,7 +601,7 @@ section.pagination {
 /* 可以通过size属性添加一个classname */
 
 .el-form--inline .el-form-item {
-  margin-right: 25px;
+  margin-right: 10px;
 }
 .el-form--inline .el-form-item:last-child {
   margin-right: 0;

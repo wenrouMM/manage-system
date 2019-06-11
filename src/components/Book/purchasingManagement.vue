@@ -23,8 +23,8 @@
               <el-select
                 v-model="searchForm.makeMethod"
                 placeholder="请选择"
-                clearable
                 style="width: 150px"
+                clearable
                 @change="selectCheck(searchForm.makeMethod)"
               >
                 <el-option label="采购批次" value="0"></el-option>

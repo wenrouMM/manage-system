@@ -105,7 +105,7 @@ export default {
       },
       changeRules: {
         deposit: [{ required: true, message: "充值金额不得为空", trigger: "blur" }],
-        
+
       },
     };
   },
@@ -225,6 +225,10 @@ export default {
 }
 .backBtn {
   cursor: pointer;
+}
+.backBtn:hover {
+  cursor: pointer;
+  color: #0096FF;
 }
 
 /*------ 用户信息卡查询 ------*/

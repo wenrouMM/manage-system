@@ -15,9 +15,7 @@
           <div class="right">
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="损坏方式 :">
-                <div class="inputBox textLeft" style="width:160px;">
-                  <el-input clearable v-model="searchForm.damageMothod" placeholder="请输入损坏方式"></el-input>
-                </div>
+                <el-input clearable v-model="searchForm.damageMothod" placeholder="请输入损坏方式" style="width: 200px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -46,13 +44,18 @@
                 <span>{{scope.row.compensationType ==0?'具体金额':'价格倍数'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="compensationNum" label="赔偿额度"></el-table-column>
+            <el-table-column align="center" prop="compensationNum" label="赔偿额度">
+              <template slot-scope="scope">
+                <span v-if="scope.row.compensationType==0">{{scope.row.compensationNum}}元</span>
+                <span v-if="scope.row.compensationType==1">{{scope.row.compensationNum}}倍</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="distinction" label="区别号">
               <template slot-scope="scope">
                 <span>{{scope.row.distinction ==0?'损坏':'遗失'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="remarks" label="备注"></el-table-column>
+            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true"></el-table-column>
             <!-- 自定义插槽 -->
             <el-table-column align="center" label="操作" width="200" fixed="right">
               <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
@@ -138,7 +141,8 @@
               </el-select>
             </el-form-item>
             <el-form-item :label="title" prop="payforNum" id="titleJ">
-              <el-input v-model="addForm.payforNum" :placeholder="placeholderTitle"></el-input>
+              <el-input v-model="addForm.payforNum" :placeholder="placeholderTitle" style="position: relative"></el-input>
+              <span style="position: absolute;top: 0px;right: 15px">{{moneyTitle}}</span>
             </el-form-item>
             <el-form-item label=" 区 别 号 : " prop="differenceNumber">
               <el-radio-group v-model="addForm.differenceNumber">
@@ -214,6 +218,7 @@
         total: 0,
         tableData: [],
         id:'',
+        moneyTitle:''
       };
     },
     computed: {
@@ -256,10 +261,12 @@
           this.title='具体金额:'
           this.placeholderTitle='请输入具体赔偿金额'
           this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
+          this.moneyTitle='元'
         }else if(val==1){
           this.title='价格倍数:'
           this.placeholderTitle='请输入赔偿价格倍数'
           this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
+          this.moneyTitle='倍'
         }
       },
       // 删除按钮
@@ -297,6 +304,15 @@
         this.i=0
         this.id=row.id
         this.dialogFormVisible=true
+        if(row.compensationType==0){
+          this.title='具体金额:'
+          //this.placeholderTitle='请输入具体赔偿金额'
+          //this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
+        }else if(row.compensationType==1){
+          this.title='价格倍数:'
+          //this.placeholderTitle='请输入赔偿价格倍数'
+          //this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
+        }
         console.log('row',row)
         this.addForm.damageMothod=row.damageName
         this.addForm.payFor=row.compensationType==0?'按具体金额赔偿':'按价格倍数赔偿'
@@ -549,12 +565,14 @@
     width: 90px;
     font-size: 16px;
     text-align: center;
-    margin-left: 30px;
   }
   .tablebox .tableBorder {
     border: 1px solid #ebeef5;
     border-bottom: none;
     font-size: 16px;
+  }
+  #titleJ{
+    position: relative;
   }
   #loginrecord {
     background: #ffffff;
