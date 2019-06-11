@@ -987,7 +987,7 @@ export default {
 /* 可以通过size属性添加一个classname */
 
 .el-form--inline .el-form-item {
-  margin-right: 15px;
+  margin-right: 10px;
 }
 .el-form--inline .el-form-item:last-child {
   margin-right: 0;

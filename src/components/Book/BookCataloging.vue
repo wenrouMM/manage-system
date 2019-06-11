@@ -95,7 +95,7 @@
         </section>
       </div>
       <!-- 新增弹框 -->
-      <div class="addEditDialog">
+      <div class="">
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <div v-if="i==1" style="width: 940px">
@@ -104,11 +104,13 @@
                 <div>
                   <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
                     <el-form-item label=" I S B N :" prop="isbn" label-width="90px" >
-                      <el-input v-model="addForm.isbn" placeholder="请输入ISBN搜索相关数据进行添加" id="isbnInput"></el-input>
+                      <el-input v-model="addForm.isbn" placeholder="请输入ISBN搜索相关数据进行添加" id="isbnInput">
+                        <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
+                      </el-input>
                     </el-form-item>
-                    <p class="searchButton" @click="isbnData">
+                    <!-- <p class="searchButton" @click="isbnData">
                       <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
-                    </p>
+                    </p> -->
                   </div>
                   <div style="margin: 0 auto 25px;width: 600px">
                     <el-checkbox-group v-model="type" class="flexLayout" @change="BookInfoFun(type)">
@@ -153,26 +155,30 @@
                     <div class="flexLayout" id="catalogingInput3">
                       <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
                         <div class="flexLayout">
-                          <el-input v-model="addForm.fkTypeCode"></el-input>
-                          <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
+                          <el-input v-model="addForm.fkTypeCode">
+                            <el-button slot="append" type="primary" @click="typeTreeFun" icon="el-icon-search"></el-button>
+                          </el-input>
+                          <!-- <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
                             <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                          </p>
+                          </p> -->
                         </div>
                       </el-form-item>
-                      <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
+                      <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput">
                         <el-input v-model="addForm.fkTypeName "></el-input>
                       </el-form-item>
                     </div>
                     <div id="catalogingInput4" class="flexLayout">
                       <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
                         <div class="flexLayout">
-                          <el-input v-model="addForm.fkPressName"></el-input>
-                          <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
+                          <el-input v-model="addForm.fkPressName">
+                            <el-button slot="append" type="primary" @click="publishTreeFun" icon="el-icon-search"></el-button>
+                          </el-input>
+                         <!--  <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
                             <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                          </p>
+                          </p> -->
                         </div>
                       </el-form-item>
-                      <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 60px">
+                      <el-form-item label=" 出 版 地 :" label-width="90px">
                         <el-input v-model="addForm.publishingPleace "></el-input>
                       </el-form-item>
                       <el-form-item label=" 出版日期 :" label-width="95px">
