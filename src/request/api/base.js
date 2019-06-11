@@ -37,7 +37,7 @@ export const bookUploadInt ={
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {
-  outline:`${url}bookcollectionmodule/cataTbBookInfo/getFields`,
+  outline:`${url}bookcollectionmodule/countDamage/getFristPage`,
   detail:`${url}bookcollectionmodule/countDamage/getSecondPage`
 }
 /*------ 流通管理模块 ------*/

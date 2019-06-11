@@ -245,6 +245,7 @@
 import axios from "axios";
 import { bookOperateInt, borrowInt } from "@request/api/base.js";
 export default {
+  name:'borrow',
   data() {
     return {
       message: "",

@@ -215,9 +215,10 @@
               
               <keep-alive>
                 <router-view v-if="$route.meta.isAlive"></router-view>
-                <router-view v-if="!$route.meta.isAlive"></router-view>
               </keep-alive>
-
+          </transition>
+          <transition name="fade-transform" mode="out-in">
+                <router-view v-if="!$route.meta.isAlive"></router-view>
           </transition>
         </el-main>
       </el-container>
