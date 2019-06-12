@@ -90,7 +90,7 @@
                     <img
                       class="head_pic"
                       v-if="!scope.row.preUrl"
-                      src="../../base/img/timg.jpg"
+                      src="../../base/img/normalHead.jpg"
                       width="30px"
                       height="30px"
                       style="border-radius: 50%"
@@ -500,7 +500,7 @@ export default {
         console.log(this.addForm.preUrl);
         console.log("真就不执行了？");
       } else {
-        src = "/static/img/timg.38262dc.jpg";
+        src = require('../..//base/img/normalHead.jpg');
       }
       return src;
     },
