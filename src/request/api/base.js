@@ -1,3 +1,17 @@
+import axios from 'axios'
+/*--- 获取按钮权限 ---*/
+export const buttonInt = `${url}authmodule/currency/selectElements`
+export function getPower (value){
+
+  return axios.get(buttonInt,{
+    params:{
+      menuCode:value
+    }
+  }).then((res)=>{
+    return Promise.resolve(res)
+  })
+}
+
 //测试环境
 /*   var url = 'http://192.168.2.54:8088/'
 var imgurl='http://192.168.2.54:8090/'
@@ -423,3 +437,9 @@ export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLo
 //个人中心头像修改
 export const editHeadPortrait=url+'authmodule/personalCore/editPersonalCenterHeade';
 export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow';
+
+
+export const deriveInt = {
+  select:`${url}catamodule/editing/cataTbBookInfo/getCountByConditon`,
+  derive:`${url}catamodule/editing/cataTbBookInfo/getFileUrlByConditon`
+}
