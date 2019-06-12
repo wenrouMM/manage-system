@@ -76,6 +76,7 @@
               class="inputDiv"
               :disabled="judge"
               placeholder="请输入电话号码"
+              @blur="verifyPhoneFun"
             ></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
@@ -85,6 +86,7 @@
               class="inputDiv"
               :disabled="judge"
               placeholder="请输入邮箱"
+              @blur="verifyEmailFun"
             ></el-input>
           </el-form-item>
           <el-form-item label="地址" prop="address" :label-width="formLabelWidth">
@@ -105,7 +107,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="角色等级" prop="level" :label-width="formLabelWidth">
-           
+
               <el-select value-key="name"  v-model="addForm.level" placeholder="请选择">
                 <el-option
                   v-for="(item,index) in optionsData"
@@ -170,7 +172,9 @@ import {
   headUpload,
   cardLevelInt,
   addCardInt,
-  bookWordInt
+  bookWordInt,
+  cardInfoInt,
+  rechargeInt
 } from "@request/api/base.js";
 export default {
   name: "getAcard",
@@ -250,7 +254,7 @@ export default {
         all = cost
         console.log('走了吗')
       }
-      
+
       return all
     },
     judge() {
@@ -262,9 +266,35 @@ export default {
     }
   },
   methods: {
+    //电话验证
+    verifyPhoneFun(){
+      this.axios.post(cardInfoInt.verifyPhone,{
+        phone:this.addForm.phoneNumber
+      }).then((res)=>{
+        console.log('电话号码验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg)
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    //邮箱验证
+    verifyEmailFun(){
+      this.axios.post(cardInfoInt.verifyEmail,{
+        email:this.addForm.email
+      }).then((res)=>{
+        console.log('邮箱验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg)
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
     // 等级选择下拉框
     levelOptionApi() {
-      axios.get(cardLevelInt.select).then(res => {
+      axios.get(rechargeInt.option).then(res => {
         if(res.data.state == true){
           this.optionsData = res.data.row
           console.log('当前下拉框',this.optionsData)
@@ -281,7 +311,7 @@ export default {
       console.log(value);
       if (value.idCard) {
         this.loading = true;
-        
+
         axios
           .get(addCardInt.searchId, {
             params: value
@@ -312,7 +342,7 @@ export default {
           });
       }
       if(isExist){
-        
+
       }
       console.log("触发了吗");
     },

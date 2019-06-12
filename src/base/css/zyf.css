@@ -231,3 +231,10 @@
 .commonMode .searchBox  .el-input .el-input__inner {
   text-align: left;
 }
+.addEditDialog #collectionAdd #collectionAddIsbn .el-button {
+  margin-right: 0px;
+  width: 40px;
+}
+.addEditDialog #collectionAdd #collectionAddIsbn .el-input .el-input__inner{
+  width: 800px;
+}

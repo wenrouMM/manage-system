@@ -176,7 +176,7 @@
               for (let item of res.data.row){
                 console.log('为表单元素赋值',item)
                 this.ruleForm.bookName=item.name
-                this.ruleForm.bookIndex=item.searchNumber
+                this.ruleForm.bookIndex=item.callNumber
                 this.ruleForm.bookType=item.fkTypeName
                 this.ruleForm.bookTypeCode=item.fkTypeCode
                 this.ruleForm.id=item.id

@@ -141,7 +141,7 @@
           <el-form ref="changeForm" :model="changeForm" :rules="addRules">
             <!-- 表单域 -->
             <el-form-item label="等级名称" prop="name" :label-width="formLabelWidth">
-              <el-input v-model="changeForm.name" autocomplete="off"></el-input>
+              <el-input v-model="changeForm.name" autocomplete="off" @blur="verifyGradeFun"></el-input>
             </el-form-item>
             <el-form-item label="续借次数" prop="renewNum" :label-width="formLabelWidth">
               <el-input v-model="changeForm.renewNum" autocomplete="off"></el-input>
@@ -154,7 +154,7 @@
             </el-form-item>
 
             <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
-              <el-input :disabled="editJude" v-model="changeForm.deposit" autocomplete="off"></el-input>
+              <el-input :disabled="editJude" v-model="changeForm.deposit" autocomplete="off" @blur="verifyDepositFun"></el-input>
             </el-form-item>
 
             <el-form-item class="select" prop="disabled" label="状　　态">
@@ -184,8 +184,6 @@
 <script>
 import axios from "axios";
 import {
-  selectEffect,
-  selectAllDrop,
   cardLevelInt
 } from "@request/api/base.js";
 export default {
@@ -232,20 +230,10 @@ export default {
       editJude: false, //押金输入框锁定
       addRules: {
         name: [{ required: true, message: "请输入等级名称", trigger: "blur" }],
-        renewNum: [
-          { required: true, message: "请输入续借天数", trigger: "blur" }
-        ],
-        readerTime: [
-          { required: true, message: "请输入借阅时间", trigger: "blur" }
-        ],
-        bookNum: [
-          { required: true, message: "请输入借阅数量", trigger: "blur" }
-        ],
-
-        deposit: [
-          { required: true, message: "请输入押金金额", trigger: "blur" }
-        ],
-
+        renewNum: [{ required: true, message: "请输入续借天数", trigger: "blur" }],
+        readerTime: [{ required: true, message: "请输入借阅时间", trigger: "blur" }],
+        bookNum: [{ required: true, message: "请输入借阅数量", trigger: "blur" }],
+        deposit: [{ required: true, message: "请输入押金金额", trigger: "blur" }],
         disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
       }
     };
@@ -285,6 +273,34 @@ export default {
     deleteTimeForm() {}
   },
   methods: {
+    //验证等级名称
+    verifyGradeFun(){
+      this.axios.post(cardLevelInt.verifyGrade,{
+        id:this.changeForm.id,
+        gradeName:this.changeForm.name
+      }).then((res)=>{
+        console.log('等级名称验证的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg);
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    //验证押金金额
+    verifyDepositFun(){
+      this.axios.post(cardLevelInt.verifyDeposit,{
+        id:this.changeForm.id,
+        gradeDeposit:this.changeForm.deposit
+      }).then((res)=>{
+        console.log('押金金额验证的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg);
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
       let page = Math.ceil(this.total / this.pageSize);

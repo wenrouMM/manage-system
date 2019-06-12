@@ -258,10 +258,13 @@
                 <div class="flexLayout" id="editCatalogInput4">
                   <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
                     <div class="flexLayout">
-                      <el-input v-model="addForm.fkTypeCode"></el-input>
+                      <!--<el-input v-model="addForm.fkTypeCode"></el-input>
                       <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
                         <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                      </p>
+                      </p>-->
+                      <el-input v-model="addForm.fkTypeCode">
+                        <el-button slot="append" type="primary" @click="typeTreeFun" icon="el-icon-search"></el-button>
+                      </el-input>
                     </div>
                   </el-form-item>
                   <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
@@ -271,10 +274,13 @@
                 <div class="flexLayout" id="editCatalogInput5">
                   <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
                     <div class="flexLayout">
-                      <el-input v-model="addForm.fkPressName"></el-input>
+                      <!--<el-input v-model="addForm.fkPressName"></el-input>
                       <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
                         <img src="../../base/img/currency/ssbs.png" style="width:20px;height:20px;margin-left: 15px;margin-top: 10px">
-                      </p>
+                      </p>-->
+                      <el-input v-model="addForm.fkPressName">
+                        <el-button slot="append" type="primary" @click="publishTreeFun" icon="el-icon-search"></el-button>
+                      </el-input>
                     </div>
                   </el-form-item>
                   <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 45px">

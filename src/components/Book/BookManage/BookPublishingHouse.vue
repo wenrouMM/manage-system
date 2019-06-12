@@ -103,21 +103,21 @@
             <!-- Form -->
             <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
               <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
-                <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 70px">
+                <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 60px">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
-                <el-form-item label="公司地址 :" prop="componentAddress" style="padding-left: 70px">
+                <el-form-item label="公 司 地 址 :" prop="componentAddress" style="padding-left: 60px">
                   <el-input v-model="addForm.componentAddress"></el-input>
                 </el-form-item>
-                <el-form-item label="联 系 人 :" prop="contacts" style="padding-left: 70px">
+                <el-form-item label="联　系　人 :" prop="contacts" style="padding-left: 60px">
                   <el-input v-model="addForm.contacts"></el-input>
                 </el-form-item>
-                <el-form-item label="联系电话 :" prop="contactPhone" style="padding-left: 70px">
+                <el-form-item label="联 系 电 话 :" prop="contactPhone" style="padding-left: 60px">
                   <el-input v-model="addForm.contactPhone"></el-input>
                 </el-form-item>
                 <!-- 弹框表单按钮  验证失效-->
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm()" >确定</el-button>
+                  <el-button type="primary" @click="submitForm()">确定</el-button>
                   <el-button type="info" @click="resetForm()" >取消</el-button>
                 </el-form-item>
               </el-form>

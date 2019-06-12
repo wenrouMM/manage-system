@@ -404,7 +404,7 @@ export default {
     // 读卡APi
     readCardApi(data) {
       console.log("用户信息");
-      axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
+      axios.get(bookDamageInt.userInfo, { params: data }).then(res => {
         if (res.data.state === true) {
           this.userTable = res.data.row;
           this.tabCard = data;

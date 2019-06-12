@@ -216,8 +216,6 @@
 <script>
 import axios from "axios";
 import {
-  readerType,
-  deposit,
   cardInfoInt,
   rechargeInt,
   bookWordInt
@@ -656,9 +654,9 @@ export default {
     // 补办费用 数据字典
     supplyCashApi() {
       axios.get(bookWordInt.search).then(res => {
+        console.log("接收的数据", res);
         if (res.data.state) {
           this.supplyCost = res.data.row.setReissueCost;
-          console.log("接收的数据", res.data.row);
           console.log("补卡费用", this.supplyCost);
         } else {
           // this.$message.error(res.data.msg);

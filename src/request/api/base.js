@@ -9,12 +9,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-var url = 'http://192.168.2.31:8088/';
+/*var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';  
-/* var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/';*/
+var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/'; */
+var fileUrl = 'http://192.168.2.121:8090/';
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
 var fileUrl = window.glob.fileUrl*/
@@ -46,37 +46,38 @@ export const damageInt = {
 /*--- 流通记录 ---*/
 // 报损记录与历史记录与处理操作
 export const damageCotInt = {
-  search:`${url}borrowmodule/damageLog/select`,
-  deal:`${url}borrowmodule/damageLog/deal`,
-  searchHis:`${url}borrowmodule/damageHis/select`
+  search:`${url}borrowmodule/borrowLog/damageLog/select`,
+  deal:`${url}borrowmodule/borrowLog/damageLog/deal`,
+  searchHis:`${url}borrowmodule/borrowLog/damageHis/select`
 }
 /*--- 借阅管理 ---*/
 // 借书页面
 
 var borrow = url + 'tibetmuseummodule/bookRFID/';
 export const borrowInt = {
-  selectCode: `${url}borrowmodule/borrow/selectByCode`,
-  selectRfid: `${borrow}borrowmodule/return/selectByrfid`
+  selectCode: `${url}borrowmodule/lend/borrow/selectByCode`,
+  selectRfid: `${borrow}borrowmodule/lend/borrow/selectByrfid`
 }
 // 还书页面
 export const returnInt = {
-  selectCode: `${url}borrowmodule/return/selectByCode`,
-  selectRfid: `${borrow}borrowmodule/borrow/selectByrfid`
+  selectCode: `${url}borrowmodule/lend/return/selectByCode`,
+  selectRfid: `${borrow}borrowmodule/lend/return/selectByrfid`
 }
 // 续借页面
 var bookOperate = url + 'borrowmodule/';
 export const bookOperateInt = {
-  borrow: `${bookOperate}borrow/out`,
-  sell: `${bookOperate}return/in`,
+  borrow: `${bookOperate}lend/borrow/out`,
+  sell: `${bookOperate}lend/return/in`,
   renew:`${url}equipmentmodule/bookinfo/renewBooks`,
-  userInfo:`${url}borrowmodule/borrow/getReaderInfo`,
-  return:`${url}borrowmodule/borrow/getReaderLog`,
-  history:`${url}borrowmodule/borrow/getReaderHis`
+  userInfo:`${bookOperate}lend/borrow/getReaderInfo`,
+  return:`${bookOperate}lend/borrow/getReaderLog`,
+  history:`${bookOperate}lend/borrow/getReaderHis`
 }
-// 报损页面
+// 书籍报损
 export const bookDamageInt = {
-  search:`${url}systemmodule/damage/select`,
-  damage:`${url}bookcollectionmodule/collection/letDamage`
+  search:`${url}borrowmodule/lend/damage/getDamage`,
+  damage:`${url}borrowmodule/lend/damage/bookDamage`,
+  userInfo:`${url}borrowmodule/lend/damage/getReaderInfo`
 }
 
 /*------ 读者管理模块 ------*/
@@ -84,58 +85,62 @@ export const bookDamageInt = {
 export const rechargeInt = {
   juge:`${url}financemodule/depositRecord/vMoney`,
   deposit:`${url}financemodule/depositRecord/add`,
-  logout:`${url}financemodule/readerTbCardLogout/Logout`, // 注销
-  lose:`${url}readermodule/readerTbCardInfo//cardReport`, // 挂失
-  cancelLost:`${url}readermodule/readerTbCardInfo/cardReportCancel`, // 取消挂失
-  supply:`${url}readermodule/readerTbCardInfo/cardReissue`,
-  option:`${url}readermodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
+  logout:`${url}readermodule/cardManagement/readerTbCardInfo/Logout`, // 注销
+  lose:`${url}readermodule/cardManagement/readerTbCardInfo/cardReport`, // 挂失
+  cancelLost:`${url}readermodule/cardManagement/readerTbCardInfo/cardReportCancel`, // 取消挂失
+  supply:`${url}readermodule/cardManagement/readerTbCardInfo/cardReissue`,
+  option:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
 }
 
 //读者卡信息
 var cardInfo = url + 'tibetmuseummodule/readerTbCardInfo/';
 export const cardInfoInt = {
-  select: `${url}readermodule/readerTbCardInfo/select`,
+  select: `${url}readermodule/cardManagement/readerTbCardInfo/select`,
   cardReport: `${cardInfo}currency/cardReport`, // 挂失/取办
-  cardReissue: `${cardInfo}currency/cardReissue`,// 补办
+  cardReissue: `${url}readermodule/cardManagement/readerTbCardInfo/cardReissue`,// 补办
   cogradient: `${cardInfo}synchronizationReader`, // 登记读者卡
-  add: `${cardInfo}currency/add`, // 办卡
+  add: `${url}readermodule/cardManagement/readerTbCardInfo/add`, // 办卡
   selectUser: `${cardInfo}selectUserInfoByCard`,
-  option:`${url}readermodule/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`
+  option:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`,
+  verifyPhone:`${url}readrmodule/readerTbUserInfo/currency/verifyPhone`,//电话验证
+  verifyEmail:`${url}readrmodule/readerTbUserInfo/currency/verifyEmail`,//邮箱验证
 }
 export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox';
 //读者卡等级
 
 export const cardLevelInt = {
-  select: `${url}readermodule/readerTbCardGradeinfo/select`,
-  add: `${url}readermodule/readerTbCardGradeinfo/add`,
-  edit: `${url}readermodule/readerTbCardGradeinfo/edit`,
-  delete: `${url}readermodule/readerTbCardGradeinfo/delete`,
+  select: `${url}readermodule/cardManagement/readerTbCardGradeinfo/select`,
+  add: `${url}readermodule/cardManagement/readerTbCardGradeinfo/add`,
+  edit: `${url}readermodule/cardManagement/readerTbCardGradeinfo/edit`,
+  delete: `${url}readermodule/cardManagement/readerTbCardGradeinfo/delete`,
+  verifyGrade:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/verifyName`,//验证读者卡等级名称
+  verifyDeposit:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/verifyDeposit` //验证押金金额
 }
 /*------ 系统设置模块  ------*/
 
 // 发布公告
 export const editorInt = {
-  add:`${url}systemmodule/sysTbNoticeInfo/add`,
-  select: `${url}systemmodule/sysTbNoticeInfo/selectPage`,
-  edit:`${url}systemmodule/sysTbNoticeInfo/edit`,
-  delete:`${url}systemmodule/sysTbNoticeInfo/delete`,
-  detail:`${url}systemmodule/sysTbNoticeInfo/selectOne`,
+  add:`${url}authmodule/sysTbNoticeInfo/add`,
+  select: `${url}authmodule/sysTbNoticeInfo/selectPage`,
+  edit:`${url}authmodule/sysTbNoticeInfo/edit`,
+  delete:`${url}authmodule/sysTbNoticeInfo/delete`,
+  detail:`${url}authmodule/sysTbNoticeInfo/currency/selectOne`,
   moreDetail:`${url}systemmodule/sysTbNoticeInfo/selectMore`,
-  revoke:`${url}systemmodule/sysTbNoticeInfo/revoke`, //公告撤销
-  cancelRevoke:`${url}systemmodule/sysTbNoticeInfo/cancelRevoke`,//公告取消撤销
-  place:`${url}systemmodule/sysTbNoticeInfo/place`,//公告置顶
-  cancelPlace:`${url}systemmodule/sysTbNoticeInfo/cancelPlace`,//公告取消置顶
+  revoke:`${url}authmodule/sysTbNoticeInfo/revoke`, //公告撤销
+  cancelRevoke:`${url}authmodule/sysTbNoticeInfo/cancelRevoke`,//公告取消撤销
+  place:`${url}authmodule/sysTbNoticeInfo/place`,//公告置顶
+  cancelPlace:`${url}authmodule/sysTbNoticeInfo/cancelPlace`,//公告取消置顶
 }
 // 数据字典
 export const bookWordInt = {
-  search:`${url}systemmodule/sysTbParamInfo/select`,
-  edit:`${url}systemmodule/sysTbParamInfo/edit`
+  search:`${url}authmodule/sysTbParamInfo/select`,
+  edit:`${url}authmodule/sysTbParamInfo/edit`,
 }
 //登陆页
 export const login = {
   yzm:`${url}authmodule/index/imgVerification?`,//验证码接口
 }
-export const powerControl=url+'authmodule/roleInformation/select';//权限表格查询
+export const powerControl=url+'authmodule/roleMenuElement/select';//权限表格查询
 //菜单页面
 export const menu = {
   select:`${url}authmodule/menuInformation/select`,//菜单查询接口
@@ -153,8 +158,8 @@ export const indexInt = {
   record:`${url}borrowmodule/index/getNewLog`,
   fan:`${url}tibetmuseummodule/index/getHotType`,
   pillar:`${url}borrowmodule/index/selectNearBorrowInfo`,
-  cardOn:`${url}readermodule/readerTbCardInfo/currency/handleCardByOneDay`,
-  notice:`${url}systemmodule/sysTbNoticeInfo/selectLittle`
+  cardOn:`${url}readermodule/cardManagement/readerTbCardInfo/currency/handleCardByOneDay`,
+  notice:`${url}authmodule/sysTbNoticeInfo/currency/selectLittle`
 }
 
 // 权限模块的API
@@ -173,7 +178,10 @@ export const userManageInterface = {
   add: `${userManage}add`,
   edit: `${userManage}edit`,
   delete: `${userManage}delete`,
-  reset:`${url}authmodule/loginInformation/edit`
+  reset:`${url}authmodule/managerInformation/resetPassword`,
+  verifyidCard:`${url}authmodule/managerInformation/currency/verifyIdCrad`,//身份证验证接口
+  verifyPhone:`${url}authmodule/managerInformation/currency/verifyPhone`,//电话号码验证
+  verifyEmail:`${url}authmodule/managerInformation/currency/verifyEmail` //邮箱验证
 }
 export const roleManageInt = {
   select: `${roleManage}select`,
@@ -204,7 +212,7 @@ export const bookModeInt = {
 //图书出版社页面
 export const bookpublish = {
   select:`${url}bookcollectionmodule/libraryPressManagementPage/select`,//图书出版社初始化查询接口
-  city:`${url}bookcollectionmodule/libraryPressManagementPage/selectCity `, //图书出版社城市信息
+  city:`${url}bookcollectionmodule/libraryPressManagementPage/selectCity`, //图书出版社城市信息
   add:`${url}bookcollectionmodule/libraryPressManagementPage/add`, //图书出版社添加信息
   edit:`${url}bookcollectionmodule/libraryPressManagementPage/edit`, //修改图书出版社
   delete:`${url}bookcollectionmodule/libraryPressManagementPage/delete`, //删除图书出版社
@@ -254,48 +262,48 @@ export const deposit = {
 }
 //逾期管路
 export const overdue = {
-  table:`${url}borrowmodule/expectLog/select`, //逾期查询表格
+  table:`${url}borrowmodule/borrowLog/expectLog/select`, //逾期查询表格
   phone:`${url}tibetmuseummodule/currency/expectLog/selectUserPhone`, //逾期催还电话
-  history:`${url}borrowmodule/expectHistoryLog/select`, //逾期历史记录查询表格
-  make:`${url}borrowmodule/expectLog/handle`, //逾期金额处理
-  setSelect:`${url}readermodule/overdueFunctionSet/select`,//逾期设置查询
-  setEdit:`${url}readermodule/overdueFunctionSet/edit`//逾期设置修改
+  history:`${url}borrowmodule/borrowLog/expectHistoryLog/select`, //逾期历史记录查询表格
+  make:`${url}borrowmodule/borrowLog/expectLog/handle`, //逾期金额处理
+  setSelect:`${url}borrowmodule/borrowLog/overdueFunctionSet/select`,//逾期设置查询
+  setEdit:`${url}borrowmodule/borrowLog/overdueFunctionSet/edit`//逾期设置修改
 }
 //借阅记录
 export const loan = {
-  table:`${url}borrowmodule/log/select`, //借阅记录表格查询
-  history:`${url}borrowmodule/history/select`, //借阅历史记录
+  table:`${url}borrowmodule/borrowLog/log/select`, //借阅记录表格查询
+  history:`${url}borrowmodule/borrowLog/history/select`, //借阅历史记录
 }
 //失信记录
 export const dishonesty = {
-  table:`${url}readermodule/loseLog/select`,//失信记录表格查询
-  revoke:`${url}readermodule/loseLog/revoke`, //失信撤销操作
-  history:`${url}readermodule/loseHistoryLog/select`//失信历史记录
+  table:`${url}readermodule/loseManagement/loseLog/select`,//失信记录表格查询
+  revoke:`${url}readermodule/loseManagement/loseLog/revoke`, //失信撤销操作
+  history:`${url}readermodule/loseManagement/loseHistoryLog/select`//失信历史记录
 }
 //馆内图书类型
 /*------ 区域模块 ------*/
 //库房模块
 var store = url + 'regionmodule/areaManagementPage/store';
 export const storeInt = {
-  select: `${store}select`,
-  add: `${store}add`,
-  edit: `${store}edit`,
-  delete: `${store}delete`
+  select: `${url}bookcollectionmodule/areaManagementPage/storeselect`,
+  add: `${url}bookcollectionmodule/areaManagementPage/storeadd`,
+  edit: `${url}bookcollectionmodule/areaManagementPage/storeedit`,
+  delete: `${url}bookcollectionmodule/areaManagementPage/storedelete`
 }
 //区模块
-var region = url + 'regionmodule/areaManagementPage/region';
+var region = url + 'bookcollectionmodule/areaManagementPage/';
 export const regionInt = {
-  select: `${region}select`,
-  add: `${region}add`,
-  edit: `${region}edit`,
-  delete: `${region}delete`,
-  selectBind: `${region}selectBind`,
-  bind: `${region}editBind`
+  select: `${url}bookcollectionmodule/areaManagementPage/regionselect`,
+  add: `${url}bookcollectionmodule/areaManagementPage/regionadd`,
+  edit: `${url}bookcollectionmodule/areaManagementPage/regionedit`,
+  delete: `${url}bookcollectionmodule/areaManagementPage/regiondelete`,
+  selectBind: `${url}bookcollectionmodule/areaManagementPage/regionselectBind`,
+  bind: `${url}bookcollectionmodule/areaManagementPage/regioneditBind`
 }
 //层架绑定
 export const layerFrame = {
-  tree:`${url}regionmodule/layerKidnappingBindingPage/selectTree`, //层架绑定树
-  save:`${url}regionmodule/layerKidnappingBindingPage/edit'`, //层架绑定修改
+  tree:`${url}bookcollectionmodule/layerKidnappingBindingPage/selectTree`, //层架绑定树
+  save:`${url}bookcollectionmodule/layerKidnappingBindingPage/edit`, //层架绑定修改
 }
 
 
@@ -313,9 +321,9 @@ export const cardTypeInt = {
 /*------ 通用接口 ------*/
 // 办卡接口
 export const addCardInt = {
-  searchId:`${url}readermodule/readerTbCardInfo/selectUserInfoByCard`,
-  validateId:`${url}readermodule/readerTbCardInfo/reissueCost`,
-  addCard:`${url}readermodule/readerTbCardInfo/add`
+  searchId:`${url}readermodule/cardManagement/readerTbCardInfo/currency/selectUserInfoByCard`,
+  validateId:`${url}readermodule/cardManagement/readerTbCardInfo/currency/reissueCost`,
+  addCard:`${url}readermodule/cardManagement/readerTbCardInfo/add`
 }
 //通用接口
 export const photoUrl = 'http://192.168.2.31'; // 预览图片前缀
@@ -338,16 +346,16 @@ export const unBanOption = url + 'tibetmuseummodule/readerTbCardGradeinfo/curren
 
 //系统管理损坏管理
 export const damage={
-  select: `${url}systemmodule/damage/select`,
-  add: `${url}systemmodule/damage/add`,
-  edit: `${url}systemmodule/damage/edit`,
-  delete: `${url}systemmodule/damage/delete`
+  select: `${url}authmodule/damageMgr/select`,
+  add: `${url}authmodule/damageMgr/add`,
+  edit: `${url}authmodule/damageMgr/edit`,
+  delete: `${url}authmodule/damageMgr/delete`
 }
 //寒暑假设置
 export const vacation={
-  select:`${url}systemmodule/holiday/select`,
-  add:`${url}systemmodule/holiday/add`,
-  edit:`${url}systemmodule/holiday/edit`,
+  select:`${url}authmodule/holiday/select`,
+  add:`${url}authmodule/holiday/add`,
+  edit:`${url}authmodule/holiday/edit`,
 }
 
 //充值设置
@@ -366,40 +374,44 @@ export const collection ={
   isbn:`${url}bookcollectionmodule/collection/selectFromCata`,
   state:`${url}bookcollectionmodule/collection/editState`,
   delete:`${url}bookcollectionmodule/collection/delete`,
-  letLeave:`${url}bookcollectionmodule/collection//letLeave`,
+  letLeave:`${url}bookcollectionmodule/collection/letLeave`,
   harm:`${url}bookcollectionmodule/collection/letLeave`,
   letRemove:`${url}bookcollectionmodule/collection/letRemove`,
-  harmSelect:`${url}systemmodule/damage/select`,
-  damage:`${url}bookcollectionmodule/collection/letDamage`
+  harmSelect:`${url}bookcollectionmodule/collection/getDamage`,
+  damage:`${url}bookcollectionmodule/collection/bookDamage`
 }
 
 //采购管理
 export const purchasing ={
-  select:`${url}bookcollectionmodule/procuremen/select`,
-  add:`${url}bookcollectionmodule/procuremen/add`,
-  delete:`${url}bookcollectionmodule/procuremen/delete`,
-  edit:`${url}bookcollectionmodule/procuremen/edit`,
+  select:`${url}catamodule/editing/procuremen/select`,
+  add:`${url}catamodule/editing/procuremen/add`,
+  delete:`${url}catamodule/editing/procuremen/delete`,
+  edit:`${url}catamodule/editing/procuremen/edit`,
 }
 
 //书籍编目
 export const catalog ={
-  select:`${url}bookcollectionmodule/cataTbBookInfo/select`,
-  add:`${url}bookcollectionmodule/cataTbBookInfo/add`,
-  delete:`${url}bookcollectionmodule/cataTbBookInfo/delete`,
-  edit:`${url}bookcollectionmodule/cataTbBookInfo/edit`,
-  typeTree:`${url}bookcollectionmodule/cataTbBookInfo/selectAllBookType`,
-  publishTree:`${url}bookcollectionmodule/cataTbBookInfo/selectPressTree`,
-  language:`${url}bookcollectionmodule/cataTbBookInfo/getLanguage`,
-  remoteCataloging:`${url}bookcollectionmodule/cataTbBookInfo/getBookInfoByLongRange`,//远程编目的数据
-  localCataloging:`${url}bookcollectionmodule/cataTbBookInfo/selectFromCata`,//本地编目的数据
+  select:`${url}catamodule/editing/cataTbBookInfo/select`,
+  add:`${url}catamodule/editing/cataTbBookInfo/add`,
+  delete:`${url}catamodule/editing/cataTbBookInfo/delete`,
+  edit:`${url}catamodule/editing/cataTbBookInfo/edit`,
+  typeTree:`${url}catamodule/editing/cataTbBookInfo/selectAllBookType`,
+  publishTree:`${url}catamodule/editing/cataTbBookInfo/selectPressTree`,
+  language:`${url}catamodule/editing/cataTbBookInfo/getLanguage`,
+  remoteCataloging:`${url}catamodule/editing/cataTbBookInfo/getBookInfoByLongRange`,//远程编目的数据
+  localCataloging:`${url}catamodule/editing/cataTbBookInfo/selectFromCata`,//本地编目的数据
+  getFields:`${url}catamodule/editing/cataTbBookInfo/getFields`,//获取映射框数据
+  start:`${url}catamodule/editing/cataTbBookInfo/start`,//导入
+  getCountByConditon:`${url}catamodule/editing/cataTbBookInfo/getCountByConditon`,//获取对应条件的数据总数
+  getFileUrlByConditon:`${url}catamodule/editing/cataTbBookInfo/getFileUrlByConditon`,//开始导出
 }
 
 //个人中心
 export const PersonalCentre={
-  userInfo:`${url}authmodule/managerInformation/getNowUser`,
-  editPassword:`${url}authmodule/loginInformation/currency/edit`,
-  editUsername:`${url}authmodule/managerInformation/editPersonalCenterName`,
-  resetPassword:`${url}authmodule/loginInformation/edit`
+  userInfo:`${url}authmodule/personalCore/getNowUser`,
+  editPassword:`${url}authmodule/personalCore/editPassword`,
+  editUsername:`${url}authmodule/personalCore/editPersonalCenterName`,
+  resetPassword:`${url}authmodule/managerInformation/resetPassword`
 }
 
 //注销记录
@@ -409,5 +421,5 @@ export const logOut=url+'financemodule/readerTbCardLogout/select';
 export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLog/select';
 
 //个人中心头像修改
-export const editHeadPortrait=url+'authmodule/managerInformation/editPersonalCenterHeade';
+export const editHeadPortrait=url+'authmodule/personalCore/editPersonalCenterHeade';
 export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow';

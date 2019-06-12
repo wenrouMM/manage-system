@@ -209,7 +209,7 @@
             element-loading-text="正在执行中"
             id="addForm"
             ref="addForm"
-            
+
             :model="addForm"
             :rules="addRules"
           >
@@ -261,7 +261,7 @@
               <el-select
                 v-model="addForm.authTbRoles"
                 multiple
-                
+
                 collapse-tags
                 placeholder="请选择类型"
                 value-key="roleCode"
@@ -279,16 +279,17 @@
                 :disabled="addForm.idCard && i==2?true:false"
                 v-model="addForm.idCard"
                 autocomplete="off"
+                @blur="verifyIdCradFun"
               ></el-input>
             </el-form-item>
             <el-form-item label="注册邮箱" prop="email" :label-width="formLabelWidth">
-              <el-input v-model="addForm.email" autocomplete="off"></el-input>
+              <el-input v-model="addForm.email" autocomplete="off" @blur="verifyEmailFun"></el-input>
             </el-form-item>
             <el-form-item label="居住地址" prop="address" :label-width="formLabelWidth">
               <el-input v-model="addForm.address" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="电话号码" prop="phone" :label-width="formLabelWidth">
-              <el-input v-model="addForm.phone" autocomplete="off"></el-input>
+              <el-input v-model="addForm.phone" autocomplete="off" @blur="verifyPhoneFun"></el-input>
             </el-form-item>
 
             <el-form-item class="select" prop="isLock" label="状　　态">
@@ -401,6 +402,7 @@ export default {
         email: "",
         isLock: null // 状态
       },
+      userId:'',
       addRules: {
         // 添加的参数验证
         username: [{ required: true, message: "请输入姓名", trigger: "blur" }],
@@ -425,7 +427,6 @@ export default {
           return time.getTime() > Date.now();
         }
       },
-
       pickerOptions0: {
         disabledDate: time => {
           if (this.searchForm.endTime) {
@@ -461,10 +462,8 @@ export default {
       tableData: [
         // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
       ],
-
       /*====== 5.0 分页相关 搜索相关设置项 ======*/
       searchLoading: false,
-
       loading: true,
       optionsData: [],
       total: 0,
@@ -547,11 +546,53 @@ export default {
     }
   },
   methods: {
+    //添加时身份证验证
+    verifyIdCradFun(){
+      this.axios.post(userManageInterface.verifyidCard,{
+        id:this.userId,
+        idCard:this.addForm.idCard
+      }).then((res)=>{
+        console.log('身份证验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg);
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    //添加或修改时手机号码验证
+    verifyPhoneFun(){
+      console.log('添加或修改时电话时是否有id',this.userId)
+      this.axios.post(userManageInterface.verifyPhone,{
+        id:this.userId,
+        phone:this.addForm.phone
+      }).then((res)=>{
+        console.log('电话号码验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg);
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
+    //添加或修改时邮箱验证
+    verifyEmailFun(){
+      console.log('添加或修改邮箱时是否有id',this.userId)
+      this.axios.post(userManageInterface.verifyEmail,{
+        id:this.userId,
+        email:this.addForm.email
+      }).then((res)=>{
+        console.log('邮箱验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg);
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
+    },
     // 重置密码按钮
     resetPsd(index, row) {
       // 禁用按钮 按钮的作用就是获取一切初始化信息
-
-
         this.i = 0;
         this.resetArr.idCard = row.idCard;
         console.log(index, row, this.resetArr); // 当前选中表格的索引和对
@@ -657,10 +698,11 @@ export default {
       });
     },
     handleEdit(index, row) {
+      console.log('编辑时该用户的id',row)
+      this.userId=row.id
       if(this.formFlag){
         this.$refs.addForm.resetFields();
       }
-      
       let obj = this.addForm
       for (var i in obj) {
         obj[i] = "";
@@ -890,20 +932,20 @@ export default {
     },
     closeForm() {
       // 弹框关闭的时候执行 清空数据
-      
+
       this.formFlag = true;
       console.log("关闭测试");
-      
+
       let obj = this.addForm;
-      
+
        // 调用这个方法进行清除登陆状态 打开的时候再清理？
-      
+
       this.files = null;
       this.editLoading = false;
       this.banDeleteLoading = false;
       //this.preloadImg = ''
       console.log("更改了吗", this.addForm);
-      
+
     },
     uPphotoApi() {
       let files = this.files;

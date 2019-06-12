@@ -115,13 +115,15 @@
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <div v-if="i==1">
             <el-form id="collectionAdd" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
-            <div class="flexLayout">
+            <div class="flexLayout" id="collectionAddIsbn">
               <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
-                <el-input v-model="addForm.isbn" style="position: relative" placeholder="请输入ISBN进行搜索选择相关数据" id="isbnInput"></el-input>
+                <el-input v-model="addForm.isbn" placeholder="请输入ISBN进行搜索选择相关数据">
+                  <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
+                </el-input>
               </el-form-item>
-              <p class="searchButton" @click="isbnData">
+              <!--<p class="searchButton" @click="isbnData">
                 <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
-              </p>
+              </p>-->
             </div>
             <div id="decideForm" style="display: none">
               <div id="haveBottomBorderAdd">
