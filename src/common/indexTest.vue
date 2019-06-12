@@ -419,20 +419,7 @@ body,
 }
 
 /*修改默认样式 傻逼样式*/
-.navBar .el-menu-item:hover {
-  outline: 0 !important;
-  color: #fff !important;
-  background: #2bcbff !important;
-  border-bottom: 2px solid #409eff !important;
-}
 
-.navBar .el-menu-item.is-active {
-  color: #fff !important;
-  background: #2bcbff !important;
-}
-.index .headmode .el-menu.el-menu--horizontal {
-  border-bottom: none;
-}
 /* 头像区域 */
 
 .headmode .headBox {
@@ -547,7 +534,7 @@ body,
   color: #fff !important;
   background: #0096ff !important;
 }
-/*
+
 
 .nav .el-menu-item.is-active {
   color: #fff !important;

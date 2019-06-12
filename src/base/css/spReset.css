@@ -116,3 +116,37 @@
 #bookUpload input.el-input__inner{
   text-align: center;
 }
+
+.navBar .el-menu-item:hover {
+  outline: 0 !important;
+  color: #fff !important;
+  background: #2bcbff !important;
+  border-bottom: 2px solid #409eff !important;
+}
+
+.navBar .el-menu-item.is-active {
+  color: #fff !important;
+  background: #2bcbff !important;
+}
+.index .headmode .el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+.nav .el-menu-item:hover {
+  outline: 0 !important;
+  color: #fff !important;
+  background: #0096ff !important;
+}
+
+
+.nav .el-menu-item.is-active {
+  color: #fff !important;
+  background: #0096ff !important;
+}
+
+.nav .el-menu-item {
+  font-size: 16px;
+  margin: 10px 0;
+}
+.nav .el-submenu__title {
+  font-size: 16px;
+}
