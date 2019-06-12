@@ -301,7 +301,8 @@ export default new Router({
           path: '/guideTest',
           meta: {
             title: '系统管理引导页',
-            Mode: '6'
+            Mode: '6',
+           
           },
           component: resolve => require(['../common/guide/guide.vue'], resolve)
         },
@@ -333,7 +334,8 @@ export default new Router({
           path: '/managerInformation',
           meta: {
             title: '用户管理',
-            Mode: '6'
+            Mode: '6',
+            menuCode:'managerInformation'
           },
           component: UserManage
         },
