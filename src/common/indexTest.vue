@@ -529,25 +529,7 @@ body,
   height: 55px;
   background: #ffba00;
 }
-.nav .el-menu-item:hover {
-  outline: 0 !important;
-  color: #fff !important;
-  background: #0096ff !important;
-}
 
-
-.nav .el-menu-item.is-active {
-  color: #fff !important;
-  background: #0096ff !important;
-}
-
-.nav .el-menu-item {
-  font-size: 16px;
-  margin: 10px 0;
-}
-.nav .el-submenu__title {
-  font-size: 16px;
-}
 /*====== 图标类 可能后期需要更换 ======*/
 .logo {
   background-image: url("../base/img/normal/email-icon.png");

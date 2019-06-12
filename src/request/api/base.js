@@ -18,6 +18,19 @@ var fileUrl = 'http://192.168.2.121:8090/'; */
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
 var fileUrl = window.glob.fileUrl */
+import axios from 'axios'
+/*--- 获取按钮权限 ---*/
+export const buttonInt = `${url}authmodule/currency/selectElements` 
+export function getPower (value){
+
+  return axios.get(buttonInt,{
+    params:{
+      menuCode:value
+    }
+  }).then((res)=>{
+    return Promise.resolve(res)
+  })
+}
 
 /*------ 文件上传模块 ------*/
 

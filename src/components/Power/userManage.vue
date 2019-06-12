@@ -324,7 +324,8 @@ import {
   selectRoleType,
   headUpload,
   headimg,
-  photoUrl
+  photoUrl,
+  getPower
 } from "@request/api/base.js";
 import moment from "moment";
 import axios from "axios";
@@ -332,8 +333,9 @@ export default {
   created() {
     let route = this.$route.path;
     console.log(this.$route.path);
-    console.log(this.$route.meta.menuName);
+    console.log(this.$route.meta.menuCode);
     this.selectRoleType(); // 获取角色类型
+    this._getPower(this.$route.meta.menuCode)
   },
   mounted() {
     this.SearchApi(this.searchTimeForm); // 调用查询接口获取数据
@@ -547,6 +549,13 @@ export default {
     }
   },
   methods: {
+    // 获取按钮权限
+    _getPower(value){
+      let obj = value
+      getPower(obj).then((res)=>{
+        console.log('按钮集',res)
+      })
+    },
     // 重置密码按钮
     resetPsd(index, row) {
       // 禁用按钮 按钮的作用就是获取一切初始化信息
