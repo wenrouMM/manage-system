@@ -18,13 +18,17 @@
               @select="handleSelect"
               background-color="#0096ff"
               :default-active="Mode"
+              v-if="menuLo.length"
             >
-              <el-menu-item id="collect" index="1">采编管理</el-menu-item>
+              <el-menu-item v-for="(item,index) of menuLo" :index="'' + item.priority" :id="item.menuCode" :key="index">
+                {{item.menuName}}
+              </el-menu-item>
+              <!-- <el-menu-item id="collect" index="1">采编管理</el-menu-item>
               <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
               <el-menu-item id="circle" index="3">流通管理</el-menu-item>
               <el-menu-item id="reader" index="4">读者管理</el-menu-item>
               <el-menu-item id="finance" index="5">财务管理</el-menu-item>
-              <el-menu-item id="system" index="6">系统管理</el-menu-item>
+              <el-menu-item id="system" index="6">系统管理</el-menu-item> -->
             </el-menu>
           </div>
         </div>
@@ -66,13 +70,21 @@
             background-color="#343B4A"
             text-color="#fff"
             :collapse="isCollapse"
+            v-if="menuLo.length"
           >
             <el-menu-item index="/indexTest">
               <i class="indexIcon indexIconMax iconxiazai45"></i>
               <span style="lineHeight:21px;">首页</span>
             </el-menu-item>
             <!--采编管理 -->
-            <div v-show="Mode == 1">
+            <NavMenu 
+            
+            v-for="(item,index) of menuLo"
+            v-show="Mode==item.priority" 
+            :key="index"
+            :navMenus="item.roleModularMenus">
+            </NavMenu>
+           <!--  <div v-show="Mode == 1">
               <el-submenu index="3">
                 <template slot="title">
                   <i style="fontSize:24px;" class="indexIcon indexIconMax iconwp-sj-3"></i>
@@ -81,13 +93,13 @@
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
                 <el-menu-item index="/purchasingManagement">采购管理</el-menu-item>
               </el-submenu>
-            </div>
+            </div> -->
             <!-- 典藏管理 -->
-            <div class="navMenu" v-show="Mode == 2">
+            <!-- <div class="navMenu" v-show="Mode == 2">
               <el-menu-item index="/publishhouse">
                 <i class="indexIcon indexIconMax iconchubanshe"></i>图书出版社
               </el-menu-item>
-              <!-- <el-menu-item index="/bookregistration">图书登记</el-menu-item> -->
+              
               <el-menu-item index="/BookCollection">
                 <i class="indexIcon iconshuji"></i>书籍典藏
               </el-menu-item>
@@ -106,9 +118,11 @@
               <el-menu-item index="/damageCount">
                 <i class="indexIcon iconbaosun"></i>损坏清点
               </el-menu-item>
-            </div>
+            </div> -->
+
+            
             <!-- 流通管理 -->
-            <div class="navMenu" v-show="Mode == 3">
+           <!--  <div class="navMenu" v-show="Mode == 3">
               <el-submenu index="userbrowrr">
                 <template slot="title">
                   <i class="indexIcon indexIconMax iconjieyuechaxun"></i>
@@ -129,8 +143,6 @@
                 <el-menu-item-group>
                   <el-menu-item index="/loanrecorde">借书记录</el-menu-item>
                   <el-menu-item index="/loanhistory">还书记录</el-menu-item>
-                  <!-- <el-menu-item index="/AdvanceRecord">预借记录</el-menu-item>
-                  <el-menu-item index="/EarlyWarningExpire">预警到期</el-menu-item> -->
                   <el-menu-item index="/overduesettings">逾期设置</el-menu-item>
                   <el-menu-item index="/overduerecords">逾期记录</el-menu-item>
                   <el-menu-item index="/overduehistory">逾期历史记录</el-menu-item>
@@ -138,10 +150,10 @@
                   <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-            </div>
+            </div> -->
             <!-- 读者管理 -->
-            <div class="navMenu" v-show="Mode == 4">
-              <!-- <el-menu-item index="/reader">读者管理</el-menu-item> -->
+            <!-- <div class="navMenu" v-show="Mode == 4">
+              
               <el-submenu index="readerCard">
                 <template slot="title">
                   <i class="indexIcon indexIconMax iconduzheguanli"></i>
@@ -162,22 +174,21 @@
                   <el-menu-item index="/DishonestyHistory">失信历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-            </div>
+            </div> -->
             <!-- 财务管理 -->
-            <div class="navMenu" v-show="Mode == 5">
+            <!-- <div class="navMenu" v-show="Mode == 5">
               <el-menu-item index="/rechargeSet">
                 <i style="fontSize:24px;" class="indexIcon iconchongzhi"></i>充值管理
               </el-menu-item>
               <el-menu-item index="/logOut">
                 <i style="fontSize:24px;" class="indexIcon iconzhuxiaojilu"></i>注销记录
               </el-menu-item>
-              <!-- <el-menu-item index="/Depositflowdirection">押金流向</el-menu-item> -->
               <el-menu-item index="/OverdueCostCirculation">
                 <i class="indexIcon indexIconMax iconyuqi"></i>逾期费用记录
               </el-menu-item>
-            </div>
+            </div> -->
             <!-- 系统设置 -->
-            <div class="navMenu" v-show="Mode == 6">
+            <!-- <div class="navMenu" v-show="Mode == 6">
               <el-menu-item index="/guideTest">
                 <i class="indexIcon indexIconMax iconyindaoxuqiu"></i>引导页
               </el-menu-item>
@@ -208,8 +219,8 @@
               <el-menu-item index="/vacationSet">
                 <i class="indexIcon indexIconMax iconjiaqi-"></i>假期设置
               </el-menu-item>
-            </div>
-            <!-- 选中之后的样式 -->
+            </div> -->
+            
           </el-menu>
         </section>
         <el-main>
@@ -243,7 +254,7 @@ export default {
     return {
       Mode: "",
       navRouter: [],
-      menuLo: [{}],
+      menuLo: [],
       userLo: null,
       nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
       logoUrl: require("../base/img/logo.png"),
@@ -306,7 +317,8 @@ export default {
       this.settingHead = uploadInt.preimg + res.data.row.headerAddress;
     });
     console.log("新方法", this.userLo);
-
+    let menu = JSON.parse(sessionStorage.getItem('menu'))
+    this.menuLo = menu
     this.Mode = sessionStorage.getItem("headIndex");
   },
   watch: {
@@ -536,25 +548,7 @@ body,
   background: #0096ff !important;
 }
 /*
-.nav .el-menu-item:hover::after {
-  content: "";
-  position: absolute;
-  top: 0px;
-  right: -8px;
-  width: 8px;
-  height: 55px;
-  background: #ffba00;
-}
-.nav .el-menu-item.is-active::after {
-  content: "";
-  position: absolute;
-  top: 0px;
-  right: -8px;
-  width: 8px;
-  height: 55px;
-  background: #ffba00;
-}
-*/
+
 .nav .el-menu-item.is-active {
   color: #fff !important;
   background: #0096ff !important;
