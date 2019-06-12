@@ -42,11 +42,14 @@ axios.interceptors.response.use(
     if(response.code == 3002){ // 权限不足
       window.vm.$router.push('/404') // 进入404页面Or权限不够页面
     }
-
+    if(response.code == 3002){ // 权限不足
+      window.vm.$router.push('/404') // 进入404页面Or权限不够页面
+    }
     return response
   },
   error => {
      console.log(error.code)
+     
      //console.log('状态吗',error.response.status)
      console.log('超时错误吗',typeof(error));//console : Error: Request failed with status code 402
     return Promise.reject(error)

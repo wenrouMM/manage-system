@@ -68,6 +68,9 @@ Vue.use(Router)
 
 export default new Router({
   //mode:history,
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  },
   routes: [{
       path: '/',
       redirect: '/indexTest'
@@ -105,7 +108,14 @@ export default new Router({
           component: resolve => require(['../common/upload/uploadBook.vue'], resolve)
         },
 
-
+        {
+          path: '/ActiveList',
+          meta: {
+            title: '公告列表',
+            
+          },
+          component: ()=>import('../components/System/ArticeList.vue')
+        },
         // 2.0 典藏管理
         {
           path: '/libInfo',

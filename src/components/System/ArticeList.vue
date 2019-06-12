@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">公告管理</span>
+          <span class="titleName">公告列表</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
@@ -71,25 +71,11 @@
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" align="center" prop="title" label="标题" width="800">
               <template slot-scope="scope">
-                  <p class="textLeft">{{scope.row.title}}</p>
-              </template>
-              <!-- <template slot-scope="scope">
                   <p @click="jumpArticle(scope.row.id)" class="textLeft">{{scope.row.title}}</p>
-              </template> -->
+              </template>
             </el-table-column>
             <!-- 自定义插槽 -->
-            <el-table-column width="300" align="center" prop="state" label="操作" fixed="right">
-              <template slot-scope="scope">
-                <span  class="operate editColor" @click="editBtn(scope.$index, scope.row)">编辑</span>
-                <span  class="operate deleteColor" @click="deleteBtn(scope.$index, scope.row)">删除</span>
-                <span  class="operate cancelColor" @click="cancelBtn(scope.$index, scope.row)">
-                  {{scope.row.disabled ===0?'撤销':'取消撤销'}}
-                </span>
-                <span  class="operate apexColor" @click="apexBtn(scope.$index, scope.row)">
-                  {{scope.row.state ===0?'置顶':'取消置顶'}}
-                  </span>
-              </template>
-            </el-table-column>
+            
           </el-table>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
@@ -481,10 +467,10 @@ export default {
 .textLeft{
   text-align: left;
 }
-/* .textLeft:hover{
+.textLeft:hover{
   color: #1e9eff;
   cursor: pointer;
-} */
+}
 #title {
   display: inline-block;
   padding-left: 10px;

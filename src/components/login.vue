@@ -17,7 +17,7 @@
           <span><img src="" id="imgYzm" @click="imgClick"></span>
         </div>
         <div style="margin-top: 55px;">
-          <button @click="submit" >登录</button>
+          <el-button type="primary" :loading="buttonLoading" @click="submit" >登录</el-button>
         </div>
         <div id="msg"></div>
       </div>
@@ -39,6 +39,7 @@ import {loginInter,login} from '../request/api/base.js'
         },
         isLand:null,
         clickNum:0,
+        buttonLoading:false
       }
     },
     methods:{
@@ -59,6 +60,7 @@ import {loginInter,login} from '../request/api/base.js'
           $('#msg').html('');
           console.log('登陆')
           this.clickNum++
+          this.buttonLoading =true
           axios.post(loginInter ,({account:this.form.name,
             password:this.form.password,identifyingCode:this.form.yzm})).then( (res) => {
             console.log(res)
@@ -82,6 +84,7 @@ import {loginInter,login} from '../request/api/base.js'
               // 存储动态路由
               // 存储权限带单信息
               this.$router.push('/indexTest'); // 跳转至首页 首页的渲染应加入loading设置
+              this.buttonLoading = false
             }else{
               if($('#name').val()&&$('#pwd').val())
                 $('#msg').html(res.data.msg)
@@ -89,23 +92,29 @@ import {loginInter,login} from '../request/api/base.js'
                 $('#yzm').show()
                 $('#imgYzm').attr("src",login.yzm+Math.random());
               }
+              this.buttonLoading = false
             }
           })
           if(this.clickNum>5){
             $('#msg').html('连接出错，请检查您的网络')
+            this.buttonLoading = false
           }
           var landTime=setTimeout(()=>{
             if(this.isLand==null){
               $('#msg').html('连接出错，请检查您的网络')
+              this.buttonLoading = false
             }
           },10000)
           clearTimeout(landTime)
         }else if($('#name').val()==false&&$('#pwd').val()==false){
           $('#msg').html('请先输入用户名和密码');
+          this.buttonLoading = false
         }else if($('#name').val()&&$('#pwd').val()==false){
           $('#msg').html('密码不能为空');
+          this.buttonLoading = false
         }else if($('#name').val()==false&&$('#pwd').val()){
           $('#msg').html('用户名不能为空');
+          this.buttonLoading = false
         }
       },
     },
