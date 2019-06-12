@@ -302,7 +302,7 @@ export default new Router({
           meta: {
             title: '系统管理引导页',
             Mode: '6',
-            menuCode:'authmodule'
+           
           },
           component: resolve => require(['../common/guide/guide.vue'], resolve)
         },
