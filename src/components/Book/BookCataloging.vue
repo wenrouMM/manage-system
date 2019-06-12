@@ -14,9 +14,9 @@
             <button class="delete" @click="drawbackBtn(tableChecked)">
               <i class="deleteIcon el-icon-delete"></i>删除
             </button>
-            <button class="blue" @click="deriveBtn">
-              <i class="blueIcon el-icon-share"></i>导出
-            </button>
+            <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
+               <!-- <i class="blueIcon el-icon-share"></i> --> 导出excel
+            </el-button>
             <button class="green" @click="tunnellingBtn">
               <i class="el-icon-edit greenIcon"></i>批量导入
             </button>
@@ -369,19 +369,25 @@
           <ul id="treeDemo" class="ztree"></ul>
         </div>
       </div>
+      <a v-show="false" href="" download="" ref="excel" id="excel" >
+        下载
+      </a>
     </el-container>
   </div>
 </template>
 
 <script>
   import axios from "axios";
-  import { catalog } from "@request/api/base.js";
+  import { catalog,deriveInt,uploadInt } from "@request/api/base.js";
   import moment from "moment";
   export default {
     data() {
       return {
         selectbookInfo:'',
         messageWidth:'',
+        excelUrl:'',
+        excelName:'',
+        downloadLoading:false,
         /*====== 2.0表单搜索区域 ======*/
         messageName:'',//树弹框的名称
         setting: {
@@ -689,9 +695,10 @@
       },
       //导出按钮
       deriveBtn(){
-        this.j=1
+        this.diriveApi()
+        /* this.j=1
         this.messageWidth='500px'
-        this.centerDialogVisible=true
+        this.centerDialogVisible=true */
       },
       //删除按钮
       drawbackBtn(){
@@ -896,6 +903,37 @@
         }
       },
       /*------ Api ------*/
+      selectDreApi(val){
+        axios.get(deriveInt.select,{
+          params:value
+        }).then((res)=>{
+          
+          console.log('查询条件',res)
+        })
+      },
+      diriveApi(val){
+        this.downloadLoading = true
+        axios.get(deriveInt.derive,{
+          params:val
+        }).then((res) =>{
+          if(res.data.state == true){
+            
+            this.excelName = res.data.row.name
+            this.excelUrl = uploadInt.showFile + '/' + res.data.row.value + '?fileName=' + res.data.row.name
+           const a = document.getElementById('excel')
+          
+           a.setAttribute("href",this.excelUrl)
+           a.setAttribute("download",this.excelName)
+            a.click()
+            this.downloadLoading = false
+          }else{
+            this.$message.error(res.data.msg)
+            this.downloadLoading = false
+
+          }
+          console.log('测试下载',res)
+        })
+      },
       searchApi(value) {
         //获取登录记录
         console.log(value);

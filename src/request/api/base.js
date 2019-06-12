@@ -9,15 +9,15 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-var url = 'http://192.168.2.31:8088/';
+/* var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';  
-/* var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/';   */
+var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/'; */
+var fileUrl = 'http://192.168.2.121:8090/';
 /* var url = window.glob.url
 var imgurl = window.glob.imgurl
-var fileUrl = window.glob.fileUrl*/
+var fileUrl = window.glob.fileUrl */
 
 /*------ 文件上传模块 ------*/
 
@@ -36,6 +36,11 @@ export const uploadInt = {
 export const bookUploadInt ={
   getFields:`${url}bookcollectionmodule/cataTbBookInfo/getFields`,
   add:`${url}bookcollectionmodule/cataTbBookInfo/start`
+}
+/*--- 导出书籍 ---*/
+export const deriveInt = {
+  select:`${url}catamodule/editing/cataTbBookInfo/getCountByConditon`,
+  derive:`${url}catamodule/editing/cataTbBookInfo/getFileUrlByConditon`
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {
