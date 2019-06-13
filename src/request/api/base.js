@@ -20,9 +20,9 @@ let fileUrl = 'http://192.168.2.31:8090/';  */
 var imgurl='http://192.168.2.121:8090/';
 var fileUrl = 'http://192.168.2.121:8090/'; */
 
-/*var url = window.glob.url
+var url = window.glob.url
 var imgurl = window.glob.imgurl
-var fileUrl = window.glob.fileUrl*/
+var fileUrl = window.glob.fileUrl
 /*------ 文件上传模块 ------*/
 export const buttonInt = `${url}authmodule/currency/selectElements`
 export function getPower (value){

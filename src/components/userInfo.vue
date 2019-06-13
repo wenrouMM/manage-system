@@ -165,7 +165,9 @@ export default {
         console.log(res)
         if(res.data.state==true){
           this.id=res.data.row.id;
-          this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
+          if(res.data.row.headerAddress){
+            this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
+          }
           console.log('this.nomalHeader',this.nomalHeader)
           this.userName=res.data.row.username;
           this.userEmail=res.data.row.email;
