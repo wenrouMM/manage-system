@@ -112,24 +112,6 @@
                 <el-input v-model="changeStoreForm.humidityE"></el-input>
               </el-form-item>
             </div>
-            <div class="row2 upload">
-              <span>上传图片</span>
-              <div class="imgBox">
-                <img class="defaultImg" src="../../../base/img/timg.jpg">
-                <img v-if="!preImg" class="loadImg" :src="changeStoreForm.imageAddress">
-                <img v-if="preImg" :src="preImg" class="preImg">
-                <div @click="pointer()" class="acces"></div>
-                <input
-                  type="file"
-                  accept="jpg/png"
-                  style="display:none;"
-                  action
-                  ref="file"
-                  id="file"
-                  @change="getFile"
-                >
-              </div>
-            </div>
             <el-form-item class="dialogFooter">
               <el-button
                 class="buttonTrueColor"
@@ -276,6 +258,7 @@ export default {
       /*------ bugHack ------*/
       storeFormBug:false,
       areaFormBug:false,
+      bindFormBug:false,
       /*====== 1.0左侧接收数据 ======*/
       storeInfo: [],
       activeIndex: 0, // 控制被选中标签的数据
@@ -626,6 +609,11 @@ export default {
     bindAreaBtn(region, index) {
       this.i = 2;
       this.bindForm.id = region.id;
+      this.bindForm.bindId = ''
+      if(this.bindFormBug){
+        this.$refs.bindForm.resetFields();
+      }
+
       this.changeOptionApi(); // 这样写会不会太耦合 数据都在内层 可扩展性不强
       this.bindDialog = true;
     },
@@ -751,8 +739,13 @@ export default {
       // 关闭和取消 确定结束后都要清除数据
       if(formName == 'changeStoreForm'){
         this.storeFormBug = true
+
       } else{
         this.areaFormBug = true
+      }
+      if(formName == 'bindForm'){
+        this.bindFormBug = true
+        console.log('已经被打开过了')
       }
       console.log("清空表单的哇",this.changeAreaForm);
       console.log('仓库',this.changeStoreForm)
@@ -957,7 +950,7 @@ export default {
   border-bottom: 1px solid #eeeeee;
 }
 .leftFont{
-  
+
 }
 .storeModeTitle:hover {
   background-color: #0096ff;
