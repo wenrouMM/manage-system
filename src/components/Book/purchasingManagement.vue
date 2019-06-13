@@ -13,9 +13,9 @@
           <button class="delete" @click="drawbackBtn">
             <i class="deleteIcon el-icon-delete"></i>删除
           </button>
-          <button class="blue" @click="deriveBtn">
+          <!--<button class="blue" @click="deriveBtn">
             <i class="blueIcon el-icon-share"></i>导出
-          </button>
+          </button>-->
         </div>
         <div class="right">
           <el-form :inline="true" :model="searchForm">

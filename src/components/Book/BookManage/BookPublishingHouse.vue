@@ -23,9 +23,9 @@
                   <button class="add" @click="addDialogOpen">
                     <i class="addIcon el-icon-plus"></i>添加
                   </button>
-                  <button class="blue" @click="deriveBtn">
+                  <!--<button class="blue" @click="deriveBtn">
                     <i class="blueIcon el-icon-share"></i>导出
-                  </button>
+                  </button>-->
                 </div>
                 <div class="right">
                   <el-form :inline="true" :model="searchForm">
