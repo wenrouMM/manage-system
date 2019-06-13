@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     back(){
-      this.$router.push('/noticeSet')
+      this.$router.push('/ActiveList')
     },
     idSearchApi() {
       let obj = this.$route.params;

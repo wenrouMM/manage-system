@@ -8,12 +8,12 @@
         v-if="navMenu.roleModularMenus ==null"
         :key="index"
         :data="navMenu"
-        :index=" '/' + navMenu.menuCode"
-        :route="navMenu.menuCode"
+        :index=" '' + navMenu.menuHref"
+        :route="navMenu.menuHref"
       >
-      <!-- 
-        <i :class="navMenu.entity.icon"></i>
-      -->
+       
+        <i class="indexIcon indexIconMax" :class="navMenu.iconDefault" ></i>
+      
         <span slot="title" class="item_title">{{navMenu.menuName}}</span>
       </el-menu-item>
 
@@ -22,12 +22,12 @@
         v-if="navMenu.roleModularMenus"
         :key="index"
         :data="navMenu"
-        :index="navMenu.menuCode"
+        :index="navMenu.menuHref"
       >
         <template slot="title">
-          <!--
-          <i :class="navMenu.entity.icon"></i>
-          -->
+          
+          <i class="indexIcon indexIconMax" :class="navMenu.iconDefault"></i>
+          
           <span class="item_title"> {{navMenu.menuName}}</span>
         </template>
         <!-- 入口条件 只要有子数据就进行递归  同时子数据没有也是出口条件-->
@@ -64,5 +64,16 @@ export default {
 如果不是 则继续执行递归 把子元素提交后在做一次判定
 上面出口的两次if 就是递归的两个if判定
 */
+.indexIcon{
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-right: 5px;
+}
+.indexIconMax{
+  font-size: 20px;
+}
 </style>
 

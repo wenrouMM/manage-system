@@ -433,7 +433,7 @@ export default {
       console.log(id)
     },
     moreBtn(){
-      this.$router.push({path:'/noticeSet'})
+      this.$router.push({path:'/ActiveList'})
     }
   },
   created() {
