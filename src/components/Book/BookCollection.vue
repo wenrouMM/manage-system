@@ -305,7 +305,7 @@
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
                   <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px">
-                    <el-input v-model="addForm.searchNumber"></el-input>
+                    <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
                   <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
                     <el-input v-model="addForm.place"></el-input>
@@ -443,7 +443,7 @@
         addForm:{
           isbn:'',
           code:'',//馆藏码
-          searchNumber:'',//索书号
+          callNumber:'',//索书号
           place:'',//藏馆地
           dailyRent:'',//默认日租金
           lendingPermission:'',//不外借
@@ -1175,7 +1175,6 @@
   .buttonBox .deongaree {
     background: #4D94FF;
     border-radius: 10px;
-    margin-left: 10px;
   }
   .buttonBox .green {
     background: #01EECA;

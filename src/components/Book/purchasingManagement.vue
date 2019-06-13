@@ -23,7 +23,6 @@
               <el-select
                 v-model="searchForm.makeMethod"
                 placeholder="请选择"
-                style="width: 150px"
                 clearable
                 @change="selectCheck(searchForm.makeMethod)"
               >

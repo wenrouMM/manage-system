@@ -56,7 +56,11 @@
             <el-table-column align="center" prop="fkTypeCode" label="分类号" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkTypeName" label="分类名" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkPressName" label="出版社" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="publishingTime" label="出版时间" width="200" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.publishingTime == null || scope.row.publishingTime=='' ?'---':scope.row.publishingTime}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="language" label="语种" width="150" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.language == null || scope.row.language=='' ?'---':scope.row.language}}</span>
@@ -95,7 +99,7 @@
         </section>
       </div>
       <!-- 新增弹框 -->
-      <div class="">
+      <div class="" id="catalogMessage">
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <div v-if="i==1" style="width: 940px">
@@ -211,7 +215,7 @@
                     </div>
                   </div>
                 </div>
-                <div style="width: 400px;margin:20px auto 0px" class="flexLayout">
+                <div style="width: 400px;margin:20px auto 0px" class="flexLayout" id="addCatalogButton">
                   <el-button type="primary" @click="definiteCheck">确定</el-button>
                   <el-button type="info" style="margin-left: 55px" @click="cancelCheck">取消</el-button>
                 </div>
@@ -267,7 +271,7 @@
                       </el-input>
                     </div>
                   </el-form-item>
-                  <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput" style="margin-left: 40px">
+                  <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput">
                     <el-input v-model="addForm.fkTypeName " ></el-input>
                   </el-form-item>
                 </div>
@@ -283,7 +287,7 @@
                       </el-input>
                     </div>
                   </el-form-item>
-                  <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 45px">
+                  <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 0px">
                     <el-input v-model="addForm.publishingPleace "></el-input>
                   </el-form-item>
                   <el-form-item label=" 出版日期 :" label-width="95px">
@@ -315,7 +319,7 @@
                   </el-form-item>
                 </div>
               </div>
-              <div style="width: 400px;margin:20px auto 0px" class="flexLayout">
+              <div style="width: 400px;margin:20px auto 0px" class="flexLayout" id="editCatalogButton">
                 <el-button type="primary" @click="EditdefiniteCheck">确定</el-button>
                 <el-button type="info" style="margin-left: 55px" @click="EditcancelCheck">取消</el-button>
               </div>
@@ -479,7 +483,8 @@
         catalogingData:[],//编目数据
         id:'',
         tableChecked: [], // 全选绑定的数据
-        type:[]//选择远程或本地的获取数据的按钮
+        type:[],//选择远程或本地的获取数据的按钮
+        decideOnData:false
       };
     },
     computed: {
@@ -504,7 +509,9 @@
     methods: {
       closeHarm(){
         console.log('关闭损坏的弹窗')
-        this.type=[]
+        if(this.decideOnData==false){
+          this.type=[]
+        }
       },
       //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
@@ -568,7 +575,9 @@
       },
       //选中某条数据的选中按钮
       decideOn(index,row){
+        console.log('选中的多选框',this.type)
         console.log('选中的数据',row)
+        this.decideOnData=true
         this.addForm=row
         this.centerDialogVisible=false
       },
@@ -818,6 +827,8 @@
               type: "error"
             });
           }
+        },(err)=>{
+          console.log('请检查网络')
         })
       },
       editApi(value){
@@ -913,7 +924,7 @@
         axios.get(deriveInt.select,{
           params:value
         }).then((res)=>{
-          
+
           console.log('查询条件',res)
         })
       },
@@ -923,11 +934,11 @@
           params:val
         }).then((res) =>{
           if(res.data.state == true){
-            
+
             this.excelName = res.data.row.name
             this.excelUrl = uploadInt.showFile + '/' + res.data.row.value + '?fileName=' + res.data.row.name
            const a = document.getElementById('excel')
-          
+
            a.setAttribute("href",this.excelUrl)
            a.setAttribute("download",this.excelName)
             a.click()

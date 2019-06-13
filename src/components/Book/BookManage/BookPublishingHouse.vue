@@ -146,7 +146,7 @@
     if (!value){
       callback(new Error('请输入电话号码'))
     }else  if (!isvalidPhone(value)){
-      callback(new Error('请输入正确的手机号码'))
+      callback(new Error('号码格式不正确或者位数不正确'))
     }else {
       callback()
     }

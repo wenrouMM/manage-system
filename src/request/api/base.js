@@ -13,12 +13,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-/* var url = 'http://192.168.2.31:8088/';
+/*  var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';  */
-/* var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/'; */
+var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/'; */
+var fileUrl = 'http://192.168.2.121:8090/';
 
 /*var url = window.glob.url
 var imgurl = window.glob.imgurl
@@ -385,7 +385,7 @@ export const collection ={
   select:`${url}bookcollectionmodule/collection/select`,
   add:`${url}bookcollectionmodule/collection/add`,
   edit:`${url}bookcollectionmodule/collection/edit`,
-  isbn:`${url}bookcollectionmodule/collection/selectFromCata`,
+  isbn:`${url}catamodule/editing/cataTbBookInfo/selectFromCata`,
   state:`${url}bookcollectionmodule/collection/editState`,
   delete:`${url}bookcollectionmodule/collection/delete`,
   letLeave:`${url}bookcollectionmodule/collection/letLeave`,
