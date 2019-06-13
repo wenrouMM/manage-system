@@ -255,7 +255,7 @@ export default {
       console.log(val);
     },
     removeBtn(index,row){
-
+      this.oweTable.splice(index, 1);
     },
     // tab切换功能
     tabBtn() {

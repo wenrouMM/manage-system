@@ -82,7 +82,7 @@ var bookOperate = url + 'borrowmodule/';
 export const bookOperateInt = {
   borrow: `${bookOperate}lend/borrow/out`,
   sell: `${bookOperate}lend/return/in`,
-  renew:`${url}renew/renewBooks`,
+  renew:`${url}borrowmodule/renew/renewBooks`,
   userInfo:`${bookOperate}lend/borrow/getReaderInfo`,
   return:`${bookOperate}renew/getReaderLog`,
   history:`${bookOperate}lend/borrow/getReaderHis`
