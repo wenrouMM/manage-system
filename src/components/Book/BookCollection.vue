@@ -190,8 +190,8 @@
                   <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px">
-                    <el-input v-model="addForm.searchNumber"></el-input>
+                  <el-form-item label=" 索书号 :" prop="callNumber" label-width="95px">
+                    <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
                   <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
                     <el-input v-model="addForm.place"></el-input>
@@ -304,7 +304,7 @@
                   <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="searchNumber" label-width="95px">
+                  <el-form-item label=" 索书号 :" prop="callNumber" label-width="95px">
                     <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
                   <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
@@ -475,7 +475,7 @@
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息", trigger: "blur" }],
           name:[{ required: true, message: "请输入正题名", trigger: "blur" }],
           code:[{ required: true,message: "请输入馆藏码", trigger: "blur" }],
-          searchNumber:[{ required: true,message: "请输入索取号", trigger: "blur" }],
+          callNumber:[{ required: true,message: "请输入索取号", trigger: "blur" }],
           place:[{ required: true,message: "请输入馆藏地", trigger: "blur" }],
           causesDamage:[{ required: true,message: "请选择损坏原因", trigger: "change" }],
           amountCompensation:[{ required: true,message: "请输入赔偿金额", trigger: "change" }],
@@ -610,7 +610,7 @@
         let newData={
           fkCataBookId:this.showData.id,
           code:this.addForm.barcode,
-          callNumber:this.addForm.searchNumber,
+          callNumber:this.addForm.callNumber,
           place:this.addForm.place,
           code:this.addForm.code,
           dailyRent:this.addForm.dailyRent==true?1:0,
@@ -625,7 +625,7 @@
         let newData={
           id:this.addForm.id,
           code:this.addForm.code,
-          callNumber:this.addForm.searchNumber,
+          callNumber:this.addForm.callNumber,
           place:this.addForm.place,
           dailyRent:this.addForm.dailyRent==true?1:0,
           lendingPermission:this.addForm.lendingPermission==true?1:0,

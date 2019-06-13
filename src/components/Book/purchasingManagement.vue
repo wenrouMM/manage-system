@@ -17,10 +17,11 @@
             <i class="blueIcon el-icon-share"></i>导出
           </button>-->
         </div>
-        <div class="right">
+        <div class="right" id="searchInput">
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="筛选 :">
               <el-select
+                style="width: 150px"
                 v-model="searchForm.makeMethod"
                 placeholder="请选择"
                 clearable

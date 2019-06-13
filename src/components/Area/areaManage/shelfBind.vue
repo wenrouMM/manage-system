@@ -235,7 +235,7 @@
           });
         }else{
           this.$message({
-            message: '位置绑定错误！！',
+            message: '位置绑定错误',
             type: 'error'
           });
         }

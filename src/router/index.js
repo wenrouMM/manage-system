@@ -112,7 +112,7 @@ export default new Router({
           path: '/ActiveList',
           meta: {
             title: '公告列表',
-            
+
           },
           component: ()=>import('../components/System/ArticeList.vue')
         },
@@ -212,6 +212,11 @@ export default new Router({
         },
         {
           path: "/returnstatus",
+          meta: {
+            title: '还书结果',
+            Mode: '3',
+            isAlive: true
+          },
           component: () => import('../components/Circulate/returnStatus.vue')
         },
         {
@@ -312,7 +317,7 @@ export default new Router({
           meta: {
             title: '系统管理引导页',
             Mode: '6',
-           
+
           },
           component: resolve => require(['../common/guide/guide.vue'], resolve)
         },

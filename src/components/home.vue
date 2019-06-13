@@ -29,7 +29,7 @@
           <img src="../base/img/index/deal.png">
         </div>
         <div class="sellInfo">
-        
+
           <p class="text"><span v-if="!cardNum">{{cardNum}}</span><ve-count v-if="cardNum"  :end="cardNum"></ve-count></p>
           <div class="iconBox">
             <p class="icon">今日办卡</p>
@@ -41,10 +41,10 @@
           <img src="../base/img/index/online.png">
         </div>
         <div class="sellInfo">
-         
+
           <p class="text"><span v-if="!bookNum">{{bookNum}}</span> <ve-count v-if="bookNum" ref="bookNum" :end="bookNum"></ve-count></p>
           <div class="iconBox">
-            <p class="icon">在线图书</p>
+            <p class="icon">在册图书</p>
           </div>
         </div>
       </div>
@@ -337,8 +337,8 @@ export default {
       axios.get(indexInt.borrow).then(res => {
         if (res.data.state === true) {
           this.borrowNum = Number(res.data.row);
-          
-          
+
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -360,7 +360,7 @@ export default {
       axios.get(indexInt.book).then(res => {
         if (res.data.state === true) {
           this.bookNum = res.data.row;
-          
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -447,7 +447,7 @@ export default {
     this.systemApi()
   },
   mounted(){
-    
+
   },
   components: {
     VePie,
@@ -714,10 +714,10 @@ export default {
   cursor: pointer;
 }
 .systemList .listInfo{
-  width:70%; 
+  width:70%;
   display:inline-block;
-  overflow: hidden; 
-  white-space: nowrap; 
+  overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 .systemList .listInfo:hover{
@@ -725,7 +725,7 @@ export default {
 }
 .systemInfo .more:hover{
   color: #33dbff;
-  
+
 }
 .systemInfo .more{
     font-size: 16px;

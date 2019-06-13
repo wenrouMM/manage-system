@@ -47,14 +47,14 @@
         </div>
       </section>
     </div>
-    <div v-if="active==1" class="TwoBox">
+    <div v-if="active==1||active==2" class="TwoBox">
       <section class="mb_30">
         <p class="mustText">提示:{{tipsText}}为必选字段</p>
       </section>
       <div
         class="loadingBox"
         v-loading="loadingTwo"
-        element-loading-text="正在导入数据"
+        element-loading-text="正在导入数据 可能耗费时间较长 请您稍作等待"
         element-loading-spinner="el-icon-loading"
       >
         <section class="stepTwo">
@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div v-if="active==2" class="stepThree">
+    <div v-if="active==3" class="stepThree">
       <div class="end">
         <div class="reflect">
           <p>
@@ -183,7 +183,7 @@ export default {
           for (let item of res.data.row.must) {
             str += "," + item;
           }
-          
+
           this.tipsText = str.substring(1);
           for (let i = 0; i < length; i++) {
             this.twiceList.push("");
@@ -199,6 +199,7 @@ export default {
     },
     submitApi(value) {
       this.loadingTwo = true;
+      this.next()
       axios.post(bookUploadInt.add, value).then(res => {
         if (res.data.state) {
           this.$message.success(res.data.msg);
@@ -208,6 +209,7 @@ export default {
         } else {
           this.$message.error(res.data.msg);
           this.loadingTwo = false;
+          this.prev()
         }
       });
     },

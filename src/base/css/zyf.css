@@ -251,6 +251,9 @@
 #catalogMessage #addCatalogButton .el-button{
   width: 150px;
 }
-.searchBox .right .el-select .el-input__inner{
+#searchInput .el-select .el-input__inner{
+  width: 150px;
+}
+#searchInput .el-select .el-input--suffix{
   width: 150px;
 }
