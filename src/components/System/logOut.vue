@@ -55,7 +55,11 @@
             </el-table-column>
             <el-table-column align="center" prop="fkCardNumber" label="读者卡号" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="fkUserName" label="用户名" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="refundAmount" label="注销金额" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="refundAmount" label="注销金额" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.refundAmount}}元</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="creatTime" label="注销时间" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="username" label="操作用户" :show-overflow-tooltip="true"></el-table-column>
           </el-table>

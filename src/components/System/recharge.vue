@@ -54,7 +54,7 @@
 
             <el-table-column align="center" prop="state" label="处理方式" width="150">
               <template slot-scope="scope">
-                <span>{{scope.row.state ==1?'退款金额':'押金充值'}}</span>
+                <span>{{scope.row.state ==1?'押金退款':'押金充值'}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="fkCardNumber" label="读者卡号" width="150" :show-overflow-tooltip="true"></el-table-column>

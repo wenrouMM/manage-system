@@ -55,8 +55,8 @@
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="350"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="200"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="350" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true" width="200">
               <template slot-scope="scope">
                 <span>{{scope.row.locationNam == null || scope.row.locationNam=='' ?'---':scope.row.locationNam}}</span>
@@ -213,7 +213,7 @@
           newState=''
         }
         let newData={
-          searchNumber:this.selectSearchForm.searchNumber,
+          callNumber:this.selectSearchForm.searchNumber,
           code:this.selectSearchForm.code,
           isbn:this.selectSearchForm.isbn,
           bookName:this.selectSearchForm.bookName,
