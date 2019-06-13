@@ -8,9 +8,13 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="buttonBox">
-            <button class="blue" @click="deriveBtn">
-              <i class="blueIcon el-icon-share"></i>导出
-            </button>
+            <el-select v-model="outputSelect" placeholder="请选择导出方式" style="width: 200px">
+                  <el-option label="导出当前页" value="0"></el-option>
+                  <el-option label="导出全部" value="1"></el-option>
+              </el-select>
+             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
+              导出excel
+            </el-button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
@@ -107,6 +111,9 @@
           </div>
         </el-dialog>
       </div>
+       <a v-show="false" href="" download="" ref="excel" id="excel" >
+        下载
+      </a>
     </el-container>
   </div>
 </template>
@@ -114,11 +121,14 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { logOut } from "../../request/api/base.js";
+  import { logOut,outputExcelInt,uploadInt } from "../../request/api/base.js";
 
   export default {
     data() {
       return {
+        downloadLoading:false,
+        outputSelect:"0",
+         paginationForm:{},
         /*====== 2.0表单搜索区域 ======*/
         depositSum:'',//押金合计
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
@@ -151,7 +161,7 @@
             );
           }
         },
-        tableLoading: true,
+        tableLoading: false,
         currentPage: 1,
         pageInput: 1,
         pageSize: 10,
@@ -159,6 +169,7 @@
         tableData: [],
         id:'',
         tableChecked: [], // 全选绑定的数据
+       
       };
     },
     computed: {
@@ -179,12 +190,38 @@
         console.log('搜索数据',newData)
         return newData
       },
+      outputTimeForm(){
+        let pbk = {
+          exportState:this.outputSelect,
+          pageSize:10,
+          currentPage:this.currentPage
+        }
+        let obj =Object.assign({},pbk, this.paginationForm);
+        
+        return obj
+      }
     },
     methods: {
       //导出按钮
       deriveBtn(){
-        this.i=0
-        this.centerDialogVisible=true
+        this.downloadLoading = true
+        axios.post(outputExcelInt.logout,this.outputTimeForm).then((res)=>{
+          if(res.data.state == true){
+
+            var excelName = res.data.row.name
+            var excelUrl = uploadInt.showFile + '/' + res.data.row.value + '?fileName=' + res.data.row.name
+           const a = document.getElementById('excel')
+
+           a.setAttribute("href",excelUrl)
+           a.setAttribute("download",excelName)
+           a.click()
+            this.downloadLoading = false
+          }else{
+            this.$message.error(res.data.msg)
+            this.downloadLoading = false
+          }
+          console.log('测试下载',res)
+        })
       },
       // 查询按钮
       searchBtn() {
@@ -229,6 +266,7 @@
               this.tableData = res.data.row; //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              console.log('上次查询的数据',this.paginationForm,this.outputTimeForm)
               this.currentPage = 1; // 回到第一页显示
               this.tableLoading = false;
             } else {
@@ -271,6 +309,7 @@
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
+        console.log('上次查询的数据',this.paginationForm,this.outputTimeForm)
         console.log("保存当前查询", this.paginationForm, this.currentPage);
         this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }

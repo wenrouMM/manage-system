@@ -13,12 +13,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-/*  var url = 'http://192.168.2.31:8088/';
+ var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/'; */
-var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/';
+/* var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/';
+var fileUrl = 'http://192.168.2.121:8090/'; */
 
 /*  var url = window.glob.url
 var imgurl = window.glob.imgurl
@@ -34,6 +34,12 @@ export function getPower (value){
   }).then((res)=>{
     return Promise.resolve(res)
   })
+}
+/*--- 文件导出 财务管理 ---*/
+export const outputExcelInt = {
+  recharge:`${url}financemodule/depositRecord/export`,
+  logout:`${url}financemodule/readerTbCardLogout/export`,
+  overdue:`${url}financemodule/readetTbOverdueExpensesLog/export`
 }
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,

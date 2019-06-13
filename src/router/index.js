@@ -477,14 +477,6 @@ export default new Router({
           component: resolve => require(['../components/System/OverdueCostCirculation.vue'], resolve)
         },
         {
-          path: '/Depositflowdirection',
-          meta: {
-            title: '押金流向',
-            Mode: '5'
-          },
-          component: resolve => require(['../components/System/Depositflowdirection.vue'], resolve)
-        },
-        {
           path: '/logOut',
           meta: {
             title: '注销记录',

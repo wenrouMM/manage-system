@@ -8,9 +8,13 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="buttonBox">
-            <button class="blue" @click="deriveBtn">
-              <i class="blueIcon el-icon-share"></i>导出
-            </button>
+            <el-select v-model="outputSelect" placeholder="请选择导出方式" style="width: 200px">
+                  <el-option label="导出当前页" value="0"></el-option>
+                  <el-option label="导出全部" value="1"></el-option>
+              </el-select>
+             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
+              导出excel
+            </el-button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
@@ -102,6 +106,9 @@
           </section>
         </section>
       </div>
+       <a v-show="false" href="" download="" ref="excel" id="excel" >
+        下载
+      </a>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
@@ -121,12 +128,15 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { overdueCostCirculation } from "../../request/api/base.js";
+  import { overdueCostCirculation,outputExcelInt,uploadInt } from "../../request/api/base.js";
 
   export default {
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        outputSelect:'0',
+        downloadLoading:false,
+        paginationForm:{},
         depositSum:'',//押金合计
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ['导出'],
@@ -184,12 +194,42 @@
         console.log('搜索数据',newData)
         return newData
       },
+      outputTimeForm(){
+        let pbk = {
+          exportState:this.outputSelect,
+          pageSize:10,
+          currentPage:this.currentPage
+        }
+        let obj =Object.assign({},pbk, this.paginationForm);
+        
+        return obj
+      }
     },
     methods: {
       //导出按钮
       deriveBtn(){
-        this.i=0
-        this.centerDialogVisible=true
+        this.downloadLoading = true
+        axios({
+          url:outputExcelInt.overdue,
+          data:this.outputTimeForm,
+          method:'post'
+        }).then((res)=>{
+          if(res.data.state == true){
+
+            var excelName = res.data.row.name
+            var excelUrl = uploadInt.showFile + '/' + res.data.row.value + '?fileName=' + res.data.row.name
+           const a = document.getElementById('excel')
+
+           a.setAttribute("href",excelUrl)
+           a.setAttribute("download",excelName)
+           a.click()
+            this.downloadLoading = false
+          }else{
+            this.$message.error(res.data.msg)
+            this.downloadLoading = false
+          }
+          console.log('测试下载',res)
+        })
       },
       //导出弹窗的确定按钮
       submitDialog(){
