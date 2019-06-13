@@ -163,18 +163,22 @@ export default {
       let imgAddress=""
       this.axios.get(PersonalCentre.userInfo).then((res)=>{
         console.log(res)
-        this.id=res.data.row.id;
-        this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
-        console.log('this.nomalHeader',this.nomalHeader)
-        this.userName=res.data.row.username;
-        this.userEmail=res.data.row.email;
-        this.userPhone=res.data.row.phone;
-        this.userCard=res.data.row.idCard;
-        this.userPassword=res.data.row.operationPassword;
-        this.userGrade=res.data.row.fkRoleNames;
-        this.hidePassword=''
-        for(var i=0;i<=this.userPassword.length;i++){
-          this.hidePassword+='*'
+        if(res.data.state==true){
+          this.id=res.data.row.id;
+          this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
+          console.log('this.nomalHeader',this.nomalHeader)
+          this.userName=res.data.row.username;
+          this.userEmail=res.data.row.email;
+          this.userPhone=res.data.row.phone;
+          this.userCard=res.data.row.idCard;
+          this.userPassword=res.data.row.operationPassword;
+          this.userGrade=res.data.row.fkRoleNames;
+          this.hidePassword=''
+          for(var i=0;i<=this.userPassword.length;i++){
+            this.hidePassword+='*'
+          }
+        }else{
+          this.$message.error(res.data.msg)
         }
       })
     },

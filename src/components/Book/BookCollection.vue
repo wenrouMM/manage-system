@@ -14,9 +14,9 @@
             <button class="delete" @click="drawbackBtn(tableChecked)">
               <i class="deleteIcon el-icon-delete"></i>删除
             </button>
-            <button class="blue" @click="deriveBtn">
+            <!--<button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
-            </button>
+            </button>-->
             <button class="deongaree" @click="rejectBtn">
               <i class="blueIcon el-icon-delete"></i>剔除
             </button>

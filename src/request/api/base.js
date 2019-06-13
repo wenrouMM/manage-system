@@ -1,16 +1,6 @@
 import axios from 'axios'
 /*--- 获取按钮权限 ---*/
-export const buttonInt = `${url}authmodule/currency/selectElements`
-export function getPower (value){
 
-  return axios.get(buttonInt,{
-    params:{
-      menuCode:value
-    }
-  }).then((res)=>{
-    return Promise.resolve(res)
-  })
-}
 
 //测试环境
 /*   var url = 'http://192.168.2.54:8088/'
@@ -25,16 +15,26 @@ let fileUrl = 'http://192.168.2.250:8090/'; */
 
 /* var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/'; */
+let fileUrl = 'http://192.168.2.31:8090/';  */
 /* var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
 var fileUrl = 'http://192.168.2.121:8090/'; */
 
-var url = window.glob.url 
+/*var url = window.glob.url
 var imgurl = window.glob.imgurl
-var fileUrl = window.glob.fileUrl
+var fileUrl = window.glob.fileUrl*/
 /*------ 文件上传模块 ------*/
+export const buttonInt = `${url}authmodule/currency/selectElements`
+export function getPower (value){
 
+  return axios.get(buttonInt,{
+    params:{
+      menuCode:value
+    }
+  }).then((res)=>{
+    return Promise.resolve(res)
+  })
+}
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,
   backImg:`${fileUrl}filemodule/uploadImg/addBackage`,

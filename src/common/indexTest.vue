@@ -233,7 +233,7 @@
                 <router-view></router-view>
           </transition> -->
           <transition name="fade-transform" mode="out-in">
-              
+
               <keep-alive>
                 <router-view v-if="$route.meta.isAlive"></router-view>
               </keep-alive>
@@ -317,10 +317,18 @@ export default {
   created() {
     axios.get(PersonalCentre.userInfo).then(res => {
       console.log("看看bug到底在哪里", res);
-      this.userLo = res.data.row;
-      if(res.data.row.headerAddress){
+      
+      
+      if(res.data.state==true){
+        this.userLo = res.data.row;
+        if(res.data.row.headerAddress){
         this.settingHead = uploadInt.preimg + res.data.row.headerAddress;
       }
+        
+      }else{
+        this.$message.error(res.data.msg)
+      }
+
     });
     console.log("新方法", this.userLo);
     let menu = JSON.parse(sessionStorage.getItem('menu'))

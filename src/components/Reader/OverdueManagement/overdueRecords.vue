@@ -11,9 +11,9 @@
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox flexLayout">
             <div class="buttonBox">
-              <button class="blue" @click="deriveBtn">
+              <!--<button class="blue" @click="deriveBtn">
                 <i class="blueIcon el-icon-share"></i>导出
-              </button>
+              </button>-->
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="用户名:" size="160">
