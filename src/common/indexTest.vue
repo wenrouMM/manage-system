@@ -71,6 +71,7 @@
             text-color="#fff"
             :collapse="isCollapse"
             v-if="menuLo.length"
+            :unique-opened="true"
           >
             <el-menu-item index="/indexTest">
               <i class="indexIcon indexIconMax iconxiazai45"></i>
@@ -228,6 +229,9 @@
             <Tags></Tags>
           </div>
           <!-- <div class="space"></div> -->
+           <!-- <transition name="fade-transform" mode="out-in">
+                <router-view></router-view>
+          </transition> -->
           <transition name="fade-transform" mode="out-in">
               
               <keep-alive>
@@ -314,7 +318,9 @@ export default {
     axios.get(PersonalCentre.userInfo).then(res => {
       console.log("看看bug到底在哪里", res);
       this.userLo = res.data.row;
-      this.settingHead = uploadInt.preimg + res.data.row.headerAddress;
+      if(res.data.row.headerAddress){
+        this.settingHead = uploadInt.preimg + res.data.row.headerAddress;
+      }
     });
     console.log("新方法", this.userLo);
     let menu = JSON.parse(sessionStorage.getItem('menu'))

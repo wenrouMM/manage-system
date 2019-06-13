@@ -26,9 +26,9 @@ let fileUrl = 'http://192.168.2.250:8090/'; */
 /* var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
 let fileUrl = 'http://192.168.2.31:8090/'; */
-var url = 'http://192.168.2.121:8088/';
+/* var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/';
+var fileUrl = 'http://192.168.2.121:8090/'; */
 
 var url = window.glob.url 
 var imgurl = window.glob.imgurl
@@ -48,8 +48,8 @@ export const uploadInt = {
 }
 /*--- 批量导入书籍编目 ---*/
 export const bookUploadInt ={
-  getFields:`${url}bookcollectionmodule/cataTbBookInfo/getFields`,
-  add:`${url}bookcollectionmodule/cataTbBookInfo/start`
+  getFields:`${url}catamodule/editing/cataTbBookInfo/getFields`,
+  add:`${url}catamodule/editing/cataTbBookInfo/start`
 }
 /*--- 损坏清点 ---*/
 export const damageInt = {
@@ -82,9 +82,9 @@ var bookOperate = url + 'borrowmodule/';
 export const bookOperateInt = {
   borrow: `${bookOperate}lend/borrow/out`,
   sell: `${bookOperate}lend/return/in`,
-  renew:`${url}equipmentmodule/bookinfo/renewBooks`,
+  renew:`${url}renew/renewBooks`,
   userInfo:`${bookOperate}lend/borrow/getReaderInfo`,
-  return:`${bookOperate}lend/borrow/getReaderLog`,
+  return:`${bookOperate}renew/getReaderLog`,
   history:`${bookOperate}lend/borrow/getReaderHis`
 }
 // 书籍报损

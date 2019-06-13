@@ -442,13 +442,10 @@ export default {
 
       axios.post(bookDamageInt.damage, data).then(res => {
         if (res.data.state === true) {
-          this.$message.success("报损成功 请前往报损记录查看");
+          this.$message.success("报损完成 请前往报损记录查看");
 
           this.endTable = res.data.row;
-          console.log("数据类型测试", typeof this.endTable[0].state);
-          if (this.endTable[0].state === true) {
-            console.log("比较测试");
-          }
+          
           if (this.isBatch) {
             this.oweTable = [];
           } else {
@@ -457,6 +454,7 @@ export default {
           this.damageDialog = false;
         } else {
           this.$message.error(res.data.msg);
+          this.damageDialog = false;
         }
       });
     },
