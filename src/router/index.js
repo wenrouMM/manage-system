@@ -77,7 +77,7 @@ export default new Router({
     },
     {
       path: '/test',
-      component: () => import('../common/count/count.vue')
+      component: () => import('../common/markText/markText.vue')
     },
     {
       path: '/login',
