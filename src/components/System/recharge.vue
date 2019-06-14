@@ -232,10 +232,7 @@
       //充值按钮
       rechargeBtn(){
         this.$router.push({
-          path:'/refunds',
-          query: {
-            title:'充值'
-          }
+          path:'/refunds'
         });
       },
       // 查询按钮

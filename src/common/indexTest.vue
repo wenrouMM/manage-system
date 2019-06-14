@@ -50,7 +50,8 @@
                 <router-link to="/returnbooks" tag="span" class="dropItem">书籍归还</router-link>
                 <span @click="rechargeBtn" class="dropItem">押金充值</span>
                 <span @click="cardBtn" class="dropItem">卡号注销</span>
-                <span @click="loginOut" class="dropItem">退出</span>
+                <router-link to="/getCard" tag="span" class="dropItem">用户办卡</router-link>
+                <span @click="loginOut" class="dropItem">账号退出</span>
               </div>
             </div>
             <!-- <i class="notice"></i>
