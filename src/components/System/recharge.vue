@@ -14,9 +14,14 @@
             <button class="delete" @click="drawbackBtn">
               <i class="deleteIcon el-icon-delete"></i>注销
             </button>
-            <button class="blue" @click="deriveBtn">
-              <i class="blueIcon el-icon-share"></i>导出
-            </button>
+            <el-select v-model="outputSelect" placeholder="请选择导出方式" style="width: 200px">
+                  <el-option label="导出当前页" value="0"></el-option>
+                  <el-option label="导出全部" value="1"></el-option>
+              </el-select>
+             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
+              导出excel
+            </el-button>
+            
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
@@ -105,6 +110,9 @@
             <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
+        <a v-show="false" href="" download="" ref="excel" id="excel" >
+        下载
+      </a>
       </div>
     </el-container>
   </div>
@@ -113,11 +121,15 @@
 <script>
   import axios from "axios";
   import moment from "moment";
-  import { recharge } from "@request/api/base.js";
+  import { recharge,outputExcelInt,uploadInt } from "@request/api/base.js";
 
   export default {
     data() {
       return {
+        /*---- 导出选择  ----*/
+        outputSelect:'0',
+        downloadLoading:false,
+        paginationForm:{},
         /*====== 2.0表单搜索区域 ======*/
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
@@ -170,12 +182,43 @@
           currentPage: 1,
         }
         return newSearch
+      },
+      outputTimeForm(){
+        let pbk = {
+          exportState:this.outputSelect,
+          pageSize:10,
+          currentPage:this.currentPage
+        }
+        let obj =Object.assign({},pbk, this.paginationForm);
+        
+        return obj
       }
     },
     methods: {
       //导出按钮
       deriveBtn(){
+        this.downloadLoading = true
+        axios({
+          url:outputExcelInt.recharge,
+          data:this.outputTimeForm,
+          method:'post'
+        }).then((res)=>{
+          if(res.data.state == true){
 
+            var excelName = res.data.row.name
+            var excelUrl = uploadInt.showFile + '/' + res.data.row.value + '?fileName=' + res.data.row.name
+           const a = document.getElementById('excel')
+
+           a.setAttribute("href",excelUrl)
+           a.setAttribute("download",excelName)
+           a.click()
+            this.downloadLoading = false
+          }else{
+            this.$message.error(res.data.msg)
+            this.downloadLoading = false
+          }
+          console.log('测试下载',res)
+        })
       },
       //退款按钮
       drawbackBtn(){

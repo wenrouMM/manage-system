@@ -15,7 +15,7 @@
               <i class="deleteIcon el-icon-delete"></i>删除
             </button>
             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
-               <!-- <i class="blueIcon el-icon-share"></i> --> 导出excel
+               <!-- <i class="blueIcon el-icon-share"></i> --> 导出当前文档
             </el-button>
             <button class="green" @click="tunnellingBtn">
               <i class="el-icon-edit greenIcon"></i>批量导入

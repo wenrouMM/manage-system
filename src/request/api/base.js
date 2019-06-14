@@ -35,6 +35,12 @@ export function getPower (value){
     return Promise.resolve(res)
   })
 }
+/*--- 文件导出 财务管理 ---*/
+export const outputExcelInt = {
+  recharge:`${url}financemodule/depositRecord/export`,
+  logout:`${url}financemodule/readerTbCardLogout/export`,
+  overdue:`${url}financemodule/readetTbOverdueExpensesLog/export`
+}
 export const uploadInt = {
   headImg:`${fileUrl}filemodule/uploadImg/addHead`,
   backImg:`${fileUrl}filemodule/uploadImg/addBackage`,
