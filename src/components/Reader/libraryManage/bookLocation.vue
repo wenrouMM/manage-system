@@ -8,7 +8,7 @@
       <div style="background-color: #ededed;width: 250px;height: 200px;border-radius: 5px">
         <img src="../../../base/img/currency/book.png" style="margin-left: 26px">
       </div>
-      <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="120px" class="demo-ruleForm"  :label-position="labelPosition" >
+      <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="90px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
           <el-form-item label="馆 藏 码 : " prop="barcode" label-width="90px">
             <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入馆藏码"></el-input>
@@ -16,8 +16,8 @@
           <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
             <span>{{ruleForm.bookName}}</span>
           </el-form-item>
-          <el-form-item label="索 书 号 :　" prop="bookindex" style="margin-top: 25px">
-            <span>{{ruleForm.bookIndex}}</span>
+          <el-form-item label="索 取 号 :　" prop="bookindex" style="margin-top: 25px">
+            <span>{{ruleForm.callNumber}}</span>
           </el-form-item>
         </div>
         <div style="display: flex;flex-direction: row;margin-top: 30px">
@@ -97,7 +97,7 @@
         ruleForm:{
           barcode:'',
           bookName:'',
-          bookIndex:'',
+          callNumber:'',
           bookType:'',
           bookTypeCode:'',
           rfid:'',
@@ -168,17 +168,17 @@
             if (res.data.row.length == 0) {
               console.log('row为空')
               this.ruleForm.bookName=''
-              this.ruleForm.bookIndex=''
               this.ruleForm.bookType=''
               this.ruleForm.bookTypeCode=''
+              this.ruleForm.callNumber=''
             } else {
               console.log('row不为空')
               for (let item of res.data.row){
                 console.log('为表单元素赋值',item)
                 this.ruleForm.bookName=item.name
-                this.ruleForm.bookIndex=item.callNumber
                 this.ruleForm.bookType=item.fkTypeName
                 this.ruleForm.bookTypeCode=item.fkTypeCode
+                this.ruleForm.callNumber=item.callNumber
                 this.ruleForm.id=item.id
               }
             }

@@ -28,7 +28,7 @@
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
                 <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectSearchCheck(searchForm.makeMethod)">
-                  <el-option label="索书号" value="0"></el-option>
+                  <el-option label="索取号" value="0"></el-option>
                   <el-option label="馆藏码" value="1"></el-option>
                   <el-option label="ISBN" value="2"></el-option>
                   <el-option label="书名" value="3"></el-option>
@@ -58,7 +58,7 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="callNumber" label="索书号" width="300" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="callNumber" label="索取号" width="300" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
@@ -66,13 +66,19 @@
             <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="lendState" label="状态" width="200">
+            <el-table-column align="center" prop="lendState" label="在馆状态" width="200">
               <template slot-scope="scope">
                 <span v-if="scope.row.lendState==0">不在架</span>
                 <span v-else-if="scope.row.lendState==1">在架</span>
                 <span v-else-if="scope.row.lendState==2">借出</span>
                 <span v-else-if="scope.row.lendState==3">剔除</span>
                 <span v-else="scope.row.lendState==4">损坏</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="available" label="书籍状态" width="200">
+              <template slot-scope="scope">
+                <span v-if="scope.row.available==0">启用</span>
+                <span v-else-if="scope.row.available==1">停用</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作" width="200" fixed="right">
@@ -190,7 +196,7 @@
                   <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="callNumber" label-width="95px">
+                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="95px">
                     <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
                   <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
@@ -304,7 +310,7 @@
                   <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索书号 :" prop="callNumber" label-width="95px">
+                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="95px">
                     <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
                   <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
@@ -330,7 +336,7 @@
                 <el-form-item label=" 编　　号 :" label-width="95px" style="">
                   <el-input v-model="harmForm.Number" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label=" 索 书 号 :" label-width="95px" style="">
+                <el-form-item label=" 索 取 号 :" label-width="95px" style="">
                   <el-input v-model="harmForm.bookIndex " :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label=" 馆 藏 地 :" label-width="95px" style="">

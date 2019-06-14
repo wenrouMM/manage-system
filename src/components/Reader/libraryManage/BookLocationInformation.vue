@@ -19,7 +19,7 @@
             <el-form :inline="true" :model="searchForm">
               <el-form-item label="筛选 :">
                 <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
-                  <el-option label="索书号" value="0"></el-option>
+                  <el-option label="索取号" value="0"></el-option>
                   <el-option label="馆藏码" value="1"></el-option>
                   <el-option label="isbn" value="2"></el-option>
                   <el-option label="书名" value="3"></el-option>
@@ -50,7 +50,7 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="callNumber" label="索书号" width="200">
+            <el-table-column align="center" prop="callNumber" label="索取号" width="200">
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
