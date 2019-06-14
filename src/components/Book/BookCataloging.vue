@@ -325,6 +325,15 @@
               </div>
             </el-form>
           </div>
+          <div id="typeMessage" >
+            <div style="position: relative">
+              <p>{{messageName}}</p>
+              <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+            </div>
+            <div>
+              <ul id="treeDemo" class="ztree"></ul>
+            </div>
+          </div>
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
@@ -370,15 +379,7 @@
         </el-dialog>
       </div>
       <!--分类号，出版社树结构弹窗-->
-      <div id="typeMessage" >
-        <div style="position: relative">
-          <p>{{messageName}}</p>
-          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
-        </div>
-        <div>
-          <ul id="treeDemo" class="ztree"></ul>
-        </div>
-      </div>
+
       <a v-show="false" href="" download="" ref="excel" id="excel" >
         下载
       </a>
@@ -1167,8 +1168,8 @@
   #typeMessage{
     display: none;
     position: absolute;
-    top: 170px;
-    left:750px;
+    top: 120px;
+    left:300px;
     z-index: 30000;
 
   }

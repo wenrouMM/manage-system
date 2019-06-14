@@ -10,8 +10,8 @@
       <div>
         <router-link
           :to="{path:'/readercardmanagement'}"
-          style="font-size: 15px;color: #878787;text-decoration: none"
-        >&#8678;跳转上一页</router-link>
+          class="backFirse"
+        ><i class="el-icon-back mr_30"></i>返回充值管理</router-link>
       </div>
     </div>
 
@@ -104,6 +104,7 @@
               autocomplete="off"
               class="inputDiv"
               placeholder="请输入卡号"
+              @blur="verifyCardFun"
             ></el-input>
           </el-form-item>
           <el-form-item label="角色等级" prop="level" :label-width="formLabelWidth">
@@ -292,6 +293,19 @@ export default {
         }
       })
     },
+    //读者卡验证
+    verifyCardFun(){
+      this.axios.post(cardInfoInt.verifyCard,{
+        cardNumber:this.addForm.cardNumber
+      }).then((res)=>{
+        console.log('读者卡验证后的结果',res)
+        if(res.data.state==true){
+          this.$message.success(res.data.msg)
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
     // 等级选择下拉框
     levelOptionApi() {
       axios.get(rechargeInt.option).then(res => {
@@ -460,6 +474,14 @@ export default {
 </script>
 
 <style scoped>
+.backFirse{
+  font-size: 15px;
+  color: #878787;
+  text-decoration: none
+}
+.backFirse:hover{
+  color: #0096FF;
+}
 .getCard {
   width: 100%;
   background-color: white;

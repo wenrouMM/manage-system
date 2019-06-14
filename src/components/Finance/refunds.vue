@@ -160,8 +160,8 @@ export default {
     /*------ API ------*/
     // 调查读者卡信息
     readCardApi(data) {
-      
-      
+
+
       axios.get(finnaceInt.userInfo, { params: data }).then(res => {
         console.log("用户信息",res);
         if (res.data.state === true) {
@@ -173,7 +173,7 @@ export default {
           this.cardData.vaildTime = data.cardExpireTime
           this.cardData.state = data.state
           this.cardData.balance = data.balance
-          
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -225,6 +225,7 @@ export default {
 }
 .backBtn {
   cursor: pointer;
+  color: #878787;
 }
 .backBtn:hover {
   cursor: pointer;

@@ -5,7 +5,7 @@
       style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px"
     >
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
-      <div style="font-size: 16px;color: #878787;margin-left:10px;">续借</div>
+      <div style="font-size: 16px;color: #878787;margin-left:10px;">书籍续借</div>
     </div>
     <div class="borrowMode">
       <div class="borrowBox">
@@ -74,7 +74,7 @@
                 max-height="250"
                 height="250"
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-                
+
               >
                 <el-table-column align="center" label="序号" width="55" type="index"></el-table-column>
                 <el-table-column align="center" width="200" prop="bookName" label="书籍名称"></el-table-column>
@@ -115,7 +115,7 @@
                 <el-table-column align="center" type="index" width="80" label="序号"></el-table-column>
                 <el-table-column align="center" prop="bookName" label="书籍名称"></el-table-column>
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
-                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column> 
+                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" prop="state" label="借书状态">
                   <template slot-scope="scope">
                     <span>{{scope.row.state === true?'续借成功':'续借失败'}}</span>
@@ -280,7 +280,7 @@ export default {
     },
     // 报损按钮
     damageBtn(row) {
-        
+
     },
     /*------ API区 ------*/
     // websocker获取RFID
@@ -312,7 +312,7 @@ export default {
           if(this.endTable[0].state === true){
               console.log('比较测试',)
           }
-          
+
           this.$message.success("操作成功");
         } else {
           this.$message.error(res.data.msg);
@@ -341,7 +341,7 @@ export default {
         }
       });
     }
-    
+
   }
 };
 </script>

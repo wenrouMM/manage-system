@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">寒暑假设置</span>
+          <span class="titleName">假期设置</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">

@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%;overflow: auto">
         <div class="sonTitle">
-          <span class="titleName">书籍典藏</span>
+          <span class="titleName">图书位置信息</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">

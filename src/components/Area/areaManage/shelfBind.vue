@@ -8,6 +8,7 @@
         </div>
       </div>
       <div style="width: 1320px;margin-left: 30px;background-color:white;height:952px" v-loading="formLoading">
+
         <div style="text-align: center;margin-top: 350px;color: #878787">
           <span style="display: none" id="addressName">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址 :&nbsp;&nbsp;&nbsp;</span>
           {{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}

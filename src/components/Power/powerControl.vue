@@ -6,7 +6,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">权限管理列表</span>
+            <span class="titleName">权限管理</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <div style="display:flex;flex-direction:row;justify-content: space-between">
@@ -83,7 +83,6 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
-
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="disabled" width="200" label="状态">

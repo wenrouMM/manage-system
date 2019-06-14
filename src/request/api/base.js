@@ -13,12 +13,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
-/*  var url = 'http://192.168.2.31:8088/';
+var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/'; */
-var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/';
+/*  var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/';
+var fileUrl = 'http://192.168.2.121:8090/'; */
 
 /*  var url = window.glob.url
 var imgurl = window.glob.imgurl
@@ -129,6 +129,7 @@ export const cardInfoInt = {
   option:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/selectEffectiveDropBoxAll`,
   verifyPhone:`${url}readrmodule/readerTbUserInfo/currency/verifyPhone`,//电话验证
   verifyEmail:`${url}readrmodule/readerTbUserInfo/currency/verifyEmail`,//邮箱验证
+  verifyCard:`${url}readermodule/readerTbCardBase/currency/verifyBaseCard` //读者卡验证
 }
 export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox';
 //读者卡等级
@@ -148,7 +149,7 @@ export const finnaceInt = {
   deposit:`${url}financemodule/depositRecord/add`,
   juge:`${url}financemodule/depositRecord/vMoney`,
   logout:`${url}financemodule/depositRecord/Logout`
-} 
+}
 /*------ 系统设置模块  ------*/
 
 // 发布公告

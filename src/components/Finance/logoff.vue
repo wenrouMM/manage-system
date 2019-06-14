@@ -18,7 +18,7 @@
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
             <el-input
-              
+
               clearable
               placeholder="请输入卡号或身份证号"
               v-model="cardInput"
@@ -156,7 +156,7 @@ export default {
       if(this.cardInput){
         this.centerDialogVisible = true;
       }
-      
+
     },
     //注销弹窗的确定按钮
     submitDialog() {
@@ -181,7 +181,7 @@ export default {
           this.cardData.state = data.state;
           this.changeForm.deposit = data.cardGradeDeposit;
           this.cardData.balance = data.balance;
-          
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -226,6 +226,7 @@ export default {
   }
   .backBtn {
     cursor: pointer;
+    color: #878787;
   }
   .backBtn:hover {
     cursor: pointer;

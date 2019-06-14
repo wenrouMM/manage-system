@@ -4,7 +4,7 @@
       <!-- 左侧列表含添加 编辑区 添加区 删除四个功能  -->
       <section class="storeRoomInfo mr_30">
         <div class="songTitle">
-          <span class="titleName">库房信息</span>
+          <span class="titleName">库房管理</span>
         </div>
         <section class="storeModeBox">
           <!-- 可能被遍历循环的地方 -->

@@ -3,7 +3,7 @@
     <el-container>
       <div class="commonMode" style="width:100%">
         <div class="sonTitle">
-          <span class="titleName">逾期费用</span>
+          <span class="titleName">逾期费用记录</span>
         </div>
         <!-- 2.0表单填写 -->
         <section class="searchBox">
@@ -201,7 +201,7 @@
           currentPage:this.currentPage
         }
         let obj =Object.assign({},pbk, this.paginationForm);
-        
+
         return obj
       }
     },
