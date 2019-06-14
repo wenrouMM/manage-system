@@ -65,7 +65,7 @@
 
 <script>
 import axios from "axios";
-import { bookOperateInt, returnInt } from "@request/api/base.js";
+import { returnInt } from "@request/api/base.js";
 export default {
   name:'return',
   data() {
@@ -192,7 +192,7 @@ export default {
     // 还书数据API
     operateApi(data) {
       console.log("传递的数据", this.submitTimeForm);
-      axios.post(bookOperateInt.sell, data).then(res => {
+      axios.post(returnInt.sell, data).then(res => {
         if (res.data.state === true) {
           console.log("返回的数据", res.data.row);
           let obj = JSON.stringify(res.data.row);

@@ -81,7 +81,8 @@ export const borrowInt = {
 // 还书页面
 export const returnInt = {
   selectCode: `${url}borrowmodule/lend/return/selectByCode`,
-  selectRfid: `${borrow}borrowmodule/lend/return/selectByrfid`
+  selectRfid: `${borrow}borrowmodule/lend/return/selectByrfid`,
+  sell:`${url}borrowmodule/lend/return/in`
 }
 // 借书
 export const bookOperateInt = {
