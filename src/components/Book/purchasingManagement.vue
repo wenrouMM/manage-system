@@ -99,10 +99,10 @@
           style="display: flex;flex-direction: column"
         >
           <!-- 弹框表单按钮  验证失效-->
-          <el-form-item label=" 采购批次 :" prop="PurchaseBatch" label-width="95px" style>
+          <el-form-item label=" 采购批次 :" prop="PurchaseBatch" label-width="100px" style>
             <el-input v-model="addForm.PurchaseBatch"  style="width: 340px"></el-input>
           </el-form-item>
-          <el-form-item label=" 备注信息 :" prop="remarks" label-width="95px">
+          <el-form-item label=" 备注信息 :" prop="remarks" label-width="100px">
             <el-input
               type="textarea"
               v-model="addForm.remarks"

@@ -123,7 +123,7 @@
             :model="addForm"
             :rules="rules"
             :ref="addForm"
-            label-width="90px"
+            label-width="100px"
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
           >

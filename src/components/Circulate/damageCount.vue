@@ -114,10 +114,10 @@
           <el-dialog  title="报损处理" :visible.sync="dealDialog" width="500px">
             <div class="FormBox">
               <el-form :model="dealForm">
-                <el-form-item label="应收金额" label-width="80px">
+                <el-form-item label="应收金额" label-width="100px">
                   <span class="text">{{dealCash}}</span>
                 </el-form-item>
-                <el-form-item label="实收金额" label-width="80px">
+                <el-form-item label="实收金额" label-width="100px">
                   <el-input v-model="dealForm.dealNum" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item>

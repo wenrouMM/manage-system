@@ -14,13 +14,15 @@
           {{Address.fkStoreId}}{{Address.fkRegionId}}{{Address.colNum}}{{Address.divNum}}{{Address.laysNum}}{{Address.direction}}
           <span><img src="../../../base/img/currency/cuowu.png" id="imgX" style="width: 14px;height: 14px;margin-left: 10px;display: none" @click="closeCheck"></span>
         </div>
-        <div style="width: 270px" class="inputDiv">
-          <el-form :ref="form" :model="form" label-width="90px" :rules="rules" style="width: 256px;margin-top: 30px">
+        <div style="width: 300px" class="inputDiv">
+          <el-form :ref="form" :model="form" label-width="100px" :rules="rules" style="width: 300px;margin-top: 30px">
             <el-form-item prop="tag" label="层架标签 : " >
               <el-input v-model="form.tag" id="tag"></el-input>
             </el-form-item>
-            <el-button type="primary" @click="onSubmit" style="width: 252px;margin-left: 5px;margin-top: 20px">保存</el-button>
           </el-form>
+          <div style="margin: 0 auto;width: 150px ">
+            <el-button type="primary" @click="onSubmit" style="width: 150px">保存</el-button>
+          </div>
         </div>
       </div>
     </div>

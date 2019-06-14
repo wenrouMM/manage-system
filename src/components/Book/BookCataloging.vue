@@ -106,11 +106,11 @@
         <!-- Form -->
         <el-dialog @close="closeForm" width="1000px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
           <div v-if="i==1" style="width: 940px">
-            <el-form id="book_cataloging" :rules="rules" :model="addForm" :ref="addForm" style="">
+            <el-form id="book_cataloging" :rules="rules" :model="addForm" label-width="110px" :ref="addForm" style="">
               <div style="display: flex;flex-direction: column;width: 100%">
                 <div>
                   <div class="flexLayout" id="catalogingInput1" style="width: 450px;position: relative">
-                    <el-form-item label=" I S B N :" prop="isbn" label-width="90px" >
+                    <el-form-item label=" I S B N :" prop="isbn" >
                       <el-input v-model="addForm.isbn" placeholder="请输入ISBN搜索相关数据进行添加" id="isbnInput">
                         <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
                       </el-input>
@@ -129,26 +129,26 @@
                 <div id="noError">
                   <div id="catalogingInput2">
                     <div class="flexLayout">
-                      <el-form-item label=" 正 题 名 :" prop="name" label-width="95px" style="">
+                      <el-form-item label=" 正 题 名 :" prop="name" style="">
                         <el-input v-model="addForm.name"></el-input>
                       </el-form-item>
-                      <el-form-item label=" 副 题 名 :" label-width="90px" style="">
+                      <el-form-item label=" 副 题 名 :" style="">
                         <el-input v-model="addForm.viceName "></el-input>
                       </el-form-item>
                     </div>
                     <div class="flexLayout">
-                      <el-form-item label=" 编 著 者 :" prop="author" label-width="95px" style="">
+                      <el-form-item label=" 编 著 者 :" prop="author" style="">
                         <el-input v-model="addForm.author "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 丛编题名 :" label-width="95px" style="">
+                      <el-form-item label=" 丛编题名 :" style="">
                         <el-input v-model="addForm.clusterName"></el-input>
                       </el-form-item>
                     </div>
                     <div  class="flexLayout">
-                      <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
+                      <el-form-item label=" 索 书 号 :" prop="searchNumber"  class="mediumInput">
                         <el-input v-model="addForm.searchNumber "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
+                      <el-form-item label=" 常用语种 :" prop="languageCode"  class="mediumInput">
                         <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
                           <el-option
                             v-for="item in options"
@@ -160,7 +160,7 @@
                       </el-form-item>
                     </div>
                     <div class="flexLayout" id="catalogingInput3">
-                      <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
+                      <el-form-item label=" 分 类 号 :" prop="fkTypeCode" class="smaillInput">
                         <div class="flexLayout">
                           <el-input v-model="addForm.fkTypeCode">
                             <el-button slot="append" type="primary" @click="typeTreeFun" icon="el-icon-search"></el-button>
@@ -170,12 +170,12 @@
                           </p> -->
                         </div>
                       </el-form-item>
-                      <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput">
+                      <el-form-item label=" 分 类 名 :" prop="fkTypeName"  class="bigInput">
                         <el-input v-model="addForm.fkTypeName "></el-input>
                       </el-form-item>
                     </div>
                     <div id="catalogingInput4" class="flexLayout">
-                      <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
+                      <el-form-item label=" 出 版 社 :" prop="fkPressName" class="smaillInput">
                         <div class="flexLayout">
                           <el-input v-model="addForm.fkPressName">
                             <el-button slot="append" type="primary" @click="publishTreeFun" icon="el-icon-search"></el-button>
@@ -185,35 +185,35 @@
                           </p> -->
                         </div>
                       </el-form-item>
-                      <el-form-item label=" 出 版 地 :" label-width="90px">
+                      <el-form-item label=" 出 版 地 :">
                         <el-input v-model="addForm.publishingPleace "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 出版日期 :" label-width="95px">
+                      <el-form-item label=" 出版日期 :">
                         <el-input v-model="addForm.publishingTime "></el-input>
                       </el-form-item>
                     </div>
                     <div class="flexLayout" id="catalogingInput5">
-                      <el-form-item label=" 页　　码 :" label-width="95px">
+                      <el-form-item label=" 页　　码 :">
                         <el-input v-model="addForm.pageNumber"></el-input>
                       </el-form-item>
-                      <el-form-item label=" 开　　本 :" label-width="95px">
+                      <el-form-item label=" 开　　本 :">
                         <el-input v-model="addForm.openBook "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
+                      <el-form-item label=" 价　　格 :" prop="price">
                         <el-input v-model="addForm.price "></el-input>
                       </el-form-item>
                     </div>
                     <div class="flexLayout">
-                      <el-form-item label=" 附　　注 :" label-width="95px">
+                      <el-form-item label=" 附　　注 :">
                         <el-input v-model="addForm.annotations "></el-input>
                       </el-form-item>
-                      <el-form-item label=" 主 题 词 :" label-width="95px">
+                      <el-form-item label=" 主 题 词 :">
                         <el-input v-model="addForm.themeWord "></el-input>
                       </el-form-item>
                     </div>
                     <div>
-                      <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
-                        <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
+                      <el-form-item label=" 备　　注 :" style="width: 950px;">
+                        <el-input type="textarea" v-model="addForm.renarks" style="width: 830px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
                       </el-form-item>
                     </div>
                   </div>
@@ -226,32 +226,32 @@
             </el-form>
           </div>
           <div v-if="i==0" style="width: 940px">
-            <el-form :rules="rules" :model="addForm" :ref="addForm" id="catalogingEdit">
+            <el-form :rules="rules" :model="addForm" label-width="100px" :ref="addForm" id="catalogingEdit">
               <div style="width: 940px" >
                 <div class="flexLayout" id="editCatalogInput1">
-                  <el-form-item label=" I S B N :" prop="isbn" label-width="90px" >
+                  <el-form-item label=" I S B N :" prop="isbn">
                     <el-input v-model="addForm.isbn"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 正 题 名 :" prop="name" label-width="95px">
+                  <el-form-item label=" 正 题 名 :" prop="name">
                     <el-input v-model="addForm.name"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 副 题 名 :" label-width="90px">
+                  <el-form-item label=" 副 题 名 :">
                     <el-input v-model="addForm.viceName "></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput2">
-                  <el-form-item label=" 编 著 者 :" prop="author" label-width="95px">
+                  <el-form-item label=" 编 著 者 :" prop="author">
                     <el-input v-model="addForm.author "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 丛编题名 :" label-width="95px">
+                  <el-form-item label=" 丛编题名 :">
                     <el-input v-model="addForm.clusterName"></el-input>
                   </el-form-item>
                 </div>
                 <div  class="flexLayout" id="editCatalogInput3">
-                  <el-form-item label=" 索 书 号 :" prop="searchNumber" label-width="95px"  class="mediumInput">
+                  <el-form-item label=" 索 书 号 :" prop="searchNumber"  class="mediumInput">
                     <el-input v-model="addForm.searchNumber "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 常用语种 :" prop="languageCode" label-width="95px"  class="mediumInput">
+                  <el-form-item label=" 常用语种 :" prop="languageCode"  class="mediumInput">
                     <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
                       <el-option
                         v-for="item in options"
@@ -263,7 +263,7 @@
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput4">
-                  <el-form-item label=" 分 类 号 :" prop="fkTypeCode" label-width="95px" class="smaillInput">
+                  <el-form-item label=" 分 类 号 :" prop="fkTypeCode" class="smaillInput">
                     <div class="flexLayout">
                       <!--<el-input v-model="addForm.fkTypeCode"></el-input>
                       <p class="searchButton" style="width: 50px;left: 180px" @click="typeTreeFun">
@@ -274,12 +274,12 @@
                       </el-input>
                     </div>
                   </el-form-item>
-                  <el-form-item label=" 分 类 名 :" prop="fkTypeName" label-width="90px"  class="bigInput">
+                  <el-form-item label=" 分 类 名 :" prop="fkTypeName"  class="bigInput">
                     <el-input v-model="addForm.fkTypeName " ></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput5">
-                  <el-form-item label=" 出 版 社 :" prop="fkPressName" label-width="95px" class="smaillInput">
+                  <el-form-item label=" 出 版 社 :" prop="fkPressName" class="smaillInput">
                     <div class="flexLayout">
                       <!--<el-input v-model="addForm.fkPressName"></el-input>
                       <p class="searchButton" style="width: 50px;left: 180px" @click="publishTreeFun">
@@ -290,34 +290,34 @@
                       </el-input>
                     </div>
                   </el-form-item>
-                  <el-form-item label=" 出 版 地 :" label-width="90px" style="margin-left: 0px">
+                  <el-form-item label=" 出 版 地 :" style="margin-left: 0px">
                     <el-input v-model="addForm.publishingPleace "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 出版日期 :" label-width="95px">
+                  <el-form-item label=" 出版日期 :">
                     <el-input v-model="addForm.publishingTime "></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput6">
-                  <el-form-item label=" 页　　码 :" label-width="95px">
+                  <el-form-item label=" 页　　码 :">
                     <el-input v-model="addForm.pageNumber"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 开　　本 :" label-width="95px">
+                  <el-form-item label=" 开　　本 :">
                     <el-input v-model="addForm.openBook "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 价　　格 :" prop="price" label-width="95px">
+                  <el-form-item label=" 价　　格 :" prop="price">
                     <el-input v-model="addForm.price "></el-input>
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="editCatalogInput7">
-                  <el-form-item label=" 附　　注 :" label-width="95px">
+                  <el-form-item label=" 附　　注 :">
                     <el-input v-model="addForm.annotations "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 主 题 词 :" label-width="95px">
+                  <el-form-item label=" 主 题 词 :">
                     <el-input v-model="addForm.themeWord "></el-input>
                   </el-form-item>
                 </div>
                 <div>
-                  <el-form-item label=" 备　　注 :" style="width: 950px;margin-left: 20px">
+                  <el-form-item label=" 备　　注 :" style="width: 950px;">
                     <el-input type="textarea" v-model="addForm.renarks" style="width: 845px;" :autosize="{ minRows: 5, maxRows: 5}" resize="none"></el-input>
                   </el-form-item>
                 </div>

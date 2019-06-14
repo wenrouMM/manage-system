@@ -114,12 +114,12 @@
         </section>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
-      <div class="forbid">
+      <div class="forbid collectionDelete">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
           </div>
-          <div slot="footer">
+          <div>
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="cancelCheck">取消</span>
           </div>

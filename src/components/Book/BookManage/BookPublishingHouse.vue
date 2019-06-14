@@ -102,7 +102,7 @@
           <div class="addEditDialog">
             <!-- Form -->
             <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
-              <el-form id="addFormYf"  label-width="100px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
+              <el-form id="addFormYf"  label-width="120px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
                 <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 60px">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>

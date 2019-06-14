@@ -8,12 +8,12 @@
       <div style="background-color: #ededed;width: 250px;height: 200px;border-radius: 5px">
         <img src="../../../base/img/currency/book.png" style="margin-left: 26px">
       </div>
-      <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="90px" class="demo-ruleForm"  :label-position="labelPosition" >
+      <el-form :model="ruleForm" :rules="rules" :ref="ruleForm" label-width="100px" class="demo-ruleForm"  :label-position="labelPosition" >
         <div style="display: flex;flex-direction: column;margin-left: 330px;margin-top: -200px">
-          <el-form-item label="馆 藏 码 : " prop="barcode" label-width="90px">
+          <el-form-item label="馆 藏 码 : " prop="barcode">
             <el-input v-model="ruleForm.barcode" style="width:250px;"  v-on:input="barcodeClick" placeholder="请输入馆藏码"></el-input>
           </el-form-item>
-          <el-form-item label="书　　名 :　" prop="bookName" style="margin-top: 25px">
+          <el-form-item label="书　　名 :　" prop="bookName" label-width="105px"  style="margin-top: 25px">
             <span>{{ruleForm.bookName}}</span>
           </el-form-item>
           <el-form-item label="索 取 号 :　" prop="bookindex" style="margin-top: 25px">
@@ -21,7 +21,7 @@
           </el-form-item>
         </div>
         <div style="display: flex;flex-direction: row;margin-top: 30px">
-          <el-form-item label="图书类型 :　" prop="bookType" style="width: 330px">
+          <el-form-item label="图书类型 :　" label-width="105px" prop="bookType" style="width: 330px">
             <span>{{ruleForm.bookType}}</span>
           </el-form-item>
           <el-form-item label="rfid : " prop="rfid" label-width="60px">

@@ -13,9 +13,6 @@
     <div class="anthoerBox">
       <section class="searchBox">
         <div class="buttonBox mb_30">
-          <button class="blue" @click="deriveBtn">
-            <i class="blueIcon el-icon-share"></i>导出
-          </button>
         </div>
       </section>
       <!-- 3.0表格数据 -->

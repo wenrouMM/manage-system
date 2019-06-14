@@ -14,7 +14,7 @@
             :rules="editrules"
             ref="editForm"
             :label-position="labelPosition"
-            label-width="80px"
+            label-width="100px"
             :model="editForm"
           >
             <el-form-item label="标题" prop="title">
@@ -342,7 +342,7 @@ export default {
   },
   created(){
       console.log(this.$route.params.id)
-      
+
   }
 };
 </script>

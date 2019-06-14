@@ -135,7 +135,7 @@
           <div v-if="i==1">
             <el-form id="collectionAdd" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
             <div class="flexLayout" id="collectionAddIsbn">
-              <el-form-item label=" I S B N :" prop="isbn" label-width="80px">
+              <el-form-item label=" I S B N :" prop="isbn" label-width="90px">
                 <el-input v-model="addForm.isbn" placeholder="请输入ISBN进行搜索选择相关数据">
                   <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
                 </el-input>
@@ -193,7 +193,7 @@
                   </el-form-item>
                 </div>
                 <div class="flexLayout" id="inputDiv6" style="margin-bottom: 20px">
-                  <el-form-item label=" 页　　码 :" label-width="83px">
+                  <el-form-item label=" 页　　码 :" label-width="90px">
                     <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 开　　本 :" label-width="95px">
@@ -206,13 +206,13 @@
               </div>
               <div id="formDiv">
                 <div class="flexLayout" style="margin-top: 10px">
-                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
+                  <el-form-item label=" 馆藏码 :" prop="code" label-width="90px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="95px">
+                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="90px">
                     <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
+                  <el-form-item label=" 馆藏地 :" prop="place" label-width="90px">
                     <el-input v-model="addForm.place"></el-input>
                   </el-form-item>
                 </div>
@@ -258,7 +258,7 @@
             <el-form :rules="rules" id="collectionEdit" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
               <div style="width: 900px;border: 1px solid #DCDFE6;border-radius: 5px;padding:0px 10px" id="haveBottomBorderEdit">
                 <div class="flexLayout" id="inputEdit1">
-                  <el-form-item label=" I S B N :" label-width="70px">
+                  <el-form-item label=" I S B N :" label-width="80px">
                     <el-input v-model="showData.isbn" style="position: relative" :disabled="disabled"></el-input>
                   </el-form-item>
                   <el-form-item label=" 正题名 :" label-width="80px">
@@ -320,13 +320,13 @@
               </div>
               <div style="width: 900px;border: 1px solid #DCDFE6;border-radius: 5px;margin-top: 20px;padding:20px 10px">
                 <div class="flexLayout" style="margin-top: 10px">
-                  <el-form-item label=" 馆藏码 :" prop="code" label-width="80px">
+                  <el-form-item label=" 馆藏码 :" prop="code" label-width="90px">
                     <el-input v-model="addForm.code"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="95px">
+                  <el-form-item label=" 索取号 :" prop="callNumber" label-width="90px">
                     <el-input v-model="addForm.callNumber"></el-input>
                   </el-form-item>
-                  <el-form-item label=" 馆藏地 :" prop="place" label-width="80px">
+                  <el-form-item label=" 馆藏地 :" prop="place" label-width="90px">
                     <el-input v-model="addForm.place"></el-input>
                   </el-form-item>
                 </div>
@@ -382,7 +382,7 @@
                   <el-form-item label=" 卡　　号 :" label-width="95px" id="cardErr">
                     <el-input v-model="harmForm.cardNumber "></el-input>
                   </el-form-item>
-                  <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle" label-width="95px">
+                  <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle" label-width="100px">
                     <el-select
                       @change="selectCheck(harmForm.causesDamage)"
                       v-model="harmForm.causesDamage"
@@ -400,7 +400,7 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="95px">
+                  <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="100px">
                     <div style="border: 1px solid #DCDFE6;width: 270px;height: 36px;border-radius: 5px;padding: 0px 10px 0px">{{harmForm.amountCompensation}}</div>
                   </el-form-item>
                 </div>
@@ -420,13 +420,13 @@
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
-      <div class="forbid">
+      <div class="forbid collectionDelete">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6||this.i==8">
             是否{{Dialogtitle[i]}}?
           </div>
           <div v-if="this.i==7">
-            <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="92px" class="demo-ruleForm">
+            <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="100px" class="demo-ruleForm">
               <el-form-item label=" 剔除原因 :" prop="cause">
                 <el-select v-model="numberValidateForm.cause" clearable placeholder="请选择" style="width: 330px">
                   <el-option label="未还" value="4"></el-option>
@@ -438,7 +438,7 @@
               </el-form-item>
             </el-form>
           </div>
-          <div slot="footer">
+          <div>
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="cancelDialog">取消</span>
           </div>

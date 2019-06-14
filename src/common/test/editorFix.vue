@@ -14,7 +14,7 @@
             :rules="editrules"
             ref="editForm"
             :label-position="labelPosition"
-            label-width="80px"
+            label-width="100px"
             :model="editForm"
           >
             <el-form-item label="标题" prop="title">
@@ -308,7 +308,7 @@ export default {
                 obj.fileAddress =item.fileAddress
                 obj.fileName = item.name
             }
-            
+
             arr.push(obj);
           }
           this.fileContent = arr;
@@ -372,13 +372,13 @@ export default {
                 this.$message.error(res.data.msg)
             }
         })
-        
+
     }
   },
   created(){
       this.idSearchApi()
       this.id = this.$route.params.id
-      
+
   }
 };
 </script>

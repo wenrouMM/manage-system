@@ -170,7 +170,7 @@
         <el-dialog
           :title="dialogTitle[i]"
           :visible.sync="changeDialog"
-          width="732px"
+          width="900px"
           @close="handleClose('changeAreaForm')"
           center
         >
@@ -178,13 +178,13 @@
             <el-form-item label="库房名称:" :label-width="changelabel" prop="storeName">
               <el-input :disabled="true" v-model="changeAreaForm.storeName"></el-input>
             </el-form-item>
-            <el-form-item label="区名称:" :label-width="changelabel" prop="zoneName">
+            <el-form-item label="区名称:" label-width="100px" prop="zoneName">
               <el-input v-model="changeAreaForm.zoneName"></el-input>
             </el-form-item>
 
             <div class="row2">
               <el-form-item label="固定所在列:" :label-width="changelabel" prop="column">
-                <el-select v-model="changeAreaForm.column" placeholder="请选择">
+                <el-select v-model="changeAreaForm.column" placeholder="请选择" style="width: 250px">
                   <el-option label="左" value="left"></el-option>
                   <el-option label="右" value="right"></el-option>
                 </el-select>
@@ -195,11 +195,11 @@
               <span class="text">列</span>
             </div>
             <div class="row2">
-              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
+              <el-form-item label="每节有:" label-width="95px" prop="floor">
                 <el-input v-model="changeAreaForm.floor"></el-input>
               </el-form-item>
               <span class="text2">层</span>
-              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
+              <el-form-item label="密集架宽度:" label-width="140px" prop="density">
                 <el-input v-model="changeAreaForm.density"></el-input>
               </el-form-item>
             </div>
@@ -481,7 +481,7 @@ export default {
           { required: true, message: "请输入通信端口", trigger: "blur" }
         ]
       },
-      changelabel: "100px"
+      changelabel: "120px"
     };
   },
   computed: {
@@ -1176,7 +1176,7 @@ export default {
 .row2 .text2 {
   position: absolute;
   top: 13px;
-  left: 318px;
+  left: 380px;
   font-size: 14px;
   color: #878787;
 }

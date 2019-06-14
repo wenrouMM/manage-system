@@ -15,7 +15,7 @@
             <div class="inputBox">
               <el-form
                 :label-position="labelPosition"
-                label-width="80px"
+                label-width="100px"
                 :model="searchForm"
                 ref="searchForm"
                 :rules="rules"

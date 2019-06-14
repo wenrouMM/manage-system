@@ -157,7 +157,7 @@
    width:370px;
 }
 #catalogingEdit #editCatalogInput4 .bigInput .el-input .el-input__inner {
-  width:515px;
+  width:500px;
 }
 #catalogingEdit #editCatalogInput4 .smaillInput .el-input .el-input__inner {
   width:180px;
@@ -166,7 +166,7 @@
   width:180px;
 }
 #catalogingEdit #editCatalogInput5 .el-input .el-input__inner {
-  width:210px;
+  width:200px;
 }
 #catalogingEdit #editCatalogInput6 .el-input .el-input__inner {
   width:210px;
@@ -187,10 +187,10 @@
   width:360px;
 }
 #book_cataloging #catalogingInput5 .el-input .el-input__inner {
-  width:210px;
+  width:200px;
 }
 #book_cataloging #catalogingInput6 .el-input .el-input__inner {
-  width:210px;
+  width:180px;
 }
 #book_cataloging #catalogingInput3 .smaillInput .el-input .el-input__inner {
   width:180px;
@@ -202,13 +202,13 @@
   width:200px;
 }
 #book_cataloging #catalogingInput4 .el-input .el-input__inner {
-  width:200px;
+  width:185px;
 }
 #book_cataloging #catalogingInput4 .smaillInput .el-input .el-input__inner {
   width:180px;
 }
 #book_cataloging #catalogingInput3 .bigInput .el-input .el-input__inner {
-  width:515px;
+  width:480px;
 }
 #purchasingMessage .el-input .el-input__inner {
   width: 340px;
@@ -256,4 +256,8 @@
 }
 #searchInput .el-select .el-input--suffix{
   width: 150px;
+}
+.collectionDelete .el-dialog--center .el-dialog__body{
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }

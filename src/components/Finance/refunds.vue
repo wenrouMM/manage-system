@@ -58,7 +58,7 @@
     <section class="entryBox">
       <div class="formBox">
         <el-form label-width="80px" label-position="left" ref="changeForm" :model="changeForm" :rules="changeRules">
-        <el-form-item label="充值金额" prop="deposit">
+        <el-form-item label="充值金额" prop="deposit" label-width="100px">
           <el-input @blur="jugeCash" v-model="changeForm.deposit" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item v-if="hide" label="验证密码" label-width="80px">
