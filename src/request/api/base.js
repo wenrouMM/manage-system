@@ -147,6 +147,7 @@ export const finnaceInt = {
   userInfo:`${url}financemodule/depositRecord/getReaderInfo`,
   deposit:`${url}financemodule/depositRecord/add`,
   juge:`${url}financemodule/depositRecord/vMoney`,
+  logout:`${url}financemodule/depositRecord/Logout`
 } 
 /*------ 系统设置模块  ------*/
 
