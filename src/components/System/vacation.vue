@@ -387,12 +387,35 @@
             console.log(error);
           });
       },
+      paginationApi(value) {
+        //获取登录记录
+        console.log(value);
+        this.tableLoading = true;
+        axios
+          .get(vacation.select, {
+            params: value
+          })
+          .then(res => {
+            console.log("寒暑假记录", res.data);
+            if (res.data.state === true) {
+              this.tableData = res.data.row; //获取返回数据
+              this.total = res.data.total; //总条目数
+              this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
+              this.tableLoading = false;
+            } else {
+              this.tableLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
         console.log("保存当前查询", this.paginationForm, this.currentPage);
-        this.searchApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
+        this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
     created() {
