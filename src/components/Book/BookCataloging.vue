@@ -325,7 +325,7 @@
               </div>
             </el-form>
           </div>
-          <div id="typeMessage" >
+          <div id="typeMessage">
             <div style="position: relative">
               <p>{{messageName}}</p>
               <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
@@ -1200,6 +1200,6 @@
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
     -moz-box-shadow: 2px 2px 10px #909090;
     -webkit-box-shadow: 2px 2px 10px #909090;
-    box-shadow:2px 2px 10px #909090;
+    box-shadow:2px 2px 100px #909090;
   }
 </style>
