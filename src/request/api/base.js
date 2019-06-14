@@ -13,12 +13,12 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 var imgurl='http://192.168.2.250:8090/';
 let fileUrl = 'http://192.168.2.250:8090/'; */
 
- var url = 'http://192.168.2.31:8088/';
+/*  var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';
-/* var url = 'http://192.168.2.121:8088/';
+let fileUrl = 'http://192.168.2.31:8090/'; */
+var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
-var fileUrl = 'http://192.168.2.121:8090/'; */
+var fileUrl = 'http://192.168.2.121:8090/';
 
 /*  var url = window.glob.url
 var imgurl = window.glob.imgurl
@@ -141,6 +141,13 @@ export const cardLevelInt = {
   verifyGrade:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/verifyName`,//验证读者卡等级名称
   verifyDeposit:`${url}readermodule/cardManagement/readerTbCardGradeinfo/currency/verifyDeposit` //验证押金金额
 }
+
+/*------ 财务管理模块 ------*/
+export const finnaceInt = {
+  userInfo:`${url}financemodule/depositRecord/getReaderInfo`,
+  deposit:`${url}financemodule/depositRecord/add`,
+  juge:`${url}financemodule/depositRecord/vMoney`,
+} 
 /*------ 系统设置模块  ------*/
 
 // 发布公告

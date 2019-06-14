@@ -18,7 +18,7 @@
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
             <el-input
-              @blur="readCardBtn"
+              
               clearable
               placeholder="请输入卡号或身份证号"
               v-model="cardInput"
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { bookOperateInt, rechargeInt } from "@request/api/base.js";
+import { finnaceInt } from "@request/api/base.js";
 import axios from "axios";
 export default {
   data() {
@@ -116,7 +116,7 @@ export default {
   computed: {
     rechargeForm() {
       let obj = {
-        fkCardNumber: this.lastCardNum,
+        fkCardNumber: this.cardInput,
         remarks: this.changeForm.remarks
       };
       return obj;
@@ -153,7 +153,10 @@ export default {
     },
     //注销弹窗
     rechargeBtn() {
-      this.centerDialogVisible = true;
+      if(this.cardInput){
+        this.centerDialogVisible = true;
+      }
+      
     },
     //注销弹窗的确定按钮
     submitDialog() {
@@ -166,7 +169,7 @@ export default {
     /*------ API ------*/
     // 调查读者卡信息
     readCardApi(data) {
-      axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
+      axios.get(finnaceInt.userInfo, { params: data }).then(res => {
         console.log("用户信息", res);
         if (res.data.state === true) {
           let data = res.data.row[0];
@@ -187,7 +190,7 @@ export default {
     //注销充值
     depositApi() {
       let value = this.rechargeForm;
-      this.axios.post(rechargeInt.logout, value).then(res => {
+      this.axios.post(finnaceInt.logout, value).then(res => {
         console.log(res);
         if (res.data.state === true) {
           this.$message.success("注销成功,注销生成的记录可在财务管理内查看");

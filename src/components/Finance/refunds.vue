@@ -15,7 +15,7 @@
         <div class="searchBox">
           <span class="text mr_30">卡号：</span>
           <div class="inputBox">
-            <el-input @blur="readCardBtn"   clearable placeholder="请输入卡号或身份证号" v-model="cardInput" class="input-with-select">
+            <el-input  clearable placeholder="请输入卡号或身份证号" v-model="cardInput" class="input-with-select">
               <el-button @click="readCardBtn" slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </div>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { bookOperateInt,rechargeInt } from "@request/api/base.js";
+import { finnaceInt } from "@request/api/base.js";
 import axios from "axios"
 export default {
   data() {
@@ -113,7 +113,7 @@ export default {
     rechargeForm() {
       let obj = {
         deposit: this.changeForm.deposit,
-        cardNumber: this.lastCardNum,
+        cardNumber: this.cardInput,
         operationPassword: this.changeForm.password,
         remarks:this.changeForm.remarks
       };
@@ -162,7 +162,7 @@ export default {
     readCardApi(data) {
       
       
-      axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
+      axios.get(finnaceInt.userInfo, { params: data }).then(res => {
         console.log("用户信息",res);
         if (res.data.state === true) {
           let data = res.data.row[0]
@@ -182,7 +182,7 @@ export default {
     // 金额判断API
     cashJugeApi() {
       axios
-        .post(rechargeInt.juge, {
+        .post(finnaceInt.juge, {
           deposit: this.changeForm.deposit
         })
         .then(res => {
@@ -198,7 +198,7 @@ export default {
     //押金充值
     depositApi() {
       let value = this.rechargeForm;
-      this.axios.post(rechargeInt.deposit, value).then(res => {
+      this.axios.post(finnaceInt.deposit, value).then(res => {
         console.log(res);
         if (res.data.state === true) {
           this.$message.success("充值成功");
