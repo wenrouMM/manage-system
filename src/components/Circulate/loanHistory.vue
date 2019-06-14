@@ -350,6 +350,10 @@
   .item {
     margin-bottom: 50px;
   }
+  .demo-form-inline{
+    display: flex;
+    justify-content: space-between;
+  }
   .tablebox .tableBorder {
     border: 1px solid #ebeef5;
     border-bottom: none;

@@ -1,7 +1,7 @@
 <template>
   <div id="Notice">
     <el-container>
-      <div class="commonMode" style="width:100%">
+      <div style="width:100%">
         <div class="sonTitle">
           <span class="titleName">假期设置</span>
         </div>
@@ -464,6 +464,7 @@
   }
   #Notice {
     background: #ffffff;
+    padding: 30px;
   }
   #Notice .searchBox{
     display: flex;
@@ -480,7 +481,16 @@
     width: 70px;
     padding: 8px 8px;
   }
-
+  .sonTitle .titleName {
+    border-left: 4px solid #0096ff;
+    padding-left: 10px;
+    font-size: 16px;
+    font-family: MicrosoftYaHei;
+    font-weight: 400;
+    color: rgba(135, 135, 135, 1);
+    display: inline-block;
+    margin-bottom: 33px;
+  }
   .button_s {
     width: 90px;
     font-size: 16px;

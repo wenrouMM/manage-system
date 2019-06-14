@@ -15,13 +15,16 @@
               <i class="deleteIcon el-icon-delete"></i>删除
             </button>
             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
-               <!-- <i class="blueIcon el-icon-share"></i> --> 导出当前文档
+               <!-- <i class="blueIcon el-icon-share"></i> --> 导出
             </el-button>
             <button class="green" @click="tunnellingBtn">
               <i class="el-icon-edit greenIcon"></i>批量导入
             </button>
           </div>
           <el-form :inline="true" :model="searchForm">
+            <el-form-item label="书名 :">
+              <el-input v-model="searchForm.name" placeholder="请输入书名查询" clearable style="width: 200px"></el-input>
+            </el-form-item>
             <el-form-item label="ISBN :">
               <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" clearable style="width: 200px"></el-input>
             </el-form-item>
@@ -46,7 +49,7 @@
                 <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="正题名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
@@ -472,6 +475,7 @@
         searchForm: {
           // 接受搜索表单的数据
           isbn:"",
+          name:''
         },
         /*初始化 */
         options: [],
@@ -492,6 +496,7 @@
       searchTimeForm(){
         let newData={
           isbn:this.searchForm.isbn,
+          name:this.searchForm.name,
           pageSize: this.pageSize,
           currentPage: 1,
         }

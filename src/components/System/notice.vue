@@ -1,7 +1,7 @@
 <template>
   <div id="Notice">
     <el-container>
-      <div class="commonMode" style="width:100%">
+      <div  style="width:100%">
         <div class="sonTitle">
           <span class="titleName">公告管理</span>
         </div>
@@ -50,7 +50,7 @@
             :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
             empty-text="无数据"
             border
-            style="width: 1540px; text-align:center;"
+            style="width: 100%; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
           >
@@ -441,10 +441,21 @@ export default {
 <style scoped>
 #Notice {
   background: #ffffff;
+  padding: 30px;
 }
 #Notice .searchBox{
     display: flex;
     justify-content: space-between;
+}
+.sonTitle .titleName {
+  border-left: 4px solid #0096ff;
+  padding-left: 10px;
+  font-size: 16px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;
+  color: rgba(135, 135, 135, 1);
+  display: inline-block;
+  margin-bottom: 33px;
 }
 .page_div {
   text-align: center;

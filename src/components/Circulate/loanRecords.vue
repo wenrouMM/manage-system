@@ -6,7 +6,7 @@
         <div class="important">
           <!-- 1.0 标题 -->
           <div class="sonTitle">
-            <span class="titleName">借阅记录</span>
+            <span class="titleName">借书记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox">
@@ -370,6 +370,10 @@
     right: 30px;
     font-size: 16px;
     cursor: pointer;
+  }
+  .demo-form-inline{
+    display: flex;
+    justify-content: space-between;
   }
   .addDialog .dialogBody {
     background: #fff;

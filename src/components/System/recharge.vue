@@ -19,9 +19,9 @@
                   <el-option label="导出全部" value="1"></el-option>
               </el-select>
              <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
-              导出excel
+              导出
             </el-button>
-            
+
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
@@ -190,7 +190,7 @@
           currentPage:this.currentPage
         }
         let obj =Object.assign({},pbk, this.paginationForm);
-        
+
         return obj
       }
     },

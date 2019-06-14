@@ -6,10 +6,10 @@
         <div style="font-size: 16px;color: #878787;margin-left:10px;margin-top: -17px">逾期设置</div>
       </div>
     </div>
-    <div style="width: 350px;height: 350px;margin:200px auto">
+    <div style="width: 370px;height: 370px;margin:200px auto">
       <el-form :label-position="labelPosition" :ref="formLabelAlign" :model="formLabelAlign" :rules="rules" ref="formLabelAlign">
         <div class="flexLayout fontStyle">
-          <el-form-item label="逾期天数" prop="dataNum" label-width="80px">
+          <el-form-item label="逾期天数" prop="dataNum" label-width="100px">
             <el-input v-model="formLabelAlign.dataNum" style="width: 250px"></el-input>
           </el-form-item>
           <el-form-item>
@@ -17,7 +17,7 @@
           </el-form-item>
         </div>
         <div class="flexLayout fontStyle">
-          <el-form-item label="逾期金额" prop="money" label-width="80px">
+          <el-form-item label="逾期金额" prop="money" label-width="100px">
             <el-input v-model="formLabelAlign.money" style="width: 250px"></el-input>
           </el-form-item>
           <el-form-item>
@@ -25,14 +25,14 @@
           </el-form-item>
         </div>
         <div class="flexLayout fontStyle">
-          <el-form-item label="催还间隔" prop="space" label-width="80px">
+          <el-form-item label="催还间隔" prop="space" label-width="100px">
             <el-input v-model="formLabelAlign.space" style="width: 250px"></el-input>
           </el-form-item>
           <el-form-item>
             <span>天</span>
           </el-form-item>
         </div>
-        <div style="margin-left: 17px;margin-top: 50px">
+        <div style="margin-left: 30px;margin-top: 50px">
           <el-button type="primary" style="border-radius: 10px;width: 150px" @click="saveClick">保存</el-button>
           <el-button type="info"  style="border-radius: 10px;width: 150px" @click="clearClick">重置</el-button>
         </div>
