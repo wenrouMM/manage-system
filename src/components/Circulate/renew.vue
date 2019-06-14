@@ -164,7 +164,7 @@
 
 <script>
 import axios from "axios";
-import { bookOperateInt, borrowInt } from "@request/api/base.js";
+import { renewInt } from "@request/api/base.js";
 export default {
   name:'renew',
   data() {
@@ -287,7 +287,7 @@ export default {
     // 读卡APi
     readCardApi(data) {
       console.log("用户信息");
-      axios.get(bookOperateInt.userInfo, { params: data }).then(res => {
+      axios.get(renewInt.userInfo, { params: data }).then(res => {
         if (res.data.state === true) {
           this.userTable = res.data.row;
           this.tabCard = data;
@@ -304,7 +304,7 @@ export default {
     // 续借Api
     renewApi(data) {
       console.log("传递的数据", this.renewForm);
-      axios.post(bookOperateInt.renew, data).then(res => {
+      axios.post(renewInt.renew, data).then(res => {
         if (res.data.state === true) {
           console.log("续借记录", res.data.row);
           this.endTable = res.data.row
@@ -321,7 +321,7 @@ export default {
     },
     // 待归还Api
     returnBookApi(data) {
-      axios.get(bookOperateInt.return, { params: data }).then(res => {
+      axios.get(renewInt.return, { params: data }).then(res => {
         if (res.data.state === true) {
           this.oweTable = res.data.row;
           console.log("待归还信息", this.oweTable);
@@ -332,7 +332,7 @@ export default {
     },
     // 历史借阅Api
     historyApi(data) {
-      axios.get(bookOperateInt.history, { params: data }).then(res => {
+      axios.get(renewInt.history, { params: data }).then(res => {
         if (res.data.state === true) {
           this.bookHistory = res.data.row;
           console.log("历史借阅记录", this.bookHistory);

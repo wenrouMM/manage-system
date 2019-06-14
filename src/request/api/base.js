@@ -83,15 +83,19 @@ export const returnInt = {
   selectCode: `${url}borrowmodule/lend/return/selectByCode`,
   selectRfid: `${borrow}borrowmodule/lend/return/selectByrfid`
 }
-// 续借页面
-var bookOperate = url + 'borrowmodule/';
+// 借书
 export const bookOperateInt = {
-  borrow: `${bookOperate}lend/borrow/out`,
-  sell: `${bookOperate}lend/return/in`,
-  renew:`${url}borrowmodule/renew/renewBooks`,
-  userInfo:`${bookOperate}lend/borrow/getReaderInfo`,
-  return:`${bookOperate}renew/getReaderLog`,
-  history:`${bookOperate}lend/borrow/getReaderHis`
+  borrow: `${url}borrowmodule/lend/borrow/out`,
+  userInfo:`${url}borrowmodule/lend/borrow/getReaderInfo`,
+  return:`${url}borrowmodule/lend/borrow/getReaderLog`,
+  history:`${url}borrowmodule/lend/borrow/getReaderHis`
+}
+// 续借
+export const renewInt = {
+  renew:`${url}borrowmodule/lend/renew/renewBooks`,
+  userInfo:`${url}borrowmodule/lend/renew/getReaderInfo`,
+  return:`${url}borrowmodule/lend/renew/getReaderLog`,
+  history:`${url}borrowmodule/lend/renew/getReaderHis`
 }
 // 书籍报损
 export const bookDamageInt = {
