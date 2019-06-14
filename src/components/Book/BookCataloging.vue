@@ -968,13 +968,22 @@
           .then(res => {
             console.log("书籍编目", res);
             if (res.data.state === true) {
-              this.tableData = res.data.rows; //获取返回数据
+              console.log(res.data.rows)
+              if(res.data.rows){
+                this.tableData = res.data.rows;
+                console.log('非null、')
+              } else{
+                this.tableData = []
+                console.log('null、')
+              }
+               //获取返回数据
               this.total = res.data.total; //总条目数
               this.paginationForm = Object.assign({}, value); // 保存上次的查询结果
               this.currentPage = 1; // 回到第一页显示
               this.tableLoading = false;
             } else {
               this.tableLoading = false;
+              console.log('查询失败',res.data.rows)
             }
           })
           .catch(error => {

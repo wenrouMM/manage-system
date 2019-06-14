@@ -10,7 +10,7 @@
         <el-form :model="ruleForm"
                  :rules="rules"
                  :ref="ruleForm"
-                 label-width="100px"
+                 label-width="120px"
                  class="demo-ruleForm"
                  style="width: 700px;margin: 100px auto"
                  :label-position="labelPosition">

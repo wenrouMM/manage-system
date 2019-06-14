@@ -17,85 +17,86 @@
               <div class="sonTitle">
                 <span class="titleName">图书出版社</span>
               </div>
-              <div class="flexLayout">
-                <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
-                <div class="buttonBox">
-                  <button class="add" @click="addDialogOpen">
-                    <i class="addIcon el-icon-plus"></i>添加
-                  </button>
-                  <!--<button class="blue" @click="deriveBtn">
-                    <i class="blueIcon el-icon-share"></i>导出
-                  </button>-->
+              <div >
+                <div class="flexLayout">
+                  <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
+                  <div class="buttonBox">
+                    <button class="add" @click="addDialogOpen">
+                      <i class="addIcon el-icon-plus"></i>添加
+                    </button>
+                    <!--<button class="blue" @click="deriveBtn">
+                      <i class="blueIcon el-icon-share"></i>导出
+                    </button>-->
+                  </div>
+                  <div class="right">
+                    <el-form :inline="true" :model="searchForm">
+                      <el-form-item label="出版社名称 :">
+                        <el-input v-model="searchForm.publishingName" placeholder="请输入出版社名称" clearable style="width: 200px"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
+                      </el-form-item>
+                    </el-form>
+                  </div>
                 </div>
-                <div class="right">
-                  <el-form :inline="true" :model="searchForm">
-                    <el-form-item label="出版社名称 :">
-                      <el-input v-model="searchForm.publishingName" placeholder="请输入出版社名称" clearable style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                      <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
-                    </el-form-item>
-                  </el-form>
-                </div>
-              </div>
-              <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
-              <section class="tableBox"  v-loading="tableLoading">
-                <el-table
-                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
-                  empty-text="无数据"
-                  style="width: 1260px; text-align:center;"
-                  :data="tableData"
-                  :row-style="{height:'60px'}"
-                >
-                  <el-table-column align="center" prop="index" type="index" width="100" label="序号">
-                    <template slot-scope="scope">
-                      <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column align="center" prop="name" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="address" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="contacts" label="联系人" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" prop="telephone" label="联系电话" :show-overflow-tooltip="true"></el-table-column>
-                  <el-table-column align="center" label="操作" fixed="right">
-                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
-                    <template slot-scope="scope">
-                      <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
-                      <span class="ban" @click="deleteBtn(scope.$index, scope.row)">删除</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <!-- 4.0 分页 -->
-                <section class="pagination mt_30">
-                  <el-pagination
-                    style="display: inline-block"
-                    background
-                    layout="prev, pager, next,total,slot"
-                    :total="total"
-                    :page-size="pageSize"
-                    :current-page="currentPage"
-                    @current-change="current_change"
+                <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
+                <section class="tableBox"  v-loading="tableLoading">
+                  <el-table
+                    :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px', fontSize:'14px',borderRight:'none'}"
+                    empty-text="无数据"
+                    style="width: 100%; text-align:center;"
+                    :data="tableData"
+                    :row-style="{height:'60px'}"
                   >
-                    <slot>
-                <span>
-                  前往
-                  <div class="el-input el-pagination__editor is-in-pagination">
-                    <input
-                      ref="text"
-                      type="number"
-                      v-model="pageInput"
-                      autocomplete="off"
-                      min="1"
-                      max="1"
-                      class="compo el-input__inner"
+                    <el-table-column align="center" prop="index" type="index" width="100" label="序号">
+                      <template slot-scope="scope">
+                        <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column align="center" prop="name" label="出版社名称" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column align="center" prop="address" label="公司地址" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column align="center" prop="contacts" label="联系人" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column align="center" prop="telephone" label="联系电话" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column align="center" label="操作" fixed="right">
+                      <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                      <template slot-scope="scope">
+                        <span class="edit" @click="EditBtn(scope.$index, scope.row)">修改</span>
+                        <span class="ban" @click="deleteBtn(scope.$index, scope.row)">删除</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <!-- 4.0 分页 -->
+                  <section class="pagination mt_30">
+                    <el-pagination
+                      style="display: inline-block"
+                      background
+                      layout="prev, pager, next,total,slot"
+                      :total="total"
+                      :page-size="pageSize"
+                      :current-page="currentPage"
+                      @current-change="current_change"
                     >
-                  </div>页
-                </span>
-                    </slot>
-                  </el-pagination>
-                  <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+                      <slot>
+                  <span>
+                    前往
+                    <div class="el-input el-pagination__editor is-in-pagination">
+                      <input
+                        ref="text"
+                        type="number"
+                        v-model="pageInput"
+                        autocomplete="off"
+                        min="1"
+                        max="1"
+                        class="compo el-input__inner"
+                      >
+                    </div>页
+                  </span>
+                      </slot>
+                    </el-pagination>
+                    <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
+                  </section>
                 </section>
-              </section>
-
+              </div>
             </div>
           </div>
           <!-- 添加弹框 -->
@@ -561,7 +562,7 @@
     display: inline-block;
     margin-bottom: 33px;
   }
-  .useradd .box-card {
+ .box-card {
     width: 100%;
   }
   .text {

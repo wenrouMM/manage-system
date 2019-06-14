@@ -61,10 +61,10 @@
         <el-form-item label="充值金额" prop="deposit" label-width="100px">
           <el-input @blur="jugeCash" v-model="changeForm.deposit" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item v-if="hide" label="验证密码" label-width="80px">
+        <el-form-item v-if="hide" label="验证密码" label-width="100px">
           <el-input type="password" v-model="changeForm.password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="remarks">
+        <el-form-item label="备注" prop="remarks" label-width="100px">
           <el-input type="textarea" :rows="4" resize="none" v-model="changeForm.remarks"></el-input>
         </el-form-item>
       </el-form>

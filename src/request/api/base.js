@@ -9,20 +9,20 @@ let fileUrl = 'http://192.168.2.54:8090/'   */
 
 // 用来管理接口的域名相关
 //var url='http://127.0.0.1:8088/'
-var url = 'http://192.168.2.250:8088/';
+/* var url = 'http://192.168.2.250:8088/';
 var imgurl='http://192.168.2.250:8090/';
-let fileUrl = 'http://192.168.2.250:8090/';
+let fileUrl = 'http://192.168.2.250:8090/';*/
 
-/* var url = 'http://192.168.2.31:8088/';
+var url = 'http://192.168.2.31:8088/';
 var imgurl='http://192.168.2.31:8090/';
-let fileUrl = 'http://192.168.2.31:8090/';*/
+let fileUrl = 'http://192.168.2.31:8090/';
 /*  var url = 'http://192.168.2.121:8088/';
 var imgurl='http://192.168.2.121:8090/';
 var fileUrl = 'http://192.168.2.121:8090/'; */
 
 /*  var url = window.glob.url
 var imgurl = window.glob.imgurl
-var fileUrl = window.glob.fileUrl */
+var fileUrl = window.glob.fileUrl*/
 /*------ 文件上传模块 ------*/
 export const buttonInt = `${url}authmodule/currency/selectElements`
 export function getPower (value){
@@ -108,7 +108,7 @@ export const bookDamageInt = {
 /*------ 读者管理模块 ------*/
 // 押金充值和判断
 export const rechargeInt = {
-  juge:`${url}financemodule/depositRecord/vMoney`,
+  juge:`${url}financemodule/depositRecord/currency/vMoney`,
   deposit:`${url}financemodule/depositRecord/add`,
   logout:`${url}readermodule/cardManagement/readerTbCardInfo/Logout`, // 注销
   lose:`${url}readermodule/cardManagement/readerTbCardInfo/cardReport`, // 挂失
@@ -147,7 +147,7 @@ export const cardLevelInt = {
 export const finnaceInt = {
   userInfo:`${url}financemodule/depositRecord/getReaderInfo`,
   deposit:`${url}financemodule/depositRecord/add`,
-  juge:`${url}financemodule/depositRecord/vMoney`,
+  juge:`${url}financemodule/depositRecord/currency/vMoney`,
   logout:`${url}financemodule/depositRecord/Logout`
 }
 /*------ 系统设置模块  ------*/
