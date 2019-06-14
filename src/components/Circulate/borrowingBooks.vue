@@ -107,6 +107,7 @@
           <div class="borrowTableBox">
             <section class="text item tablebox">
               <el-table
+                empty-text=" "
                 class="tableBorder"
                 :data="borrowTableData"
                 style="text-align:center;"
@@ -409,7 +410,7 @@ export default {
           this.tabCard = data;
           this.tabFlag = true;
           this.lastCardNum = this.searchForm.cardNum
-          
+
           console.log("查询成功的读者卡号", data, this.tabFlag);
           console.log("用户信息", this.userTable);
         } else {

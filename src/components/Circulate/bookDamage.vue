@@ -68,6 +68,7 @@
               <el-table
                 class="tableBorder"
                 :data="oweTable"
+                empty-text=" "
                 style="text-align:center; width: 100%"
                 :row-style="rowStyle"
                 max-height="250"
@@ -445,7 +446,7 @@ export default {
           this.$message.success("报损完成 请前往报损记录查看");
 
           this.endTable = res.data.row;
-          
+
           if (this.isBatch) {
             this.oweTable = [];
           } else {

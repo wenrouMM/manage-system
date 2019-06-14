@@ -74,7 +74,7 @@
                 max-height="250"
                 height="250"
                 :header-cell-style="{background:'#0096FF', color:'#fff',height:'60px'}"
-
+                empty-text=" "
               >
                 <el-table-column align="center" label="序号" width="55" type="index"></el-table-column>
                 <el-table-column align="center" width="200" prop="bookName" label="书籍名称"></el-table-column>

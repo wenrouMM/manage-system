@@ -32,7 +32,7 @@
                   <el-option label="馆藏码" value="1"></el-option>
                   <el-option label="ISBN" value="2"></el-option>
                   <el-option label="书名" value="3"></el-option>
-                  <el-option label="状态" value="4"></el-option>
+                  <el-option label="在馆状态" value="4"></el-option>
                 </el-select>
                 <el-input v-model="searchForm.searchData" clearable placeholder="请输入相关内容" style="width: 250px"></el-input>
               </el-form-item>
@@ -72,13 +72,26 @@
                 <span v-else-if="scope.row.lendState==1">在架</span>
                 <span v-else-if="scope.row.lendState==2">借出</span>
                 <span v-else-if="scope.row.lendState==3">剔除</span>
-                <span v-else="scope.row.lendState==4">损坏</span>
+                <span v-else-if="scope.row.lendState==4">损坏</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="available" label="书籍状态" width="200">
               <template slot-scope="scope">
-                <span v-if="scope.row.available==0">启用</span>
-                <span v-else-if="scope.row.available==1">停用</span>
+                <span v-if="scope.row.available==0">停用</span>
+                <span v-else-if="scope.row.available==1">启用</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="otherState" label="特殊状态" width="200">
+              <template slot-scope="scope">
+                <span v-if="scope.row.otherState==0">无特殊状态</span>
+                <span v-else-if="scope.row.otherState==1">损坏</span>
+                <span v-else-if="scope.row.otherState==2">遗失</span>
+                <span v-else-if="scope.row.otherState==3">调馆</span>
+                <span v-else="scope.row.otherState==4">未还</span>
+                <span v-else="scope.row.otherState==5">被盗</span>
+                <span v-else="scope.row.otherState==6">陈旧</span>
+                <span v-else="scope.row.otherState==7">破损</span>
+                <span v-else="scope.row.otherState==8">其他</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作" width="200" fixed="right">
