@@ -79,16 +79,6 @@
               @blur="verifyPhoneFun"
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
-            <el-input
-              v-model="addForm.email"
-              autocomplete="off"
-              class="inputDiv"
-              :disabled="judge"
-              placeholder="请输入邮箱"
-              @blur="verifyEmailFun"
-            ></el-input>
-          </el-form-item>
           <el-form-item label="地址" prop="address" :label-width="formLabelWidth">
             <el-input
               v-model="addForm.address"
@@ -96,6 +86,15 @@
               class="inputDiv"
               placeholder="请输入地址"
               :disabled="judge"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
+            <el-input
+              v-model="addForm.email"
+              autocomplete="off"
+              class="inputDiv"
+              placeholder="请输入邮箱"
+              @blur="verifyEmailFun"
             ></el-input>
           </el-form-item>
           <el-form-item label="卡号" prop="cardNumber" :label-width="formLabelWidth">
