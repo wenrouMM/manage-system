@@ -379,21 +379,14 @@
             <div style="margin-top: 20px;padding: 0px 20px;width: 100%" id="selectInput">
               <div class="flexLayout">
                 <div>
-                  <el-form-item label=" 卡　　号 :" label-width="95px" id="cardErr">
+                  <el-form-item label=" 卡　　号 :" label-width="100px" id="cardErr">
                     <el-input v-model="harmForm.cardNumber "></el-input>
                   </el-form-item>
                   <el-form-item label=" 损坏原因 :" prop="causesDamage" class="errTitle" label-width="100px">
-                    <el-select
-                      @change="selectCheck(harmForm.causesDamage)"
-                      v-model="harmForm.causesDamage"
-                      filterable
-                      remote
-                      reserve-keyword
-                      placeholder="请输入关键词查询相关损坏原因"
-                      :remote-method="remoteMethod"
-                      :loading="loading">
+                    <el-select v-model="harmForm.causesDamage" clearable placeholder="请选择" @change="selectCheck(harmForm.causesDamage)">
                       <el-option
                         v-for="item in options"
+
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -401,7 +394,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label=" 赔偿金额 :" prop="amountCompensation" label-width="100px">
-                    <div style="border: 1px solid #DCDFE6;width: 270px;height: 36px;border-radius: 5px;padding: 0px 10px 0px">{{harmForm.amountCompensation}}</div>
+                    <div style="border: 1px solid #DCDFE6;width: 280px;height: 36px;border-radius: 5px;padding: 0px 10px 0px">{{harmForm.amountCompensation}}</div>
                   </el-form-item>
                 </div>
                 <div id="remarks">
@@ -686,21 +679,15 @@
           this.harmForm.amountCompensation=harmData.num
         }
       },
-      remoteMethod(query){
-        console.log('query',query)
-        if(query){
-          this.axios.get(collection.harmSelect,{params:{name:query}}).then((res)=>{
-            console.log('搜索损坏的下拉的数据',res.data.row)
-            this.options.length=0
-            for(const item of res.data.row){
-              console.log('item',item)
-              this.options.push({label:item.damageName,value:item.id,type:item.compensationType,num:item.compensationNum})
-            }
-          })
-        }else{
-          this.options = [];
-        }
-
+      harmMethod(){
+        this.axios.get(collection.harmSelect).then((res)=>{
+          console.log('搜索损坏的下拉的数据',res.data.row)
+          this.options.length=0
+          for(const item of res.data.row){
+            console.log('item',item)
+            this.options.push({label:item.damageName,value:item.id,type:item.compensationType,num:item.compensationNum})
+          }
+        })
       },
       //批量选择
       handleSelectionChange(val) {
@@ -1111,6 +1098,7 @@
       }
     },
     created() {
+      this.harmMethod()
       this.searchApi(this.searchTimeForm); // 调用查询接口获取数据
     }
   };
