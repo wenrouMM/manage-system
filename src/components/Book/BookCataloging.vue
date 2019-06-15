@@ -725,7 +725,7 @@
       drawbackBtn(){
         if(this.tableChecked.length){
           this.j=0
-          this.messageWidth='500px'
+          this.messageWidth='400px'
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择删除对象')

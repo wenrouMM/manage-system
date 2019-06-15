@@ -421,7 +421,7 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" :width="widthMessage" center>
           <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6||this.i==8">
             是否{{Dialogtitle[i]}}?
           </div>
@@ -457,6 +457,7 @@
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        widthMessage:'',
         loading: false,
         options:[],
         addForm:{
@@ -708,6 +709,7 @@
       },
       //剔除按钮
       rejectBtn(){
+        this.widthMessage='500px'
         if(this.tableChecked.length){
           this.i=7
           this.centerDialogVisible=true
@@ -722,6 +724,7 @@
       },
       //删除按钮
       drawbackBtn(){
+        this.widthMessage='400px'
         if(this.tableChecked.length){
           this.i=3
           this.centerDialogVisible=true
@@ -894,6 +897,7 @@
       },
       //调馆按钮
       tunnellingBtn(){
+        this.widthMessage='400px'
         if(this.tableChecked.length){
           this.i=2
           this.centerDialogVisible=true

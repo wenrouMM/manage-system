@@ -115,7 +115,7 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="400px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
           </div>

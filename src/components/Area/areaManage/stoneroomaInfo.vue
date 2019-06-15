@@ -155,7 +155,7 @@
       </div>
       <!-- 删除区Or删除库房 -->
       <div class="forbid collectionDelete">
-        <el-dialog :title="dialogTitle[i]" :visible.sync="deleteDialog" width="448px" center>
+        <el-dialog :title="dialogTitle[i]" :visible.sync="deleteDialog" width="400px" center>
           <div class="dialogBody">
             是否删除?
           </div>

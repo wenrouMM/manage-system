@@ -177,7 +177,7 @@
           element-loading-text="正在执行中 请稍等"
           :title="Dialogtitle[i]"
           :visible.sync="centerDialogVisible"
-          width="500px"
+          width="400px"
           center
         >
           <div class="dialogBody">

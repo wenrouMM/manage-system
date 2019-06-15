@@ -129,7 +129,7 @@
       <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
       <!-- 禁用弹框/批量删除弹框 -->
       <div class="forbid">
-        <el-dialog :title="dialogTitle[i]" :visible.sync="refuseDialog" width="500px" center>
+        <el-dialog :title="dialogTitle[i]" :visible.sync="refuseDialog" width="400px" center>
           <div class="dialogBody">是否{{dialogTitle[i]}}?</div>
           <div slot="footer">
             <span class="dialogButton true mr_40" @click="refuseBtn">确 定</span>
