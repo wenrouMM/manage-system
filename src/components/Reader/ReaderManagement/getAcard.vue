@@ -20,7 +20,7 @@
         <el-form-item class="uploadBox" style="width: 100px;margin-left: 250px;margin-top: 20px">
           <section class="upload mb_30" @click="pointer">
             <!-- 背景图片做改动 -->
-            <div
+            <!--<div
               class="defultHead"
               style="width:100px; height:100px; border-radius:50%;position: relative"
             >
@@ -44,7 +44,7 @@
                 id="file"
                 @change="getFile"
               >
-            </div>
+            </div>-->
           </section>
         </el-form-item>
         <!-- 表单域 -->
