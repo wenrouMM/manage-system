@@ -111,8 +111,8 @@
           </section>
         </section>
         <div class="dealDialog">
-          <el-dialog  title="报损处理" :visible.sync="dealDialog" width="500px">
-            <div class="FormBox">
+          <el-dialog  title="报损处理" :visible.sync="dealDialog" width="400px">
+            <div class="FormBox" style="width: 200px">
               <el-form :model="dealForm">
                 <el-form-item label="应收金额" label-width="100px">
                   <span class="text">{{dealCash}}</span>
