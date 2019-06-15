@@ -14,7 +14,7 @@
             <span class="ml_10 text">条</span>
           </div>
         </el-form-item>
-        <el-form-item label="充值验证额度" prop="recharge">
+        <el-form-item label="充值金额验证" prop="recharge">
           <div class="inputBox">
             <el-input v-model.number="changeForm.recharge"></el-input>
             <span class="ml_10 text">元</span>
