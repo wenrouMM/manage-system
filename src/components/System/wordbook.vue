@@ -121,6 +121,8 @@ export default {
           }).then(res => {
             if (res.data.state) {
               this.$message.success("修改成功");
+              this.searchApi();
+              this.levelOptionApi()
             } else {
               this.$message.error(res.data.msg);
             }

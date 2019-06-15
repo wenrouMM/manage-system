@@ -196,7 +196,7 @@ export default new Router({
           meta: {
             title: '书籍借阅',
             Mode: '3',
-            isAlive: true
+            
           },
           component: BorrowingBooks,
         },
@@ -206,7 +206,7 @@ export default new Router({
           meta: {
             title: '书籍归还',
             Mode: '3',
-            isAlive: true
+            
           },
           component: () => import('../components/Circulate/returnBooks.vue')
         },
@@ -215,7 +215,7 @@ export default new Router({
           meta: {
             title: '还书结果',
             Mode: '3',
-            isAlive: true
+            
           },
           component: () => import('../components/Circulate/returnStatus.vue')
         },
@@ -225,7 +225,7 @@ export default new Router({
           meta: {
             title: '书籍续借',
             Mode: '3',
-            isAlive: true
+            
           },
           component: resolve => require(['@/components/Circulate/renew.vue'], resolve)
         },
@@ -235,7 +235,7 @@ export default new Router({
           meta: {
             title: '书籍报损',
             Mode: '3',
-            isAlive: true
+            
           },
           component: resolve => require(['@/components/Circulate/bookDamage.vue'], resolve)
         },
@@ -549,7 +549,8 @@ export default new Router({
           path: '/wordBook',
           meta: {
             title: '数据字典',
-            Mode: '6'
+            Mode: '6',
+            isAlive:true
           },
           component: resolve => require(['../components/System/wordbook.vue'], resolve)
         }

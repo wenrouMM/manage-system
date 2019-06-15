@@ -18,17 +18,17 @@
               @select="handleSelect"
               background-color="#0096ff"
               :default-active="Mode"
-              v-if="menuLo.length"
+              
             >
-              <el-menu-item v-for="(item,index) of menuLo" :index="'' + item.priority" :id="item.menuCode" :key="index">
+              <!-- <el-menu-item v-for="(item,index) of menuLo" :index="'' + item.priority" :id="item.menuCode" :key="index">
                 {{item.menuName}}
-              </el-menu-item>
-              <!-- <el-menu-item id="collect" index="1">采编管理</el-menu-item>
+              </el-menu-item> -->
+              <el-menu-item id="collect" index="1">采编管理</el-menu-item>
               <el-menu-item id="reservation" index="2">典藏管理</el-menu-item>
               <el-menu-item id="circle" index="3">流通管理</el-menu-item>
               <el-menu-item id="reader" index="4">读者管理</el-menu-item>
               <el-menu-item id="finance" index="5">财务管理</el-menu-item>
-              <el-menu-item id="system" index="6">系统管理</el-menu-item> -->
+              <el-menu-item id="system" index="6">系统管理</el-menu-item>
             </el-menu>
           </div>
         </div>
@@ -71,7 +71,7 @@
             background-color="#343B4A"
             text-color="#fff"
             :collapse="isCollapse"
-            v-if="menuLo.length"
+            
             :unique-opened="true"
           >
             <el-menu-item index="/indexTest">
@@ -79,14 +79,14 @@
               <span style="lineHeight:21px;">首页</span>
             </el-menu-item>
             <!--采编管理 -->
-            <NavMenu
+            <!-- <NavMenu
 
             v-for="(item,index) of menuLo"
             v-show="Mode==item.priority"
             :key="index"
             :navMenus="item.roleModularMenus">
-            </NavMenu>
-           <!--  <div v-show="Mode == 1">
+            </NavMenu> -->
+            <div v-show="Mode == 1">
               <el-submenu index="3">
                 <template slot="title">
                   <i style="fontSize:24px;" class="indexIcon indexIconMax iconwp-sj-3"></i>
@@ -95,9 +95,9 @@
                 <el-menu-item index="/BookCataloging">书籍编目</el-menu-item>
                 <el-menu-item index="/purchasingManagement">采购管理</el-menu-item>
               </el-submenu>
-            </div> -->
+            </div>
             <!-- 典藏管理 -->
-            <!-- <div class="navMenu" v-show="Mode == 2">
+            <div class="navMenu" v-show="Mode == 2">
               <el-menu-item index="/publishhouse">
                 <i class="indexIcon indexIconMax iconchubanshe"></i>图书出版社
               </el-menu-item>
@@ -120,11 +120,11 @@
               <el-menu-item index="/damageCount">
                 <i class="indexIcon iconbaosun"></i>损坏清点
               </el-menu-item>
-            </div> -->
+            </div>
 
 
             <!-- 流通管理 -->
-           <!--  <div class="navMenu" v-show="Mode == 3">
+            <div class="navMenu" v-show="Mode == 3">
               <el-submenu index="userbrowrr">
                 <template slot="title">
                   <i class="indexIcon indexIconMax iconjieyuechaxun"></i>
@@ -152,9 +152,9 @@
                   <el-menu-item index="/reimburseHistory">报损历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-            </div> -->
+            </div>
             <!-- 读者管理 -->
-            <!-- <div class="navMenu" v-show="Mode == 4">
+            <div class="navMenu" v-show="Mode == 4">
 
               <el-submenu index="readerCard">
                 <template slot="title">
@@ -176,9 +176,9 @@
                   <el-menu-item index="/DishonestyHistory">失信历史记录</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-            </div> -->
+            </div>
             <!-- 财务管理 -->
-            <!-- <div class="navMenu" v-show="Mode == 5">
+            <div class="navMenu" v-show="Mode == 5">
               <el-menu-item index="/rechargeSet">
                 <i style="fontSize:24px;" class="indexIcon iconchongzhi"></i>充值管理
               </el-menu-item>
@@ -188,9 +188,9 @@
               <el-menu-item index="/OverdueCostCirculation">
                 <i class="indexIcon indexIconMax iconyuqi"></i>逾期费用记录
               </el-menu-item>
-            </div> -->
+            </div>
             <!-- 系统设置 -->
-            <!-- <div class="navMenu" v-show="Mode == 6">
+            <div class="navMenu" v-show="Mode == 6">
               <el-menu-item index="/guideTest">
                 <i class="indexIcon indexIconMax iconyindaoxuqiu"></i>引导页
               </el-menu-item>
@@ -221,7 +221,7 @@
               <el-menu-item index="/vacationSet">
                 <i class="indexIcon indexIconMax iconjiaqi-"></i>假期设置
               </el-menu-item>
-            </div> -->
+            </div>
 
           </el-menu>
         </section>
@@ -230,17 +230,17 @@
             <Tags></Tags>
           </div>
           <!-- <div class="space"></div> -->
-           <transition name="fade-transform" mode="out-in">
+           <!-- <transition name="fade-transform" mode="out-in">
                 <router-view></router-view>
-          </transition>
-          <!-- <transition name="fade-transform" mode="out-in">
+          </transition> -->
+          <transition name="fade-transform" mode="out-in">
               <keep-alive>
                 <router-view v-if="$route.meta.isAlive"></router-view>
               </keep-alive>
           </transition>
           <transition name="fade-transform" mode="out-in">
                 <router-view v-if="!$route.meta.isAlive"></router-view>
-          </transition>-->
+          </transition>
         </el-main>
       </el-container>
     </section>
