@@ -186,7 +186,7 @@
                 <el-input :disabled="juge" v-model="changeForm.cardNumber" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="押金" prop="deposit">
-                <el-input @blur="jugeCash" v-model="changeForm.deposit" autocomplete="off"></el-input>
+                <el-input @blur="jugeCash" v-model.number="changeForm.deposit" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item v-if="hide" label="密码" label-width="50px">
                 <el-input type="password" v-model="changeForm.password" autocomplete="off"></el-input>

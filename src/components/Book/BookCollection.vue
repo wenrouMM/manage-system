@@ -87,11 +87,11 @@
                 <span v-else-if="scope.row.otherState==1">损坏</span>
                 <span v-else-if="scope.row.otherState==2">遗失</span>
                 <span v-else-if="scope.row.otherState==3">调馆</span>
-                <span v-else="scope.row.otherState==4">未还</span>
-                <span v-else="scope.row.otherState==5">被盗</span>
-                <span v-else="scope.row.otherState==6">陈旧</span>
-                <span v-else="scope.row.otherState==7">破损</span>
-                <span v-else="scope.row.otherState==8">其他</span>
+                <span v-else-if="scope.row.otherState==4">未还</span>
+                <span v-else-if="scope.row.otherState==5">被盗</span>
+                <span v-else-if="scope.row.otherState==6">陈旧</span>
+                <span v-else-if="scope.row.otherState==7">破损</span>
+                <span v-else-if="scope.row.otherState==8">其他</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作" width="200" fixed="right">

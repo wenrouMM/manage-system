@@ -184,7 +184,7 @@ export default {
       rowStyle: {
         height: "60px"
       },
-      defaultImg:require('../../base/img/normalHead.jpg'),
+      defaultImg:require('../../base/img/defaultImg.png'),
       loadingImg:require('../../base/img/Nodata.png'),
       activeName: "first",
       /*------ 全选按钮 ------*/
@@ -386,7 +386,6 @@ export default {
   width: 118px;
   height: 136px;
   margin-right: 40px;
-  background-color: antiquewhite;
 }
 .userInfo .infoBox .info {
   display: flex;

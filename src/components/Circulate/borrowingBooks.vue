@@ -256,7 +256,7 @@ export default {
         bookCode: "",
         selectBook: "1"
       },
-      defaultImg:require('../../base/img/normalHead.jpg'),
+      defaultImg:require('../../base/img/defaultImg.png'),
       loadingImg:require('../../base/img/Nodata.png'),
       rules: {
         // 添加的参数验证
@@ -650,7 +650,6 @@ export default {
   width: 118px;
   height: 136px;
   margin-right: 40px;
-  background-color: antiquewhite;
 }
 .userInfo .infoBox .info {
   display: flex;

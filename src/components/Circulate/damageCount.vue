@@ -117,9 +117,11 @@
                 <el-form-item label="应收金额" label-width="100px">
                   <span class="text">{{dealCash}}</span>
                 </el-form-item>
+                <!--
                 <el-form-item label="实收金额" label-width="100px">
                   <el-input v-model="dealForm.dealNum" auto-complete="off"></el-input>
                 </el-form-item>
+                -->
                 <el-form-item>
                   <div class="textCenter">
                     <el-button type="primary" @click="dealFormBtn">确 定</el-button>

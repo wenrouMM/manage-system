@@ -18,7 +18,7 @@
     <div style="width: 610px;height: 600px;" class="formDiv">
       <el-form ref="addForm" :model="addForm" :rules="addRules">
         <el-form-item class="uploadBox" style="width: 100px;margin-left: 250px;margin-top: 20px">
-          <section class="upload mb_30" @click="pointer">
+          <section class="upload mb_30">
             <!-- 背景图片做改动 -->
             <!--<div
               class="defultHead"
@@ -36,6 +36,7 @@
                 alt="预览照片"
                 class="preloadImg"
               >
+              <!--
               <input
                 type="file"
                 accept="jpg/png"
