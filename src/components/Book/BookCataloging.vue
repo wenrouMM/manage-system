@@ -340,13 +340,13 @@
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
-      <div class="forbid" id="catalogingMessage">
+      <div class="forbid collectionDelete">
         <el-dialog :title="catalogtitle[j]" :visible.sync="centerDialogVisible" @close="closeHarm" :width="messageWidth" center>
           <div v-if="j==0||j==1||j==2">
             <div class="dialogBody" style="margin-left: -30px;margin-bottom: 20px">
               是否{{catalogtitle[j]}}?
             </div>
-            <div slot="footer">
+            <div style="margin-bottom: 30px">
               <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
               <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
             </div>

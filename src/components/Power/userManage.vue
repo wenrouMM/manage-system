@@ -171,7 +171,7 @@
       </div>
       <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
       <!-- 禁用弹框/批量删除弹框 -->
-      <div class="forbid">
+      <div class="forbid collectionDelete">
         <el-dialog
           v-loading="banDeleteLoading"
           element-loading-text="正在执行中 请稍等"
@@ -185,7 +185,7 @@
             <p v-if="i==0">重置过后密码默认为身份证号后6位</p>
           </div>
 
-          <div slot="footer" class="dialog-footer">
+          <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="delteBan">确 定</span>
             <span class="dialogButton cancel" @click="deleteBanCancel">取消</span>
           </div>

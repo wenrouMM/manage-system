@@ -79,10 +79,10 @@
               <span style="lineHeight:21px;">首页</span>
             </el-menu-item>
             <!--采编管理 -->
-            <NavMenu 
-            
+            <NavMenu
+
             v-for="(item,index) of menuLo"
-            v-show="Mode==item.priority" 
+            v-show="Mode==item.priority"
             :key="index"
             :navMenus="item.roleModularMenus">
             </NavMenu>
@@ -101,7 +101,7 @@
               <el-menu-item index="/publishhouse">
                 <i class="indexIcon indexIconMax iconchubanshe"></i>图书出版社
               </el-menu-item>
-              
+
               <el-menu-item index="/BookCollection">
                 <i class="indexIcon iconshuji"></i>书籍典藏
               </el-menu-item>
@@ -122,7 +122,7 @@
               </el-menu-item>
             </div> -->
 
-            
+
             <!-- 流通管理 -->
            <!--  <div class="navMenu" v-show="Mode == 3">
               <el-submenu index="userbrowrr">
@@ -155,7 +155,7 @@
             </div> -->
             <!-- 读者管理 -->
             <!-- <div class="navMenu" v-show="Mode == 4">
-              
+
               <el-submenu index="readerCard">
                 <template slot="title">
                   <i class="indexIcon indexIconMax iconduzheguanli"></i>
@@ -222,7 +222,7 @@
                 <i class="indexIcon indexIconMax iconjiaqi-"></i>假期设置
               </el-menu-item>
             </div> -->
-            
+
           </el-menu>
         </section>
         <el-main>
@@ -230,18 +230,17 @@
             <Tags></Tags>
           </div>
           <!-- <div class="space"></div> -->
-           <!-- <transition name="fade-transform" mode="out-in">
+           <transition name="fade-transform" mode="out-in">
                 <router-view></router-view>
-          </transition> -->
-          <transition name="fade-transform" mode="out-in">
-
+          </transition>
+          <!-- <transition name="fade-transform" mode="out-in">
               <keep-alive>
                 <router-view v-if="$route.meta.isAlive"></router-view>
               </keep-alive>
           </transition>
           <transition name="fade-transform" mode="out-in">
                 <router-view v-if="!$route.meta.isAlive"></router-view>
-          </transition>
+          </transition>-->
         </el-main>
       </el-container>
     </section>
@@ -318,14 +317,14 @@ export default {
   created() {
     axios.get(PersonalCentre.userInfo).then(res => {
       console.log("看看bug到底在哪里", res);
-      
-      
+
+
       if(res.data.state==true){
         this.userLo = res.data.row;
         if(res.data.row.headerAddress){
         this.settingHead = uploadInt.preimg + res.data.row.headerAddress;
       }
-        
+
       }else{
         this.$message.error(res.data.msg)
       }

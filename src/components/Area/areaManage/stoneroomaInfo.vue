@@ -154,15 +154,15 @@
         </el-dialog>
       </div>
       <!-- 删除区Or删除库房 -->
-      <div class="forbid bind">
+      <div class="forbid collectionDelete">
         <el-dialog :title="dialogTitle[i]" :visible.sync="deleteDialog" width="448px" center>
-          <div class="dialogBody">是否删除?</div>
-          <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="subDelete()">确定</el-button>
-              <el-button class="buttonCancelColor" @click="deleteDialog = false">取消</el-button>
-            </el-form-item>
-          </el-form>
+          <div class="dialogBody">
+            是否删除?
+          </div>
+          <div style="margin-bottom: 30px">
+            <span class="dialogButton true mr_40" @click="subDelete()">确 定</span>
+            <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
+          </div>
         </el-dialog>
       </div>
       <!-- 编辑区Or添加区 -->

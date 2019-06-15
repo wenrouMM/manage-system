@@ -425,7 +425,7 @@
           <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==5||this.i==6||this.i==8">
             是否{{Dialogtitle[i]}}?
           </div>
-          <div v-if="this.i==7">
+          <div v-if="this.i==7" style="margin-top: 20px">
             <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="100px" class="demo-ruleForm">
               <el-form-item label=" 剔除原因 :" prop="cause">
                 <el-select v-model="numberValidateForm.cause" clearable placeholder="请选择" style="width: 330px">
@@ -438,7 +438,7 @@
               </el-form-item>
             </el-form>
           </div>
-          <div>
+          <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="cancelDialog">取消</span>
           </div>

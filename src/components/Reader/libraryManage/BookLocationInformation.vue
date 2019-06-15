@@ -50,7 +50,7 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="callNumber" label="索取号" width="200">
+            <el-table-column align="center" prop="callNumber" label="索取号" width="250" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
@@ -119,7 +119,7 @@
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
           </div>
-          <div>
+          <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="cancelCheck">取消</span>
           </div>

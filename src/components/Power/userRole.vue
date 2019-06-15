@@ -106,12 +106,12 @@
       </div>
       <!-- 弹框组 添加弹框未知 批量删除弹框 禁用弹框 编辑弹框 -->
       <!-- 禁用弹框/批量删除弹框 -->
-      <div class="forbid">
+      <div class="forbid collectionDelete">
         <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
           </div>
-          <div slot="footer">
+          <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
           </div>
