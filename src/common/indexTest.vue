@@ -230,17 +230,17 @@
             <Tags></Tags>
           </div>
           <!-- <div class="space"></div> -->
-           <!-- <transition name="fade-transform" mode="out-in">
+           <transition name="fade-transform" mode="out-in">
                 <router-view></router-view>
-          </transition> -->
-          <transition name="fade-transform" mode="out-in">
+          </transition>
+          <!-- <transition name="fade-transform" mode="out-in">
               <keep-alive>
                 <router-view v-if="$route.meta.isAlive"></router-view>
               </keep-alive>
           </transition>
           <transition name="fade-transform" mode="out-in">
                 <router-view v-if="!$route.meta.isAlive"></router-view>
-          </transition>
+          </transition> -->
         </el-main>
       </el-container>
     </section>
