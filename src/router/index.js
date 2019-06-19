@@ -11,28 +11,26 @@ import Menu from '../components/Power/menu.vue'
 import LoginRecord from '../components/Power/loginrecord.vue'
 
 
-import Test from '../common/test/test.vue'
-import Test2 from '../common/test/test2.vue'
-import TestBook from '../common/test/testBook.vue'
+
+
 import BookType from '../components/Book/BookManage/bookType.vue'
 import BookInfo from '../components/Book/BookManage/bookInfo.vue'
 import BookPublishHouse from '../components/Book/BookManage/BookPublishingHouse.vue'
 import LibInfo from '../components/Book/libInfo.vue'
 
-import TestArea from '../common/test/testArea.vue'
+
 import StoneRoomInfo from '../components/Area/areaManage/stoneroomaInfo.vue'
 import ShelfBind from '../components/Area/areaManage/shelfBind'
-import TestReader from '../common/test/testReader.vue'
 import ReaderAdmin from '../components/Reader/ReaderManagement/readeradmin.vue'
 import GetCard from '../components/Reader/ReaderManagement/getAcard.vue'
 
 import LibBookType from '../components/Reader/libraryManage/libBookType'
 import LibBookInfo from '../components/Reader/libraryManage/libBookInfo'
 import BookRegistration from '../components/Reader/libraryManage/bookRegistration'
-import bookLocation from '../components/Reader/libraryManage/bookLocation'
+
 
 import ReaderCardManagement from '../components/Reader/ReaderCardManagement/readerCardmanagement.vue'
-import ReaderCardType from '../components/Reader/ReaderCardManagement/readerCardType.vue'
+
 import ReaderCardGrade from '../components/Reader/ReaderCardManagement/readerCardgrade'
 import LoanRecorde from '../components/Circulate/loanRecords.vue'
 import LoanHistory from '../components/Circulate/loanHistory.vue'
@@ -40,14 +38,9 @@ import BorrowingBooks from '../components/Circulate/borrowingBooks.vue'
 
 
 
-import ChargeMoney from '../components/Reader/RechargeManagement/chargeMoney.vue'
-import DepositRecord from '../components/Reader/RechargeManagement/depositRecord.vue'
 
-import DepositDetails from '../components/Reader/RechargeManagement/depositDetails.vue'
-
-import OverdueRecords from '../components/Reader/OverdueManagement/overdueRecords.vue'
 import OverdueHistory from '../components/Reader/OverdueManagement/overduehistory.vue'
-import OverdueSetting from '../components/Reader/OverdueManagement/overduesettings.vue'
+
 
 import DishonestyRecords from '../components/Reader/DishonestyManagement/dishonestyRecords'
 import DishonestyHistory from '../components/Reader/DishonestyManagement/dishonestyHistory'
@@ -58,10 +51,8 @@ import Not from '../components/error.vue'
 
 import IndexTest from '../common/indexTest.vue'
 /*系统设置 */
-import TestSystem from '../common/test/testSystem.vue'
-import {
-  resolve
-} from 'upath';
+
+
 Vue.use(Router)
 // 暴露一个router对象
 /*导航守卫 */
@@ -77,7 +68,8 @@ export default new Router({
     },
     {
       path: '/test',
-      component: () => import('../common/markText/markText.vue')
+      component: () => import('../common/login/login.vue'),
+      
     },
     {
       path: '/login',
@@ -138,23 +130,25 @@ export default new Router({
           component: BookPublishHouse
         },
 
-
-        {
-          path: '/stoneroomInfo',
-          meta:{
-            title:'库房管理',
-            Mode:'2'
+        
+          {
+            path: '/stoneroomInfo',
+            meta:{
+              title:'库房管理',
+              Mode:'2'
+            },
+            component: StoneRoomInfo
           },
-          component: StoneRoomInfo
-        },
-        {
-          path: '/shelfBind',
-          meta:{
-            title:'层架绑定',
-            Mode:'2'
+          {
+            path: '/shelfBind',
+            meta:{
+              title:'层架绑定',
+              Mode:'2'
+            },
+            component: ShelfBind
           },
-          component: ShelfBind
-        },
+        
+        
 
 
         // 3.0 流通管理
@@ -566,47 +560,5 @@ export default new Router({
       path: '*',
       component: Not
     },
-    {
-      path: '/test', // 一级路由 管理横条
-      component: Test,
-      children: [{
-          path: '/systemMode',
-          component: TestSystem,
-
-        },
-
-
-        {
-          path: '/bookMode',
-          component: TestBook,
-          children: []
-        },
-        {
-          path: '/readerMode',
-          component: TestReader,
-          children: [{
-              path: '/readeradmin',
-              component: ReaderAdmin,
-            },
-            {
-              path: '/LibBookInfo',
-              component: LibBookInfo
-            },
-            {
-              path: '/LibBookInfo/:id',
-              component: LibDetail
-            },
-            {
-              path: '/libBookType',
-              component: LibBookType
-            },
-            {
-              path: "/bookregistration",
-              component: BookRegistration
-            },
-          ]
-        }
-      ]
-    }
   ]
 })

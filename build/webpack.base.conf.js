@@ -81,6 +81,11 @@ module.exports = {
     loader: 'imports-loader?window.Quill=quill',
     include: path.resolve('./node_modules/quill-image-resize-module')
 
+      },
+      {
+        test:/\.scss$/,
+        loaders: ["style", "css", "sass"],
+        exclude:/node_modules/
       }
     ]
   },

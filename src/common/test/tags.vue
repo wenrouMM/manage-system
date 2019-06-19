@@ -1,6 +1,6 @@
 <template>
   <div class="tagsBox">
-    <transition>
+    
     <div class="routerBox" v-if="showTags">
       <el-tag
         v-for="(item,index) in tagsList"
@@ -13,17 +13,6 @@
       >
         {{item.title}}
       </el-tag>
-      <!-- <li
-        class="routerButton circularButton"
-        v-for="(item,index) in tagsList"
-        :class="{'labelActive':isActive(item.path)}"
-        :key="index"
-      >
-        <router-link :to="item.path" class="tags-li-title">{{item.title}}</router-link>
-        <span class="tags-li-icon" @click="closeTags(index)">
-          <i class="el-icon-close point"></i>
-        </span>
-      </li> -->
       <div class="tags-close">
         <el-dropdown @command="handleTags">
           <el-button size="mini" type="primary">
@@ -37,7 +26,7 @@
         </el-dropdown>
       </div>
     </div>
-    </transition>
+    
   </div>
 </template>
 
@@ -145,9 +134,10 @@ export default {
 
 .routerBox {
   background-color: #fff;
-  min-height: 70px;
+  box-shadow: 0 5px 10px #ddd;
+  
   width: 100%;
-  padding: 0 30px;
+  padding: 5px 30px;
   align-items: center;
   display: flex;
   box-sizing: border-box;
