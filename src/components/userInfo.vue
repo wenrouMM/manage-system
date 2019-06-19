@@ -48,6 +48,10 @@
         </div>
       </div>
     </section>
+    <div style="width: 650px;margin:0 auto " class="rowList1">
+      <div class="text"><i style="fontSize:24px;" class="userIcon iconquanxian"></i>个人权限:</div>
+      <div class="powerElement" id="powerZtree"><ul id="treeDemo" class="ztree"></ul></div>
+    </div>
     <!-- 图片上传 -->
     <section class="uploadBox">
       <my-upload
@@ -113,6 +117,11 @@
             <input type="password" v-model="newInput" />
             <p class="userHr"></p>
           </div>
+          <div class="data" style="margin-top: 30px">
+            <p>确认密码</p>
+            <input type="password" v-model="okInput" />
+            <p class="userHr"></p>
+          </div>
         </div>
         <div class="foot">
           <div class="buttonBox">
@@ -127,11 +136,48 @@
 </template>
 
 <script>
-import {uploadInt , PersonalCentre,editHeadPortrait} from '@/request/api/base.js'
+import {uploadInt , PersonalCentre,editHeadPortrait ,bookLocation} from '@/request/api/base.js'
 import myUpload from "vue-image-crop-upload";
 export default {
   data() {
     return {
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          removeTitle: "删除节点",
+          showRenameBtn: false,
+          editNameSelectAll: false
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: true,
+          addDiyDom: this.addDiyDom,
+          selectedMulti: true,
+          addHoverDom: this.addHoverDom,
+          removeHoverDom: this.removeHoverDom
+        },
+        callback: {
+          onClick: this.zTreeOnClick, //节点点击事件
+          onCollapse: this.onCollapse, //点击图标按钮节点 折叠后 异步加载子数据
+          beforeRemove: this.zTreeBeforeRemove, //点击删除时，用来提示用户是否确定删除
+          beforeEditName: this.beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑
+          onExpand: this.zTreeOnExpand,
+          onCollapse: this.onCollapse,
+          beforeExpand: this.zTreeBeforeExpand,
+        }
+      },
+      zNodes: [], //ztree树加载的数据
       uploadurl:uploadInt.headImg,
       nomalHeader: require("../base/img/normalHead.jpg"), // 默认头像
       settingHead: "",
@@ -143,6 +189,7 @@ export default {
       changeInput:'',//正常输入框
       oldInput:'', //旧密码输入框
       newInput:'', // 新密码输入框
+      okInput:'',//确认密码
       id:'',
       userName:'',
       userEmail:'',
@@ -158,13 +205,44 @@ export default {
     this.InitializationFun()
   },
   methods: {
+    zTreeBeforeExpand(treeId, treeNode) {
+      this.singlePath(treeNode);
+      return true;
+    },
+    singlePath(currNode) {
+      //console.log(currNode);
+      //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
+      var cLevel = currNode.level;
+      //这里假设id是唯一的
+      var cId = currNode.id;
+      //此对象可以保存起来，没有必要每次查找
+      var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+      /**
+       * 展开的所有节点，这是从父节点开始查找（也可以全文查找）
+       * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
+       */
+      var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
+      console.log(expandedNodes);
+      for(var i = expandedNodes.length - 1; i >= 0; i--){
+        var node = expandedNodes[i];
+        var level = node.level;
+        var id = node.id;
+        if (cId != id && level == cLevel) {
+          treeObj.expandNode(node, false);
+        }
+      }
+    },
     //初始化信息
     InitializationFun(){
-      let imgAddress=""
+     /* return this.axios.get(PersonalCentre.userInfo).then((res)=>{
+        console.log('初始化信息',res)
+        this.id=res.data.row.id;
+      })*/
       this.axios.get(PersonalCentre.userInfo).then((res)=>{
-        console.log(res)
+        console.log('初始化信息',res)
         if(res.data.state==true){
           this.id=res.data.row.id;
+          this.freshArea(res.data.row.id)
           if(res.data.row.headerAddress){
             this.nomalHeader=uploadInt.preimg+res.data.row.headerAddress;
           }
@@ -181,6 +259,30 @@ export default {
           }
         }else{
           this.$message.error(res.data.msg)
+        }
+      })
+    },
+    freshArea(value) {
+      this.axios.get(PersonalCentre.powerZtree,{
+        params:{id:value}
+      }).then((response) => {
+        console.log('个人权限树',response)
+        if(response.data.state==true){
+          for (var item of response.data.rows) {
+            //console.log('树',item)
+            this.zNodes.push({
+              id: item.id, //节点id
+              pId: item.pid, //节点父id
+              name: item.name, //节点名称
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+        }else{
+          this.$message({
+            message: response.data.msg,
+            type: 'error'
+          });
         }
       })
     },
@@ -227,28 +329,32 @@ export default {
     },
     //修改密码确定按钮
     editpasswordFun(){
-      this.axios.put(PersonalCentre.editPassword,{password:this.oldInput,newPassword:this.newInput}).then((res)=>{
-        console.log('修改密码后的结果',res)
-        if(res.data.state==true){
-          this.$message({
-            message:'修改成功，三秒后返回重新登录',
-            type: 'success'
-          });
-          this.pwdDialog=false
-          setTimeout(()=>{
-            this.$router.push({ path: "/" });
-          },3000)
-        }else{
-          this.$message({
-            message:res.data.msg,
-            type: 'error'
-          });
-        }
-      })
-      if(this.push==true){
-        console.log('跳转')
-        this.timeBack()
+      if(this.newInput===this.okInput){
+        this.axios.put(PersonalCentre.editPassword,{password:this.oldInput,newPassword:this.newInput}).then((res)=>{
+          console.log('修改密码后的结果',res)
+          if(res.data.state==true){
+            this.$message({
+              message:'修改成功，三秒后返回重新登录',
+              type: 'success'
+            });
+            this.pwdDialog=false
+            setTimeout(()=>{
+              this.$router.push({ path: "/" });
+            },3000)
+          }else{
+            this.$message({
+              message:res.data.msg,
+              type: 'error'
+            });
+          }
+        })
+      }else{
+        this.$message({
+          message:'您的确认密码与新密码不相同',
+          type: 'error'
+        });
       }
+
     },
     /*------ 图片上传相关 ------*/
     cropSuccess(imgDataUrl, field) {
@@ -298,6 +404,7 @@ export default {
 </script>
 
 <style scoped>
+
 .userInfo {
   background-image: url("../base/img/userInfo/bgUser.jpg");
   min-height: 100vh;
@@ -387,11 +494,25 @@ export default {
   position: relative;
   overflow-x: hidden;
   overflow-y: visible;
+  height:360px;
 }
 .rowList {
   display: flex;
   flex-direction: row;
   height: 60px;
+}
+.rowList1 {
+  display: flex;
+  flex-direction: row;
+
+}
+.rowList1 .text {
+  padding-left: 20px;
+  width: 130px;
+  text-align: left;
+  line-height: 50px;
+  color: #878787;
+  font-size: 20px;
 }
 .rowList .text {
   padding-left: 20px;

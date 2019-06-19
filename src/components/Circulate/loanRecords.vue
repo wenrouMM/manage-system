@@ -61,7 +61,7 @@
                   <span>{{scope.row.renewCount}}次</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="createTime" label="预计归还时间" width="200"></el-table-column>
+              <el-table-column align="center" prop="planReturnTime" label="预计归还时间" width="200"></el-table-column>
             </el-table>
             <section class="pagination mt_30">
               <el-pagination

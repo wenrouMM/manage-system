@@ -26,6 +26,9 @@
   font-size: 18px;
   margin-bottom: 25px;
 }
+#collectionAdd{
+
+}
 #collectionAdd .el-input #isbnInput{
   width: 860px;
   border: 1px solid #DCDFE6
@@ -33,15 +36,21 @@
 #collectionAdd .el-form-item{
   margin-bottom: 20px;
 }
+#decideForm{
+  width: 880px;
+  border: 1px solid #DCDFE6;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 20px 0px;
+}
 #collectionEdit .el-form-item{
   margin-bottom: 20px;
 }
 #collectionAdd #haveBottomBorderAdd{
   border: 1px solid #DCDCDC;
-  width: 880px;
-  border-radius: 5px;
+  width:750px;
   padding: 10px 30px;
-  margin-top: 10px;
+  margin: 0px auto;
 }
 #collectionAdd #haveBottomBorderAdd .el-input .el-input__inner{
   border-radius: 5px;
@@ -50,12 +59,20 @@
   border: none;
   border-bottom: 1px solid #DCDCDC;
 }
-#collectionEdit #haveBottomBorderEdit .el-input .el-input__inner{
-  border-radius: 5px;
-  height:20px;
-  line-height: 20px;
-  border: none;
-  border-bottom: 1px solid #DCDCDC;
+#collectionAdd #haveBottomBorderAdd .oneInput .el-input .el-input__inner{
+  width: 590px;
+}
+#collectionAdd #haveBottomBorderAdd .twoInput .el-input .el-input__inner{
+  width:270px;
+}
+#collectionAdd #haveBottomBorderAdd .oneInputBig .el-input .el-input__inner{
+  width:660px;
+}
+#collectionAdd #haveBottomBorderAdd .el-form-item__content{
+  line-height: 30px
+}
+#collectionAdd #haveBottomBorderAdd .el-form-item__label{
+  line-height: 30px
 }
 #collectionAdd #haveBottomBorderAdd .el-form-item{
   margin-bottom: 0px;
@@ -66,43 +83,15 @@
 #collectionAdd #haveBottomBorderAdd .el-form-item__error{
   display: none;
 }
-#collectionAdd #haveBottomBorderAdd #inputDiv1 .el-input .el-input__inner{
-  width: 730px;
-}
-#collectionEdit #haveBottomBorderEdit #inputEdit1 .el-input .el-input__inner{
-  width: 320px;
-}
-#collectionAdd #haveBottomBorderAdd #inputDiv2 .el-input .el-input__inner{
-  width: 350px;
-}
-#collectionEdit #haveBottomBorderEdit #inputEdit2 .el-input .el-input__inner{
-  width: 350px;
-}
-#collectionAdd #haveBottomBorderAdd #inputDiv3 .el-input .el-input__inner{
-  width: 200px;
-}
-#collectionEdit #haveBottomBorderEdit #inputEdit3 .el-input .el-input__inner{
-  width: 350px;
-}
-#collectionAdd #haveBottomBorderAdd #inputDiv4 .el-input .el-input__inner{
-  width: 350px;
-}
-#collectionAdd #haveBottomBorderAdd #inputDiv5 .el-input .el-input__inner{
-  width: 190px;
-}
-#collectionAdd #haveBottomBorderAdd #inputDiv6 .el-input .el-input__inner{
-  width: 190px;
-}
+
 #collectionAdd #haveBottomBorderAdd .el-checkbox{
   height: 30px;
 }
-#collectionAdd #haveBottomBorderAdd #oneHalf .el-input .el-input__inner{
-  width: 200px;
-}
+
 #formDiv{
   border: 1px solid #DCDCDC;
-  border-radius: 5px;
-  width: 900px;
+  border-radius: 10px;
+  width: 840px;
   padding: 10px 20px;
   margin-top: 20px;
 }
@@ -141,74 +130,62 @@
 .errTitle .el-form-item__error {
   margin-left: 95px;
 }
-#book_cataloging #noError .el-form-item{
-  margin-bottom: 10px;
-}
 #catalogingEdit .el-form-item{
   margin-bottom: 10px;
 }
 #catalogingEdit .el-form-item__error{
   display: none;
 }
-#catalogingEdit #editCatalogInput1 .el-input .el-input__inner {
-  width:210px;
-}
-#catalogingEdit #editCatalogInput2 .el-input .el-input__inner {
-   width:370px;
-}
-#catalogingEdit #editCatalogInput4 .bigInput .el-input .el-input__inner {
-  width:500px;
-}
-#catalogingEdit #editCatalogInput4 .smaillInput .el-input .el-input__inner {
-  width:180px;
-}
-#catalogingEdit #editCatalogInput5 .smaillInput .el-input .el-input__inner {
-  width:180px;
-}
-#catalogingEdit #editCatalogInput5 .el-input .el-input__inner {
-  width:200px;
-}
-#catalogingEdit #editCatalogInput6 .el-input .el-input__inner {
-  width:210px;
-}
-#catalogingEdit #editCatalogInput3 .el-input .el-input__inner {
-  width:370px;
-}
-#catalogingEdit #editCatalogInput7 .el-input .el-input__inner {
-  width:370px;
-}
-#book_cataloging #noError .el-form-item__error{
+#catalogingAdd #noError .el-form-item__error{
   display: none;
 }
-#book_cataloging #catalogingInput1 .el-input .el-input__inner {
-  width:371px;
+#catalogingAdd #noError .el-form-item {
+  margin-bottom: 5px;
 }
-#book_cataloging #catalogingInput2 .el-input .el-input__inner {
-  width:360px;
+#catalogingAdd .buttonInput .el-input-group__append button.el-button, .el-input-group__append div.el-select .el-input__inner, .el-input-group__append div.el-select:hover .el-input__inner, .el-input-group__prepend button.el-button, .el-input-group__prepend div.el-select .el-input__inner, .el-input-group__prepend div.el-select:hover .el-input__inner {
+  border-color: transparent;
+  background-color: transparent;
+  color: inherit;
+  border-top: 0;
+  width: 10px;
+  border-bottom: 0;
 }
-#book_cataloging #catalogingInput5 .el-input .el-input__inner {
-  width:200px;
+#catalogingAdd .el-input .el-input__inner {
+  height: 30px;
+  line-height: 30px;
 }
-#book_cataloging #catalogingInput6 .el-input .el-input__inner {
-  width:180px;
+#catalogingAdd .buttonInput .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
+  display: inline-block;
+  margin: -10px -28px;
 }
-#book_cataloging #catalogingInput3 .smaillInput .el-input .el-input__inner {
-  width:180px;
+#catalogingAdd .oneInput .el-input .el-input__inner {
+  width:450px;
 }
-#book_cataloging #catalogingInput3 .mediumInput .el-input .el-input__inner {
-  width:200px;
+#catalogingAdd .twoInput .el-input .el-input__inner {
+  width:300px;
 }
-#book_cataloging #catalogingInput4 .el-date-editor.el-input, .el-date-editor.el-input__inner{
-  width:200px;
+#catalogingEdit .twoInput .el-input .el-input__inner {
+  width:300px;
 }
-#book_cataloging #catalogingInput4 .el-input .el-input__inner {
-  width:185px;
+#catalogingAdd .buttonInput .el-input .el-input__inner {
+  width:150px;
 }
-#book_cataloging #catalogingInput4 .smaillInput .el-input .el-input__inner {
-  width:180px;
+#catalogingAdd .threeInput .el-input .el-input__inner {
+  width:175px;
 }
-#book_cataloging #catalogingInput3 .bigInput .el-input .el-input__inner {
-  width:480px;
+#catalogingEdit .threeInput .el-input .el-input__inner {
+  width:175px;
+}
+#catalogingAdd .oneBigInput .el-input .el-input__inner {
+  width:190px;
+}
+#catalogingAdd .selectInput .el-select {
+  display: inline-block;
+  position: relative;
+  width: 190px;
+}
+#catalogingAdd .isbnInput .el-input .el-input__inner {
+  width:300px;
 }
 #purchasingMessage .el-input .el-input__inner {
   width: 340px;
@@ -239,7 +216,7 @@
   width: 40px;
 }
 .addEditDialog #collectionAdd #collectionAddIsbn .el-input .el-input__inner{
-  width: 800px;
+  width: 300px;
 }
 #catalogMessage .el-dialog__body{
   border-bottom-right-radius: 20px;
@@ -260,4 +237,125 @@
 .collectionDelete .el-dialog--center .el-dialog__body{
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+}
+#powerZtree .ztree li{
+  margin-top: 0px;
+}
+#powerZtree{
+  overflow: auto;
+  margin-top: 15px;
+}
+.powerElement .ztree li span.button.ico_docu {
+  margin-right: 2px;
+  background-position: 0px -72px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerElement .ztree li span.button.chk.checkbox_true_part {
+  background-position: 2px -28px;
+  display: none;
+}
+.powerElement .ztree li span.button.noline_docu {
+  background: none;
+}
+.powerElement .ztree li span.button.chk.checkbox_false_full {
+  background-position: 0 0;
+  display: none;
+}
+.powerElement .ztree li span.button.chk.checkbox_true_full {
+  background-position: -14px 0;
+  display: none;
+}
+.powerElement .ztree li span.button.ico_open {
+  margin-right: 2px;
+  background-position: -21px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerElement .ztree li span.button.ico_close {
+  margin-right: 2px;
+  background-position: -21px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerElement .ztree li span.button.root_open{background-position:-92px -54px}
+.ztree li span.button {line-height:0; margin:0; width:16px; height:16px; display: inline-block; vertical-align:middle;
+  border:0 none; cursor: pointer;outline:none;
+  background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
+  background-image:url("../../zTree_v3/css/zTreeStyle/img/zTreeStandarda.png"); *background-image:url("../../zTree_v3/css/zTreeStyle/img/zTreeStandarda.gif")}
+.typeZtree .ztree li span.button.ico_close {
+  margin-right: 2px;
+  background-position: -1px -90px;
+  vertical-align: top;
+  vertical-align: middle;
+}
+.typeZtree .ztree li span.button.ico_open {
+  margin-right: 2px;
+  background-position: -1px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.typeZtree .ztree li span.button.ico_docu {
+  margin-right: 2px;
+  background-position: -44px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.bookAdress .ztree li span.button.ico_close {
+  margin-right: 2px;
+  background-position: -28px -74px;
+  vertical-align: top;
+  vertical-align: middle;
+}
+.bookAdress .ztree li span.button.ico_open {
+  margin-right: 2px;
+  background-position: -28px -74px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.bookAdress .ztree li span.button.ico_docu {
+  margin-right: 2px;
+  background-position: -1px -103px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.Separator{
+  width: 840px;
+  border-bottom: 1px solid #DCDFE6;
+  margin: 0px auto 10px;
+}
+#catalogMessage .el-dialog__body {
+  /*padding: 30px 20px;*/
+  color: #606266;
+  font-size: 14px;
+  padding: 0px;
+}
+#collectionMessage .el-dialog__body {
+  /*padding: 30px 20px;*/
+  color: #606266;
+  font-size: 14px;
+  padding: 0px;
+}
+#catalogMessage .messageAdd_Edit{
+  width: 840px;
+  border: 1px solid #DCDFE6;
+  border-radius: 10px;
+  margin: 10px auto;
+  padding:10px 20px;
+}
+#catalogMessage .buttonStyle .el-button--primary {
+  background: rgba(0,150,255,1);
+  border-radius: 10px;
+  font-size: 16px;
+}
+#catalogMessage .buttonStyle .el-button{
+  border-radius: 10px;
+}
+#catalogMessage .buttonStyle .el-button--info {
+  background: #909399;
+  border-radius: 10px;
+  font-size: 16px;
+}
+#catalogMessage .el-textarea__inner{
+  height: 80px;
 }

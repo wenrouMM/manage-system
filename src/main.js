@@ -19,8 +19,6 @@ import './zTree_v3/js/jquery.ztree.exhide.min'
 //css
 import '../src/base/iconfont/iconfont.css'
 import 'element-ui/lib/theme-chalk/index.css'
-import './zTree_v3/css/zTreeStyle/zTreeStyle.css'
-//import './zTree_v3/css/metroStyle/metroStyle.css'
 import {
   Message
 } from 'element-ui'

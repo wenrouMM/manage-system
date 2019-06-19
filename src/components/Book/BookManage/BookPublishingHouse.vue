@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex;flex-direction: row;">
     <div style="width:250px;display: flex;flex-direction:column;">
-      <div style="width: 250px;height:60px;background-color: #0096FF;font-size: 18px;color: white;text-align: center;line-height: 60px ">图书出版社</div>
+      <div style="width: 210px;height:60px;background-color: #0096FF;font-size: 18px;color: white;padding-left: 40px;line-height: 60px ">图书出版社</div>
       <div style="overflow-y: auto;background-color:white;height: 900px">
-        <ul id="treeDemo" class="ztree" style="margin-top:30px;margin-left:30px"></ul>
+        <ul id="treeDemo" class="ztree" style="margin-left:15px"></ul>
       </div>
     </div>
       <div style="width:1320px;margin-left: 30px;background-color:white;overflow: auto">

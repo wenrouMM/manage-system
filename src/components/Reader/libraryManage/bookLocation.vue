@@ -37,12 +37,12 @@
         <el-button type="primary" style="width:200px;margin-left: 450px;margin-top: 50px" @click="saveApi">保存</el-button>
       </el-form>
     </div>
-    <div id="typeMessage">
+    <div class="typeMessage">
       <div style="position: relative">
         <p>请选择位置信息</p>
         <img src="../../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
       </div>
-      <div v-loading="treeLoading">
+      <div v-loading="treeLoading" class="bookAdress">
         <ul id="treeDemo" class="ztree"></ul>
       </div>
     </div>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+  import '../../../zTree_v3/css/zTreeStyle/zTreeStyle.css'
   import { bookLocation } from "../../../request/api/base.js";
   export default {
     data(){
@@ -122,7 +123,7 @@
       }
     },
     mounted(){
-      $('#typeMessage').fadeOut()
+      $('.typeMessage').fadeOut()
     },
     methods:{
       /*====== zTree保持展开单一路径的实现 ======*/
@@ -155,7 +156,7 @@
       },
       /*====== 取消位置信息的弹框 ======*/
       closeCheck(){
-        $('#typeMessage').fadeOut()
+        $('.typeMessage').fadeOut()
       },
       /*====== 输入条码发送请求加载数据 ======*/
       barcodeClick:function(){
@@ -213,7 +214,7 @@
           console.log(treeNode.direction)
           this.Address.direction=treeNode.name
           this.ruleForm.code=treeNode.code
-          $('#typeMessage').fadeOut()
+          $('.typeMessage').fadeOut()
         }
       },
       /*====== 位置信息他边框出现的操作 ======*/
@@ -249,7 +250,8 @@
             //将数据渲染到ztree树
             $.fn.zTree.init($("#treeDemo"), this.setting, list);
             if(list.length>0){
-              $('#typeMessage').fadeIn()
+              console.log('ztree树打开')
+              $('.typeMessage').fadeIn()
               this.zNodes=list
             }else{
               this.$message('暂无数据')
@@ -327,14 +329,14 @@
     background-color: white;
     height: 852px;
   }
-  #typeMessage{
+  .typeMessage{
     display: none;
     position: absolute;
     top: 200px;
     left:750px;
     z-index: 30000;
   }
-  #typeMessage div:nth-child(1){
+  .typeMessage div:nth-child(1){
     width: 400px;
     height: 50px;
     background-color: #0096FF;
@@ -349,7 +351,7 @@
     -webkit-box-shadow: 2px 2px 10px #909090;
     box-shadow:2px 2px 10px #909090;
   }
-  #typeMessage div:nth-child(2){
+  .typeMessage div:nth-child(2){
     overflow: auto;
     height:500px ;
     width: 370px;

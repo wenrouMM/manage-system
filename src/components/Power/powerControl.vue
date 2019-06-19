@@ -138,12 +138,12 @@
         </el-dialog>
       </div>
       <!-- 添加 编辑弹框 -->
-      <div id="typeMessage" >
+      <div id="typeMessage">
         <div style="position: relative">
           <p>授权</p>
           <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
         </div>
-        <div>
+        <div class="powerElement">
           <ul id="treeDemo" class="ztree"></ul>
           <el-button type="primary" plain style="margin-left: 70px;width: 200px;margin-top: 10px" @click="controlClick">确定</el-button>
         </div>
@@ -153,6 +153,7 @@
 </template>
 
 <script>
+  import '../../zTree_v3/css/zTreeStyle/zTreeStyle.css'
 import moment from "moment";
 import axios from "axios";
 import { powerMangaeInt, selectRoleType,control,powerControl } from "../../request/api/base.js";
@@ -718,6 +719,7 @@ section.pagination {
 }
 .operator {
 }
+.ztree li span.button.ico_docu{margin-right:2px; background-position:1px -72px; vertical-align:top; *vertical-align:middle}
 .edit {
   color: #00d7f0;
   cursor: pointer;
