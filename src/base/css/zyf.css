@@ -541,3 +541,6 @@
 #collectionMessage .libraryAddressMessage .libraryAddressMessage_second .el-input .el-input__inner{
   width: 580px;
 }
+.el-button{
+  border-radius: 10px;
+}
