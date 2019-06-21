@@ -52,6 +52,65 @@
   padding: 10px 30px;
   margin: 0px auto;
 }
+#collectionAdd .countInput .el-input .el-input__inner {
+  width: 70px;
+  height: 30px;
+  line-height: 30px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input__inner {
+  padding-left: 5px;
+  padding-right: 27px;
+}
+#collectionAdd .countInput .el-input-number {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  line-height: 38px;
+}
+#collectionAdd .countInput .el-checkbox {
+  color: #606266;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-right: 5px;
+}
+#collectionAdd #formDiv .el-button {
+  height: 46px;
+  width: 10px;
+}
+#collectionAdd #formDiv .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
+  display: inline-block;
+  margin: -12px -29px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__increase {
+  height: auto;
+  line-height: 13px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease {
+  right: 1px;
+  bottom: 5px;
+  top: auto;
+  left: auto;
+  border-right: none;
+  border-left: 1px solid #DCDFE6;
+  border-radius: 0 0 4px;
+}
+#collectionAdd .countInput .el-input-number__decrease, .el-input-number__increase {
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  width: 25px;
+  height: auto;
+  text-align: center;
+  background: #f5f7fa;
+  color: #606266;
+  cursor: pointer;
+  font-size: 13px;
+}
 #collectionAdd #haveBottomBorderAdd .el-input .el-input__inner{
   border-radius: 5px;
   height:20px;
@@ -68,6 +127,12 @@
 #collectionAdd #haveBottomBorderAdd .oneInputBig .el-input .el-input__inner{
   width:660px;
 }
+#collectionAdd #haveBottomBorderAdd .threeInput .el-input .el-input__inner{
+  width:150px;
+}
+#collectionAdd #formDiv .threeInput .el-input .el-input__inner{
+  width:150px;
+}
 #collectionAdd #haveBottomBorderAdd .el-form-item__content{
   line-height: 30px
 }
@@ -83,11 +148,34 @@
 #collectionAdd #haveBottomBorderAdd .el-form-item__error{
   display: none;
 }
-
+#collectionAdd .buttonDiv .el-form-item{
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+#collectionAdd .buttonDiv .el-input .el-input__inner {
+  height: 25px;
+  line-height: 25px;
+  width: 100px;
+}
 #collectionAdd #haveBottomBorderAdd .el-checkbox{
   height: 30px;
 }
 
+#collectionMessage #collectionAdd #dataDiv .el-table td, .el-table th {
+  padding: 0px
+}
+
+#collectionMessage  .el-dialog__body{
+  padding: 0px!important
+}
+#collectionMessage .buttonStyle .el-button{
+  height: 35px;
+  font-size: 15px;
+  padding: 10px 20px;
+}
+#catalogMessage .el-dialog__body{
+  padding: 0px!important
+}
 #formDiv{
   border: 1px solid #DCDCDC;
   border-radius: 10px;
@@ -95,11 +183,19 @@
   padding: 10px 20px;
   margin-top: 20px;
 }
+#dataDiv{
+  border: 1px solid #DCDCDC;
+  border-radius: 10px;
+  width: 840px;
+  padding: 10px 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
 #formDiv .el-input .el-input__inner{
   border: 1px solid #DCDCDC;
 }
 #harm #harm_noneTopBorder .el-form-item{
-  margin-bottom: 10px;
+  margin-bottom: -5px;
 }
 #harm #harm_noneTopBorder .el-form-item__error{
   margin-top: 0px;
@@ -218,6 +314,13 @@
 .addEditDialog #collectionAdd #collectionAddIsbn .el-input .el-input__inner{
   width: 300px;
 }
+.addEditDialog #collectionAdd #decideForm #collectionAddIsbn .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
+  display: inline-block;
+  margin: -13px -8px;
+}
+.addEditDialog #collectionAdd #decideForm #collectionAddIsbn .el-button{
+  padding:0px
+}
 #catalogMessage .el-dialog__body{
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -334,7 +437,7 @@
   /*padding: 30px 20px;*/
   color: #606266;
   font-size: 14px;
-  padding: 0px;
+  padding: 0px!important
 }
 #catalogMessage .messageAdd_Edit{
   width: 840px;
@@ -352,10 +455,89 @@
   border-radius: 10px;
 }
 #catalogMessage .buttonStyle .el-button--info {
-  background: #909399;
   border-radius: 10px;
   font-size: 16px;
 }
 #catalogMessage .el-textarea__inner{
   height: 80px;
+}
+#collectionMessage .callNumberMessage{
+  position: absolute;
+  top: 150px;
+  z-index: 30000;
+  background: white;
+  width: 600px;
+  border: 1px solid #DCDCDC;
+  border-radius: 3px;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#80808075,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #80808075;
+  -webkit-box-shadow: 2px 2px 10px #80808075;
+  box-shadow:2px 2px 20px #80808075;
+}
+#collectionMessage .callNumberMessage .callNumberMessage_first{
+  width: 570px;
+  padding:7px 15px;
+  color: #827c7cab
+}
+#collectionMessage .callNumberMessage .callNumberMessage_scound{
+  padding: 15px 20px;
+  width: 560px;
+  background: #e0f2ff;
+  color: #878787;
+}
+#collectionMessage .callNumberMessage .callNumberMessage_scound .el-form-item{
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+#collectionMessage .callNumberMessage .callNumberMessage_scound .el-input .el-input__inner{
+  height: 30px;
+  line-height: 30px;
+  width: 300px;
+}
+.el-button--info {
+  color: #FFF;
+  background-color: #aaadb396;
+  border-color:  #aaadb396;
+}
+.dialogButton{
+  height: 35px;
+  line-height: 35px;
+  width: 110px;
+  border-radius:10px;
+  display: inline-block;
+  cursor: pointer;
+  font-size:15px;
+  color:#fff;
+  border: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+#collectionMessage .libraryAddressMessage{
+  position: absolute;
+  top: 150px;
+  z-index: 30000;
+  width:800px;
+  background: white;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#80808075,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #80808075;
+  -webkit-box-shadow: 2px 2px 10px #80808075;
+  box-shadow:2px 2px 20px #80808075;
+}
+#collectionMessage .libraryAddressMessage .libraryAddressMessage_first{
+  height: 50px;
+  line-height: 50px;
+  background: #0096ff;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+#collectionMessage .libraryAddressMessage .libraryAddressMessage_second{
+  background: white;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px 5px;
+}
+#collectionMessage .libraryAddressMessage .libraryAddressMessage_second .el-input .el-input__inner{
+  width: 580px;
 }

@@ -79,8 +79,8 @@ textarea {
 }
 .el-dialog__header{
 	background-color:#0096FF;
-	padding-top: 27px;
-	padding-bottom: 27px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 	color:#fff;
 	border-radius: 20px 20px 0 0;
 	text-align: center;
@@ -91,10 +91,11 @@ textarea {
     color: #FFFFFF;
 }
 .el-dialog__headerbtn{
-	width: 35px;
-	height: 35px;
+	width: 25px;
+	height: 25px;
 	border-radius: 50%;
 	border: 2px solid #fff;
+  top: 15px;
 }
 .el-dialog__headerbtn .el-dialog__close{
 	color: #fff;
@@ -151,13 +152,13 @@ textarea {
 }
 /* 弹框中的按钮 */
 .dialogButton{
-	height: 46px;
-	line-height: 46px;
-	width: 150px;
+	height: 35px;
+	line-height: 35px;
+	width: 120px;
 	border-radius:10px;
 	display: inline-block;
 	cursor: pointer;
-	font-size:18px;
+	font-size:15px;
 	color:#fff;
 	border: none;
 	box-sizing: border-box;
@@ -262,7 +263,7 @@ textarea {
 
 /*按钮覆盖*/
 .el-button{
-	
+
 	font-size: 16px;
 }
 .el-button--primary{ /*primary 默认搜索用按钮*/

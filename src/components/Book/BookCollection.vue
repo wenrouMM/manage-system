@@ -131,16 +131,20 @@
       <!-- 新增弹框 -->
       <div class="addEditDialog" id="collectionMessage">
         <!-- Form -->
-        <el-dialog @close="closeForm" width="900px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
-          <div v-if="i==1||i==0" style="width: 880px">
+        <el-dialog @close="closeForm" width="900px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible" >
+          <div v-if="i==1||i==0" style="width: 880px;position: relative">
             <div class="messageAdd_Edit">
               <el-form id="collectionAdd"  label-width="90px" :rules="rules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
                 <div id="decideForm">
-                  <div class="flexLayout" id="collectionAddIsbn">
-                    <el-form-item label=" I S B N :" prop="isbn" label-width="90px">
+                  <div class="flexLayout">
+                    <el-form-item label=" I S B N :" prop="isbn" label-width="90px" id="collectionAddIsbn">
                       <el-input v-model="addForm.isbn" placeholder="请输入ISBN进行搜索选择相关数据">
                         <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
                       </el-input>
+                    </el-form-item>
+                    <el-form-item  class="countInput" style="margin-right: 15px">
+                      <el-checkbox v-model="duplicate">含有复本(F)</el-checkbox>
+                      <el-input-number v-model="num" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
                     </el-form-item>
                   </div>
                   <div id="haveBottomBorderAdd">
@@ -158,7 +162,7 @@
                         <el-input v-model="showData.clusterName " :disabled="disabled"></el-input>
                       </el-form-item>
                     </div>
-                    <div class="flexLayout">
+                    <div class="flexLayout threeInput">
                       <el-form-item label=" 分类号 :">
                         <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
                       </el-form-item>
@@ -177,7 +181,7 @@
                         <el-input v-model="showData.layout " :disabled="disabled"></el-input>
                       </el-form-item>
                     </div>
-                    <div class="flexLayout">
+                    <div class="flexLayout threeInput">
                       <el-form-item label=" 出版社 :">
                         <el-input v-model="showData.fkPressName" :disabled="disabled"></el-input>
                       </el-form-item>
@@ -188,7 +192,7 @@
                         <el-input v-model="showData.appendix" :disabled="disabled"></el-input>
                       </el-form-item>
                     </div>
-                    <div class="flexLayout">
+                    <div class="flexLayout threeInput">
                       <el-form-item label=" 页码 :">
                         <el-input v-model="showData.pageNumber" :disabled="disabled"></el-input>
                       </el-form-item>
@@ -205,43 +209,137 @@
                   </div>
                 </div>
                 <div id="formDiv">
-                  <div class="flexLayout" style="margin-top: 10px">
+                  <div class="flexLayout threeInput" style="margin-top: 10px">
                     <el-form-item label=" 馆藏码 :" prop="code" label-width="90px">
                       <el-input v-model="addForm.code"></el-input>
                     </el-form-item>
                     <el-form-item label=" 索取号 :" prop="callNumber" label-width="90px">
-                      <el-input v-model="addForm.callNumber"></el-input>
+                      <el-input v-model="addForm.callNumber">
+                        <el-button slot="append" @click="callNumberFun" type="primary" icon="el-icon-search"></el-button>
+                      </el-input>
                     </el-form-item>
                     <el-form-item label=" 馆藏地 :" prop="place" label-width="90px">
-                      <el-input v-model="addForm.place"></el-input>
+                      <el-input v-model="addForm.place">
+                        <el-button slot="append" @click="libraryAddressFun" type="primary" icon="el-icon-search"></el-button>
+                      </el-input>
                     </el-form-item>
                   </div>
                   <div style="margin-left: 150px">
-                    <el-checkbox v-model="addForm.dailyRent">默认日租金</el-checkbox>
-                    <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 150px">不外借</el-checkbox>
+                    <el-checkbox v-model="addForm.lendingPermission" style="margin-left: 120px">不外借</el-checkbox>
                     <el-checkbox v-model="addForm.available" style="margin-left: 150px">启用</el-checkbox>
                   </div>
                 </div>
                 <!-- 弹框表单按钮  验证失效-->
-                <el-form-item style="margin:20px auto;width: 570px" >
-                  <el-button type="primary" @click="submitForm()" >确定</el-button>
-                  <el-button type="info" style="margin-left: 80px" @click="resetForm()" >取消</el-button>
+                <div class="flexLayout buttonDiv">
+                  <el-form-item label=" 批次号 :">
+                    <el-input v-model="addForm.place"></el-input>
+                  </el-form-item>
+                  <div class="buttonStyle" style="margin-top: 13px">
+                    <el-button type="primary" @click="submitForm()" >确定</el-button>
+                    <el-button type="info" style="margin-left: 20px" @click="resetForm()" >取消</el-button>
+                  </div>
+                  <div style="padding: 20px 20px 10px 0px">
+                    <a href="#">打印书标</a>
+                    <a href="#" style="margin-left: 20px;">打印设置...</a>
+                  </div>
+                </div>
+                <div id="dataDiv">
+                  <section class="tableBox bookInfo">
+                    <el-table
+                      :header-cell-style="{background:'#0096FF', color:'#fff',height:'30px', fontSize:'18px',borderRight:'none'}"
+                      empty-text="无数据"
+                      style="width: 840px; text-align:center;"
+                      :data="messageData"
+                      border
+                      height="100"
+                      :row-style="{height:'30px'}"
+                    >
+                      <el-table-column align="center" prop="isbn" label="条码号" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="name" label="索取号" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="author" label="馆藏地" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="fkPressName" label="状态" :show-overflow-tooltip="true"></el-table-column>
+                    </el-table>
+                    <!-- 4.0 分页 -->
+                  </section>
+                </div>
+              </el-form>
+            </div>
+          </div>
+          <div style="display: none" class="callNumberMessage">
+            <div class="flexLayout callNumberMessage_first">
+              <p>当前对应的分类号是"g"</p>
+              <p style="cursor: default" @click="callNumberMessageClose()">x</p>
+            </div>
+            <div class="callNumberMessage_scound">
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;当前对应的分类号是"g"的最大种次顺序号如下所显示，请为其设置一个新的最大种次号，以便和分类号组成一起组成图书排架号:</p>
+              <el-form>
+                <el-form-item label=" 起始种次号 :" prop="callNumber" label-width="90px">
+                  <el-input v-model="addForm.callNumber"></el-input>
                 </el-form-item>
               </el-form>
+              <p style="margin-left: 20px">此类图书的书架位置属性实例:</p>
+              <div style="margin:5px 20px;border: 1px solid  #DCDFE6 ;padding: 15px 70px;background: white">
+                <div class="flexLayout">
+                  <p>第一条书架位置编号:g/1</p>
+                  <p>第二条书架位置编号:g/2</p>
+                </div>
+                <div class="flexLayout" style="margin-top: 30px">
+                  <p>第三条书架位置编号:g/3</p>
+                  <p>第四条书架位置编号:g/4</p>
+                </div>
+                <p style="text-align: center;margin-top: 20px">后面图书按同样的种次号递增规律类推......</p>
+              </div>
+              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 240px">
+                <el-button type="primary" @click="callNumberMessageDefine()" style="width: 130px">确定</el-button>
+                <el-button type="info"  @click="callNumberMessageClose()" style="width: 130px">取消</el-button>
+              </div>
+            </div>
+          </div>
+          <div style="display: none" class="libraryAddressMessage">
+            <div class="libraryAddressMessage_first">
+              <p>馆藏地选择</p>
+              <span style="border-radius: 50%;border: 1px solid white;margin-right: 10px"><i class="el-dialog__close el-icon el-icon-close"></i></span>
+            </div>
+            <div class="libraryAddressMessage_second">
+              <el-form>
+                <el-form-item label=" 按馆藏地代码或名称筛选 :" prop="callNumber" label-width="200px">
+                  <el-input v-model="addForm.callNumber"></el-input>
+                </el-form-item>
+              </el-form>
+              <section class="tableBox bookInfo">
+                <el-table
+                  :header-cell-style="{background:'#0096FF', color:'#fff',height:'30px', fontSize:'18px',borderRight:'none'}"
+                  empty-text="无数据"
+                  style="width: 100%; text-align:center;"
+                  :data="libraryData"
+                  height="200"
+                  border
+                  :row-style="{height:'30px'}"
+                >
+                  <el-table-column align="center" prop="isbn" label="馆藏地代码" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="name" label="馆藏地名称" :show-overflow-tooltip="true"></el-table-column>
+                  <el-table-column align="center" prop="author" label="备注信息" :show-overflow-tooltip="true"></el-table-column>
+                </el-table>
+                <!-- 4.0 分页 -->
+              </section>
+              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 470px">
+                <el-button type="primary" @click="libraryAddressDefine()" style="width: 130px">确定</el-button>
+                <el-button type="info"  @click="libraryAddressClose()" style="width: 130px">取消</el-button>
+              </div>
             </div>
           </div>
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" :width="widthMessage" center>
-          <div v-if="i==1||i==0">
+        <el-dialog :title="Secondarytitle[j]" :visible.sync="centerDialogVisible" @close="closeForm" :width="widthMessage" center>
+          <div v-if="j==6">
             <div id="decideTable">
               <section class="tableBox bookInfo">
                 <el-table
                   :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
                   empty-text="无数据"
-                  style="width: 950px; text-align:center;"
+                  style="width: 600px; text-align:center;"
                   :data="selectIsbnData"
                   height="250"
                   :row-style="{height:'50px'}"
@@ -261,7 +359,7 @@
               </section>
             </div>
           </div>
-          <div v-if="i==5">
+          <div v-if="j==3">
             <el-form  id="harm" :rules="rules" :model="harmForm" :ref="harmForm">
               <div class="gray_radio_border" id="harm_noneTopBorder">
                 <div class="flexLayout">
@@ -322,17 +420,17 @@
                     </el-form-item>
                   </div>
                 </div>
-                <div style="width: 450px;margin:30px auto">
+                <div style="width: 450px;margin:10px auto 0px">
                   <el-button type="primary" @click="definiteCheck" style="width: 150px">确定</el-button>
                   <el-button type="info" style="margin-left: 100px;width: 150px" @click="cancelCheck">取消</el-button>
                 </div>
               </div>
             </el-form>
           </div>
-          <div class="dialogBody" v-if="this.i==2||this.i==3||this.i==4||this.i==6||this.i==8">
-            是否{{Dialogtitle[i]}}?
+          <div class="dialogBody" v-if="this.j==0||this.j==1||this.j==2||this.j==4">
+            是否{{Secondarytitle[j]}}?
           </div>
-          <div v-if="this.i==7" style="margin-top: 20px">
+          <div v-if="this.j==5" style="margin-top: 20px">
             <el-form :model="numberValidateForm" :ref="numberValidateForm" :rules="rules" label-width="100px" class="demo-ruleForm">
               <el-form-item label=" 剔除原因 :" prop="cause">
                 <el-select v-model="numberValidateForm.cause" clearable placeholder="请选择" style="width: 330px">
@@ -345,12 +443,13 @@
               </el-form-item>
             </el-form>
           </div>
-          <div style="margin-bottom: 30px" v-if="this.i==2||this.i==3||this.i==4||this.i==6||this.i==7||this.i==8">
+          <div style="margin-bottom: 30px" v-if="this.j==0||this.j==1||this.j==2||this.j==4||this.j==5">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="cancelDialog">取消</span>
           </div>
         </el-dialog>
       </div>
+
     </el-container>
   </div>
 </template>
@@ -364,6 +463,10 @@
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        messageData:[],
+        libraryData:[],
+        num: 1,
+        duplicate:"",
         widthMessage:'',
         loading: false,
         options:[],
@@ -425,8 +528,10 @@
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["修改", "书籍典藏那(新增)",'调馆','删除','启用','报损','导出','剔除设置','停用',"添加"],
+        Dialogtitle: ["修改", "书籍典藏(新增)"],
+        Secondarytitle:['调馆','删除','启用','报损','停用','剔除设置',"数据添加"],
         i: null, // 切换弹框标题
+        j:null,
         searchForm: {
           // 接受搜索表单的数据
           makeMethod:'',
@@ -565,12 +670,39 @@
       }
     },
     methods: {
+      //索取号弹窗
+      callNumberFun(){
+        $('.callNumberMessage').fadeIn()
+      },
+      //索取号弹窗确定按钮
+      callNumberMessageDefine(){
+        alert('暂无效果')
+      },
+      //索取号弹窗取消按钮
+      callNumberMessageClose(){
+        $('.callNumberMessage').fadeOut()
+      },
+      //馆藏地弹窗
+      libraryAddressFun(){
+        $('.libraryAddressMessage').fadeIn()
+      },
+      //馆藏地弹窗确定按钮
+      libraryAddressDefine(){
+        alert('暂无效果')
+      },
+      //馆藏地弹窗取消按钮
+      libraryAddressClose(){
+        $('.libraryAddressMessage').fadeOut()
+      },
+      //复本数量函数
+      handleChange(value) {
+        //console.log(value);
+      },
       //选中某条数据的按钮
       decideOn(index,row){
-        $('#decideTable').fadeOut()
-        $('#decideForm').fadeIn()
         this.showData=row
         this.disabled=true
+        this.centerDialogVisible=false
         console.log('选中的数据',this.showData)
       },
       selectSearchCheck(val){
@@ -613,7 +745,7 @@
       rejectBtn(){
         this.widthMessage='500px'
         if(this.tableChecked.length){
-          this.i=7
+          this.j=5
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择剔除对象')
@@ -628,7 +760,7 @@
       drawbackBtn(){
         this.widthMessage='400px'
         if(this.tableChecked.length){
-          this.i=3
+          this.j=1
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择删除对象')
@@ -641,6 +773,9 @@
       },
       //添加isbn数据搜索
       isbnData(){
+        this.j=6;
+        this.centerDialogVisible=true
+        this.widthMessage="700px"
         this.axios.get(collection.isbn,{params:{isbn:this.addForm.isbn}}).then((res)=>{
           console.log('isbn的数据',res)
           if(res.data.state===true){
@@ -729,11 +864,12 @@
       },
       //添加修改关闭按钮
       closeForm() { // 弹框关闭的时候执行 清空数据
-        if(this.i==4){
-          this.$refs[this.selectSearchForm].resetFields();
-          for (var i in this.selectSearchForm) {
-            this.selectSearchForm[i] = "";
+        if(this.j==3){
+          this.$refs[this.harmForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+          for (var i in this.harmForm) {
+            this.harmForm[i] = "";
           }
+          this.centerDialogVisible=false
         }else if(this.i==1||this.i==0){
           this.$refs[this.addForm].resetFields();
           for (var i in this.addForm) {
@@ -744,8 +880,8 @@
           }
           this.disabled=false
           this.selectIsbnData.length=0
+          $('.callNumberMessage').fadeOut()
         }
-
         this.dialogFormVisible = false
         this.searchApi(this.searchTimeForm)
       },
@@ -757,7 +893,7 @@
       },
       //报损弹框
       deleteBtn(index,row){
-        this.i=5
+        this.j=3
         this.addForm.id=row.id
         this.bookId=row.id
         this.centerDialogVisible=true
@@ -799,7 +935,7 @@
       tunnellingBtn(){
         this.widthMessage='400px'
         if(this.tableChecked.length){
-          this.i=2
+          this.j=0
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择调馆对象')
@@ -809,9 +945,9 @@
       makeBtn(index,row){
         console.log(row.available)
         if(row.available==0){
-          this.i=4
+          this.j=2
         }else if(row.available==1){
-          this.i=8
+          this.i=4
         }
         this.addForm.id=row.id
         this.centerDialogVisible=true
@@ -824,7 +960,8 @@
           idData.push({id:item.id})
           bookId.push(item.id)
         }
-        if(this.i==4){
+        /*Secondarytitle:['调馆','删除','启用','报损','停用','剔除设置',"数据添加"],*/
+        if(this.j==2){
           this.axios.post(collection.state,{id:this.addForm.id,available:1}).then((res)=>{
             if (res.data.state == true) {
               this.$message({
@@ -840,7 +977,7 @@
               });
             }
           })
-        }else if(this.i==8){
+        }else if(this.j==4){
           this.axios.post(collection.state,{id:this.addForm.id,available:0}).then((res)=>{
             if (res.data.state == true) {
               this.$message({
@@ -856,7 +993,7 @@
               });
             }
           })
-        }else if(this.i==3){
+        }else if(this.j==1){
           console.log('idData',idData)
           this.axios.post(collection.delete,idData).then((res)=>{
             if (res.data.state == true){
@@ -873,9 +1010,7 @@
               });
             }
           })
-        }else if(this.i==5){
-          //报损
-        }else if(this.i==2){
+        }else if(this.j==0){
           console.log('idData',idData)
           this.axios.post(collection.letLeave,idData).then((res)=>{
             if (res.data.state == true){
@@ -892,7 +1027,7 @@
               });
             }
           })
-        }else if(this.i==7){
+        }else if(this.j==5){
           this.$refs[this.numberValidateForm].validate((valid) => {
             if (valid) {
               this.axios.post(collection.letRemove,{bookId:bookId,remove:this.numberValidateForm.cause}).then((res)=>{
@@ -922,7 +1057,7 @@
           for (var i in this.harmForm) {
             this.harmForm[i] = "";
           }
-        this.dialogFormVisible=false
+        this.centerDialogVisible=false
       },
       cancelDialog(){
         this.centerDialogVisible=false
@@ -1164,5 +1299,12 @@
     width:25px;
     margin-left: 18px;
     margin-top: 7px
+  }
+  a {
+    text-decoration: none;
+    font-size: 15px;
+    color: #409effd1;
+    /* text-decoration: initial; */
+    text-decoration: underline;
   }
 </style>
