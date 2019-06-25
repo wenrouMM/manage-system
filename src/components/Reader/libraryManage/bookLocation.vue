@@ -1,5 +1,5 @@
 <template>
-  <div class="borrowbook" v-loading="formLoading">
+  <div class="borrowbook" >
     <div style="display: flex;flex-direction: row;padding-left: 30px;padding-top: 30px">
       <div style="width: 4px;height: 17px;background-color: #0096FF"></div>
       <div style="font-size: 16px;color: #878787;margin-left:10px;">图书位置绑定</div>

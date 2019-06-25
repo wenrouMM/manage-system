@@ -9,16 +9,22 @@
             <span class="titleName">借书记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
+          <section class="searchBox flexLayout">
+            <div class="buttonBox"></div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名" style="width: 200px"></el-input>
-              </el-form-item>
-              <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNum" clearable placeholder="请输入卡号" style="width: 200px"></el-input>
-              </el-form-item>
-              <el-form-item label="馆内码:">
-                <el-input size="120" v-model="searchForm.code" clearable placeholder="请输入馆内码" style="width: 200px"></el-input>
+              <el-form-item label="筛选 :">
+                <el-select
+                  style="width: 150px"
+                  v-model="searchForm.makeMethod"
+                  placeholder="请选择"
+                  clearable
+                  @change="selectCheck(searchForm.makeMethod)"
+                >
+                  <el-option label="用户名" value="0"></el-option>
+                  <el-option label="卡号" value="1"></el-option>
+                  <el-option label="馆内码" value="2"></el-option>
+                </el-select>
+                <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
               </el-form-item>
               <el-form-item label="创建时间:" size="130">
                 <el-date-picker
@@ -138,19 +144,24 @@
         pageSize: 10,
         pageInput:1,
         currentPage: 1,
-        searchForm: {
-          // 搜索需要的表单数据
-          userName: "",
-          cardNum: "",
-          beginTime: "",
-          endTime: "",
-          code:''
-        },
         tableLoading:true,
         tableData: [
           // 用于注入表单的数据 这里的数据应该在created钩子函数创建的时候向后台获取
-        ]
-        /*====== 5.0 分页相关设置项 ======*/
+        ],
+        searchForm: {
+          // 接受搜索表单的数据
+          makeMethod: "",
+          searchData: "",
+          beginTime: "",
+          endTime: "",
+          currentPage: 0
+        },
+        searchData: "",
+        selectSearchForm: {
+          userName: "", //用户名
+          cardNum: "", //卡号
+          code:'',
+        },
       };
     },
     mounted() {
@@ -159,13 +170,34 @@
     computed:{
       searchTimeForm() {
         // 计算属性 真正传递的数据
-        let date = this.searchForm.date;
+        console.log('this.searchData',this.searchData)
+        if (this.searchData) {
+          switch (this.searchData / 1) {
+            case 0:
+              console.log("书名");
+              this.selectSearchForm.userName = this.searchForm.searchData;
+              break;
+            case 1:
+              console.log("卡号");
+              this.selectSearchForm.cardNum = this.searchForm.searchData;
+              break;
+            case 2:
+              console.log("馆内码");
+              this.selectSearchForm.code = this.searchForm.searchData;
+              break;
+          }
+        } else {
+          console.log("为空");
+          this.selectSearchForm.userName = "";
+          this.selectSearchForm.cardNum = "";
+          this.selectSearchForm.code = ""
+        }
         let searchForm = {
           pageSize: this.pageSize,
           currentPage: 1,
-          logCardNum:this.searchForm.cardNum,
-          logName:this.searchForm.userName,
-          code:this.searchForm.code,
+          logCardNum:this.selectSearchForm.cardNum,
+          logName:this.selectSearchForm.userName,
+          code:this.selectSearchForm.code,
           logStartTime: !this.searchForm.beginTime
             ? null
             : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间,
@@ -177,6 +209,10 @@
       },
     },
     methods: {
+      selectCheck(val) {
+        console.log("val", val);
+        this.searchData = val;
+      },
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
         let page = Math.ceil(this.total / this.pageSize)

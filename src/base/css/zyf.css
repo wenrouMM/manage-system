@@ -54,12 +54,14 @@
 }
 #collectionAdd .countInput .el-input .el-input__inner {
   width: 70px;
-  height: 30px;
-  line-height: 30px;
+  height: 25px;
+  line-height: 25px;
+  background-color: #dcdfe64d;
 }
 #collectionAdd .countInput .el-input-number.is-controls-right .el-input__inner {
   padding-left: 5px;
   padding-right: 27px;
+
 }
 #collectionAdd .countInput .el-input-number {
   position: relative;
@@ -87,12 +89,12 @@
   margin: -12px -29px;
 }
 #collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__increase {
-  height: auto;
-  line-height: 13px;
+  height: 11px;
+  line-height: 11px;
 }
 #collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease {
   right: 1px;
-  bottom: 5px;
+  bottom: 8px;
   top: auto;
   left: auto;
   border-right: none;
@@ -102,7 +104,7 @@
 #collectionAdd .countInput .el-input-number__decrease, .el-input-number__increase {
   position: absolute;
   z-index: 1;
-  top: 5px;
+  top: 8px;
   width: 25px;
   height: auto;
   text-align: center;
@@ -543,4 +545,38 @@
 }
 .el-button{
   border-radius: 10px;
+}
+.powerControl .ztree li span.button.noline_close {
+  background-position: -77px -99px;
+}
+.powerControl .ztree li span.button.ico_close {
+  margin-right: 2px;
+  background-position: -22px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerControl .ztree li span.button.ico_open {
+  margin-right: 2px;
+  background-position: -22px -90px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerControl .ztree li span.button.ico_docu {
+  margin-right: 2px;
+  background-position: 1px -72px;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.powerControl .ztree li span.button.chk.checkbox_false_full {
+  background-position: 0 0;
+}
+.powerControl .ztree li span.button.chk.checkbox_true_full {
+  background-position: -14px 0;
+}
+.storeRoomDia .el-input-number__decrease, .el-input-number__increase {
+  display: none;
+}
+.storeRoomDia .el-input-number .el-input__inner{
+  text-align: left;
+  padding-left: 15px;
 }

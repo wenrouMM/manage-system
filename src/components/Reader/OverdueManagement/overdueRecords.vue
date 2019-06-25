@@ -10,20 +10,21 @@
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
           <section class="searchBox flexLayout">
-            <div class="buttonBox">
-              <!--<button class="blue" @click="deriveBtn">
-                <i class="blueIcon el-icon-share"></i>导出
-              </button>-->
-            </div>
+            <div class="buttonBox"></div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="用户名:" size="160">
-                <el-input v-model="searchForm.userName" placeholder="请输入用户名" style="width: 200px"></el-input>
-              </el-form-item>
-              <el-form-item label="卡号:">
-                <el-input size="120" v-model="searchForm.cardNum" placeholder="请输入卡号" style="width: 200px"></el-input>
-              </el-form-item>
-              <el-form-item label="书名:" size="160">
-                <el-input v-model="searchForm.bookName" placeholder="请输入书名" style="width: 200px"></el-input>
+              <el-form-item label="筛选 :">
+                <el-select
+                  style="width: 150px"
+                  v-model="searchForm.makeMethod"
+                  placeholder="请选择"
+                  clearable
+                  @change="selectCheck(searchForm.makeMethod)"
+                >
+                  <el-option label="用户名" value="0"></el-option>
+                  <el-option label="卡号" value="1"></el-option>
+                  <el-option label="书名" value="2"></el-option>
+                </el-select>
+                <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
@@ -132,10 +133,17 @@
         pageInput:1,
         currentPage: 1,
         searchForm: {
-          // 搜索需要的表单数据
-          userName: "",
-          cardNum: "",
-          bookName:""
+          // 接受搜索表单的数据
+          makeMethod: "",
+          searchData: "",
+          currentPage: 0
+        },
+        searchData: "",
+        selectSearchForm: {
+          userName: "", //用户名
+          cardNum: "", //卡号
+          bookName:'',//书名
+          currentPage: 0
         },
         tableLoading:true,
         tableData: [
@@ -152,17 +160,42 @@
     computed:{
       searchTimeForm() {
         // 计算属性 真正传递的数据
+        if (this.searchData) {
+          switch (this.searchData / 1) {
+            case 0:
+              console.log("用户名");
+              this.selectSearchForm.userName = this.searchForm.searchData;
+              break;
+            case 1:
+              console.log("卡号");
+              this.selectSearchForm.cardNum = this.searchForm.searchData;
+              break;
+            case 2:
+              console.log("书名");
+              this.selectSearchForm.bookName = this.searchForm.searchData;
+              break;
+          }
+        } else {
+          console.log("为空");
+          this.selectSearchForm.userName = "";
+          this.selectSearchForm.cardNum = "";
+          this.selectSearchForm.bookName = "";
+        }
         let searchForm = {
           pageSize: this.pageSize,
           currentPage: 1,
-          cardNumber:this.searchForm.cardNum,
-          name:this.searchForm.userName,
-          bookName:this.searchForm.bookName
+          cardNumber:this.selectSearchForm.cardNum,
+          name:this.selectSearchForm.userName,
+          bookName:this.selectSearchForm.bookName
         };
         return searchForm;
       },
     },
     methods: {
+      selectCheck(val) {
+        console.log("val", val);
+        this.searchData = val;
+      },
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
         let page = Math.ceil(this.total / this.pageSize)

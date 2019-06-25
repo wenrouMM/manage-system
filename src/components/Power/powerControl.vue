@@ -141,9 +141,9 @@
       <div id="typeMessage">
         <div style="position: relative">
           <p>授权</p>
-          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 360px;width: 20px;height: 20px" @click="closeCheck">
         </div>
-        <div class="powerElement">
+        <div class="powerControl">
           <ul id="treeDemo" class="ztree"></ul>
           <el-button type="primary" plain style="margin-left: 70px;width: 200px;margin-top: 10px" @click="controlClick">确定</el-button>
         </div>
@@ -193,6 +193,7 @@ export default {
         },
         callback: {
           onCheck: this.zTreeOnCheck, //勾选时事件
+          beforeCheck: this.zTreeBeforeCheck,
           beforeExpand: this.zTreeBeforeExpand,
         },
         check: {
@@ -266,7 +267,8 @@ export default {
 
       },
       menuId:[],
-      roleId:null
+      roleId:null,
+      checked:false
     };
   },
   computed: {
@@ -350,7 +352,7 @@ export default {
       this.zNodes.length=0
       let list=[]
       this.axios.get(control.tree,{params:{roleid:row.id}}).then((res)=>{
-        console.log(res)
+        console.log("树状图",res)
         if(res.data.state==true){
           for (var item of res.data.rows) {
             //console.log(item)
@@ -373,6 +375,7 @@ export default {
     },
     /*====== 授权加载ztree树，节点被勾选时 ======*/
     zTreeOnCheck(event,treeId,treeNode){
+      this.checked=true
       this.menuId.length=0
       console.log(treeNode)
       let treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
@@ -390,21 +393,29 @@ export default {
     },
     controlClick(){
       console.log('选中值id',this.menuId)
-      this.axios.post(control.add,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
-        console.log(res)
-        if(res.data.state==true){
-          this.$message({
-            message: res.data.msg,
-            type: "success"
-          });
-        }else{
-          this.$message({
-            message: res.data.msg,
-            type: "error"
-          });
-        }
-      })
-      $('#typeMessage').fadeOut()
+      if(this.checked==true){
+        this.axios.post(control.add,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
+        $('#typeMessage').fadeOut()
+      }else{
+        this.$message({
+          message:'请先选择您要赋予的权限',
+          type: "error"
+        });
+      }
+
     },
     /*====== 搜索按钮 ======*/
     searchBtn() {

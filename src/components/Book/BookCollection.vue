@@ -238,7 +238,7 @@
                     <el-button type="primary" @click="submitForm()" >确定</el-button>
                     <el-button type="info" style="margin-left: 20px" @click="resetForm()" >取消</el-button>
                   </div>
-                  <div style="padding: 20px 20px 10px 0px">
+                  <div style="padding: 23px 20px 10px 0px">
                     <a href="#">打印书标</a>
                     <a href="#" style="margin-left: 20px;">打印设置...</a>
                   </div>
@@ -332,7 +332,7 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="Secondarytitle[j]" :visible.sync="centerDialogVisible" @close="closeForm" :width="widthMessage" center>
+        <el-dialog :title="Secondarytitle[j]" :visible.sync="centerDialogVisible" :width="widthMessage" center>
           <div v-if="j==6">
             <div id="decideTable">
               <section class="tableBox bookInfo">
@@ -700,9 +700,9 @@
       },
       //选中某条数据的按钮
       decideOn(index,row){
+        this.centerDialogVisible=false
         this.showData=row
         this.disabled=true
-        this.centerDialogVisible=false
         console.log('选中的数据',this.showData)
       },
       selectSearchCheck(val){
@@ -773,27 +773,30 @@
       },
       //添加isbn数据搜索
       isbnData(){
-        this.j=6;
-        this.centerDialogVisible=true
-        this.widthMessage="700px"
-        this.axios.get(collection.isbn,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-          console.log('isbn的数据',res)
-          if(res.data.state===true){
-            if(res.data.row.length!=0){
-              this.selectIsbnData = res.data.row
+        if(this.addForm.isbn){
+          this.axios.get(collection.isbn,{params:{isbn:this.addForm.isbn}}).then((res)=>{
+            console.log('isbn的数据',res)
+            if(res.data.state===true){
+              if(res.data.row.length!=0){
+                this.selectIsbnData = res.data.row
+                this.j=6;
+                this.centerDialogVisible=true
+                this.widthMessage="700px"
+              }
             }else{
               this.$message({
-                message: '没有此ISBN的相关数据，请重新搜索',
+                message: res.data.msg,
                 type: "error"
               });
             }
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
-          }
-        })
+          })
+        }else{
+          this.$message({
+            message: '没有ISBN无法查询相关数据',
+            type: "error"
+          });
+        }
+
       },
       //修改弹框
       EditBtn(index,row){
@@ -871,13 +874,13 @@
           }
           this.centerDialogVisible=false
         }else if(this.i==1||this.i==0){
-          this.$refs[this.addForm].resetFields();
           for (var i in this.addForm) {
             this.addForm[i] = "";
           }
           for (var i in this.showData) {
             this.showData[i] = "";
           }
+          this.$refs[this.addForm].resetFields();
           this.disabled=false
           this.selectIsbnData.length=0
           $('.callNumberMessage').fadeOut()
@@ -894,6 +897,7 @@
       //报损弹框
       deleteBtn(index,row){
         this.j=3
+        this.widthMessage="900px"
         this.addForm.id=row.id
         this.bookId=row.id
         this.centerDialogVisible=true
@@ -945,8 +949,10 @@
       makeBtn(index,row){
         console.log(row.available)
         if(row.available==0){
+          this.widthMessage="400px"
           this.j=2
         }else if(row.available==1){
+          this.widthMessage="400px"
           this.i=4
         }
         this.addForm.id=row.id

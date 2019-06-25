@@ -6,7 +6,8 @@
           <span class="titleName">登录记录</span>
         </div>
         <!-- 2.0表单填写 -->
-        <section class="searchBox">
+        <section class="searchBox flexLayout">
+          <div class="buttonBox"></div>
           <el-form :inline="true" :model="searchForm">
             <el-form-item label="登录来源:">
               <el-select clearable v-model="searchForm.loginSource" placeholder="请选择" style="width: 200px">

@@ -15,21 +15,18 @@
         </div>
         <div class="right">
           <el-form :inline="true" :model="searchForm">
-            <el-form-item label="书籍名称 :">
-              <el-input
+            <el-form-item label="筛选 :">
+              <el-select
+                style="width: 150px"
+                v-model="searchForm.makeMethod"
+                placeholder="请选择"
                 clearable
-                v-model="searchForm.bookName"
-                placeholder="请输入书籍名称"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="ISBN :">
-              <el-input
-                clearable
-                v-model="searchForm.isbn"
-                placeholder="请输入相关的ISBN"
-                style="width: 200px"
-              ></el-input>
+                @change="selectCheck(searchForm.makeMethod)"
+              >
+                <el-option label="书籍名称" value="0"></el-option>
+                <el-option label="isbn" value="1"></el-option>
+              </el-select>
+              <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -118,8 +115,16 @@ export default {
   data() {
     return {
       searchForm: {
-        isbn: "",
-        bookName: ""
+        // 接受搜索表单的数据
+        makeMethod: "",
+        searchData: "",
+        currentPage: 0
+      },
+      searchData: "",
+      selectSearchForm: {
+        bookName: "", //书名
+        isbn: "", //isbn
+        currentPage: 0
       },
       tableLoading: true,
       currentPage: 1,
@@ -132,9 +137,25 @@ export default {
   },
   computed: {
     searchTimeForm() {
+      if (this.searchData) {
+        switch (this.searchData / 1) {
+          case 0:
+            console.log("书名");
+            this.selectSearchForm.bookName = this.searchForm.searchData;
+            break;
+          case 1:
+            console.log("备注信息");
+            this.selectSearchForm.isbn = this.searchForm.searchData;
+            break;
+        }
+      } else {
+        console.log("为空");
+        this.selectSearchForm.bookName = "";
+        this.selectSearchForm.isbn = "";
+      }
       let newSearch = {
-        isbn: this.searchForm.isbn,
-        bookName: this.searchForm.bookName,
+        isbn: this.selectSearchForm.isbn,
+        bookName: this.selectSearchForm.bookName,
         pageSize: this.pageSize,
         currentPage: 1
       };
@@ -142,6 +163,10 @@ export default {
     }
   },
   methods: {
+    selectCheck(val) {
+      console.log("val", val);
+      this.searchData = val;
+    },
     // 查询按钮
     searchBtn() {
       this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中

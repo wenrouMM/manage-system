@@ -22,11 +22,18 @@
             </button>
           </div>
           <el-form :inline="true" :model="searchForm">
-            <el-form-item label="书名 :">
-              <el-input v-model="searchForm.name" placeholder="请输入书名查询" clearable style="width: 200px"></el-input>
-            </el-form-item>
-            <el-form-item label="ISBN :">
-              <el-input v-model="searchForm.isbn" placeholder="请输入ISBN查询" clearable style="width: 200px"></el-input>
+            <el-form-item label="筛选 :">
+              <el-select
+                style="width: 150px"
+                v-model="searchForm.makeMethod"
+                placeholder="请选择"
+                clearable
+                @change="selectCheck(searchForm.makeMethod)"
+              >
+                <el-option label="书名" value="0"></el-option>
+                <el-option label="isbn" value="1"></el-option>
+              </el-select>
+              <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" class="button_s" @click="searchBtn">搜索</el-button>
@@ -114,18 +121,19 @@
                        :ref="addForm">
                 <div style="display: flex;flex-direction: column;">
                   <div>
-                    <div class="flexLayout" style="width: 450px;">
+                    <div class="flexLayout" style="width: 840px;">
                       <el-form-item label=" I S B N :" prop="isbn" label-width="100px" class="isbnInput">
                         <el-input v-model="addForm.isbn" placeholder="请输入ISBN搜索相关数据进行添加" id="isbnInput">
                           <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
                         </el-input>
                       </el-form-item>
+                      <span style="padding-top: 15px;padding-right:60px;font-size: 10px;color: rgb(180, 187, 202)">若远程或本地都没有您想要的数据，请手动录入图书资料！</span>
                       <!-- <p class="searchButton" @click="isbnData">
                         <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
                       </p> -->
                     </div>
                     <div style="margin: 0px auto 15px;width: 600px">
-                      <el-checkbox-group v-model="type" class="flexLayout" @change="BookInfoFun(type)">
+                      <el-checkbox-group v-model="type" @change="BookInfoFun(type)" class="flexLayout">
                         <el-checkbox :label="1" name="type">本地获取数据</el-checkbox>
                         <el-checkbox :label="2" name="type">远程获取数据</el-checkbox>
                       </el-checkbox-group>
@@ -187,15 +195,21 @@
                         <el-input v-model="addForm.pageNumber"></el-input>
                       </el-form-item>
                       <el-form-item label=" 开 本 :">
-                        <el-input v-model="addForm.openBook "></el-input>
+                        <el-select v-model="addForm.openBook" filterable>
+                          <el-option label="64开" value="64"></el-option>
+                          <el-option label="32开" value="32"></el-option>
+                          <el-option label="16开" value="16"></el-option>
+                          <el-option label="8开" value="8"></el-option>
+                          <el-option label="4开" value="4"></el-option>
+                        </el-select>
                       </el-form-item>
                       <el-form-item label=" 价 格 :" prop="price">
                         <el-input v-model="addForm.price "></el-input>
                       </el-form-item>
                     </div>
-                    <div  class="flexLayout selectInput">
-                      <el-form-item label=" 语 种 :" prop="languageCode">
-                        <el-select v-model="addForm.languageCode" clearable placeholder="请选择">
+                    <div  class="flexLayout">
+                      <el-form-item label=" 语 种 :" prop="languageCode" class="selectInput">
+                        <el-select v-model="addForm.languageCode" filterable placeholder="请选择">
                           <el-option
                             v-for="item in options"
                             :key="item.index"
@@ -204,16 +218,24 @@
                           </el-option>
                         </el-select>
                       </el-form-item>
-                      <el-form-item label=" 文献类别 :">
-                        <el-input v-model="addForm.LiteratureCategory "></el-input>
+                      <el-form-item label=" 文献类别 :" class="threeInput">
+                        <el-select v-model="addForm.literatureType" filterable>
+                          <el-option label="图书" value="图书"></el-option>
+                          <el-option label="古籍" value="古籍"></el-option>
+                          <el-option label="视频" value="视频"></el-option>
+                          <el-option label="教材" value="教材"></el-option>
+                        </el-select>
                       </el-form-item>
                       <el-form-item label=" 装订版面 :">
-                        <el-input v-model="addForm.BindingLayout  "></el-input>
+                        <el-select v-model="addForm.layout" filterable>
+                          <el-option label="平装" value="平装"></el-option>
+                          <el-option label="精装" value="精装"></el-option>
+                        </el-select>
                       </el-form-item>
                     </div>
                     <div class="flexLayout threeInput">
                       <el-form-item label=" 版 次 :" class="oneBigInput">
-                        <el-input v-model="addForm.editionNumber "></el-input>
+                        <el-input v-model="addForm.edition "></el-input>
                       </el-form-item>
                       <el-form-item label=" 卷 册 号 :">
                         <el-input v-model="addForm.volumeNumber "></el-input>
@@ -253,7 +275,7 @@
           <div id="typeMessage">
             <div style="position: relative">
               <p>{{messageName}}</p>
-              <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 340px;width: 30px;height: 30px" @click="closeCheck">
+              <img src="../../base/img/menu/xx.png" style="position: absolute;top: 15px;left: 360px;width: 20px;height: 20px" @click="closeCheck">
             </div>
             <div class="typeZtree powerElement">
               <ul id="treeDemo" class="ztree"></ul>
@@ -263,9 +285,9 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="catalogtitle[j]" :visible.sync="centerDialogVisible" @close="closeHarm" :width="messageWidth" center>
+        <el-dialog :title="catalogtitle[j]" :visible.sync="centerDialogVisible" :width="messageWidth" center>
           <div v-if="j==0||j==1||j==2">
-            <div class="dialogBody" style="margin-left: -30px;margin-bottom: 20px">
+            <div class="dialogBody" style="margin-left: -30px">
               是否{{catalogtitle[j]}}?
             </div>
             <div style="margin-bottom: 30px">
@@ -297,7 +319,7 @@
                 </el-table-column>
               </el-table>
             </section>
-            <div style="width: 200px;margin: 20px auto" id="decideShow">
+            <div style="width: 200px;margin: 20px auto 0px" id="decideShow">
               <span class="dialogButton cancel" @click="decideOut" style="width: 200px">取消</span>
             </div>
           </div>
@@ -351,6 +373,7 @@
           callback: {
             onClick: this.zTreeOnClick, //节点点击事件
             beforeExpand: this.zTreeBeforeExpand,
+            onDblClick: this.zTreeOnDblClick
           }
         }, //ztree树加载的配置
         zNodes: [], //ztree树的数据
@@ -359,8 +382,8 @@
           name:'', //正题名
           viceName:'', //副题名
           clusterName:'',//丛编题名
-          LiteratureCategory:'',//文献类别
-          BindingLayout:'',//装订版面
+          literatureType:'',//文献类别
+          layout:'',//装订版面
           fkTypeCode:'',//分类号
           fkTypeName:'',//分类名
           author:'',//编著者
@@ -372,7 +395,7 @@
           openBook:'',//开本
           price:'',//价格
           language:'',//语种
-          editionNumber:'',//版次
+          edition:'',//版次
           volumeNumber:'',//卷册号
           appendix:'',//附件
           languageCode:'',
@@ -395,14 +418,9 @@
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ["修改", "新增"],
-        catalogtitle:['删除','导出','导入','若列表中没有合适的数据，请点击“取消”按钮进行远程获取','远程数据'],
+        catalogtitle:['删除','导出','导入','本地数据','远程数据'],
         i: null, // 切换弹框标题
         j:null,
-        searchForm: {
-          // 接受搜索表单的数据
-          isbn:"",
-          name:''
-        },
         /*初始化 */
         options: [],
         tableLoading: true,
@@ -414,15 +432,43 @@
         catalogingData:[],//编目数据
         id:'',
         tableChecked: [], // 全选绑定的数据
-        type:[],//选择远程或本地的获取数据的按钮
-        decideOnData:false
+        type:[1,2],//选择远程或本地的获取数据的按钮
+        decideOnData:false,
+        searchForm: {
+          // 接受搜索表单的数据
+          makeMethod: "",
+          searchData: "",
+          currentPage: 0
+        },
+        searchData: "",
+        selectSearchForm: {
+          name: "", //书名
+          isbn: "", //isbn
+          currentPage: 0
+        },
       };
     },
     computed: {
       searchTimeForm(){
+        if (this.searchData) {
+          switch (this.searchData / 1) {
+            case 0:
+              console.log("书名");
+              this.selectSearchForm.name = this.searchForm.searchData;
+              break;
+            case 1:
+              console.log("备注信息");
+              this.selectSearchForm.isbn = this.searchForm.searchData;
+              break;
+          }
+        } else {
+          console.log("为空");
+          this.selectSearchForm.name = "";
+          this.selectSearchForm.isbn = "";
+        }
         let newData={
-          isbn:this.searchForm.isbn,
-          name:this.searchForm.name,
+          isbn:this.selectSearchForm.isbn,
+          name:this.selectSearchForm.name,
           pageSize: this.pageSize,
           currentPage: 1,
         }
@@ -439,71 +485,14 @@
       }
     },
     methods: {
-      closeHarm(){
-        console.log('关闭损坏的弹窗')
-        if(this.decideOnData==false){
-          this.type=[]
-        }
+      selectCheck(val) {
+        console.log("val", val);
+        this.searchData = val;
       },
       //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
         console.log('获取图书信息',value)
         console.log('isbn的值',this.addForm.isbn)
-        /*if(this.addForm.isbn){
-          if(value==1){
-            $('#decideShow').show()
-            this.j=3
-            this.messageWidth='800px'
-            this.centerDialogVisible=true
-            this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-              console.log('isbn的数据',res)
-              if(res.data.state==true){
-                this.catalogingData=res.data.row
-              }else{
-                this.$message({
-                  message: '没有ISBN查询无法获取本地数据',
-                  type: "error"
-                });
-                this.catalogingData=res.data.row
-              }
-            },(err)=>{
-              console.log('err',err)
-              this.catalogingData=[]
-              this.$message({
-                message: '网络出错',
-                type: "error"
-              });
-            })
-          }else if(value==2){
-            $('#decideShow').hide()
-            this.j=4
-            this.centerDialogVisible=true
-            this.messageWidth='800px'
-            this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-              console.log('远程编目的数据',res)
-              if(res.data.state==true){
-                this.catalogingData=res.data.row
-              }else{
-                this.$message({
-                  message: '没有ISBN查询无法获取远程数据',
-                  type: "error"
-                });
-                this.catalogingData=res.data.rows
-              }
-            },(err)=>{
-              console.log('err',err)
-              this.$message({
-                message: '网络出错',
-                type: "error"
-              });
-            })
-          }
-        }else{
-          this.$message({
-            message: '请先输入搜索相应ISBN获取数据',
-            type: "error"
-          });
-        }*/
       },
       //选中某条数据的选中按钮
       decideOn(index,row){
@@ -515,29 +504,7 @@
       },
       //取消本地获取，获取远程数据
       decideOut(){
-        $('#decideShow').hide()
-        this.type=[2]
-        this.j=4
-        this.centerDialogVisible=true
-        this.messageWidth='800px'
-        this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-          console.log('远程编目的数据',res)
-          if(res.data.state==true){
-            this.catalogingData=res.data.row
-          }else{
-            this.$message({
-              message: '没有ISBN查询无法获取远程数据',
-              type: "error"
-            });
-            this.catalogingData=res.data.rows
-          }
-        },(err)=>{
-          console.log('err',err)
-          this.$message({
-            message: '网络出错',
-            type: "error"
-          });
-        })
+        this.centerDialogVisible=false
       },
       /*====== 出版社弹窗内容 ======*/
       publishTreeFun(){
@@ -611,6 +578,10 @@
       },
       /*====== ztree节点点击添加节点信息 ======*/
       zTreeOnClick(event, treeId, treeNode){
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        treeObj.expandNode(treeNode);
+      },
+      zTreeOnDblClick(event, treeId, treeNode){
         if(this.messageName=='请选择出版社名称'){
           if(treeNode.code!=null){
             console.log(treeNode)
@@ -659,6 +630,7 @@
       },
       //新增按钮
       rechargeBtn(){
+        this.type=[1,2]
         this.i=1
         this.dialogFormVisible=true
         this.languageFun()
@@ -677,83 +649,91 @@
       },
       //添加isbn数据搜索
       isbnData(){
-        console.log('远程或者本地',this.type[0])
-        if(this.type[0]===2){
-          $('#decideShow').hide()
-          this.messageWidth='750px'
-          this.j=4
-          this.centerDialogVisible=true
-          this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-            console.log('远程编目的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
-              this.$message({
-                message: '没有ISBN查询无法获取远程数据',
-                type: "error"
-              });
-              this.catalogingData=res.data.rows
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
-        }else if(this.type[0]===1){
-          $('#decideShow').show()
-          this.j=3
-          this.messageWidth='750px'
-          this.centerDialogVisible=true
-          this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-            console.log('isbn的数据',res)
-            if(res.data.state==true){
-              this.catalogingData=res.data.row
-            }else{
-              this.$message({
-                message: '没有ISBN查询无法获取本地数据',
-                type: "error"
-              });
-              this.catalogingData=res.data.row
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.catalogingData=[]
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-          })
-        }else if(this.type[0]===undefined){
-          $('#decideShow').show()
-          this.type=[1,2]
-          this.messageWidth='750px'
-          this.j=3
-          this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-            console.log('isbn的数据',res)
-            if(res.data.state==true){
-              this.centerDialogVisible=true
-              this.catalogingData=res.data.row
-            }else{
-              this.$message({
-                message: '没有ISBN查询无法获取本地数据',
-                type: "error"
-              });
-              this.centerDialogVisible=true
-              this.catalogingData=res.data.row
-            }
-          },(err)=>{
-            console.log('err',err)
-            this.j=3
-            this.centerDialogVisible=true
-            this.$message({
-              message: '网络出错',
-              type: "error"
-            });
-            this.catalogingData=[]
-          })
+        console.log('远程或者本地',this.type)
+        console.log('远程或者本地长度',this.type.length)
+        let typeIndex
+        for(const item of this.type){
+          typeIndex=item
+          console.log('typeIndex',typeIndex)
         }
+        if(this.addForm.isbn){
+          if(this.type.length===1){
+            if(typeIndex===1){
+              console.log('本地数据')
+              this.localCatalogData()
+            }else if(typeIndex===2){
+              console.log('远程数据')
+              this.remoteCatalogData()
+            }
+          }else if(this.type.length===2){
+            console.log('远程又本地')
+            this.localCatalogData()
+            console.log('this.catalogingData.length',this.catalogingData.length)
+            if(this.catalogingData.length==0){
+              this.remoteCatalogData()
+            }
+          }else{
+            this.$message({
+              message: '请先选择远程获取或本地获取',
+              type: "error"
+            });
+          }
+        }
+      },
+      //本地数据
+      localCatalogData(){
+        this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
+          console.log('isbn的数据',res)
+          if(res.data.state==true){
+            if(res.data.row.length!=0){
+              this.catalogingData=res.data.row
+              this.j=3
+              this.messageWidth='750px'
+              this.centerDialogVisible=true
+            }
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        },(err)=>{
+          console.log('err',err)
+          this.$message({
+            message: '网络出错',
+            type: "error"
+          });
+        })
+      },
+      //远程数据
+      remoteCatalogData(){
+        this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
+          console.log('远程编目的数据',res)
+          if(res.data.state==true){
+            if(res.data.row.length!=0){
+              this.catalogingData=res.data.row
+              this.messageWidth='750px'
+              this.j=4
+              this.centerDialogVisible=true
+            }else{
+              this.$message({
+                message: "没有相关数据，请手动录入图书资料",
+                type: "error"
+              });
+            }
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        },(err)=>{
+          console.log('err',err)
+          this.$message({
+            message: '网络出错',
+            type: "error"
+          });
+        })
       },
       //修改弹框
       EditBtn(index,row){
@@ -830,7 +810,6 @@
           this.addForm[i] = "";
         }
         this.dialogFormVisible = false
-        this.type=''
         this.searchApi(this.searchTimeForm)
         $('#typeMessage').fadeOut()
       },
@@ -1146,8 +1125,7 @@
   #typeMessage{
     display: none;
     position: absolute;
-    top: 120px;
-    left:300px;
+    top: 100px;
     z-index: 30000;
 
   }
