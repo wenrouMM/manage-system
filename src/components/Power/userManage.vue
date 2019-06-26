@@ -70,7 +70,7 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
+                <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>

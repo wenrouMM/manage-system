@@ -32,7 +32,7 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
+                <el-button size="15" type="primary" class="button_s" @click="onSubmit">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>

@@ -546,37 +546,165 @@
 .el-button{
   border-radius: 10px;
 }
-.powerControl .ztree li span.button.noline_close {
+.powerControl .ztree li span.button.noline_close{
   background-position: -77px -99px;
 }
-.powerControl .ztree li span.button.ico_close {
+.powerControl .ztree li span.button.ico_close{
   margin-right: 2px;
   background-position: -22px -90px;
   vertical-align: top;
   *vertical-align: middle;
 }
-.powerControl .ztree li span.button.ico_open {
+.powerControl .ztree li span.button.ico_open{
   margin-right: 2px;
   background-position: -22px -90px;
   vertical-align: top;
   *vertical-align: middle;
 }
-.powerControl .ztree li span.button.ico_docu {
+.powerControl .ztree li span.button.ico_docu{
   margin-right: 2px;
   background-position: 1px -72px;
   vertical-align: top;
   *vertical-align: middle;
 }
-.powerControl .ztree li span.button.chk.checkbox_false_full {
+.powerControl .ztree li span.button.chk.checkbox_false_full{
   background-position: 0 0;
 }
-.powerControl .ztree li span.button.chk.checkbox_true_full {
+.powerControl .ztree li span.button.chk.checkbox_true_full{
   background-position: -14px 0;
 }
-.storeRoomDia .el-input-number__decrease, .el-input-number__increase {
+.stonerMessage .el-input-number__decrease{
+  display: none;
+}
+.stonerMessage .el-input-number__increase{
   display: none;
 }
 .storeRoomDia .el-input-number .el-input__inner{
   text-align: left;
   padding-left: 15px;
+}
+.button_s{
+  width: 90px;
+}
+.printSetupMessage{
+  position: absolute;
+  top: 150px;
+  z-index: 30000;
+  width:700px;
+  background: white;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#80808075,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #80808075;
+  -webkit-box-shadow: 2px 2px 10px #80808075;
+  box-shadow:2px 2px 20px #80808075;
+}
+.printSetupMessage .el-form-item {
+  margin-bottom:0px;
+}
+.printSetupMessage_first{
+  background-color: #0096ffa1;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  font-size: 18px;
+}
+.printSetupMessage_second{
+  background-color: #0096ff14;
+  padding: 10px 20px 20px;
+}
+.printSetupMessageBorder{
+  border: 1px solid #0066ccba;
+  border-radius: 10px;
+  width: 628px;
+  margin-top: 10px;
+  position: relative;
+  padding: 15px;
+  background-color: white;
+}
+.printSetupMessageBorder .el-input .el-input__inner {
+  height: 20px;
+  line-height: 20px;
+  width:90px
+}
+.printSetupMessageBorder .el-input__icon {
+  width: 15px;
+}
+.printSetupMessageBorder .el-input--suffix .el-input__inner {
+  padding-right: 30px;
+  background: whitesmoke;
+}
+.fontBorder{
+  border: 1px solid #0066ccba;
+  position: absolute;
+  top: -10px;
+  left: 30px;
+  background-color: white;
+  padding: 2px 4px;
+}
+.printSetupButton{
+  border:1px solid #dcdcdc;
+  background-color: white;
+  color: #409effd1;
+}
+.printModel .el-input .el-input__inner {
+  height: 20px;
+  line-height: 20px;
+}
+.printModel .el-input--suffix .el-input__inner {
+  padding-right: 30px;
+  background: whitesmoke;
+}
+.numberInput .el-input .el-input__inner {
+  height: 25px;
+  line-height: 20px;
+  width:90px;
+}
+.numberInput .el-input-number__increase {
+  right: 11px;
+  border-radius: 0 4px 4px 0;
+  border-left: 1px solid #DCDFE6;
+}
+.numberInput .el-input-number.is-controls-right .el-input-number__decrease {
+  right: 11px;
+  bottom:8px;
+  top: auto;
+  left: auto;
+  border-right: none;
+  border-left: 1px solid #DCDFE6;
+  border-radius: 0 0 4px;
+}
+.numberInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__increase {
+  height: 11px;
+  line-height: 11px;
+}
+.numberInput .el-input-number__decrease, .el-input-number__increase {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  width: 25px;
+  height: auto;
+  text-align: center;
+  background: #f5f7fa;
+  color: #606266;
+  cursor: pointer;
+  font-size: 13px;
+}
+.numberInput .el-input-number {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  line-height: 38px;
+}
+.printSetupButStyle{
+  height: 25px;
+  width: 100px;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+  border: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: darkgray
 }

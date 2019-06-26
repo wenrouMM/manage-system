@@ -11,7 +11,7 @@
             <span @click="skip" class="Logotext">图书馆管理平台</span>
           </div>
           <!-- 头部导航模块 路由添加尚未完成 active驻留模块未完成 -->
-          <div id="navBar" class="navBar">
+          <div id="navBar" class="navBar" style="overflow: hidden">
             <el-menu
               text-color="#fff"
               mode="horizontal"

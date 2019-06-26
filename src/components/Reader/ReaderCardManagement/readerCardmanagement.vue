@@ -71,7 +71,7 @@
                 </el-select>
               </el-form-item>-->
               <el-form-item>
-                <el-button size="15" type="primary" @click="searchBtn">查询</el-button>
+                <el-button size="15" type="primary" @click="searchBtn" class="button_s">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>

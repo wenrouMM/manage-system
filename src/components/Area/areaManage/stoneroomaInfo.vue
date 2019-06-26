@@ -83,7 +83,7 @@
     <div class="dialogBox">
       <!-- 左侧弹框组 -->
       <!-- 库房添加/编辑 -->
-      <div class="storeRoomDia common">
+      <div class="storeRoomDia common stonerMessage">
         <el-dialog
           :title="dialogTitle[i]"
           :visible.sync="storeRoomDialog"

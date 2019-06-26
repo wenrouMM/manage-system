@@ -57,6 +57,11 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="clusterName" label="丛编题名" width="200" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.clusterName == null || scope.row.clusterName=='' ?'---':scope.row.clusterName}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
@@ -668,6 +673,7 @@
           }else if(this.type.length===2){
             console.log('远程又本地')
             this.localCatalogData()
+            console.log('this.catalogingData',this.catalogingData)
             console.log('this.catalogingData.length',this.catalogingData.length)
             if(this.catalogingData.length==0){
               this.remoteCatalogData()
@@ -683,19 +689,19 @@
       //本地数据
       localCatalogData(){
         this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-          console.log('isbn的数据',res)
+          console.log('本地的数据',res)
+          console.log('isbn的数据 ISBN',res.data.row.isbn)
           if(res.data.state==true){
-            if(res.data.row.length!=0){
-              this.catalogingData=res.data.row
+            if(res.data.row.length>1){
+              this.catalogingData = res.data.row
               this.j=3
               this.messageWidth='750px'
               this.centerDialogVisible=true
+            }else if(res.data.row.length=1){
+              console.log('length为1的时候',res.data.row)
+              this.addForm = res.data.row[0]
+
             }
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
           }
         },(err)=>{
           console.log('err',err)
@@ -710,22 +716,14 @@
         this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
           console.log('远程编目的数据',res)
           if(res.data.state==true){
-            if(res.data.row.length!=0){
-              this.catalogingData=res.data.row
-              this.messageWidth='750px'
+            if(res.data.row.length>1){
+              this.catalogingData = res.data.row
               this.j=4
+              this.messageWidth='750px'
               this.centerDialogVisible=true
-            }else{
-              this.$message({
-                message: "没有相关数据，请手动录入图书资料",
-                type: "error"
-              });
+            }else if(res.data.row.length=1){
+              this.addForm = res.data.row[0]
             }
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: "error"
-            });
           }
         },(err)=>{
           console.log('err',err)

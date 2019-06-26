@@ -406,14 +406,15 @@ export const collection ={
   select:`${url}bookcollectionmodule/collection/select`,
   add:`${url}bookcollectionmodule/collection/add`,
   edit:`${url}bookcollectionmodule/collection/edit`,
-  isbn:`${url}catamodule/editing/cataTbBookInfo/selectFromCata`,
+  isbn:`${url}bookcollectionmodule/collection/selectFromCata`,
   state:`${url}bookcollectionmodule/collection/editState`,
   delete:`${url}bookcollectionmodule/collection/delete`,
   letLeave:`${url}bookcollectionmodule/collection/letLeave`,
   harm:`${url}bookcollectionmodule/collection/letLeave`,
   letRemove:`${url}bookcollectionmodule/collection/letRemove`,
   harmSelect:`${url}bookcollectionmodule/collection/getDamage`,
-  damage:`${url}bookcollectionmodule/collection/bookDamage`
+  damage:`${url}bookcollectionmodule/collection/bookDamage`,
+  selectFromCataID:`${url}bookcollectionmodule/collection/selectFromCataID`,
 }
 
 //采购管理
