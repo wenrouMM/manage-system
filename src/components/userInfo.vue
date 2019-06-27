@@ -60,8 +60,8 @@
         @crop-upload-success="cropUploadSuccess"
         @crop-upload-fail="cropUploadFail"
         v-model="show"
-        :width="300"
-        :height="300"
+        :width="100"
+        :height="100"
         :url="uploadurl"
         img-format="png"
       ></my-upload>
