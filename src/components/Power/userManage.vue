@@ -9,13 +9,29 @@
             <span class="titleName">用户管理</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
+          <section class="searchBox flexLayout">
+            <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
+            <div class="buttonBox">
+              <button class="add" @click="addDialogOpen">
+                <i class="addIcon el-icon-plus"></i>添加
+              </button>
+              <button class="delete" @click="batchDelete">
+                <i class="deleteIcon el-icon-delete"></i>批量删除
+              </button>
+            </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="姓名:">
-                <el-input size="160" v-model="searchForm.userName" clearable placeholder="请输入姓名" style="width: 170px"></el-input>
-              </el-form-item>
-              <el-form-item label="身份证号:" size="160">
-                <el-input v-model="searchForm.userId" clearable placeholder="请输入身份证号" style="width: 170px"></el-input>
+              <el-form-item label="筛选 :">
+                <el-select
+                  style="width: 150px"
+                  v-model="searchForm.makeMethod"
+                  placeholder="请选择"
+                  clearable
+                  @change="selectCheck(searchForm.makeMethod)"
+                >
+                  <el-option label="姓名" value="0"></el-option>
+                  <el-option label="身份证号" value="1"></el-option>
+                </el-select>
+                <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
               </el-form-item>
               <!--<el-form-item label="手机号码:" size="160">
                 <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码" style="width: 170px"></el-input>
@@ -54,19 +70,10 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">查询</el-button>
+                <el-button :loading="searchLoading" size="15" type="primary" @click="searchSubmit">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>
-          <!-- 3.0 添加删除按钮 添加之前：弹框提交  状态： 正在添加 添加完成（alert提示自带）/添加失败请重试 -->
-          <div class="buttonBox">
-            <button class="add" @click="addDialogOpen">
-              <i class="addIcon el-icon-plus"></i>添加
-            </button>
-            <button class="delete" @click="batchDelete">
-              <i class="deleteIcon el-icon-delete"></i>批量删除
-            </button>
-          </div>
           <!-- 4.0 表格展示内容 编辑功能：状态用上 禁用 批量禁用弹框 弹框可尝试用slot插槽封装 -->
           <section class="tablebox" v-loading="tableLoading" element-loading-text="拼命加载中">
             <el-table
@@ -473,13 +480,19 @@ export default {
       pageInput: 1,
       currentPage: 1,
       searchForm: {
-        // 搜索需要的表单数据
-        userName: "",
+        // 接受搜索表单的数据
+        makeMethod: "",
+        searchData: "",
         userType: "",
-        userId: "",
-        userPhone: "",
         beginTime: "",
-        endTime: ""
+        endTime: "",
+        currentPage: 0
+      },
+      searchData: "",
+      selectSearchForm: {
+        userName: "",
+        userId: "",
+        currentPage: 0
       },
       paginationForm: {},
       /*===== 6.0弹框初始化数据 ======*/
@@ -508,13 +521,28 @@ export default {
     searchTimeForm() {
       // 计算属性 真正传递的数据
       let date = this.searchForm.date;
+      if (this.searchData) {
+        switch (this.searchData / 1) {
+          case 0:
+            console.log("姓名");
+            this.selectSearchForm.userName = this.searchForm.searchData;
+            break;
+          case 1:
+            console.log("身份证号");
+            this.selectSearchForm.userId = this.searchForm.searchData;
+            break;
+        }
+      } else {
+        console.log("为空");
+        this.selectSearchForm.userName = "";
+        this.selectSearchForm.userId = "";
+      }
       let searchForm = {
         pageSize: this.pageSize,
         currentPage: 1,
-        name: this.searchForm.userName,
+        name: this.selectSearchForm.userName,
         fkRoleCode: this.searchForm.userType, // 只是给了一个code
-        idCard: this.searchForm.userId,
-        phone: this.searchForm.userPhone,
+        idCard: this.selectSearchForm.userId,
         beginTime: !this.searchForm.beginTime
           ? null
           : moment(this.searchForm.beginTime).format("YYYY-MM-DD"), //开始时间
@@ -548,6 +576,10 @@ export default {
     }
   },
   methods: {
+    selectCheck(val) {
+      console.log("val", val);
+      this.searchData = val;
+    },
     //添加时身份证验证
     verifyIdCradFun(){
       this.axios.post(userManageInterface.verifyidCard,{

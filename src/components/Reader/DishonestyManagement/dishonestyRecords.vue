@@ -9,7 +9,8 @@
             <span class="titleName">失信记录</span>
           </div>
           <!-- 2.0 表单填写 查询接口 状态：正在查询（loading组件） 查询成功 查询失败 -->
-          <section class="searchBox">
+          <section class="searchBox flexLayout">
+            <div class="buttonBox"></div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
               <el-form-item label="用户名:" >
                 <el-input v-model="searchForm.userName" clearable placeholder="请输入用户名" style="width: 200px"></el-input>
@@ -31,7 +32,7 @@
                 ></el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button size="15" type="primary" @click="onSubmit">查询</el-button>
+                <el-button size="15" type="primary" class="button_s" @click="onSubmit">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>

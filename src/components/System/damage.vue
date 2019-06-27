@@ -98,12 +98,12 @@
         </section>
       </div>
       <!--删除弹框-->
-      <div class="forbid">
-        <el-dialog title="删除" :visible.sync="centerDialogVisible" width="500px" center>
+      <div class="forbid collectionDelete">
+        <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
           <div class="dialogBody">
             是否删除当前记录?
           </div>
-          <div slot="footer">
+          <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
             <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
           </div>

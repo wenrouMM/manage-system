@@ -83,7 +83,7 @@
     <div class="dialogBox">
       <!-- 左侧弹框组 -->
       <!-- 库房添加/编辑 -->
-      <div class="storeRoomDia common">
+      <div class="storeRoomDia common stonerMessage">
         <el-dialog
           :title="dialogTitle[i]"
           :visible.sync="storeRoomDialog"
@@ -94,21 +94,24 @@
             <el-form-item class="spec" label="库房名称:" :label-width="changelabel" prop="storeName">
               <el-input v-model="changeStoreForm.storeName"></el-input>
             </el-form-item>
+            <el-form-item class="spec" label="楼　　号:" :label-width="changelabel" prop="storeNum">
+              <el-input-number v-model="changeStoreForm.storeNum "  :min="-5" :max="100"></el-input-number>
+            </el-form-item>
             <div class="row2">
-              <el-form-item prop="temperatureS" label="温度警报" :label-width="changelabel">
+              <el-form-item label="温度警报" :label-width="changelabel">
                 <el-input v-model="changeStoreForm.temperatureS"></el-input>
               </el-form-item>
               <div class="hr">-</div>
-              <el-form-item prop="temperatureE">
+              <el-form-item>
                 <el-input v-model="changeStoreForm.temperatureE"></el-input>
               </el-form-item>
             </div>
             <div class="row2">
-              <el-form-item prop="humidityS" label="湿度警报" :label-width="changelabel">
+              <el-form-item label="湿度警报" :label-width="changelabel">
                 <el-input v-model="changeStoreForm.humidityS"></el-input>
               </el-form-item>
               <div class="hr">-</div>
-              <el-form-item prop="humidityE">
+              <el-form-item>
                 <el-input v-model="changeStoreForm.humidityE"></el-input>
               </el-form-item>
             </div>
@@ -161,7 +164,7 @@
           </div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="subDelete()">确 定</span>
-            <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
+            <span class="dialogButton cancel" @click="deleteDialog = false">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -175,13 +178,21 @@
           center
         >
           <el-form ref="changeAreaForm" :inline="true" :rules="changeRules" :model="changeAreaForm">
-            <el-form-item label="楼层名称:" :label-width="changelabel" prop="storeName">
+            <el-form-item label="库房名称:" :label-width="changelabel" prop="storeName">
               <el-input :disabled="true" v-model="changeAreaForm.storeName"></el-input>
             </el-form-item>
             <el-form-item label="区名称:" :label-width="changelabel" prop="zoneName">
               <el-input v-model="changeAreaForm.zoneName"></el-input>
             </el-form-item>
-
+            <div class="row2">
+              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
+                <el-input v-model="changeAreaForm.floor"></el-input>
+              </el-form-item>
+              <span class="text2">层</span>
+              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
+                <el-input v-model="changeAreaForm.density"></el-input>
+              </el-form-item>
+            </div>
             <div class="row2">
               <el-form-item label="固定所在列:" :label-width="changelabel" prop="column">
                 <el-select v-model="changeAreaForm.column" placeholder="请选择" style="width: 214px">
@@ -189,7 +200,7 @@
                   <el-option label="右" value="right"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="该去区共有:" :label-width="changelabel" prop="columnNumber">
+              <el-form-item label="该区共有:" :label-width="changelabel" prop="columnNumber">
                 <el-input v-model="changeAreaForm.columnNumber"></el-input>
               </el-form-item>
               <span class="text">列</span>
@@ -212,19 +223,21 @@
               </el-form-item>
               <span class="text1">节</span>
             </div>
-
-            <el-form-item label="运行速度:" :label-width="changelabel" prop="speed">
-              <el-input v-model="changeAreaForm.speed"></el-input>
-            </el-form-item>
-            <el-form-item label="密集架IP:" :label-width="changelabel" prop="ip">
-              <el-input v-model="changeAreaForm.ip"></el-input>
-            </el-form-item>
+            <div class="row2">
+              <el-form-item label="运行速度:" :label-width="changelabel" prop="speed">
+                <el-input v-model="changeAreaForm.speed"></el-input>
+              </el-form-item>
+              <el-form-item label="密集架IP:" :label-width="changelabel" prop="ip">
+                <el-input v-model="changeAreaForm.ip"></el-input>
+              </el-form-item>
+            </div>
             <el-form-item label="HTTP端口:" :label-width="changelabel" prop="httpPort">
               <el-input v-model="changeAreaForm.httpPort"></el-input>
             </el-form-item>
             <el-form-item label="通信端口:" :label-width="changelabel" prop="comPort">
               <el-input v-model="changeAreaForm.comPort"></el-input>
             </el-form-item>
+
             <el-form-item class="dialogFooter">
               <el-button
                 class="buttonTrueColor"
@@ -379,6 +392,7 @@ export default {
       imgfiles: null,
       changeStoreForm: {
         storeName: "",
+        storeNum:0,
         temperatureS: "",
         temperatureE: "",
         humidityS: "",
@@ -391,6 +405,9 @@ export default {
       changeStoreRules: {
         storeName: [
           { required: true, message: "请输入库房名称", trigger: "blur" }
+        ],
+        storeNum:[
+          { required: true, message: "请输入楼号", trigger: "blur" }
         ],
         temperatureS: [
           { required: true, message: "请输入温度警告", trigger: "blur" }
@@ -491,6 +508,7 @@ export default {
     editStoreSub() {
       let obj = {
         storeName: this.changeStoreForm.storeName,
+        storeNum:this.changeStoreForm.storeNum,
         wddown: this.changeStoreForm.temperatureS,
         wdup: this.changeStoreForm.temperatureE,
         sddown: this.changeStoreForm.humidityS,
@@ -512,6 +530,7 @@ export default {
       let obj = {
         id: this.changeAreaForm.id,
         fkStoreName: this.changeAreaForm.storeName,
+        storeNum:this.changeAreaForm.storeNum,
         regionName: this.changeAreaForm.zoneName,
         gdlType: this.changeAreaForm.column,
         cols: this.changeAreaForm.columnNumber,
@@ -706,7 +725,7 @@ export default {
     },
     // 改变表单取消按钮
     resetForm(formName, dialogName) {
-      //this.$refs[formName].resetFields();
+      // /this.$refs[formName].resetFields();
       this[dialogName] = false;
     },
     // 绑定区按钮提交按钮

@@ -17,21 +17,40 @@
               <button class="add" @click="conductBtn">
                 <i class="addIcon el-icon-plus"></i>办卡
               </button>
-              <!-- <button class="add" @click="depositBtn">
-                <i class="addIcon el-icon-plus"></i>押金充值
-              </button>
-              <button class="add" @click="addCardBtn">
-                <i class="addIcon el-icon-tickets"></i>登记读者卡
-              </button>-->
             </div>
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-              <el-form-item label="卡号:">
-                <el-input v-model="searchForm.cardNumber" style="width: 200px" clearable placeholder="请输入卡号"></el-input>
+              <el-form-item label="筛选 :">
+                <el-select
+                  style="width: 150px"
+                  v-model="searchForm.makeMethod"
+                  placeholder="请选择"
+                  clearable
+                  @change="selectCheck(searchForm.makeMethod)"
+                >
+                  <el-option label="卡号" value="0"></el-option>
+                  <el-option label="用户名" value="1"></el-option>
+                  <el-option label="等级名称" value="2"></el-option>
+                  <el-option label="状态" value="3"></el-option>
+                </el-select>
+                <el-input v-model="searchForm.searchData" id="searchInput" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
+                <el-select clearable id="gradeName" v-model="searchForm.type" style="width: 250px;display: none" placeholder="请选择等级名称">
+                  <el-option
+                    v-for="(option,index) of optionsDataType"
+                    :key="index"
+                    :label="option.name"
+                    :value="option.code"
+                  ></el-option>
+                </el-select>
+                <el-select clearable id="state" v-model="searchForm.state" style="width: 250px;display: none" placeholder="请选择状态">
+                  <el-option
+                    v-for="(option,index) of optionsData"
+                    :key="index"
+                    :label="option.name"
+                    :value="option.code"
+                  ></el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item label="用户名:">
-                <el-input v-model="searchForm.name" style="width: 200px" clearable placeholder="请输入用户名"></el-input>
-              </el-form-item>
-              <el-form-item label="等级名称:">
+              <!--<el-form-item label="等级名称:">
                 <el-select clearable v-model="searchForm.type" style="width: 200px" placeholder="请选择等级名称">
                   <el-option
                     v-for="(option,index) of optionsDataType"
@@ -50,9 +69,9 @@
                     :value="option.code"
                   ></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item>-->
               <el-form-item>
-                <el-button size="15" type="primary" @click="searchBtn">查询</el-button>
+                <el-button size="15" type="primary" @click="searchBtn" class="button_s">搜索</el-button>
               </el-form-item>
             </el-form>
           </section>
@@ -227,10 +246,18 @@ export default {
       optionsData: [{ name: "在用", code: 0 }, { name: "挂失", code: 1 }],
       optionsDataType: [], // 类型下拉框
       searchForm: {
+        // 接受搜索表单的数据
+        makeMethod: "",
+        searchData: "",
+        currentPage: 0
+      },
+      searchData: "",
+      selectSearchForm: {
         cardNum: "",
         username: "",
         uerType: "",
-        state: ""
+        state: "",
+        currentPage: 0
       },
       /*====== 3.0添加 批量删除所需数据 ======*/
       Allseclet: [], // 全选
@@ -285,9 +312,25 @@ export default {
   },
   computed: {
     searchTimeForm() {
+      if (this.searchData) {
+        switch (this.searchData / 1) {
+          case 0:
+            console.log("卡号");
+            this.selectSearchForm.cardNumber = this.searchForm.searchData;
+            break;
+          case 1:
+            console.log("用户名");
+            this.selectSearchForm.name = this.searchForm.searchData;
+            break;
+        }
+      } else {
+        console.log("为空");
+        this.selectSearchForm.name = "";
+        this.selectSearchForm.cardNumber = "";
+      }
       let obj = {
-        name: this.searchForm.name,
-        cardNumber: this.searchForm.cardNumber,
+        name: this.selectSearchForm.name,
+        cardNumber: this.selectSearchForm.cardNumber,
         gradeCode: this.searchForm.type,
         state: this.searchForm.state,
         currentPage: 1,
@@ -328,7 +371,19 @@ export default {
       let obj = {};
     }
   },
+  mounted(){
+    $('#gradeName').fadeOut()
+    $('#state').fadeOut()
+  },
   methods: {
+    selectCheck(val) {
+      console.log("val", val);
+      this.searchData = val;
+      if(val==2){
+        $('#searchInput').fadeOut()
+        $('#gradeName').css('display','block')
+      }
+    },
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
       let page = Math.ceil(this.total / this.pageSize);

@@ -6,8 +6,8 @@
           <span class="titleName">报损历史记录</span>
         </div>
         <!-- 2.0表单填写 -->
-        <section class="searchBox">
-
+        <section class="searchBox flexLayout">
+          <div class="buttonBox"></div>
           <div class="searchFormBox">
             <el-form :inline="true" :model="searchForm">
               <el-form-item size="130" label="创建时间">

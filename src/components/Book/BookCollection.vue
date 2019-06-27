@@ -87,27 +87,14 @@
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop="code"
-              label="馆藏码"
-              width="400"
-              :show-overflow-tooltip="true"
-            ></el-table-column>
-            <el-table-column
-              align="center"
-              prop="isbn"
-              label="ISBN"
-              width="300"
-              :show-overflow-tooltip="true"
-            ></el-table-column>
-            <el-table-column
-              align="center"
-              prop="name"
-              label="书名"
-              width="300"
-              :show-overflow-tooltip="true"
-            ></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="clusterName" label="丛编题名" width="300" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{scope.row.clusterName == null || scope.row.clusterName=='' ?'---':scope.row.clusterName}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="lendState" label="在馆状态" width="200">
               <template slot-scope="scope">
                 <span v-if="scope.row.lendState==0">不在架</span>
@@ -244,7 +231,7 @@
                     </div>
                     <div class="flexLayout threeInput">
                       <el-form-item label=" 分类号 :">
-                        <el-input v-model="showData.searchNumber" :disabled="disabled"></el-input>
+                        <el-input v-model="showData.fkTypeCode" :disabled="disabled"></el-input>
                       </el-form-item>
                       <el-form-item label=" 版次 :">
                         <el-input v-model="showData.edition" :disabled="disabled"></el-input>
@@ -284,7 +271,7 @@
                       </el-form-item>
                     </div>
                     <el-form-item label=" 摘要 :" class="oneInputBig">
-                      <el-input v-model="showData. abstract" :disabled="disabled"></el-input>
+                      <el-input v-model="showData. introduction" :disabled="disabled"></el-input>
                     </el-form-item>
                   </div>
                 </div>
@@ -322,15 +309,15 @@
                 <!-- 弹框表单按钮  验证失效-->
                 <div class="flexLayout buttonDiv">
                   <el-form-item label=" 批次号 :">
-                    <el-input v-model="addForm.place"></el-input>
+                    <el-input v-model="addForm.batchNumber"></el-input>
                   </el-form-item>
                   <div class="buttonStyle" style="margin-top: 13px">
                     <el-button type="primary" @click="submitForm()">确定</el-button>
                     <el-button type="info" style="margin-left: 20px" @click="resetForm()">取消</el-button>
                   </div>
-                  <div style="padding: 20px 20px 10px 0px">
+                  <div style="padding: 23px 20px 10px 0px">
                     <a href="#">打印书标</a>
-                    <a href="#" style="margin-left: 20px;">打印设置...</a>
+                    <a href="#" style="margin-left: 20px;" @click="printSetupFun">打印设置...</a>
                   </div>
                 </div>
                 <div id="dataDiv">
@@ -340,34 +327,21 @@
                       empty-text="无数据"
                       style="width: 840px; text-align:center;"
                       :data="messageData"
-                      border
                       height="100"
                       :row-style="{height:'30px'}"
                     >
-                      <el-table-column
-                        align="center"
-                        prop="isbn"
-                        label="条码号"
-                        :show-overflow-tooltip="true"
-                      ></el-table-column>
-                      <el-table-column
-                        align="center"
-                        prop="name"
-                        label="索取号"
-                        :show-overflow-tooltip="true"
-                      ></el-table-column>
-                      <el-table-column
-                        align="center"
-                        prop="author"
-                        label="馆藏地"
-                        :show-overflow-tooltip="true"
-                      ></el-table-column>
-                      <el-table-column
-                        align="center"
-                        prop="fkPressName"
-                        label="状态"
-                        :show-overflow-tooltip="true"
-                      ></el-table-column>
+                      <el-table-column align="center" prop="code" label="条码号" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="callNumber" label="索取号" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="place" label="馆藏地" :show-overflow-tooltip="true"></el-table-column>
+                      <el-table-column align="center" prop="lendState" label="状态" :show-overflow-tooltip="true">
+                        <template slot-scope="scope">
+                          <span v-if="scope.row.lendState==0">不在架</span>
+                          <span v-else-if="scope.row.lendState==1">在架</span>
+                          <span v-else-if="scope.row.lendState==2">借出</span>
+                          <span v-else-if="scope.row.lendState==3">剔除</span>
+                          <span v-else-if="scope.row.lendState==4">损坏</span>
+                        </template>
+                      </el-table-column>
                     </el-table>
                     <!-- 4.0 分页 -->
                   </section>
@@ -410,9 +384,6 @@
           <div style="display: none" class="libraryAddressMessage">
             <div class="libraryAddressMessage_first">
               <p>馆藏地选择</p>
-              <span style="border-radius: 50%;border: 1px solid white;margin-right: 10px">
-                <i class="el-dialog__close el-icon el-icon-close"></i>
-              </span>
             </div>
             <div class="libraryAddressMessage_second">
               <el-form>
@@ -457,17 +428,139 @@
               </div>
             </div>
           </div>
+          <div style="display: none" class="printSetupMessage">
+            <div class="printSetupMessage_first">
+              书标打印设置
+            </div>
+            <div class="printSetupMessage_second">
+              <a href="#" style="margin-left: 420px">导入参数设置...</a>
+              <a href="#" style="margin-left: 10px">导出参数设置...</a>
+              <div class="printSetupMessageBorder">
+                <p class="fontBorder">打印机设置</p>
+                <el-form ref="form" :model="printSetupData">
+                  <el-form-item label="通讯端口 :" label-width="100px">
+                    <el-select v-model="printSetupData.port">
+                      <el-option label="USB口" value="USB口"></el-option>
+                      <el-option label="开口" value="开口"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="打印浓度 :" label-width="100px">
+                    <el-select v-model="printSetupData.potency">
+                      <el-option label="21" value="21"></el-option>
+                      <el-option label="22" value="22"></el-option>
+                      <el-option label="23" value="23"></el-option>
+                      <el-option label="24" value="24"></el-option>
+                      <el-option label="25" value="25"></el-option>
+                      <el-option label="26" value="26"></el-option>
+                      <el-option label="27" value="27"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label-width="30px">
+                    <input type="button" class="printSetupButton" value="打印偏移设置"/>
+                  </el-form-item>
+                  <el-form-item label-width="30px">
+                    <input type="button" class="printSetupButton" value="打印机复位"/>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div style="margin-top: 20px;display: flex;flex-direction: row">
+                <div class="printSetupMessageBorder" style="width: 300px;margin-right: 20px">
+                  <p class="fontBorder">条码信息</p>
+                  <el-form ref="form" :model="printSetupData">
+                    <el-form-item label="标题 :" label-width="90px">
+                      <el-select v-model="printSetupData.title">
+                        <el-option label="显示" value="显示"></el-option>
+                        <el-option label="不显示" value="不显示"></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <input type="text" style="width: 150px;margin-left: 50px">
+                    <span style="margin-left: 10px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    <el-form-item label="条码 :" label-width="90px" style="margin-top: 30px">
+                      <el-select v-model="printSetupData.code">
+                        <el-option label="Code39码" value="Code39码"></el-option>
+                        <el-option label="Code128码" value="Code128码"></el-option>
+                      </el-select>
+                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="printSetupMessageBorder" style="width: 300px">
+                  <p class="fontBorder">书标信息</p>
+                  <el-form ref="form" :model="printSetupData">
+                    <el-form-item label="第一行 :" label-width="90px">
+                      <el-select v-model="printSetupData.one">
+                        <el-option label="分类号" value="Code39码"></el-option>
+                        <el-option label="书次号" value="Code128码"></el-option>
+                        <el-option label="资料编号" value="Code128码"></el-option>
+                        <el-option label="书架号" value="Code128码"></el-option>
+                        <el-option label="出版年" value="Code128码"></el-option>
+                        <el-option label="馆藏地代码" value="Code128码"></el-option>
+                        <el-option label="无" value="Code128码"></el-option>
+                      </el-select>
+                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    </el-form-item>
+                    <el-form-item label="第二行 :" label-width="90px">
+                      <el-select v-model="printSetupData.two">
+                        <el-option label="分类号" value="Code39码"></el-option>
+                        <el-option label="书次号" value="Code128码"></el-option>
+                        <el-option label="资料编号" value="Code128码"></el-option>
+                        <el-option label="书架号" value="Code128码"></el-option>
+                        <el-option label="出版年" value="Code128码"></el-option>
+                        <el-option label="馆藏地代码" value="Code128码"></el-option>
+                        <el-option label="无" value="Code128码"></el-option>
+                      </el-select>
+                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    </el-form-item>
+                    <el-form-item label="第三行 :" label-width="90px">
+                      <el-select v-model="printSetupData.three">
+                        <el-option label="分类号" value="Code39码"></el-option>
+                        <el-option label="书次号" value="Code128码"></el-option>
+                        <el-option label="资料编号" value="Code128码"></el-option>
+                        <el-option label="书架号" value="Code128码"></el-option>
+                        <el-option label="出版年" value="Code128码"></el-option>
+                        <el-option label="馆藏地代码" value="Code128码"></el-option>
+                        <el-option label="无" value="Code128码"></el-option>
+                      </el-select>
+                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    </el-form-item>
+                    <el-form-item label="条码 :" label-width="90px">
+                      <el-select v-model="printSetupData.four">
+                        <el-option label="分类号" value="Code39码"></el-option>
+                        <el-option label="书次号" value="Code128码"></el-option>
+                        <el-option label="资料编号" value="Code128码"></el-option>
+                        <el-option label="书架号" value="Code128码"></el-option>
+                        <el-option label="出版年" value="Code128码"></el-option>
+                        <el-option label="馆藏地代码" value="Code128码"></el-option>
+                        <el-option label="无" value="Code128码"></el-option>
+                      </el-select>
+                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </div>
+              <el-form ref="form" :model="printSetupData" class="printModel">
+                <el-form-item label="自动打印方式 :" label-width="110px">
+                  <el-select v-model="printSetupData.printMode">
+                    <el-option label="新增典藏后自动打印" value="Code39码"></el-option>
+                    <el-option label="新增典藏后提示打印" value="Code128码"></el-option>
+                    <el-option label="不打印" value="Code128码"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="单个标签重复数 :" label-width="120px" class="numberInput" style="margin-left: 130px">
+                  <el-input-number v-model="printSetupData.num" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
+                </el-form-item>
+              </el-form>
+              <div style="width:250px;margin: 10px auto 0px">
+                <input type="button" value="确定" class="printSetupButStyle" style="background-color: rgba(0, 150, 255, 0.68);margin-right: 40px">
+                <input type="button" value="取消" class="printSetupButStyle" @click="printSetupCloseFun">
+              </div>
+            </div>
+          </div>
         </el-dialog>
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog
-          :title="Secondarytitle[j]"
-          :visible.sync="centerDialogVisible"
-          @close="closeForm"
-          :width="widthMessage"
-          center
-        >
+        <el-dialog :title="Secondarytitle[j]" :visible.sync="centerDialogVisible" :width="widthMessage" center>
           <div v-if="j==6">
             <div id="decideTable">
               <section class="tableBox bookInfo">
