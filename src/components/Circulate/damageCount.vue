@@ -249,6 +249,7 @@ export default {
     // 批量产生
     selectAllBtn(val) {
       this.dealArr = []
+      this.dealCash =0
       for(let item of val){
         this.dealArr.push(item.id)
         item.price=item.price==null|| item.price==''?0:item.price;

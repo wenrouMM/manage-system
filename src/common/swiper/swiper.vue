@@ -10,10 +10,15 @@
       :display="display"
       :border="0"
       >
-      <slide v-for="(item,index) of imgBox" :index="index" :key="index">
-        <img  :src="item.showImg">
+      <slide  :index="0" >
+        <img   :src="imgBox[0].showImg">
       </slide>
-      
+      <slide  :index="1" >
+        <img   :src="imgBox[1].showImg">
+      </slide>
+      <slide  :index="2" >
+        <img   :src="imgBox[2].showImg">
+      </slide>
       
     </carousel-3d>
   </div>

@@ -89,7 +89,7 @@
                 <el-table-column align="center" width="100" prop="renewCount" label="续借次数"></el-table-column>
                 <el-table-column align="center" fixed="right" width="100" label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="removeBtn(scope.row)" type="text" size="small">移除</el-button>
+                    <el-button @click="removeBtn(scope.$index,scope.row)" type="text" size="small">移除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -255,6 +255,7 @@ export default {
       console.log(val);
     },
     removeBtn(index,row){
+      console.log('此时移除的数组',index)
       this.oweTable.splice(index, 1);
     },
     // tab切换功能

@@ -12,15 +12,15 @@
           </div>
           <div class="bookList">
             <div class="textBox" v-for="(item,index) of bookArr" :key="index">
-              <P class="mb_8">
-                <span class="rankNumber">{{index+1}}</span>
-                <span class="bookName">《{{item.name}}》</span>
-                —— {{item.author}}
-                <span></span>
-              </P>
-              <p class="ml_24">{{item.press}}</p>
+              <span class="rankNumber">{{index+1}}.</span>
+              <div class="content">
+                <P>
+                  原作名:{{item.name}}
+                </P>
+                <p>作者:{{item.author}}</p>
+                <p>出版社:{{item.press}}</p>
+              </div>
             </div>
-            
           </div>
         </div>
       </div>
@@ -89,7 +89,6 @@
           <el-table-column align="center" prop="author" label="作者"></el-table-column>
           <el-table-column align="center" prop="press" label="出版社"></el-table-column>
           <el-table-column align="center" label="操作">
-            
             <template slot-scope="scope">
               <span class="red" @click="deleteBtn(scope.$index, scope.row)">删除</span>
             </template>
@@ -133,10 +132,10 @@ export default {
         lib: "",
         imgUrl: ""
       },
-      juge:false,
+      juge: false,
       imgDataUrl: "",
-      propArr:[],
-      defaultSrc: require("../../base/img/normal/Layer.png"),
+      propArr: [],
+      defaultSrc: require("../../base/img/swiper/default.jpg"),
       rules: {
         bookName: [
           { required: true, message: "书籍名称不得为空", trigger: "blur" }
@@ -170,7 +169,7 @@ export default {
       uploadurl: imgUpload,
       show: false,
       bookArr: [],
-      deleteObj:{}
+      deleteObj: {}
     };
   },
   computed: {
@@ -188,7 +187,7 @@ export default {
         press: this.upForm.lib,
         cover: this.upForm.imgUrl
       };
-      return obj
+      return obj;
     }
   },
   components: {
@@ -202,16 +201,15 @@ export default {
     uploadBtn() {
       this.show = true;
     },
-    deleteBtn(index,row) {
-     
-      this.deleteObj.id = row.id
-      this._delete()
+    deleteBtn(index, row) {
+      this.deleteObj.id = row.id;
+      this._delete();
     },
     onSubmit(formName) {
       console.log("数据提交", this.addTimeForm);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this._add()
+          this._add();
         } else {
           console.log("error submit!!");
           return false;
@@ -221,43 +219,42 @@ export default {
     /*--- API ---*/
     _search() {
       dataSearch().then(res => {
-        if(res.data.row.length ==3){
-          this.juge = true
-        } else{
-          this.juge = false
+        if (res.data.row.length == 3) {
+          this.juge = true;
+        } else {
+          this.juge = false;
         }
-        console.log('现在的数组长度',res.data.row.length)
-        this._toFilter(res.data.row)
+        console.log("现在的数组长度", res.data.row.length);
+        this._toFilter(res.data.row);
         console.log("测试接口", res);
       });
     },
     _add() {
-      dataAdd(this.addTimeForm).then(res=>{
+      dataAdd(this.addTimeForm).then(res => {
         console.log("测试添加", res);
-        this.clearObj(this.upForm)
-        this.imgDataUrl = ''
-        this.$refs.addForm.resetFields()
-        this._search()
-        this.$message.success(res.data.msg)
-      })
+        this.clearObj(this.upForm);
+        this.imgDataUrl = "";
+        this.$refs.addForm.resetFields();
+        this._search();
+        this.$message.success(res.data.msg);
+      });
     },
-    _delete(){
-      
-      dataDelete(this.deleteObj).then((res)=>{
-        this.$message.success(res.data.msg)
-        this._search()
-      })
+    _delete() {
+      dataDelete(this.deleteObj).then(res => {
+        this.$message.success(res.data.msg);
+        this._search();
+      });
     },
     /*--- 过滤函数 ---*/
-    _toFilter(arr){
-      let length = arr.length
-      let propArr = []
-      for(let item of arr){
-        let showImg = preImg +item.cover 
-        item.showImg = showImg
-        propArr.push(showImg)
+    _toFilter(arr) {
+      let length = arr.length;
+      let propArr = [];
+      for (let item of arr) {
+        let showImg = preImg + item.cover;
+        item.showImg = showImg;
+        propArr.push(showImg);
       }
-      
+
       /* if(length<3){
         while(length<3){
           propArr.push(this.defaultSrc)
@@ -265,13 +262,13 @@ export default {
         }
         
       } */
-      this.bookArr = arr
-      this.propArr = propArr  
-      console.log('添加之后',this.bookArr,this.propArr)
+      this.bookArr = arr;
+      this.propArr = propArr;
+      console.log("添加之后", this.bookArr, this.propArr);
     },
-    clearObj(obj){
-      for(let key in obj){
-        obj[key] = ''
+    clearObj(obj) {
+      for (let key in obj) {
+        obj[key] = "";
       }
     },
     /*--- 图片上传 ---*/
@@ -333,7 +330,7 @@ export default {
 .loop {
   width: 480px;
   height: 261px;
-  padding-top: 40px;
+  padding-top: 20px;
   border: solid 1px #d2dee6;
   display: flex;
   flex-direction: row;
@@ -343,20 +340,31 @@ export default {
   width: 250px;
 }
 .textBox {
-  font-size: 16px;
+  font-size: 13px;
+  line-height: 18px;
   color: #878787;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
 }
 .textBox .rankNumber {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
+
   display: inline-block;
   text-align: center;
-  line-height: 19px;
+  line-height: 18px;
   font-size: 16px;
-  background-color: #ff334b;
-  color: #ffffff;
+  
+  color: #0e0d0d;
+}
+.content p{
+  max-width: 180px;
+  overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+
+}
+.bookList{
+  
 }
 .ml_24 {
   margin-left: 24px;
@@ -381,14 +389,14 @@ export default {
   width: 168px;
   height: 208px;
 }
-/* .coverUpload:hover .clickImg{
+.coverUpload:hover .clickImg{
   display: block;
-} */
-.coverBox .imgBox{
+}
+.coverBox .imgBox {
   width: 168px;
   height: 208px;
 }
-.coverBox .imgBox img{
+.coverBox .imgBox img {
   width: 100%;
   height: 100%;
 }
@@ -399,7 +407,7 @@ export default {
   top: 0;
   background-color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
-  /* display: none; */
+  display: none;
 }
 .clickImg img {
   width: 168px;
@@ -427,13 +435,11 @@ export default {
   width: 75%;
   padding-top: 30px;
 }
-.red{
+.red {
   color: #ff334b;
   cursor: pointer;
 }
-.tab-imgBox{
-  
+.tab-imgBox {
 }
-
 </style>
 
