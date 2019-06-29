@@ -49,7 +49,7 @@
                   <p>读者姓名：{{userTable[0].cardFkReaderName}}</p>
                   <p>读者角色：{{userTable[0].cardGradeName}}</p>
                   <p>有效期限：{{userTable[0].cardExpireTime}}</p>
-                  <p>可借本数：{{userTable[0].stillBorrowNumber}}</p>
+                  <p>剩余可借：{{userTable[0].stillBorrowNumber}}本</p>
                 </section>
                 <section class="right">
                   <p>读者性别：{{userTable[0].sex ==1?'男':'女'}}</p>

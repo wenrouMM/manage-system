@@ -60,7 +60,7 @@
               </el-table-column>
               <el-table-column align="center" prop="borrowNumber" label="借书数量" width="150">
                 <template slot-scope="scope">
-                  <span>{{scope.row.borrowNumber}}次</span>
+                  <span>{{scope.row.borrowNumber}}本</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="deposit" label="押金金额" width="150">

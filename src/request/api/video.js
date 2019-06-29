@@ -7,12 +7,12 @@ var fileUrl = window.glob.fileUrl;
 
 /* 书籍推荐 */
 const recommendInt = {
-    search:`${url}authmodule/bookTbBigDataReferr/select`,
-    add:`${url}authmodule/bookTbBigDataReferr/add`,
-    delete:`${url}authmodule/bookTbBigDataReferr/delete`,
-    imgUpload:`${fileUrl}filemodule/uploadImg/addBookCover`
+    search:`${url}authmodule/videoTbBigDataReferr/select`,
+    add:`${url}authmodule/videoTbBigDataReferr/add`,
+    delete:`${url}authmodule/videoTbBigDataReferr/delete`,
+    videoUpload:`${fileUrl}filemodule/uploadVideo/addBigDataVideo`
 }
-export const imgUpload = `${fileUrl}filemodule/uploadImg/addBookCover`
+export const  videoUpload=`${fileUrl}filemodule/uploadVideo/addBigDataVideo`
 export const preImg=`${fileUrl}filemodule/showFile/getShow`
 export function dataSearch() {
    return axios.get(recommendInt.search).then((res) =>{
