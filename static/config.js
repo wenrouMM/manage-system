@@ -1,5 +1,5 @@
 
-var ip = 'http://192.168.2.163'
+var ip = 'http://192.168.2.31'
 window.glob = {
   url:ip + ':8088/',
   imgurl:ip +':8090/',

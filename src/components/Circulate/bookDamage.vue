@@ -88,8 +88,8 @@
                 <el-table-column align="center" width="100" prop="renewCount" label="续借次数"></el-table-column>
                 <el-table-column align="center" fixed="right" width="150" label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="damageBtn(scope.row,scope.index)" type="text" size="small">报损</el-button>
-                    <el-button @click="removeBtn(scope.row,scope.index)" type="text" size="small">移除</el-button>
+                    <el-button @click="damageBtn(scope.row,scope.$index)" type="text" size="small">报损</el-button>
+                    <el-button @click="removeBtn(scope.row,scope.$index)" type="text" size="small">移除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -398,6 +398,7 @@ export default {
       console.log("书籍价格", this.damageForm.bookCash);
     },
     removeBtn(row, index) {
+      console.log('选择的缩影',index)
       this.oweTable.splice(index, 1);
     },
     /*------ API区 ------*/

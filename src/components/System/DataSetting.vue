@@ -7,14 +7,34 @@
       <div class="loopBox">
         <p class="data-title">数据实时可视化书籍推荐页面</p>
         <div class="loop">
-          <div class="loopContent"></div>
+          <div class="loopContent">
+            <swiper :imgBox="bookArr"></swiper>
+          </div>
+          <div class="bookList">
+            <div class="textBox" v-for="(item,index) of bookArr" :key="index">
+              <span class="rankNumber">{{index+1}}.</span>
+              <div class="content">
+                <P>
+                  原作名:{{item.name}}
+                </P>
+                <p>作者:{{item.author}}</p>
+                <p>出版社:{{item.press}}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- 添加设置 -->
       <div class="inputBox">
-        <p class="data-title">管理员添加设置推荐书籍</p>
+        <p class="data-title">
+          管理员添加设置推荐书籍
+          <span class="data-tips">(提示：推荐书籍列表最多可上传3本 如列表已有3本 请先进行删除再上传)</span>
+        </p>
         <div class="coverBox clearFix">
           <div class="coverUpload">
-            <div class="imgBox"></div>
+            <div class="imgBox">
+              <img :src="showSrc">
+            </div>
             <div class="clickImg" @click="uploadBtn">
               <div class="iconBox">
                 <i class="el-icon-plus"></i>
@@ -29,6 +49,7 @@
               :model="upForm"
               :rules="rules"
               class="demo-form-inline"
+              ref="addForm"
             >
               <el-form-item label="书籍名称" prop="bookName">
                 <el-input v-model="upForm.bookName" placeholder="请输入书籍名称"></el-input>
@@ -40,7 +61,7 @@
                 <el-input v-model="upForm.lib" placeholder="请输入出版社名称"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">确定</el-button>
+                <el-button type="primary" :disabled="juge" @click="onSubmit('addForm')">确定</el-button>
               </el-form-item>
             </el-form>
           </section>
@@ -58,15 +79,16 @@
           :row-style="{height:'50px'}"
         >
           <el-table-column align="center" prop="name" label="书籍封面">
-            <template>
-              <div class="imgBox"></div>
+            <template slot-scope="scope">
+              <div class="tab-imgBox">
+                <img :src="scope.row.showImg">
+              </div>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="isbn" label="书籍名称"></el-table-column>
+          <el-table-column align="center" prop="name" label="书籍名称"></el-table-column>
           <el-table-column align="center" prop="author" label="作者"></el-table-column>
-          <el-table-column align="center" prop="author" label="出版社"></el-table-column>
+          <el-table-column align="center" prop="press" label="出版社"></el-table-column>
           <el-table-column align="center" label="操作">
-            <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
             <template slot-scope="scope">
               <span class="red" @click="deleteBtn(scope.$index, scope.row)">删除</span>
             </template>
@@ -93,16 +115,27 @@
 </template>
 <script>
 import myUpload from "vue-image-crop-upload";
+import swiper from "../../common/swiper/swiper";
+import {
+  imgUpload,
+  preImg,
+  dataSearch,
+  dataAdd,
+  dataDelete
+} from "@request/api/api.js";
 export default {
   data() {
     return {
       upForm: {
-        booKName: "",
+        bookName: "",
         author: "",
         lib: "",
         imgUrl: ""
       },
-      
+      juge: false,
+      imgDataUrl: "",
+      propArr: [],
+      defaultSrc: require("../../base/img/swiper/default.jpg"),
       rules: {
         bookName: [
           { required: true, message: "书籍名称不得为空", trigger: "blur" }
@@ -114,37 +147,130 @@ export default {
           { required: true, message: "出版社名称不得为空", trigger: "blur" }
         ]
       },
-      zh:{
-        hint: '点击，或拖动图片至此处',
-        loading: '正在上传……',
-        noSupported: '浏览器不支持该功能，请使用IE10以上或其他现在浏览器！',
-        success: '上传成功',
-        fail: '图片上传失败',
-        preview: '图片预览',
+      zh: {
+        hint: "点击，或拖动图片至此处",
+        loading: "正在上传……",
+        noSupported: "浏览器不支持该功能，请使用IE10以上或其他现在浏览器！",
+        success: "上传成功",
+        fail: "图片上传失败",
+        preview: "图片预览",
         btn: {
-            off: '取消',
-            close: '关闭',
-            back: '上一步',
-            save: '保存'
+          off: "取消",
+          close: "关闭",
+          back: "上一步",
+          save: "保存"
         },
         error: {
-            onlyImg: '仅限图片格式',
-            outOfSize: '单文件大小不能超过 ',
-            lowestPx: '图片最低像素为（宽*高）：'
+          onlyImg: "仅限图片格式",
+          outOfSize: "单文件大小不能超过 ",
+          lowestPx: "图片最低像素为（宽*高）："
         }
-    
       },
-      show:false,
-      bookArr: []
+      uploadurl: imgUpload,
+      show: false,
+      bookArr: [],
+      deleteObj: {}
     };
   },
+  computed: {
+    showSrc() {
+      if (this.imgDataUrl) {
+        return this.imgDataUrl;
+      } else {
+        return this.defaultSrc;
+      }
+    },
+    addTimeForm() {
+      let obj = {
+        name: this.upForm.bookName,
+        author: this.upForm.author,
+        press: this.upForm.lib,
+        cover: this.upForm.imgUrl
+      };
+      return obj;
+    }
+  },
   components: {
-    myUpload
+    myUpload,
+    swiper
+  },
+  created() {
+    this._search();
   },
   methods: {
-      uploadBtn(){
-          this.show=true;
-      },
+    uploadBtn() {
+      this.show = true;
+    },
+    deleteBtn(index, row) {
+      this.deleteObj.id = row.id;
+      this._delete();
+    },
+    onSubmit(formName) {
+      console.log("数据提交", this.addTimeForm);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this._add();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    /*--- API ---*/
+    _search() {
+      dataSearch().then(res => {
+        if (res.data.row.length == 3) {
+          this.juge = true;
+        } else {
+          this.juge = false;
+        }
+        console.log("现在的数组长度", res.data.row.length);
+        this._toFilter(res.data.row);
+        console.log("测试接口", res);
+      });
+    },
+    _add() {
+      dataAdd(this.addTimeForm).then(res => {
+        console.log("测试添加", res);
+        this.clearObj(this.upForm);
+        this.imgDataUrl = "";
+        this.$refs.addForm.resetFields();
+        this._search();
+        this.$message.success(res.data.msg);
+      });
+    },
+    _delete() {
+      dataDelete(this.deleteObj).then(res => {
+        this.$message.success(res.data.msg);
+        this._search();
+      });
+    },
+    /*--- 过滤函数 ---*/
+    _toFilter(arr) {
+      let length = arr.length;
+      let propArr = [];
+      for (let item of arr) {
+        let showImg = preImg + item.cover;
+        item.showImg = showImg;
+        propArr.push(showImg);
+      }
+
+      /* if(length<3){
+        while(length<3){
+          propArr.push(this.defaultSrc)
+          length++
+        }
+        
+      } */
+      this.bookArr = arr;
+      this.propArr = propArr;
+      console.log("添加之后", this.bookArr, this.propArr);
+    },
+    clearObj(obj) {
+      for (let key in obj) {
+        obj[key] = "";
+      }
+    },
     /*--- 图片上传 ---*/
     cropSuccess(imgDataUrl, field) {
       console.log("-------- crop success --------");
@@ -156,8 +282,9 @@ export default {
       console.log("-------- upload success --------");
       console.log(jsonData);
       console.log("图片地址", jsonData.row);
-      let imgFile = "";
-      imgFile = jsonData.row;
+      /* let imgFile = "";
+      imgFile = jsonData.row; */
+      this.upForm.imgUrl = jsonData.row;
       console.log("field: " + field);
       this.imgDataUrl = this.cutimgUrl;
     },
@@ -172,6 +299,7 @@ export default {
 <style scoped>
 #dataSetting {
   padding: 0 30px;
+  padding-bottom: 30px;
   background-color: #ffffff;
 }
 .pagetitle {
@@ -190,16 +318,61 @@ export default {
 
   margin-bottom: 6px;
 }
+.data-tips {
+  color: #878787;
+}
 .picBack {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+/*--- 回显 ---*/
 .loop {
   width: 480px;
   height: 261px;
+  padding-top: 20px;
   border: solid 1px #d2dee6;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
 }
+.loopContent {
+  width: 250px;
+}
+.textBox {
+  font-size: 13px;
+  line-height: 18px;
+  color: #878787;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+}
+.textBox .rankNumber {
+
+  display: inline-block;
+  text-align: center;
+  line-height: 18px;
+  font-size: 16px;
+  
+  color: #0e0d0d;
+}
+.content p{
+  max-width: 180px;
+  overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+
+}
+.bookList{
+  
+}
+.ml_24 {
+  margin-left: 24px;
+}
+.mb_8 {
+  margin-bottom: 8px;
+}
+/*--- 设置图片  ---*/
 .coverBox {
   width: 1030px;
   height: 261px;
@@ -216,13 +389,29 @@ export default {
   width: 168px;
   height: 208px;
 }
+.coverUpload:hover .clickImg{
+  display: block;
+}
+.coverBox .imgBox {
+  width: 168px;
+  height: 208px;
+}
+.coverBox .imgBox img {
+  width: 100%;
+  height: 100%;
+}
 .clickImg {
   width: 168px;
   height: 208px;
   position: absolute;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
+  display: none;
+}
+.clickImg img {
+  width: 168px;
+  height: 208px;
 }
 .clickImg .iconBox {
   font-size: 35px;
@@ -245,6 +434,12 @@ export default {
 .uploadForm {
   width: 75%;
   padding-top: 30px;
+}
+.red {
+  color: #ff334b;
+  cursor: pointer;
+}
+.tab-imgBox {
 }
 </style>
 
