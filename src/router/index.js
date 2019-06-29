@@ -89,9 +89,18 @@ export default new Router({
         {
           path:'/recommandBook',
           meta:{
-            title:'图书推荐'
+            title:'图书推荐',
+            Mode:'6',
           },
           component:() => import('../components/System/DataSetting.vue')
+        },
+        {
+          path:'/recommandVideo',
+          meta:{
+            title:'馆内视频设置',
+            Mode:'6',
+          },
+          component:() => import('../components/System/videoSetting.vue')
         },
         // 1.0 采编管理
         {
