@@ -11,6 +11,9 @@
             <button class="add" @click="rechargeBtn">
               <i class="addIcon el-icon-plus"></i>新增
             </button>
+            <button class="delete" @click="batchDelete(tableChecked)">
+              <i class="deleteIcon el-icon-delete"></i>删除
+            </button>
           </div>
         </section>
         <!-- 3.0表格数据 -->
@@ -21,7 +24,9 @@
             style="width: 1540px; text-align:center;"
             :data="tableData"
             :row-style="{height:'60px'}"
+            @selection-change="handleSelectionChange"
           >
+            <el-table-column align="center" type="selection" width="100" fixed="left"></el-table-column>
             <el-table-column align="center" prop="holidayName" label="假期名称"></el-table-column>
             <el-table-column align="center" prop="holidaySource" label="发布者"></el-table-column>
             <el-table-column align="center" prop="startTime" label="开始时间"></el-table-column>
@@ -129,6 +134,17 @@
           </el-form>
         </el-dialog>
       </div>
+      <div class="forbid collectionDelete">
+        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="400px" center>
+          <div class="dialogBody">
+            是否{{Dialogtitle[i]}}?
+          </div>
+          <div style="margin-bottom: 30px">
+            <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
+        </el-dialog>
+      </div>
     </el-container>
   </div>
 </template>
@@ -141,8 +157,10 @@
     data() {
       return {
         /*====== 2.0表单搜索区域 ======*/
+        tableChecked: [], // 全选绑定的数据
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
-        Dialogtitle: ["修改", "新增"],
+        centerDialogVisible:false,
+        Dialogtitle: ["修改", "新增","删除"],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据
@@ -257,6 +275,42 @@
       }
     },
     methods: {
+      //批量选择
+      handleSelectionChange(val) {
+        console.log("全选按钮之后的数据", val);
+        this.tableChecked = val;
+      },
+      batchDelete() {
+        // 批量删除
+        if(this.tableChecked.length){
+          this.i=2
+          this.centerDialogVisible=true
+        } else {
+          this.$message.error('请先选择被删除的数据')
+        }
+      },
+      //删除弹窗确定按钮
+      submitDialog(){
+        var deleteParam = [];
+        for (var item of this.tableChecked) {
+          console.log(item.id, item.roleCode);
+          deleteParam.push({ id: item.id, code: item.roleCode });
+        }
+        this.axios.post(vacation.delete,{id:deleteParam}).then((res)=>{
+          console.log('删除之后返回的数据',res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
+      },
       //修改弹窗
       EditBtn (index,row) {
         this.i=0;
@@ -454,10 +508,17 @@
     transition: 0.1s;
     font-weight: 500;
   }
+  .buttonBox .delete {
+    background: rgba(255, 92, 60, 1);
+    border-radius: 10px;
+  }
+  .buttonBox .delete .deleteIcon {
+    margin-right: 6px;
+  }
   .buttonBox .add {
     background: rgba(255, 146, 49, 1);
     border-radius: 10px;
-    margin-right: 30px;
+    margin-right: 10px;
   }
   .buttonBox .add .addIcon {
     margin-right: 6px;

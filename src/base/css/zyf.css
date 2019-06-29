@@ -150,6 +150,9 @@
 #collectionAdd #haveBottomBorderAdd .el-form-item__error{
   display: none;
 }
+#collectionAdd .buttonDiv{
+  margin: 20px auto 10px;
+}
 #collectionAdd .buttonDiv .el-form-item{
   margin-bottom: 0px;
   margin-top: 10px;

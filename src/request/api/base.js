@@ -391,6 +391,7 @@ export const vacation={
   select:`${url}authmodule/holiday/select`,
   add:`${url}authmodule/holiday/add`,
   edit:`${url}authmodule/holiday/edit`,
+  delete:`${url}authmodule/holiday/delete`,
 }
 
 //充值设置
@@ -415,6 +416,8 @@ export const collection ={
   harmSelect:`${url}bookcollectionmodule/collection/getDamage`,
   damage:`${url}bookcollectionmodule/collection/bookDamage`,
   selectFromCataID:`${url}bookcollectionmodule/collection/selectFromCataID`,
+  selectCataOrderByID:`${url}bookcollectionmodule/collection/selectCataOrderByID`,
+  getAllOrder:`${url}bookcollectionmodule/collection/getAllOrder`,
 }
 
 //采购管理

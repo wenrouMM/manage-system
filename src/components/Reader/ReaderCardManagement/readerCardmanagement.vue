@@ -675,7 +675,7 @@ export default {
     loseApi(data) {
       axios.put(rechargeInt.lose, data).then(res => {
         if (res.data.state === true) {
-          this.$message.success("执行成功");
+          this.$message.success(res.data.msg);
           this.searchTable();
         } else {
           this.$message.error(res.data.msg);
@@ -685,7 +685,7 @@ export default {
     cancelLoseApi(data) {
       axios.put(rechargeInt.cancelLost, data).then(res => {
         if (res.data.state === true) {
-          this.$message.success("执行成功");
+          this.$message.success(res.data.msg);
           this.searchTable();
         } else {
           this.$message.error(res.data.msg);
