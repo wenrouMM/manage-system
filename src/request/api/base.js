@@ -418,6 +418,7 @@ export const collection ={
   selectFromCataID:`${url}bookcollectionmodule/collection/selectFromCataID`,
   selectCataOrderByID:`${url}bookcollectionmodule/collection/selectCataOrderByID`,
   getAllOrder:`${url}bookcollectionmodule/collection/getAllOrder`,
+  getLibName:`${url}bookcollectionmodule/collection/getLibName`,
 }
 
 //采购管理
@@ -464,8 +465,13 @@ export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLo
 export const editHeadPortrait=url+'authmodule/personalCore/editPersonalCenterHeade';
 export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow';
 
-
 export const deriveInt = {
   select:`${url}catamodule/editing/cataTbBookInfo/getCountByConditon`,
   derive:`${url}catamodule/editing/cataTbBookInfo/getFileUrlByConditon`
+}
+//馆内公告设置
+export const libNotice = {
+  select:`${url}authmodule/noticeTbBigDataReferr/select`,
+  delete:`${url}authmodule/noticeTbBigDataReferr/delete`,
+  add:`${url}authmodule/noticeTbBigDataReferr/add`,
 }

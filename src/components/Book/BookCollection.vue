@@ -353,7 +353,7 @@
               <p>&nbsp;&nbsp;&nbsp;&nbsp;当前对应的分类号是"g"的最大种次顺序号如下所显示，请为其设置一个新的最大种次号，以便和分类号一起组成图书排架号:</p>
               <el-form>
                 <el-form-item label=" 起始种次号 :" prop="callNumber" label-width="90px">
-                  <el-input v-model="showData.orderNum"></el-input>
+                  <el-input v-model="showData.orderNum+1"></el-input>
                 </el-form-item>
               </el-form>
               <p style="margin-left: 20px">此类图书的书架位置属性实例:</p>
@@ -382,8 +382,8 @@
             </div>
             <div class="libraryAddressMessage_second">
               <el-form>
-                <el-form-item label=" 按馆藏地代码或名称筛选 :" prop="callNumber" label-width="200px">
-                  <el-input v-model="addForm.callNumber"></el-input>
+                <el-form-item label=" 按馆藏地名称筛选 :" prop="callNumber" label-width="140px">
+                  <el-input v-model="libraryName" @input="searchLibrary()"></el-input>
                 </el-form-item>
               </el-form>
               <section class="tableBox bookInfo">
@@ -393,12 +393,11 @@
                   style="width: 100%; text-align:center;"
                   :data="libraryData"
                   height="200"
-                  border
                   :row-style="{height:'30px'}"
                 >
                   <el-table-column
                     align="center"
-                    prop="isbn"
+                    prop="code"
                     label="馆藏地代码"
                     :show-overflow-tooltip="true"
                   ></el-table-column>
@@ -410,15 +409,24 @@
                   ></el-table-column>
                   <el-table-column
                     align="center"
-                    prop="author"
+                    prop="remark"
                     label="备注信息"
                     :show-overflow-tooltip="true"
-                  ></el-table-column>
+                  >
+                    <template slot-scope="scope">
+                      <span>{{scope.row.remark == null || scope.row.remark=='' ?'---':scope.row.remark}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column align="center" label="操作" width="150">
+                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                    <template slot-scope="scope">
+                      <span class="blue" @click="libraryOn(scope.$index, scope.row)">选中</span>
+                    </template>
+                  </el-table-column>
                 </el-table>
                 <!-- 4.0 分页 -->
               </section>
-              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 470px">
-                <el-button type="primary" @click="libraryAddressDefine()" style="width: 130px">确定</el-button>
+              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 650px">
                 <el-button type="info" @click="libraryAddressClose()" style="width: 130px">取消</el-button>
               </div>
             </div>
@@ -617,6 +625,7 @@ export default {
   data() {
     return {
       /*====== 2.0表单搜索区域 ======*/
+      libraryName:"",
       duplicateDisable:true,
       messageData: [],
       libraryData: [],
@@ -859,6 +868,17 @@ export default {
     }
   },
   methods: {
+    //选中馆藏地
+    libraryOn(row,index){
+      console.log('选中的馆藏地',row,index)
+      $(".libraryAddressMessage").fadeOut();
+      this.addForm.place=index.name
+    },
+    searchLibrary(){
+      var libraryName={name:this.libraryName}
+      this.libraryDataFun(libraryName)
+    },
+    //是否有复本
     duplicateFun(val){
       console.log(val)
       if(val==true){
@@ -902,10 +922,22 @@ export default {
     //馆藏地弹窗
     libraryAddressFun() {
       $(".libraryAddressMessage").fadeIn();
+      this.libraryDataFun()
+
+    },
+    libraryDataFun(value){
+      this.axios.get(collection.getLibName,{params:value}).then((res)=>{
+        console.log('获取馆藏地返回的数据',res)
+        if(res.data.state==true){
+          this.libraryData=res.data.row
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
     },
     //馆藏地弹窗确定按钮
     libraryAddressDefine() {
-      alert("暂无效果");
+
     },
     //馆藏地弹窗取消按钮
     libraryAddressClose() {
@@ -928,11 +960,6 @@ export default {
           this.messageData=res.data.row
         }
       })
-      this.axios.get(collection.getAllOrder,{params:{id:val}}).then((res)=>{
-        if(res.data.state==true){
-          this.addForm.code=res.data.row
-        }
-      })
       this.axios.get(collection.selectCataOrderByID,{params:{id:val}}).then((res)=>{
         console.log('获取累加值返回的数据',res)
         if(res.data.state==true){
@@ -940,7 +967,6 @@ export default {
           this.disabled = true;
           this.showData.volumeNum=res.data.row.volumeNum
           this.showData.orderNum=res.data.row.orderNum
-          this.addForm.code=parseInt(this.showData.orderNum)+1
           console.log('卷册号为:',this.showData.volumeNum,"种次号为:",this.showData.orderNum)
           var orderNum=this.showData.orderNum+1
           var orderNum1=this.showData.orderNum+2
@@ -961,6 +987,12 @@ export default {
             this.addForm.callNumber3=this.showData.fkTypeCode+"/"+orderNum3
             console.log('this.showData.orderNum+1',this.showData.orderNum+1)
           }
+        }
+      })
+      this.axios.get(collection.getAllOrder,{params:{id:val}}).then((res)=>{
+        console.log("获取馆藏吗",res)
+        if(res.data.state==true){
+          this.addForm.code=res.data.row
         }
       })
     },

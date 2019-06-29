@@ -544,7 +544,7 @@
   padding: 10px 5px;
 }
 #collectionMessage .libraryAddressMessage .libraryAddressMessage_second .el-input .el-input__inner{
-  width: 580px;
+  width: 640px;
 }
 .el-button{
   border-radius: 10px;
@@ -710,4 +710,7 @@
   box-sizing: border-box;
   text-align: center;
   background-color: darkgray
+}
+.noticeForm .el-form-item__label {
+  color: #0096ffd6;
 }

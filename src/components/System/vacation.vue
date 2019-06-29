@@ -296,13 +296,14 @@
           console.log(item.id, item.roleCode);
           deleteParam.push({ id: item.id, code: item.roleCode });
         }
-        this.axios.post(vacation.delete,{id:deleteParam}).then((res)=>{
+        this.axios.post(vacation.delete,deleteParam).then((res)=>{
           console.log('删除之后返回的数据',res)
           if(res.data.state==true){
             this.$message({
               message: res.data.msg,
               type: "success"
             });
+            this.centerDialogVisible=false
           }else{
             this.$message({
               message: res.data.msg,
