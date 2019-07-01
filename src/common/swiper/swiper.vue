@@ -10,14 +10,14 @@
       :display="display"
       :border="0"
       >
-      <slide  :index="0" >
-        <img   :src="imgBox[0].showImg">
+      <slide   :index="0" >
+        <img   :src="imgBox[0]">
       </slide>
       <slide  :index="1" >
-        <img   :src="imgBox[1].showImg">
+        <img   :src="imgBox[1]">
       </slide>
       <slide  :index="2" >
-        <img   :src="imgBox[2].showImg">
+        <img   :src="imgBox[2]">
       </slide>
 
     </carousel-3d>

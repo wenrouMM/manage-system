@@ -6,34 +6,42 @@
     <div class="videoBox">
       <section class="uploadBox">
         <div class="nomal-Box">
-          <el-upload
-            ref="upload"
-            class="upload-demo"
-            drag
-            :action="fileUrl"
-            :file-list="fileList"
-            :limit="1"
-            :before-upload="beforefileUpload"
-            :on-remove="fileRemove"
-            :before-remove="beforeRemove"
-            :on-exceed="handleExceed"
-            :on-success="fileSuccess"
-            :on-error="fileError"
-          >
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">
-              将视频拖到此处，或
-              <em>点击上传</em>
+          <div class="upload-demo" style="width:360px;">
+            <div class="inputBox">
+              <el-form :model="addForm" :rules="rules" ref="addForm" label-width="60px">
+                <el-form-item label="标题" prop="title">
+                  <el-input placeholder="标题不得超过10个字" v-model="addForm.title"></el-input>
+                </el-form-item>
+              </el-form>
             </div>
-            <div slot="tip" class="el-upload__tip">
-              <p>提示:只能上传("rmvb","wmv","avi","mp4","3gp")等格式的视频文件</p>
-              <p>(视频大小限500M）</p>
-              <div class="textCenter firstButton">
-                <el-button type="primary">上传</el-button>
-                <el-button type="primary">取消</el-button>
+            <el-upload
+              ref="upload"
+              drag
+              :action="fileUrl"
+              :file-list="fileList"
+              :limit="1"
+              :before-upload="beforefileUpload"
+              :on-remove="fileRemove"
+              :before-remove="beforeRemove"
+              :on-exceed="handleExceed"
+              :on-success="fileSuccess"
+              :on-error="fileError"
+            >
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">
+                将视频拖到此处，或
+                <em>点击上传</em>
               </div>
+              <div slot="tip" class="el-upload__tip">
+                <p>提示:只能上传("rmvb","wmv","avi","mp4","3gp")等格式的视频文件</p>
+                <p>(视频大小限500M）</p>
+              </div>
+            </el-upload>
+            <div class="textCenter firstButton">
+              <el-button type="primary" @click="addBtn">上传</el-button>
+              <el-button type="info" @click="cancelBtn">取消</el-button>
             </div>
-          </el-upload>
+          </div>
         </div>
       </section>
       <section class="ListBox">
@@ -47,16 +55,41 @@
               :data="videoArr"
               :row-style="{height:'50px'}"
             >
-              <el-table-column align="center" prop="name" label="视频封面">
+              <el-table-column min-width="160px" align="center" prop="name" label="视频封面">
                 <template slot-scope="scope">
                   <div class="tab-imgBox">
-                    <img :src="scope.row.showImg">
+                    <video controls :src="scope.row.showFile" width="160" height="120"></video>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="name" label="标题/时长"></el-table-column>
-              <el-table-column align="center" prop="author" label="上传者"></el-table-column>
-              <el-table-column align="center" prop="press" label="时间/大小"></el-table-column>
+              <el-table-column
+                :show-overflow-tooltip="true"
+                align="left"
+                prop="title"
+                label="标题/时长"
+              >
+                <template slot-scope="scope">
+                  <div style="text-align:left" class="box">
+                    <p>{{scope.row.title}}</p>
+                    <p>{{scope.row.videoTime}}</p>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="fkHandleModeName" label="上传者"></el-table-column>
+              <el-table-column
+                min-width="160"
+                :show-overflow-tooltip="true"
+                align="center"
+                prop="createTime"
+                label="时间/大小"
+              >
+                <template slot-scope="scope">
+                  <div class>
+                    <p>{{scope.row.createTime}}</p>
+                    <p>{{scope.row.videoSize}}M</p>
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column align="center" label="操作">
                 <template slot-scope="scope">
                   <span class="red" @click="deleteBtn(scope.$index, scope.row)">删除</span>
@@ -75,31 +108,64 @@ import {
   videoUpload,
   dataSearch,
   dataAdd,
-  dataDelete
+  dataDelete,
+  preFile
 } from "@request/api/video.js";
 export default {
   data() {
     return {
       fileUrl: videoUpload,
+
       fileList: [], // 文件列表
       backUrl: "", // 返回的视频链接
       videoArr: [], // video数组
-      jude:false, // 判定是否禁用
-      
+      jude: false, // 判定是否禁用
+      addForm: {
+        title: "",
+        backUrl: ""
+      },
+      rules: {
+        title: [{ required: true, message: "标题不得为空", trigger: "blur" }]
+      },
+      videoSrc: "",
+      videoSize: "",
+      videoTime: "",
+      timeFile: null, // 文件转换
+      deleteObj: {}
     };
   },
-  computed:{
-      addTimeForm(){
-          let obj={
-              path:''
-          }
-      }
+  computed: {
+    addTimeForm() {
+      let obj = {
+        path: this.addForm.backUrl,
+        title: this.addForm.title,
+        videoTime: this.videoTime,
+        videoSize: this.videoSize
+      };
+      return obj;
+    }
   },
-  created(){
-      this. _search()
+  created() {
+    this._search();
   },
   methods: {
     /*--- ---*/
+    cancelBtn() {
+
+      this.$refs.addForm.resetFields();
+      this.fileList = []
+    },
+    addBtn() {
+      this.$refs.addForm.validate(valid => {
+        if (valid) {
+          this._add();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+      console.log("上传之前的数据", this.addTimeForm);
+    },
     deleteBtn(index, row) {
       this.deleteObj.id = row.id;
       this._delete();
@@ -107,13 +173,13 @@ export default {
     /*--- API ---*/
     _search() {
       dataSearch().then(res => {
-        if (res.data.row == null||res.data.row.length == 6) {
+        if (res.data.row == null || res.data.row.length == 6) {
           this.juge = true;
         } else {
           this.juge = false;
         }
-        
-        
+        this.videoArr = this._toFilter(res.data.row);
+
         console.log("测试接口", res);
       });
     },
@@ -121,7 +187,7 @@ export default {
       dataAdd(this.addTimeForm).then(res => {
         console.log("测试添加", res);
         this.clearObj(this.upForm);
-        this.imgDataUrl = "";
+        this.fileList = [];
         this.$refs.addForm.resetFields();
         this._search();
         this.$message.success(res.data.msg);
@@ -133,13 +199,64 @@ export default {
         this._search();
       });
     },
+    /*--- 过滤函数 ---*/
+    clearObj(obj) {
+      for (let key in obj) {
+        obj[key] = "";
+      }
+    },
+    _toFilter(arr) {
+      let length = arr.length;
+
+      for (let item of arr) {
+        let showFile = preFile + item.path;
+        item.showFile = showFile;
+        // item.createTime = item.createTime.slice(0,10)
+      }
+      return arr;
+      console.log("添加之后", this.videoArr);
+    },
+    /*--- 功能函数 ---*/
+    toNumebr(value, num) {
+      let str = String(value);
+      let length = str.length;
+      while (length < num) {
+        str = "0" + str;
+        length++;
+      }
+      return str;
+    },
     /*--- 上传视频文件设置 ---*/
     beforefileUpload(file) {
+      let that = this;
       const fileExe = file.name.replace(/.+\./, ""); // 正则匹配 有丶慌
 
       const isExcel = file.type;
+      this.videoSize = (file.size / 1024 / 1000).toFixed(2); // 获取文件大小
+      console.log(this.videoSize, file.size);
+      // 获取视频时长
+      var video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = function() {
+        window.URL.revokeObjectURL(video.src);
+        var duration = video.duration;
+        var curhours = that.toNumebr(parseInt(duration / 3600), 2);
+        var curminutes = that.toNumebr(
+          parseInt((duration - curhours * 3600) / 60),
+          2
+        );
+        var curseconds = that.toNumebr(parseInt(duration % 60), 2);
+        that.videoTime = curhours + ":" + curminutes + ":" + curseconds;
+        console.log("看看之后的video对象", that.videoTime, curseconds);
+      };
+
+      video.src = URL.createObjectURL(file);
+
       console.log("文件类型", isExcel);
-      if (["rmvb", "wmv","avi","mp4","3gp"].indexOf(fileExe.toLowerCase()) === -1) {
+      if (
+        ["rmvb", "wmv", "avi", "mp4", "3gp"].indexOf(fileExe.toLowerCase()) ===
+        -1
+      ) {
         this.$message({
           type: "warning",
           message: "请上传后缀名rmvb,wmv,avi,mp4,3gp,的文件！"
@@ -167,7 +284,10 @@ export default {
       if (res.state == true) {
         console.log("正确回复的是", res, fileList);
         this.fileList = fileList;
-        this.backUrl = res.row;
+        this.addForm.backUrl = res.row;
+        /*转换信息 */
+        this.timeFile = this.fileList[0].raw;
+
         console.log("绑定的数据列表", this.fileList);
       } else {
         this.$message.error(res.msg);
@@ -182,6 +302,7 @@ export default {
     },
     fileChange(file, fileList) {
       this.fileList = fileList.slice(-1);
+      this.addForm.backUrl = "";
       console.log("超过三个的列表", this.fileList);
     }
   }
@@ -227,12 +348,18 @@ export default {
   transform: translate(-50%, -50%);
 }
 /*--- 视频上传列表 ---*/
-.ListBox{
-    max-width: 820px;
-    width: 100%;
+.ListBox {
+  max-width: 820px;
+  width: 100%;
 }
-.recomandList{
-    
+.recomandList {
+}
+.red {
+  cursor: pointer;
+  color: #ff3535;
+}
+.firstButton {
+  margin-top: 30px;
 }
 </style>
 
