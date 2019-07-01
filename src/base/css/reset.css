@@ -96,6 +96,7 @@ textarea {
 	border-radius: 50%;
 	border: 2px solid #fff;
   top: 15px;
+  line-height: 25px;
 }
 .el-dialog__headerbtn .el-dialog__close{
 	color: #fff;

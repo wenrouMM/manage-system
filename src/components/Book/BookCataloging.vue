@@ -452,6 +452,7 @@
         selectSearchForm: {
           name: "", //书名
           isbn: "", //isbn
+          clusterName:"",//丛编题名
           currentPage: 0
         },
       };
@@ -468,15 +469,20 @@
               console.log("备注信息");
               this.selectSearchForm.isbn = this.searchForm.searchData;
               break;
+            case 2:
+              console.log('丛编题名');
+              this.selectSearchForm.clusterName = this.searchForm.searchData
           }
         } else {
           console.log("为空");
           this.selectSearchForm.name = "";
           this.selectSearchForm.isbn = "";
+          this.selectSearchForm.clusterName = ""
         }
         let newData={
           isbn:this.selectSearchForm.isbn,
           name:this.selectSearchForm.name,
+          clusterName:this.selectSearchForm.clusterName,
           pageSize: this.pageSize,
           currentPage: 1,
         }

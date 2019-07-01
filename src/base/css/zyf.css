@@ -58,16 +58,34 @@
   line-height: 25px;
   background-color: #dcdfe64d;
 }
-#collectionAdd .countInput .el-input-number.is-controls-right .el-input__inner {
-  padding-left: 5px;
-  padding-right: 27px;
-
-}
 #collectionAdd .countInput .el-input-number {
   position: relative;
   display: inline-block;
   width: 70px;
   line-height: 38px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input__inner {
+  padding-left: 12px;
+  padding-right: 39px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__increase {
+  height: 11px;
+  line-height: 11px;
+  width: 25px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__decrease {
+  height: 11px;
+  line-height: 11px;
+  width: 25px;
+}
+#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease {
+  right: 1px;
+  bottom: 7px;
+  top: auto;
+  left: auto;
+  border-right: none;
+  border-left: 1px solid #DCDFE6;
+  border-radius: 0 0 4px;
 }
 #collectionAdd .countInput .el-checkbox {
   color: #606266;
@@ -78,7 +96,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  margin-right: 5px;
+  margin-right: 0px;
 }
 #collectionAdd #formDiv .el-button {
   height: 46px;
@@ -87,31 +105,6 @@
 #collectionAdd #formDiv .el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
   display: inline-block;
   margin: -12px -29px;
-}
-#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease, .el-input-number.is-controls-right .el-input-number__increase {
-  height: 11px;
-  line-height: 11px;
-}
-#collectionAdd .countInput .el-input-number.is-controls-right .el-input-number__decrease {
-  right: 1px;
-  bottom: 8px;
-  top: auto;
-  left: auto;
-  border-right: none;
-  border-left: 1px solid #DCDFE6;
-  border-radius: 0 0 4px;
-}
-#collectionAdd .countInput .el-input-number__decrease, .el-input-number__increase {
-  position: absolute;
-  z-index: 1;
-  top: 8px;
-  width: 25px;
-  height: auto;
-  text-align: center;
-  background: #f5f7fa;
-  color: #606266;
-  cursor: pointer;
-  font-size: 13px;
 }
 #collectionAdd #haveBottomBorderAdd .el-input .el-input__inner{
   border-radius: 5px;
