@@ -8,7 +8,7 @@
         <p class="data-title">数据实时可视化书籍推荐页面</p>
         <div class="loop">
           <div class="loopContent">
-            <swiper :imgBox="bookArr"></swiper>
+            <swiper :imgBox="propArr"></swiper>
           </div>
           <div class="bookList">
             <div class="textBox" v-for="(item,index) of bookArr" :key="index">
@@ -255,13 +255,13 @@ export default {
         propArr.push(showImg);
       }
 
-      /* if(length<3){
+       if(length<3){
         while(length<3){
           propArr.push(this.defaultSrc)
           length++
         }
         
-      } */
+      } 
       this.bookArr = arr;
       this.propArr = propArr;
       console.log("添加之后", this.bookArr, this.propArr);

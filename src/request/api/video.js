@@ -13,7 +13,7 @@ const recommendInt = {
     videoUpload:`${fileUrl}filemodule/uploadVideo/addBigDataVideo`
 }
 export const  videoUpload=`${fileUrl}filemodule/uploadVideo/addBigDataVideo`
-export const preImg=`${fileUrl}filemodule/showFile/getShow`
+export const preFile=`${fileUrl}filemodule/showFile/getShow`
 export function dataSearch() {
    return axios.get(recommendInt.search).then((res) =>{
         return Promise.resolve(res)
