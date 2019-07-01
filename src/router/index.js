@@ -102,6 +102,14 @@ export default new Router({
           },
           component:() => import('../components/System/videoSetting.vue')
         },
+        {
+          path:'/recommandNotice',
+          meta:{
+            title:'馆内公告设置',
+            Mode:'6',
+          },
+          component:() => import('../components/System/noticeSetting.vue')
+        },
         // 1.0 采编管理
         {
           path: '/uploadBook',

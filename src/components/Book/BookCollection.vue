@@ -39,6 +39,7 @@
                   <el-option label="ISBN" value="2"></el-option>
                   <el-option label="书名" value="3"></el-option>
                   <el-option label="在馆状态" value="4"></el-option>
+                  <el-option label="丛编题名" value="5"></el-option>
                 </el-select>
                 <el-input
                   v-model="searchForm.searchData"
@@ -204,13 +205,14 @@
                       </el-input>
                     </el-form-item>
                     <el-form-item class="countInput" style="margin-right: 15px">
-                      <el-checkbox v-model="duplicate">含有复本(F)</el-checkbox>
+                      <el-checkbox v-model="duplicate" @change="duplicateFun(duplicate)">含有复本(F)</el-checkbox>
                       <el-input-number
-                        v-model="num"
+                        v-model="duplicateNum"
+                        :disabled="duplicateDisable"
                         controls-position="right"
                         @change="handleChange"
                         :min="1"
-                        :max="10"
+                        :max="99"
                       ></el-input-number>
                     </el-form-item>
                   </div>
@@ -237,7 +239,7 @@
                         <el-input v-model="showData.edition" :disabled="disabled"></el-input>
                       </el-form-item>
                       <el-form-item label=" 卷册号 :">
-                        <el-input v-model="showData.volumeNumber" :disabled="disabled"></el-input>
+                        <el-input v-model="showData.volumeNum" :disabled="disabled"></el-input>
                       </el-form-item>
                     </div>
                     <div class="flexLayout twoInput">
@@ -307,17 +309,10 @@
                   </div>
                 </div>
                 <!-- 弹框表单按钮  验证失效-->
-                <div class="flexLayout buttonDiv">
-                  <el-form-item label=" 批次号 :">
-                    <el-input v-model="addForm.batchNumber"></el-input>
-                  </el-form-item>
-                  <div class="buttonStyle" style="margin-top: 13px">
+                <div class="buttonDiv">
+                  <div class="buttonStyle" style=" ">
                     <el-button type="primary" @click="submitForm()">确定</el-button>
                     <el-button type="info" style="margin-left: 20px" @click="resetForm()">取消</el-button>
-                  </div>
-                  <div style="padding: 23px 20px 10px 0px">
-                    <a href="#">打印书标</a>
-                    <a href="#" style="margin-left: 20px;" @click="printSetupFun">打印设置...</a>
                   </div>
                 </div>
                 <div id="dataDiv">
@@ -355,10 +350,10 @@
               <p style="cursor: default" @click="callNumberMessageClose()">x</p>
             </div>
             <div class="callNumberMessage_scound">
-              <p>&nbsp;&nbsp;&nbsp;&nbsp;当前对应的分类号是"g"的最大种次顺序号如下所显示，请为其设置一个新的最大种次号，以便和分类号组成一起组成图书排架号:</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;当前对应的分类号是"g"的最大种次顺序号如下所显示，请为其设置一个新的最大种次号，以便和分类号一起组成图书排架号:</p>
               <el-form>
                 <el-form-item label=" 起始种次号 :" prop="callNumber" label-width="90px">
-                  <el-input v-model="addForm.callNumber"></el-input>
+                  <el-input v-model="showData.orderNum+1"></el-input>
                 </el-form-item>
               </el-form>
               <p style="margin-left: 20px">此类图书的书架位置属性实例:</p>
@@ -366,12 +361,12 @@
                 style="margin:5px 20px;border: 1px solid  #DCDFE6 ;padding: 15px 70px;background: white"
               >
                 <div class="flexLayout">
-                  <p>第一条书架位置编号:g/1</p>
-                  <p>第二条书架位置编号:g/2</p>
+                  <p>第一条书架位置编号:{{addForm.callNumber}}</p>
+                  <p>第二条书架位置编号:{{addForm.callNumber1}}</p>
                 </div>
                 <div class="flexLayout" style="margin-top: 30px">
-                  <p>第三条书架位置编号:g/3</p>
-                  <p>第四条书架位置编号:g/4</p>
+                  <p>第三条书架位置编号:{{addForm.callNumber2}}</p>
+                  <p>第四条书架位置编号:{{addForm.callNumber3}}</p>
                 </div>
                 <p style="text-align: center;margin-top: 20px">后面图书按同样的种次号递增规律类推......</p>
               </div>
@@ -387,8 +382,8 @@
             </div>
             <div class="libraryAddressMessage_second">
               <el-form>
-                <el-form-item label=" 按馆藏地代码或名称筛选 :" prop="callNumber" label-width="200px">
-                  <el-input v-model="addForm.callNumber"></el-input>
+                <el-form-item label=" 按馆藏地名称筛选 :" prop="callNumber" label-width="140px">
+                  <el-input v-model="libraryName" @input="searchLibrary()"></el-input>
                 </el-form-item>
               </el-form>
               <section class="tableBox bookInfo">
@@ -398,12 +393,11 @@
                   style="width: 100%; text-align:center;"
                   :data="libraryData"
                   height="200"
-                  border
                   :row-style="{height:'30px'}"
                 >
                   <el-table-column
                     align="center"
-                    prop="isbn"
+                    prop="code"
                     label="馆藏地代码"
                     :show-overflow-tooltip="true"
                   ></el-table-column>
@@ -415,144 +409,25 @@
                   ></el-table-column>
                   <el-table-column
                     align="center"
-                    prop="author"
+                    prop="remark"
                     label="备注信息"
                     :show-overflow-tooltip="true"
-                  ></el-table-column>
+                  >
+                    <template slot-scope="scope">
+                      <span>{{scope.row.remark == null || scope.row.remark=='' ?'---':scope.row.remark}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column align="center" label="操作" width="150">
+                    <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
+                    <template slot-scope="scope">
+                      <span class="blue" @click="libraryOn(scope.$index, scope.row)">选中</span>
+                    </template>
+                  </el-table-column>
                 </el-table>
                 <!-- 4.0 分页 -->
               </section>
-              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 470px">
-                <el-button type="primary" @click="libraryAddressDefine()" style="width: 130px">确定</el-button>
+              <div class="buttonStyle" style="margin-top: 13px;padding: 10px 0px 10px 650px">
                 <el-button type="info" @click="libraryAddressClose()" style="width: 130px">取消</el-button>
-              </div>
-            </div>
-          </div>
-          <div style="display: none" class="printSetupMessage">
-            <div class="printSetupMessage_first">
-              书标打印设置
-            </div>
-            <div class="printSetupMessage_second">
-              <a href="#" style="margin-left: 420px">导入参数设置...</a>
-              <a href="#" style="margin-left: 10px">导出参数设置...</a>
-              <div class="printSetupMessageBorder">
-                <p class="fontBorder">打印机设置</p>
-                <el-form ref="form" :model="printSetupData">
-                  <el-form-item label="通讯端口 :" label-width="100px">
-                    <el-select v-model="printSetupData.port">
-                      <el-option label="USB口" value="USB口"></el-option>
-                      <el-option label="开口" value="开口"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="打印浓度 :" label-width="100px">
-                    <el-select v-model="printSetupData.potency">
-                      <el-option label="21" value="21"></el-option>
-                      <el-option label="22" value="22"></el-option>
-                      <el-option label="23" value="23"></el-option>
-                      <el-option label="24" value="24"></el-option>
-                      <el-option label="25" value="25"></el-option>
-                      <el-option label="26" value="26"></el-option>
-                      <el-option label="27" value="27"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label-width="30px">
-                    <input type="button" class="printSetupButton" value="打印偏移设置"/>
-                  </el-form-item>
-                  <el-form-item label-width="30px">
-                    <input type="button" class="printSetupButton" value="打印机复位"/>
-                  </el-form-item>
-                </el-form>
-              </div>
-              <div style="margin-top: 20px;display: flex;flex-direction: row">
-                <div class="printSetupMessageBorder" style="width: 300px;margin-right: 20px">
-                  <p class="fontBorder">条码信息</p>
-                  <el-form ref="form" :model="printSetupData">
-                    <el-form-item label="标题 :" label-width="90px">
-                      <el-select v-model="printSetupData.title">
-                        <el-option label="显示" value="显示"></el-option>
-                        <el-option label="不显示" value="不显示"></el-option>
-                      </el-select>
-                    </el-form-item>
-                    <input type="text" style="width: 150px;margin-left: 50px">
-                    <span style="margin-left: 10px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    <el-form-item label="条码 :" label-width="90px" style="margin-top: 30px">
-                      <el-select v-model="printSetupData.code">
-                        <el-option label="Code39码" value="Code39码"></el-option>
-                        <el-option label="Code128码" value="Code128码"></el-option>
-                      </el-select>
-                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <div class="printSetupMessageBorder" style="width: 300px">
-                  <p class="fontBorder">书标信息</p>
-                  <el-form ref="form" :model="printSetupData">
-                    <el-form-item label="第一行 :" label-width="90px">
-                      <el-select v-model="printSetupData.one">
-                        <el-option label="分类号" value="Code39码"></el-option>
-                        <el-option label="书次号" value="Code128码"></el-option>
-                        <el-option label="资料编号" value="Code128码"></el-option>
-                        <el-option label="书架号" value="Code128码"></el-option>
-                        <el-option label="出版年" value="Code128码"></el-option>
-                        <el-option label="馆藏地代码" value="Code128码"></el-option>
-                        <el-option label="无" value="Code128码"></el-option>
-                      </el-select>
-                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    </el-form-item>
-                    <el-form-item label="第二行 :" label-width="90px">
-                      <el-select v-model="printSetupData.two">
-                        <el-option label="分类号" value="Code39码"></el-option>
-                        <el-option label="书次号" value="Code128码"></el-option>
-                        <el-option label="资料编号" value="Code128码"></el-option>
-                        <el-option label="书架号" value="Code128码"></el-option>
-                        <el-option label="出版年" value="Code128码"></el-option>
-                        <el-option label="馆藏地代码" value="Code128码"></el-option>
-                        <el-option label="无" value="Code128码"></el-option>
-                      </el-select>
-                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    </el-form-item>
-                    <el-form-item label="第三行 :" label-width="90px">
-                      <el-select v-model="printSetupData.three">
-                        <el-option label="分类号" value="Code39码"></el-option>
-                        <el-option label="书次号" value="Code128码"></el-option>
-                        <el-option label="资料编号" value="Code128码"></el-option>
-                        <el-option label="书架号" value="Code128码"></el-option>
-                        <el-option label="出版年" value="Code128码"></el-option>
-                        <el-option label="馆藏地代码" value="Code128码"></el-option>
-                        <el-option label="无" value="Code128码"></el-option>
-                      </el-select>
-                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    </el-form-item>
-                    <el-form-item label="条码 :" label-width="90px">
-                      <el-select v-model="printSetupData.four">
-                        <el-option label="分类号" value="Code39码"></el-option>
-                        <el-option label="书次号" value="Code128码"></el-option>
-                        <el-option label="资料编号" value="Code128码"></el-option>
-                        <el-option label="书架号" value="Code128码"></el-option>
-                        <el-option label="出版年" value="Code128码"></el-option>
-                        <el-option label="馆藏地代码" value="Code128码"></el-option>
-                        <el-option label="无" value="Code128码"></el-option>
-                      </el-select>
-                      <span style="margin-left: 30px"><input type="button" value="高级..." class="printSetupButton"></span>
-                    </el-form-item>
-                  </el-form>
-                </div>
-              </div>
-              <el-form ref="form" :model="printSetupData" class="printModel">
-                <el-form-item label="自动打印方式 :" label-width="110px">
-                  <el-select v-model="printSetupData.printMode">
-                    <el-option label="新增典藏后自动打印" value="Code39码"></el-option>
-                    <el-option label="新增典藏后提示打印" value="Code128码"></el-option>
-                    <el-option label="不打印" value="Code128码"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="单个标签重复数 :" label-width="120px" class="numberInput" style="margin-left: 130px">
-                  <el-input-number v-model="printSetupData.num" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
-                </el-form-item>
-              </el-form>
-              <div style="width:250px;margin: 10px auto 0px">
-                <input type="button" value="确定" class="printSetupButStyle" style="background-color: rgba(0, 150, 255, 0.68);margin-right: 40px">
-                <input type="button" value="取消" class="printSetupButStyle" @click="printSetupCloseFun">
               </div>
             </div>
           </div>
@@ -750,21 +625,27 @@ export default {
   data() {
     return {
       /*====== 2.0表单搜索区域 ======*/
+      libraryName:"",
+      duplicateDisable:true,
       messageData: [],
       libraryData: [],
-      num: 1,
-      duplicate: "",
+      duplicateNum: 1,
+      duplicate:false,
       widthMessage: "",
       loading: false,
       options: [],
       addForm: {
+        batchNumber:"",//批次号
         isbn: "",
         code: "", //馆藏码
         callNumber: "", //索书号
+        callNumber1:"",
+        callNumber2:"",
+        callNumber3:"",
         place: "", //藏馆地
         dailyRent: "", //默认日租金
         lendingPermission: "", //不外借
-        available: "" //启用
+        available:true //启用
       },
       showData: {
         id: "",
@@ -776,7 +657,7 @@ export default {
         cluster: "", //丛编题名
         classificationCode: "", //分类号
         edition: "", //版次
-        volumeNumber: "", //卷册号
+        volumeNum: "", //卷册号
         contributors: "", //编著者
         bindingLayout: "", //装订版面
         publishHouse: "", //出版社
@@ -784,7 +665,8 @@ export default {
         appendix: "", //附件
         pageNumber: "", //页码
         format: "", //开本
-        price: "" //价格
+        price: "" ,//价格
+        orderNum:""//种次号
       },
       numberValidateForm: {
         cause: "" //剔除原因
@@ -887,7 +769,9 @@ export default {
       decideData: [],
       selectIsbnData: [],
       decide: false,
-      disabled: false
+      disabled: false,
+      startNum:"",
+      startCallNumber:""
     };
   },
   computed: {
@@ -949,7 +833,12 @@ export default {
       return newData;
     },
     addFormData() {
+      if(this.addForm.callNumber!=this.startCallNumber){
+        this.showData.orderNum=""
+      }
       let newData = {
+        startNum:this.showData.orderNum,
+        duplicate:this.duplicateNum,
         fkCataBookId: this.showData.id,
         code: this.addForm.barcode,
         callNumber: this.addForm.callNumber,
@@ -979,13 +868,52 @@ export default {
     }
   },
   methods: {
+    //选中馆藏地
+    libraryOn(row,index){
+      console.log('选中的馆藏地',row,index)
+      $(".libraryAddressMessage").fadeOut();
+      this.addForm.place=index.name
+    },
+    searchLibrary(){
+      var libraryName={name:this.libraryName}
+      this.libraryDataFun(libraryName)
+    },
+    //是否有复本
+    duplicateFun(val){
+      console.log(val)
+      if(val==true){
+        this.duplicateDisable=false
+      }else{
+        this.duplicateDisable=true
+      }
+    },
     //索取号弹窗
     callNumberFun() {
       $(".callNumberMessage").fadeIn();
     },
     //索取号弹窗确定按钮
     callNumberMessageDefine() {
-      alert("暂无效果");
+      console.log('this.showData.orderNum',this.showData.orderNum)
+      var orderNum=parseInt(this.showData.orderNum)+1
+      var orderNum1=parseInt(this.showData.orderNum)+2
+      var orderNum2=parseInt(this.showData.orderNum)+3
+      var orderNum3=parseInt(this.showData.orderNum)+4
+      if(this.showData.volumeNum!=null){
+        this.startCallNumber=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+this.showData.orderNum
+        this.addForm.callNumber=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum
+        this.addForm.callNumber1=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum1
+        this.addForm.callNumber2=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum2
+        this.addForm.callNumber3=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum3
+        console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+      }else{
+        this.startCallNumber=this.showData.fkTypeCode+"/"+this.showData.orderNum
+        this.addForm.callNumber=this.showData.fkTypeCode+"/"+orderNum
+        this.addForm.callNumber1=this.showData.fkTypeCode+"/"+orderNum1
+        this.addForm.callNumber2=this.showData.fkTypeCode+"/"+orderNum2
+        this.addForm.callNumber3=this.showData.fkTypeCode+"/"+orderNum3
+        console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+      }
+      $(".callNumberMessage").fadeOut();
     },
     //索取号弹窗取消按钮
     callNumberMessageClose() {
@@ -994,10 +922,22 @@ export default {
     //馆藏地弹窗
     libraryAddressFun() {
       $(".libraryAddressMessage").fadeIn();
+      this.libraryDataFun()
+
+    },
+    libraryDataFun(value){
+      this.axios.get(collection.getLibName,{params:value}).then((res)=>{
+        console.log('获取馆藏地返回的数据',res)
+        if(res.data.state==true){
+          this.libraryData=res.data.row
+        }else{
+          this.$message.error(res.data.msg);
+        }
+      })
     },
     //馆藏地弹窗确定按钮
     libraryAddressDefine() {
-      alert("暂无效果");
+
     },
     //馆藏地弹窗取消按钮
     libraryAddressClose() {
@@ -1009,10 +949,52 @@ export default {
     },
     //选中某条数据的按钮
     decideOn(index, row) {
-      this.showData = row;
-      this.disabled = true;
+      this.AccumFun(row.id)
       this.centerDialogVisible = false;
-      console.log("选中的数据", this.showData, row);
+    },
+    //累加值
+    AccumFun(val){
+      this.axios.get(collection.selectFromCataID,{params:{fkCataBookId:val}}).then((res)=>{
+        console.log('获取新增弹窗表格数据',res)
+        if(res.data.state==true){
+          this.messageData=res.data.row
+        }
+      })
+      this.axios.get(collection.selectCataOrderByID,{params:{id:val}}).then((res)=>{
+        console.log('获取累加值返回的数据',res)
+        if(res.data.state==true){
+          this.showData=res.data.row
+          this.disabled = true;
+          this.showData.volumeNum=res.data.row.volumeNum
+          this.showData.orderNum=res.data.row.orderNum
+          console.log('卷册号为:',this.showData.volumeNum,"种次号为:",this.showData.orderNum)
+          var orderNum=this.showData.orderNum+1
+          var orderNum1=this.showData.orderNum+2
+          var orderNum2=this.showData.orderNum+3
+          var orderNum3=this.showData.orderNum+4
+          if(this.showData.volumeNum!=null){
+            this.startCallNumber=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+this.showData.orderNum
+            this.addForm.callNumber=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum
+            this.addForm.callNumber1=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum1
+            this.addForm.callNumber2=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum2
+            this.addForm.callNumber3=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum3
+            console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+          }else{
+            this.startCallNumber=this.showData.fkTypeCode+"/"+this.showData.orderNum
+            this.addForm.callNumber=this.showData.fkTypeCode+"/"+orderNum
+            this.addForm.callNumber1=this.showData.fkTypeCode+"/"+orderNum1
+            this.addForm.callNumber2=this.showData.fkTypeCode+"/"+orderNum2
+            this.addForm.callNumber3=this.showData.fkTypeCode+"/"+orderNum3
+            console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+          }
+        }
+      })
+      this.axios.get(collection.getAllOrder,{params:{id:val}}).then((res)=>{
+        console.log("获取馆藏吗",res)
+        if(res.data.state==true){
+          this.addForm.code=res.data.row
+        }
+      })
     },
     selectSearchCheck(val) {
       console.log("查询val", val);
@@ -1090,16 +1072,18 @@ export default {
     },
     //添加isbn数据搜索
     isbnData() {
-      this.j = 6;
-      this.centerDialogVisible = true;
-      this.widthMessage = "700px";
       this.axios
         .get(collection.isbn, { params: { isbn: this.addForm.isbn } })
         .then(res => {
           console.log("isbn的数据", res);
           if (res.data.state === true) {
-            if (res.data.row.length != 0) {
+            if (res.data.row.length >1) {
+              this.j = 6;
+              this.centerDialogVisible = true;
+              this.widthMessage = "700px";
               this.selectIsbnData = res.data.row;
+            }else if(res.data.row.length =1){
+              this.AccumFun(res.data.row[0].id)
             } else {
               this.$message({
                 message: "没有此ISBN的相关数据，请重新搜索",
@@ -1132,6 +1116,7 @@ export default {
       console.log("ISBN", this.addForm.isbn);
       if (this.i == 1) {
         if (this.addForm.isbn) {
+
           this.addApi(this.addFormData);
         } else {
           this.$message({
@@ -1151,6 +1136,7 @@ export default {
             type: "success"
           });
           this.closeForm();
+          this.dialogFormVisible=false
           this.searchApi(this.searchTimeForm);
         } else {
           this.$message({
@@ -1168,6 +1154,7 @@ export default {
             type: "success"
           });
           this.closeForm();
+          this.dialogFormVisible=false
           this.searchApi(this.searchTimeForm);
         } else {
           this.$message({
@@ -1192,13 +1179,12 @@ export default {
         }
       } else if (this.i == 1 || this.i == 0) {
         this.$refs[this.addForm].resetFields();
+        for(var index in this.showData){
+          this.showData[index] = "";
+        }
         for (var i in this.addForm) {
           this.addForm[i] = "";
         }
-        /*
-          for (var i in this.showData) {
-            this.showData[i] = "";
-          }*/
         this.disabled = false;
         this.selectIsbnData.length = 0;
         $(".callNumberMessage").fadeOut();
@@ -1268,9 +1254,11 @@ export default {
     makeBtn(index, row) {
       console.log(row.available);
       if (row.available == 0) {
+        this.widthMessage="400px"
         this.j = 2;
       } else if (row.available == 1) {
-        this.i = 4;
+        this.widthMessage="400px"
+        this.j = 4;
       }
       this.addForm.id = row.id;
       this.centerDialogVisible = true;

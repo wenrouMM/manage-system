@@ -32,6 +32,7 @@
               >
                 <el-option label="书名" value="0"></el-option>
                 <el-option label="isbn" value="1"></el-option>
+                <el-option label="丛编题名" value="2"></el-option>
               </el-select>
               <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
             </el-form-item>
@@ -132,7 +133,7 @@
                           <el-button slot="append" type="primary" @click="isbnData" icon="el-icon-search"></el-button>
                         </el-input>
                       </el-form-item>
-                      <span style="padding-top: 15px;padding-right:60px;font-size: 10px;color: rgb(180, 187, 202)">若远程或本地都没有您想要的数据，请手动录入图书资料！</span>
+                      <span style="padding-top: 15px;padding-right:60px;font-size: 10px;color: rgb(180, 187, 202)">若远程或本地都没有相关的数据，请手动录入图书资料！</span>
                       <!-- <p class="searchButton" @click="isbnData">
                         <img src="../../base/img/currency/ssbs.png" id="isbnSearch">
                       </p> -->
@@ -243,7 +244,7 @@
                         <el-input v-model="addForm.edition "></el-input>
                       </el-form-item>
                       <el-form-item label=" 卷 册 号 :">
-                        <el-input v-model="addForm.volumeNumber "></el-input>
+                        <el-input v-model="addForm.volumeNum "></el-input>
                       </el-form-item>
                       <el-form-item label=" 附 件 :">
                         <el-input v-model="addForm.appendix "></el-input>
@@ -273,7 +274,7 @@
               </div>
             </div>
             <div style="margin-bottom: 10px">
-              <el-checkbox :label="1" name="type">套装书</el-checkbox>
+              <el-checkbox v-model="SuitBook" @change="SuitBookFun(SuitBook)">套装书</el-checkbox>
               <span>(说明:同一套书请录入相同的丛编题名)</span>
             </div>
           </div>
@@ -346,6 +347,7 @@
   export default {
     data() {
       return {
+        SuitBook:false,
         selectbookInfo:'',
         messageWidth:'',
         excelUrl:'',
@@ -401,12 +403,13 @@
           price:'',//价格
           language:'',//语种
           edition:'',//版次
-          volumeNumber:'',//卷册号
+          volumeNum:'',//卷册号
           appendix:'',//附件
           languageCode:'',
           annotations:'',//附注
           themeWord:'',//主题词
           renarks:'',//备注
+          setBooks:0,//套装书
         },
         rules:{
           isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息进行添加", trigger: "blur" }],
@@ -490,6 +493,14 @@
       }
     },
     methods: {
+      SuitBookFun(val){
+        console.log(val)
+        if(val=false){
+          this.addForm.setBooks=0
+        }else{
+          this.addForm.setBooks=1
+        }
+      },
       selectCheck(val) {
         console.log("val", val);
         this.searchData = val;
@@ -685,22 +696,22 @@
             });
           }
         }
+        console.log('addForm.name',this.addForm.name)
       },
       //本地数据
       localCatalogData(){
         this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
-          console.log('本地的数据',res)
-          console.log('isbn的数据 ISBN',res.data.row.isbn)
           if(res.data.state==true){
+            console.log('本地编目获取的数据',res.data.row)
             if(res.data.row.length>1){
               this.catalogingData = res.data.row
               this.j=3
               this.messageWidth='750px'
               this.centerDialogVisible=true
-            }else if(res.data.row.length=1){
-              console.log('length为1的时候',res.data.row)
+            }else if(res.data.row.length==1){
               this.addForm = res.data.row[0]
-
+            }else if(res.data.row.length==0){
+              return
             }
           }
         },(err)=>{
@@ -714,15 +725,17 @@
       //远程数据
       remoteCatalogData(){
         this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-          console.log('远程编目的数据',res)
+          console.log('远程编目获取的数据',res.data.row)
           if(res.data.state==true){
             if(res.data.row.length>1){
               this.catalogingData = res.data.row
               this.j=4
               this.messageWidth='750px'
               this.centerDialogVisible=true
-            }else if(res.data.row.length=1){
+            }else if(res.data.row.length==1){
               this.addForm = res.data.row[0]
+            }else if(res.data.row==null){
+              return
             }
           }
         },(err)=>{
@@ -770,7 +783,6 @@
               message: res.data.msg,
               type: "success"
             });
-            this.dialogFormVisible = false
             this.closeForm()
             this.searchApi(this.searchTimeForm);
           } else {
@@ -790,7 +802,6 @@
               message: res.data.msg,
               type: "success"
             });
-            this.dialogFormVisible = false
             this.closeForm()
             this.searchApi(this.searchTimeForm);
           } else {
@@ -803,11 +814,11 @@
       },
       //添加修改关闭按钮
       closeForm() { // 弹框关闭的时候执行 清空数据
-        this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
         for (var i in this.addForm) {
           this.addForm[i] = "";
         }
-        this.dialogFormVisible = false
+        this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？
+        this.dialogFormVisible=false
         this.searchApi(this.searchTimeForm)
         $('#typeMessage').fadeOut()
       },

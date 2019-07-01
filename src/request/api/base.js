@@ -391,6 +391,7 @@ export const vacation={
   select:`${url}authmodule/holiday/select`,
   add:`${url}authmodule/holiday/add`,
   edit:`${url}authmodule/holiday/edit`,
+  delete:`${url}authmodule/holiday/delete`,
 }
 
 //充值设置
@@ -415,6 +416,9 @@ export const collection ={
   harmSelect:`${url}bookcollectionmodule/collection/getDamage`,
   damage:`${url}bookcollectionmodule/collection/bookDamage`,
   selectFromCataID:`${url}bookcollectionmodule/collection/selectFromCataID`,
+  selectCataOrderByID:`${url}bookcollectionmodule/collection/selectCataOrderByID`,
+  getAllOrder:`${url}bookcollectionmodule/collection/getAllOrder`,
+  getLibName:`${url}bookcollectionmodule/collection/getLibName`,
 }
 
 //采购管理
@@ -461,8 +465,13 @@ export const overdueCostCirculation=url+'financemodule/readetTbOverdueExpensesLo
 export const editHeadPortrait=url+'authmodule/personalCore/editPersonalCenterHeade';
 export const editimgFile='http://192.168.2.54:8090/filemodule/showFile/getShow';
 
-
 export const deriveInt = {
   select:`${url}catamodule/editing/cataTbBookInfo/getCountByConditon`,
   derive:`${url}catamodule/editing/cataTbBookInfo/getFileUrlByConditon`
+}
+//馆内公告设置
+export const libNotice = {
+  select:`${url}authmodule/noticeTbBigDataReferr/select`,
+  delete:`${url}authmodule/noticeTbBigDataReferr/delete`,
+  add:`${url}authmodule/noticeTbBigDataReferr/add`,
 }

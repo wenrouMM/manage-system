@@ -2,8 +2,8 @@
   <div id="swiper">
     <carousel-3d
       :space="space"
-      :height="height" 
-      :width="width" 
+      :height="height"
+      :width="width"
       :autoplay="true"
       :perspective="perspective"
       :inverseScaling="scaling"
@@ -19,7 +19,7 @@
       <slide  :index="2" >
         <img   :src="imgBox[2]">
       </slide>
-      
+
     </carousel-3d>
   </div>
 </template>
@@ -56,9 +56,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-img{
-  width: 100%;
-  height: 100%;
-}
-</style>
+
