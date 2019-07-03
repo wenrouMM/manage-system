@@ -9,10 +9,10 @@
         <section class="searchBox">
           <div class="buttonBox">
             <button class="add" @click="rechargeBtn">
-              <i class="addIcon el-icon-plus"></i>新增
+              <i class="addIcon el-icon-plus"></i>添加
             </button>
             <button class="delete" @click="batchDelete(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>删除
+              <i class="deleteIcon el-icon-delete"></i>批量删除
             </button>
           </div>
         </section>
@@ -303,6 +303,7 @@
               message: res.data.msg,
               type: "success"
             });
+            this.searchApi(this.searchTimeForm);
             this.centerDialogVisible=false
           }else{
             this.$message({

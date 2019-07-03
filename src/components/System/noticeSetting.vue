@@ -21,15 +21,15 @@
               </el-input>
             </el-form-item>
             <el-form-item class="buttonStyle">
-              <input type="button" value="发 布" class="buttonBlue" @click="publishBut()">
-              <input type="button" value="取 消" class="buttonGray" @click="cancelBut()">
+              <el-button type="primary" @click="publishBut()">上传</el-button>
+              <el-button type="info" @click="cancelBut()">取消</el-button>
             </el-form-item>
           </el-form>
         </div>
       </section>
       <section class="ListBox">
         <div style="display: flex;flex-direction: column">
-          <p style="color: #878787">发布公告列表</p>
+          <p style="color: #0096FF">发布公告列表</p>
           <div class="noneNotice" v-if="showNotice.length==0">暂无公告</div>
           <div style="margin-top: 20px;height: 550px;">
             <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice">
@@ -45,7 +45,7 @@
       <div class="forbid collectionDelete">
         <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
           <div class="dialogBody">
-            是否删除本条公告?
+            是否删除这条公告?
           </div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="deleteBut()">确 定</span>

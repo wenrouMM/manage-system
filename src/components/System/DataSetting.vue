@@ -12,7 +12,7 @@
           </div>
           <div class="bookList">
             <div class="textBox" v-for="(item,index) of bookArr" :key="index">
-              <span class="rankNumber">{{index+1}}.</span>
+              <span class="rankNumber" style="color: #0096FF">{{index+1}}.</span>
               <div class="content">
                 <P>
                   原作名:{{item.name}}
@@ -28,11 +28,11 @@
       <div class="inputBox">
         <p class="data-title">
           管理员添加设置推荐书籍
-          <span class="data-tips">(提示：推荐书籍列表最多可上传3本 如列表已有3本 请先进行删除再上传)</span>
+          <span class="data-tips" style="color: red">(提示：推荐书籍列表最多可上传3本 如列表已有3本 请先进行删除再上传)</span>
         </p>
         <div class="coverBox clearFix">
           <div class="coverUpload">
-            <div class="imgBox">
+            <div class="imgBox" >
               <img :src="showSrc">
             </div>
             <div class="clickImg" @click="uploadBtn">
@@ -81,7 +81,7 @@
           <el-table-column align="center" prop="name" label="书籍封面">
             <template slot-scope="scope">
               <div class="tab-imgBox">
-                <img :src="scope.row.showImg">
+                <img :src="scope.row.showImg" style="width:60px;height: 80px">
               </div>
             </template>
           </el-table-column>
@@ -111,6 +111,17 @@
         img-format="png"
       ></my-upload>
     </section>
+    <div class="forbid collectionDelete">
+      <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
+        <div class="dialogBody">
+          是否删除这本书籍?
+        </div>
+        <div style="margin-bottom: 30px">
+          <span class="dialogButton true mr_40" @click="deleteDefineBut()">确 定</span>
+          <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -126,6 +137,7 @@ import {
 export default {
   data() {
     return {
+      centerDialogVisible:false,
       upForm: {
         bookName: "",
         author: "",
@@ -135,7 +147,7 @@ export default {
       juge: false,
       imgDataUrl: "",
       propArr: [],
-      defaultSrc: require("../../base/img/swiper/default.jpg"),
+      defaultSrc: require("../../base/img/swiper/02.jpg"),
       rules: {
         bookName: [
           { required: true, message: "书籍名称不得为空", trigger: "blur" }
@@ -202,7 +214,11 @@ export default {
       this.show = true;
     },
     deleteBtn(index, row) {
+      this.centerDialogVisible=true
       this.deleteObj.id = row.id;
+
+    },
+    deleteDefineBut(){
       this._delete();
     },
     onSubmit(formName) {
@@ -242,6 +258,7 @@ export default {
     _delete() {
       dataDelete(this.deleteObj).then(res => {
         this.$message.success(res.data.msg);
+        this.centerDialogVisible=false
         this._search();
       });
     },
@@ -260,8 +277,8 @@ export default {
           propArr.push(this.defaultSrc)
           length++
         }
-        
-      } 
+
+      }
       this.bookArr = arr;
       this.propArr = propArr;
       console.log("添加之后", this.bookArr, this.propArr);
@@ -353,7 +370,7 @@ export default {
   text-align: center;
   line-height: 18px;
   font-size: 16px;
-  
+
   color: #0e0d0d;
 }
 .content p{
@@ -364,7 +381,7 @@ white-space: nowrap;
 
 }
 .bookList{
-  
+
 }
 .ml_24 {
   margin-left: 24px;

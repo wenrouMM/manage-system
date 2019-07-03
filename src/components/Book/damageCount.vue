@@ -23,8 +23,8 @@
                 clearable
                 @change="selectCheck(searchForm.makeMethod)"
               >
-                <el-option label="书籍名称" value="0"></el-option>
-                <el-option label="isbn" value="1"></el-option>
+                <el-option label="书名" value="0"></el-option>
+                <el-option label="ISBN" value="1"></el-option>
               </el-select>
               <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
             </el-form-item>
@@ -50,7 +50,7 @@
           </el-table-column>
           <el-table-column align="center" prop="name" label="书名" :show-overflow-tooltip="true" width="200"></el-table-column>
           <el-table-column align="center" prop="isbn" label="ISBN" :show-overflow-tooltip="true" width="200"></el-table-column>
-          <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true" width="150"></el-table-column>
+          <el-table-column align="center" prop="author" label="编著者" :show-overflow-tooltip="true" width="200"></el-table-column>
           <el-table-column align="center" prop="fkPressName" label="出版社" :show-overflow-tooltip="true" width="200"></el-table-column>
           <el-table-column align="center" prop="total" label="总藏馆数量" :show-overflow-tooltip="true" width="150"></el-table-column>
           <el-table-column align="center" prop="sum" label="在馆" :show-overflow-tooltip="true" width="150"></el-table-column>

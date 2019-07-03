@@ -85,12 +85,12 @@
               <el-table-column align="center" prop="roleName" label="角色名称"></el-table-column>
               <el-table-column align="center" prop="createTime" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间"></el-table-column>
-              <el-table-column align="center" prop="disabled" width="200" label="状态">
+              <el-table-column align="center" prop="disabled" label="状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.disabled ===0?'启用':'禁用'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="200" fixed="right">
+              <el-table-column align="center" label="操作" fixed="right">
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="editButton(scope.$index, scope.row)">授权</span>

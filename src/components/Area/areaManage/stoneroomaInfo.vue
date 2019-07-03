@@ -46,7 +46,6 @@
             </div>
             <div class="areaOparate">
               <span @click="editAreaBtn(region,index)">编辑区</span>
-              <span @click="bindAreaBtn(region,index)">绑定区</span>
               <span @click="deleteAreaBtn(region,index)">删除区</span>
             </div>
           </div>
@@ -185,17 +184,8 @@
               <el-input v-model="changeAreaForm.zoneName"></el-input>
             </el-form-item>
             <div class="row2">
-              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
-                <el-input v-model="changeAreaForm.floor"></el-input>
-              </el-form-item>
-              <span class="text2">层</span>
-              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
-                <el-input v-model="changeAreaForm.density"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row2">
               <el-form-item label="固定所在列:" :label-width="changelabel" prop="column">
-                <el-select v-model="changeAreaForm.column" placeholder="请选择" style="width: 214px">
+                <el-select v-model="changeAreaForm.column" placeholder="请选择">
                   <el-option label="左" value="left"></el-option>
                   <el-option label="右" value="right"></el-option>
                 </el-select>
@@ -206,15 +196,6 @@
               <span class="text">列</span>
             </div>
             <div class="row2">
-              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
-                <el-input v-model="changeAreaForm.floor"></el-input>
-              </el-form-item>
-              <span class="text2">层</span>
-              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
-                <el-input v-model="changeAreaForm.density"></el-input>
-              </el-form-item>
-            </div>
-            <div class="row2">
               <el-form-item label="本区区号:" :label-width="changelabel" prop="zoneNumber">
                 <el-input v-model="changeAreaForm.zoneNumber"></el-input>
               </el-form-item>
@@ -222,6 +203,15 @@
                 <el-input v-model="changeAreaForm.section"></el-input>
               </el-form-item>
               <span class="text1">节</span>
+            </div>
+            <div class="row2">
+              <el-form-item label="每节有:" :label-width="changelabel" prop="floor">
+                <el-input v-model="changeAreaForm.floor"></el-input>
+              </el-form-item>
+              <span class="text2">层</span>
+              <el-form-item label="密集架宽度:" :label-width="changelabel" prop="density">
+                <el-input v-model="changeAreaForm.density"></el-input>
+              </el-form-item>
             </div>
             <div class="row2">
               <el-form-item label="运行速度:" :label-width="changelabel" prop="speed">
@@ -1188,21 +1178,21 @@ export default {
 .row2 .text {
   position: absolute;
   top: 13px;
-  right: 50px;
+  right: 80px;
   font-size: 14px;
   color: #878787;
 }
 .row2 .text2 {
   position: absolute;
   top: 13px;
-  left: 400px;
+  left: 390px;
   font-size: 14px;
   color: #878787;
 }
 .row2 .text1 {
   position: absolute;
   top: 13px;
-  right:50px;
+  right:80px;
   font-size: 14px;
   color: #878787;
 }
@@ -1231,7 +1221,6 @@ export default {
   width: 130px;
   position: relative;
   background-image: url("../../../base/img/timg.jpg");
-  border: 1px solid #0096ff;
 }
 .imgBox img {
   height: 130px;

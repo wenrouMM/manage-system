@@ -532,7 +532,7 @@ export default new Router({
         {
           path: '/vacationSet',
           meta: {
-            title: '寒暑假设置',
+            title: '假期设置',
             Mode: '6'
           },
           component: resolve => require(['../components/System/vacation.vue'], resolve)

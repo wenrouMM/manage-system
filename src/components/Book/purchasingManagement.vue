@@ -8,10 +8,10 @@
       <section class="searchBox">
         <div class="buttonBox">
           <button class="add" @click="rechargeBtn">
-            <i class="addIcon el-icon-plus"></i>新增
+            <i class="addIcon el-icon-plus"></i>添加
           </button>
           <button class="delete" @click="drawbackBtn">
-            <i class="deleteIcon el-icon-delete"></i>删除
+            <i class="deleteIcon el-icon-delete"></i>批量删除
           </button>
           <!--<button class="blue" @click="deriveBtn">
             <i class="blueIcon el-icon-share"></i>导出

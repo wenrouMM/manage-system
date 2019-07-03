@@ -9,10 +9,10 @@
         <section class="searchBox">
           <div class="buttonBox">
             <button class="add" @click="rechargeBtn">
-              <i class="addIcon el-icon-plus"></i>新增
+              <i class="addIcon el-icon-plus"></i>添加
             </button>
             <button class="delete" @click="drawbackBtn(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>删除
+              <i class="deleteIcon el-icon-delete"></i>批量删除
             </button>
             <!--<button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
@@ -81,17 +81,17 @@
               align="center"
               prop="callNumber"
               label="索取号"
-              width="300"
+              width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="clusterName" label="丛编题名" width="300" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="code" label="馆藏码" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="clusterName" label="丛编题名" width="200" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.clusterName == null || scope.row.clusterName=='' ?'---':scope.row.clusterName}}</span>
               </template>

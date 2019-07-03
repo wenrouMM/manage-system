@@ -57,22 +57,22 @@
               </template>
             </el-table-column>
 
-            <el-table-column align="center" prop="state" label="处理方式" width="150">
+            <el-table-column align="center" prop="state" label="处理方式" width="180">
               <template slot-scope="scope">
                 <span>{{scope.row.state ==1?'押金退款':'押金充值'}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkReaderName" label="用户名" width="150"  :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="momentum" label="金额" width="150">
+            <el-table-column align="center" prop="fkCardNumber" label="读者卡号" width="180" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkReaderName" label="用户名" width="180"  :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="momentum" label="金额" width="180">
               <template slot-scope="scope">
                 <span>{{scope.row.momentum}}元</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="createTime" label="处理日期" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="fkHandleModeName" label="操作用户"  :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="serialNumber" label="流水标号" width="250"></el-table-column>
-            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="createTime" label="处理日期" width="180" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="fkHandleModeName" label="操作用户" width="180"  :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="serialNumber" label="流水标号" width="180" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="remarks" label="备注" :show-overflow-tooltip="true" width="180">
               <template slot-scope="scope">
                 <span>{{scope.row.remarks == null || scope.row.remarks=='' ?'---':scope.row.remarks}}</span>
               </template>

@@ -32,7 +32,7 @@
                 将视频拖到此处，或
                 <em>点击上传</em>
               </div>
-              <div slot="tip" class="el-upload__tip">
+              <div slot="tip" class="el-upload__tip" style="color: red">
                 <p>提示:只能上传("rmvb","wmv","avi","mp4","3gp")等格式的视频文件</p>
                 <p>(视频大小限500M）</p>
               </div>
@@ -46,7 +46,7 @@
       </section>
       <section class="ListBox">
         <section class="recomandList">
-          <p class="data-title mb_20">上传视频列表</p>
+          <p class="data-title mb_20" style="color:#0096FF">上传视频列表</p>
           <section class="tableBox">
             <el-table
               :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
@@ -99,6 +99,17 @@
           </section>
         </section>
       </section>
+      <div class="forbid collectionDelete">
+        <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
+          <div class="dialogBody">
+            是否删除这条视频?
+          </div>
+          <div style="margin-bottom: 30px">
+            <span class="dialogButton true mr_40" @click="deleteDefineBut()">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -115,7 +126,7 @@ export default {
   data() {
     return {
       fileUrl: videoUpload,
-
+      centerDialogVisible:false,
       fileList: [], // 文件列表
       backUrl: "", // 返回的视频链接
       videoArr: [], // video数组
@@ -167,7 +178,10 @@ export default {
       console.log("上传之前的数据", this.addTimeForm);
     },
     deleteBtn(index, row) {
+      this.centerDialogVisible=true
       this.deleteObj.id = row.id;
+    },
+    deleteDefineBut(){
       this._delete();
     },
     /*--- API ---*/
@@ -196,6 +210,7 @@ export default {
     _delete() {
       dataDelete(this.deleteObj).then(res => {
         this.$message.success(res.data.msg);
+        this.centerDialogVisible=false
         this._search();
       });
     },

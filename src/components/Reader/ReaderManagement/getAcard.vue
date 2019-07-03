@@ -385,7 +385,7 @@ export default {
             console.log("返回成功的信息", res);
             if (res.data.state === true) {
               console.log("提交成功");
-              this.$message.success("成功");
+              this.$message.success("办卡成功");
               this.rebackData = true;
             } else {
               this.$message.error(res.data.msg);
