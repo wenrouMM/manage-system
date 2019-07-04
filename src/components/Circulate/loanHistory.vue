@@ -60,10 +60,10 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" width="170" label="用户名"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" width="170" label="卡号"></el-table-column>
-              <el-table-column align="center" prop="bookName" width="170" label="书籍名称" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode" width="350" label="馆内码" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" width="160" label="用户名"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" width="160" label="卡号"></el-table-column>
+              <el-table-column align="center" prop="bookName" width="170" label="书名" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode" width="200" label="馆内码" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="createTime" width="200" label="借书时间"></el-table-column>
               <el-table-column align="center" prop="renewCount" width="150" label="续借次数">
                 <template slot-scope="scope">

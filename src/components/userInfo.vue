@@ -263,6 +263,7 @@ export default {
       })
     },
     freshArea(value) {
+      this.zNodes=[]
       this.axios.get(PersonalCentre.powerZtree,{
         params:{id:value}
       }).then((response) => {

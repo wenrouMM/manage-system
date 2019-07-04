@@ -379,10 +379,6 @@ export default {
     selectCheck(val) {
       console.log("val", val);
       this.searchData = val;
-      if(val==2){
-        $('#searchInput').fadeOut()
-        $('#gradeName').css('display','block')
-      }
     },
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型

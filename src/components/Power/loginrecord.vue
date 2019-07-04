@@ -60,18 +60,17 @@
             <!-- <el-table-column align="center" prop="loginMessage" label="用户名称"></el-table-column> -->
             <el-table-column align="center" prop="loginIp" label="登录IP"></el-table-column>
             <el-table-column align="center" prop="loginAccount" label="登录账户"></el-table-column>
-            <el-table-column align="center" prop="fkLoginCode" label="登录来源">
+            <el-table-column align="center" prop="fkLoginCodeName" label="登录来源"></el-table-column>
+            <el-table-column align="center" prop="loginTypeManageName" label="系统类别"></el-table-column>
+            <el-table-column align="center" prop="loginType" label="登陆系统">
               <template slot-scope="scope">
-                <span>{{scope.row.fkLoginCode == 0?'平台登录':'设备登录'}}</span>
+                <span>{{scope.row.loginType==0?'管理系统':'读者系统'}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="loginTime" label="登录时间"></el-table-column>
             <!-- 自定义插槽 -->
-            <el-table-column align="center" prop="loginStatus" label="登录状态">
-              <template slot-scope="scope">
-                <span :class="{error: scope.row.loginStatus==1}">{{scope.row.loginStatus == 0?'成功':'失败'}}</span>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="loginStatusName" label="登录状态"></el-table-column>
+            <el-table-column align="center" prop="loginMessage" label="登录消息" :show-overflow-tooltip="true"></el-table-column>
           </el-table>
           <!-- 4.0 分页 -->
           <section class="pagination mt_30">
@@ -164,7 +163,9 @@
         pageInput: 1,
         pageSize: 10,
         total: 0,
-        tableData: []
+        tableData: [],
+        loginNameType:"",
+        loginReaderType:""
       }
 
     },
@@ -212,7 +213,6 @@
           .catch(error => {
             console.log(error)
           })
-
       },
       current_change (currentPage) {
         //分页查询

@@ -9,10 +9,10 @@
         <section class="searchBox">
           <div class="buttonBox">
             <button class="add" @click="rechargeBtn">
-              <i class="addIcon el-icon-plus"></i>新增
+              <i class="addIcon el-icon-plus"></i>添加
             </button>
             <button class="delete" @click="drawbackBtn(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>删除
+              <i class="deleteIcon el-icon-delete"></i>批量删除
             </button>
             <!--<button class="blue" @click="deriveBtn">
               <i class="blueIcon el-icon-share"></i>导出
@@ -81,17 +81,17 @@
               align="center"
               prop="callNumber"
               label="索取号"
-              width="300"
+              width="200"
               :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="400" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="name" label="书名" width="300" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="clusterName" label="丛编题名" width="300" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="code" label="馆藏码" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="clusterName" label="丛编题名" width="200" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.clusterName == null || scope.row.clusterName=='' ?'---':scope.row.clusterName}}</span>
               </template>
@@ -734,27 +734,8 @@ export default {
         code: "", //馆藏码
         isbn: "", //isbn
         bookName: "", //书名
-        state: "" //状态
-      },
-      pickerOptions0: {
-        disabledDate: time => {
-          if (this.searchForm.endTime) {
-            return (
-              time.getTime() > Date.now() ||
-              time.getTime() > this.searchForm.endTime
-            );
-          } else {
-            return time.getTime() > Date.now();
-          }
-        }
-      },
-      pickerOptions1: {
-        disabledDate: time => {
-          return (
-            time.getTime() < this.searchForm.startTime ||
-            time.getTime() > Date.now()
-          );
-        }
+        state: "", //状态
+        clusterName:''//丛编题名
       },
       tableLoading: true,
       currentPage: 1,
@@ -811,6 +792,10 @@ export default {
               newState = 4;
             }
             break;
+          case 5:
+            console.log('丛编题名');
+            this.selectSearchForm.clusterName=this.searchForm.searchData;
+            break
         }
       } else {
         console.log("为空");
@@ -818,6 +803,7 @@ export default {
         this.selectSearchForm.code = "";
         this.selectSearchForm.isbn = "";
         this.selectSearchForm.bookName = "";
+        this.selectSearchForm.clusterName = ""
         newState = "";
       }
       let newData = {
@@ -825,6 +811,7 @@ export default {
         code: this.selectSearchForm.code,
         isbn: this.selectSearchForm.isbn,
         bookName: this.selectSearchForm.bookName,
+        clusterName:this.selectSearchForm.clusterName,
         state: newState,
         pageSize: this.pageSize,
         currentPage: 1

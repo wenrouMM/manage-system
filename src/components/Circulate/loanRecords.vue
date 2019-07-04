@@ -57,12 +57,12 @@
                   <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="fkReaderName" label="用户名" width="170"></el-table-column>
-              <el-table-column align="center" prop="fkCardNumber" label="卡号" width="170"></el-table-column>
-              <el-table-column align="center" prop="bookName" label="书籍名称" width="200" :show-overflow-tooltip="true"></el-table-column>
-              <el-table-column align="center" prop="libraryBookCode"  width="350" label="馆内码" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column align="center" prop="fkReaderName" label="用户名" width="200"></el-table-column>
+              <el-table-column align="center" prop="fkCardNumber" label="卡号" width="200"></el-table-column>
+              <el-table-column align="center" prop="bookName" label="书名" width="220" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column align="center" prop="libraryBookCode"  width="220" label="馆内码" :show-overflow-tooltip="true"></el-table-column>
               <el-table-column align="center" prop="createTime" label="借书时间" width="200"></el-table-column>
-              <el-table-column align="center" prop="renewCount" label="续借次数" width="150">
+              <el-table-column align="center" prop="renewCount" label="续借次数" width="200">
                 <template slot-scope="scope">
                   <span>{{scope.row.renewCount}}次</span>
                 </template>

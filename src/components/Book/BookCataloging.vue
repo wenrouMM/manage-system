@@ -9,10 +9,10 @@
         <section class="searchBox">
           <div class="buttonBox">
             <button class="add" @click="rechargeBtn">
-              <i class="addIcon el-icon-plus"></i>新增
+              <i class="addIcon el-icon-plus"></i>添加
             </button>
             <button class="delete" @click="drawbackBtn(tableChecked)">
-              <i class="deleteIcon el-icon-delete"></i>删除
+              <i class="deleteIcon el-icon-delete"></i>批量删除
             </button>
             <el-button icon="el-icon-share" type="primary" class="blue" :loading="downloadLoading"  @click="deriveBtn">
                <!-- <i class="blueIcon el-icon-share"></i> --> 导出
@@ -31,7 +31,7 @@
                 @change="selectCheck(searchForm.makeMethod)"
               >
                 <el-option label="书名" value="0"></el-option>
-                <el-option label="isbn" value="1"></el-option>
+                <el-option label="ISBN" value="1"></el-option>
                 <el-option label="丛编题名" value="2"></el-option>
               </el-select>
               <el-input v-model="searchForm.searchData" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
@@ -63,7 +63,7 @@
                 <span>{{scope.row.clusterName == null || scope.row.clusterName=='' ?'---':scope.row.clusterName}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="isbn" label="ISBN" width="300" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.isbn == null || scope.row.isbn=='' ?'---':scope.row.isbn}}</span>
               </template>
@@ -452,6 +452,7 @@
         selectSearchForm: {
           name: "", //书名
           isbn: "", //isbn
+          clusterName:"",//丛编题名
           currentPage: 0
         },
       };
@@ -468,15 +469,20 @@
               console.log("备注信息");
               this.selectSearchForm.isbn = this.searchForm.searchData;
               break;
+            case 2:
+              console.log('丛编题名');
+              this.selectSearchForm.clusterName = this.searchForm.searchData
           }
         } else {
           console.log("为空");
           this.selectSearchForm.name = "";
           this.selectSearchForm.isbn = "";
+          this.selectSearchForm.clusterName = ""
         }
         let newData={
           isbn:this.selectSearchForm.isbn,
           name:this.selectSearchForm.name,
+          clusterName:this.selectSearchForm.clusterName,
           pageSize: this.pageSize,
           currentPage: 1,
         }
@@ -641,7 +647,12 @@
           this.messageWidth='400px'
           this.centerDialogVisible=true
         } else {
-          this.$message.error('请先选择删除对象')
+          this.$message({
+            message: '请先选择删除对象',
+            duration:2000,
+            type: 'error'
+          });
+      //    this.$message.error('请先选择删除对象')
         }
       },
       //新增按钮

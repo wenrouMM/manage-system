@@ -8,7 +8,7 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="left buttonBox">
-            <button @click="addBtn" class="add"><i class="addIcon el-icon-plus">新增</i></button>
+            <button @click="addBtn" class="add"><i class="addIcon el-icon-plus">添加</i></button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">

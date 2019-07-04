@@ -21,26 +21,38 @@
               </el-input>
             </el-form-item>
             <el-form-item class="buttonStyle">
-              <el-button type="primary" class="buttonBlue" @click="publishBut()">发 布 </el-button>
-              <el-button type="info"  class="buttonGray" @click="cancelBut()">取 消 </el-button>
+              <el-button type="primary" @click="publishBut()">上传</el-button>
+              <el-button type="info" @click="cancelBut()">取消</el-button>
             </el-form-item>
           </el-form>
         </div>
       </section>
       <section class="ListBox">
         <div style="display: flex;flex-direction: column">
-          <p style="color: #878787">发布公告列表</p>
+          <p style="color: #0096FF">发布公告列表</p>
+          <div class="noneNotice" v-if="showNotice.length==0">暂无公告</div>
           <div style="margin-top: 20px;height: 550px;">
             <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice" :key="index">
               <div style="display: flex;flex-direction: column;width: 730px ">
                 <p style="color: rgba(69,71,77,1)">【{{item.title}}】</p>
-                <p style="margin-top: 10px;color: #878787;">{{item.content}}</p>
+                <p style="margin-top: 10px;color: #878787">{{item.content}}</p>
               </div>
-              <p id="deleteBut" @click="deleteBut(item.id)">删除</p>
+              <p id="deleteBut" @click="deleteButOk(item.id)">删除</p>
             </div>
           </div>
         </div>
       </section>
+      <div class="forbid collectionDelete">
+        <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
+          <div class="dialogBody">
+            是否删除这条公告?
+          </div>
+          <div style="margin-bottom: 30px">
+            <span class="dialogButton true mr_40" @click="deleteBut()">确 定</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          </div>
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -50,11 +62,14 @@
   export default {
     data() {
       return {
+        centerDialogVisible:false,
         formLabelAlign:{
           title:"", //标题
           content:"" //内容
         },
-        showNotice:[]
+        showNotice:[],
+        visible:false,
+        id:""
       };
     },
     computed:{
@@ -64,12 +79,16 @@
       this.initializationFun()
     },
     methods: {
+      deleteButOk(value){
+        console.log('id为',value)
+        this.centerDialogVisible=true
+        this.id=value
+      },
       //页面初始化数据
       initializationFun(){
         this.axios.get(libNotice.select).then((res)=>{
           console.log('初始化返回的公告数据',res)
           if(res.data.state==true){
-            //this.$message.success(res.data.msg);
             this.showNotice=res.data.row
           }
         })
@@ -105,11 +124,12 @@
         }
       },
       //删除
-      deleteBut(val){
-        this.axios.delete(libNotice.delete,{data:{id:val}}).then((res)=>{
+      deleteBut(){
+        this.axios.delete(libNotice.delete,{data:{id:this.id}}).then((res)=>{
           console.log('删除后返回的数据',res)
           if(res.data.state==true){
             this.$message.success(res.data.msg);
+            this.centerDialogVisible=false
             this.initializationFun()
           }else{
             this.$message.error(res.data.msg);
@@ -121,10 +141,41 @@
 </script>
 
 <style scoped>
+  .noneNotice{
+    font-size: 40px;
+    color: #d2d2d2;
+    font-weight: bold;
+    line-height: 550px;
+    text-align: center;
+
+  }
   .NoticeContent{
     border: 1px solid #e4e4e4;
     padding: 20px 15px;
     height: 140px;
+    animation: fadeInLeft 1s forwards;
+  }
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-100%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @-webkit-keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translate3d(-10%, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
   #deleteBut{
     line-height:140px;
@@ -196,19 +247,10 @@
     border-right: 2px solid #e4e4e4;
     position: relative;
   }
-  .upload-demo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
   /*--- 视频上传列表 ---*/
   .ListBox{
     max-width: 820px;
     width: 100%;
-  }
-  .recomandList{
-
   }
 </style>
 

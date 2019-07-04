@@ -21,7 +21,7 @@
                 <el-select v-model="searchForm.makeMethod" placeholder="搜索方式" clearable style="width: 150px" @change="selectCheck(searchForm.makeMethod)">
                   <el-option label="索取号" value="0"></el-option>
                   <el-option label="馆藏码" value="1"></el-option>
-                  <el-option label="isbn" value="2"></el-option>
+                  <el-option label="ISBN" value="2"></el-option>
                   <el-option label="书名" value="3"></el-option>
                   <el-option label="状态" value="4"></el-option>
                 </el-select>
@@ -50,19 +50,19 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="callNumber" label="索取号" width="250" :show-overflow-tooltip="true">
+            <el-table-column align="center" prop="callNumber" label="索取号" width="200" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="350" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="locationNam" label="图书位置" :show-overflow-tooltip="true" width="200">
               <template slot-scope="scope">
                 <span>{{scope.row.locationNam == null || scope.row.locationNam=='' ?'---':scope.row.locationNam}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="author" label="录入员" width="200"></el-table-column>
+            <el-table-column align="center" prop="author" label="录入员" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="updateTime" label="上架时间" width="200"></el-table-column>
             <el-table-column align="center" prop="fkTypeName" label="类型" width="200"></el-table-column>
             <el-table-column align="center" prop="lendState" label="状态" width="200">
