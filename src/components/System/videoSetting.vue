@@ -38,8 +38,8 @@
               </div>
             </el-upload>
             <div class="textCenter firstButton">
-              <el-button type="primary" @click="addBtn">上传</el-button>
-              <el-button type="info" @click="cancelBtn">取消</el-button>
+              <el-button class="buttonBlue" type="primary" @click="addBtn">上传</el-button>
+              <el-button class="buttonGray" type="info" @click="cancelBtn">取消</el-button>
             </div>
           </div>
         </div>
@@ -151,9 +151,8 @@ export default {
   methods: {
     /*--- ---*/
     cancelBtn() {
-
       this.$refs.addForm.resetFields();
-      this.fileList = []
+      this.fileList = [];
     },
     addBtn() {
       this.$refs.addForm.validate(valid => {
@@ -217,6 +216,7 @@ export default {
       console.log("添加之后", this.videoArr);
     },
     /*--- 功能函数 ---*/
+    // 传入一个字符串和一个限制长度的数字 生成一个补0到指定长度的字符串
     toNumebr(value, num) {
       let str = String(value);
       let length = str.length;
@@ -236,9 +236,9 @@ export default {
       console.log(this.videoSize, file.size);
       // 获取视频时长
       var video = document.createElement("video");
-      video.preload = "metadata";
-      video.onloadedmetadata = function() {
-        window.URL.revokeObjectURL(video.src);
+      video.preload = "metadata"; // 暗示加载元数据
+      video.onloadedmetadata = function() { // 元数据加载完毕的生命周期函数
+        window.URL.revokeObjectURL(video.src); // 回收生成的url对象
         var duration = video.duration;
         var curhours = that.toNumebr(parseInt(duration / 3600), 2);
         var curminutes = that.toNumebr(
@@ -360,6 +360,35 @@ export default {
 }
 .firstButton {
   margin-top: 30px;
+}
+.buttonBlue {
+  color: white;
+  cursor: pointer;
+  background-color: #0096ffad;
+  border-width: 0px;
+    border-style: none;
+    width: 100px;
+    
+    outline: none;
+}
+.buttonBlue:hover {
+  color: white;
+  background-color: #0096ff73;
+}
+.buttonGray {
+  background-color: #dcdcdc;
+  color: #878787;
+  cursor: pointer;
+  margin-left: 10px;
+  border-style: none;
+    width: 100px;
+    
+    outline: none;
+}
+.buttonGray:hover {
+  background-color: #d2d2d2;
+  color: #878787;
+  margin-left: 10px;
 }
 </style>
 

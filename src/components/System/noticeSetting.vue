@@ -21,8 +21,8 @@
               </el-input>
             </el-form-item>
             <el-form-item class="buttonStyle">
-              <input type="button" value="发 布" class="buttonBlue" @click="publishBut()">
-              <input type="button" value="取 消" class="buttonGray" @click="cancelBut()">
+              <el-button type="primary" class="buttonBlue" @click="publishBut()">发 布 </el-button>
+              <el-button type="info"  class="buttonGray" @click="cancelBut()">取 消 </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -31,10 +31,10 @@
         <div style="display: flex;flex-direction: column">
           <p style="color: #878787">发布公告列表</p>
           <div style="margin-top: 20px;height: 550px;">
-            <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice">
+            <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice" :key="index">
               <div style="display: flex;flex-direction: column;width: 730px ">
                 <p style="color: rgba(69,71,77,1)">【{{item.title}}】</p>
-                <p style="margin-top: 10px;color: #878787;overflow: auto">{{item.content}}</p>
+                <p style="margin-top: 10px;color: #878787;">{{item.content}}</p>
               </div>
               <p id="deleteBut" @click="deleteBut(item.id)">删除</p>
             </div>
@@ -69,7 +69,7 @@
         this.axios.get(libNotice.select).then((res)=>{
           console.log('初始化返回的公告数据',res)
           if(res.data.state==true){
-            this.$message.success(res.data.msg);
+            //this.$message.success(res.data.msg);
             this.showNotice=res.data.row
           }
         })
@@ -130,7 +130,7 @@
     line-height:140px;
     font-size: 12px;
     color:red;
-    cursor: default;
+    cursor: pointer;
     width: 30px;
   }
   .buttonStyle{
@@ -139,6 +139,7 @@
   }
   .buttonBlue{
     color: white;
+    cursor: pointer;
     background-color: #0096ffad;
   }
   .buttonBlue:hover{
@@ -148,6 +149,7 @@
   .buttonGray{
     background-color: #DCDCDC;
     color: #878787;
+    cursor: pointer;
     margin-left: 10px
   }
   .buttonGray:hover{

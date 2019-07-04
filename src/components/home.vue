@@ -445,6 +445,7 @@ export default {
     this.pillarApi();
     this.cardOnApi()
     this.systemApi()
+    this.$customMessage.success('成功了') 
   },
   mounted(){
 
