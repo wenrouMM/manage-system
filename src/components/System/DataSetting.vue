@@ -14,9 +14,7 @@
             <div class="textBox" v-for="(item,index) of bookArr" :key="index">
               <span class="rankNumber" style="color: #0096FF">{{index+1}}.</span>
               <div class="content">
-                <P>
-                  原作名:{{item.name}}
-                </P>
+                <P>原作名:{{item.name}}</P>
                 <p>作者:{{item.author}}</p>
                 <p>出版社:{{item.press}}</p>
               </div>
@@ -32,8 +30,8 @@
         </p>
         <div class="coverBox clearFix">
           <div class="coverUpload">
-            <div class="imgBox" >
-              <img :src="showSrc">
+            <div class="imgBox">
+              <img :src="showSrc" />
             </div>
             <div class="clickImg" @click="uploadBtn">
               <div class="iconBox">
@@ -81,7 +79,7 @@
           <el-table-column align="center" prop="name" label="书籍封面">
             <template slot-scope="scope">
               <div class="tab-imgBox">
-                <img :src="scope.row.showImg" style="width:60px;height: 80px">
+                <img :src="scope.row.showImg" style="width:60px;height: 80px" />
               </div>
             </template>
           </el-table-column>
@@ -113,9 +111,7 @@
     </section>
     <div class="forbid collectionDelete">
       <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
-        <div class="dialogBody">
-          是否删除这本书籍?
-        </div>
+        <div class="dialogBody">是否删除这本书籍?</div>
         <div style="margin-bottom: 30px">
           <span class="dialogButton true mr_40" @click="deleteDefineBut()">确 定</span>
           <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
@@ -137,7 +133,7 @@ import {
 export default {
   data() {
     return {
-      centerDialogVisible:false,
+      centerDialogVisible: false,
       upForm: {
         bookName: "",
         author: "",
@@ -214,11 +210,10 @@ export default {
       this.show = true;
     },
     deleteBtn(index, row) {
-      this.centerDialogVisible=true
+      this.centerDialogVisible = true;
       this.deleteObj.id = row.id;
-
     },
-    deleteDefineBut(){
+    deleteDefineBut() {
       this._delete();
     },
     onSubmit(formName) {
@@ -235,31 +230,45 @@ export default {
     /*--- API ---*/
     _search() {
       dataSearch().then(res => {
-        if (res.data.row.length == 3) {
-          this.juge = true;
-        } else {
-          this.juge = false;
+        if (res.data.state) {
+          if (res.data.row.length == 3 || res.data.row == null) {
+            this.juge = true;
+          } else {
+            this.juge = false;
+          }
+          console.log("现在的数组长度", res.data.row.length);
+          this._toFilter(res.data.row);
+          console.log("测试接口", res);
+        } else{
+          this.$message.error(res.data.msg)
         }
-        console.log("现在的数组长度", res.data.row.length);
-        this._toFilter(res.data.row);
-        console.log("测试接口", res);
       });
     },
     _add() {
       dataAdd(this.addTimeForm).then(res => {
-        console.log("测试添加", res);
+        if(res.data.state){
+          console.log("测试添加", res);
         this.clearObj(this.upForm);
         this.imgDataUrl = "";
         this.$refs.addForm.resetFields();
         this._search();
         this.$message.success(res.data.msg);
+        } else{
+          this.$message.error(res.data.msg);
+        }
+        
       });
     },
     _delete() {
       dataDelete(this.deleteObj).then(res => {
-        this.$message.success(res.data.msg);
-        this.centerDialogVisible=false
-        this._search();
+        if(res.data.state){
+          this.$message.success(res.data.msg);
+          this.centerDialogVisible = false;
+          this._search();
+        } else{
+          this.$message.error(res.data.msg);
+        }
+        
       });
     },
     /*--- 过滤函数 ---*/
@@ -272,12 +281,11 @@ export default {
         propArr.push(showImg);
       }
 
-       if(length<3){
-        while(length<3){
-          propArr.push(this.defaultSrc)
-          length++
+      if (length < 3) {
+        while (length < 3) {
+          propArr.push(this.defaultSrc);
+          length++;
         }
-
       }
       this.bookArr = arr;
       this.propArr = propArr;
@@ -365,7 +373,6 @@ export default {
   flex-direction: row;
 }
 .textBox .rankNumber {
-
   display: inline-block;
   text-align: center;
   line-height: 18px;
@@ -373,15 +380,13 @@ export default {
 
   color: #0e0d0d;
 }
-.content p{
+.content p {
   max-width: 180px;
   overflow: hidden;
-text-overflow:ellipsis;
-white-space: nowrap;
-
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.bookList{
-
+.bookList {
 }
 .ml_24 {
   margin-left: 24px;
@@ -406,7 +411,7 @@ white-space: nowrap;
   width: 168px;
   height: 208px;
 }
-.coverUpload:hover .clickImg{
+.coverUpload:hover .clickImg {
   display: block;
 }
 .coverBox .imgBox {

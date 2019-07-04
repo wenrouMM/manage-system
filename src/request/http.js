@@ -48,10 +48,14 @@ axios.interceptors.response.use(
     return response
   },
   error => {
-     console.log(error.code)
-     
+     console.log(error)
+     console.log(error.message.indexOf('Network') )
+     /* if(error.message.indexOf('Network') == 0){
+       Message.error('网络错误 请检查')
+       console.log('我觉得这个支线了')
+     } */
      //console.log('状态吗',error.response.status)
-     console.log('超时错误吗',typeof(error));//console : Error: Request failed with status code 402
+     console.log('超时错误吗',typeof(error),error.message);//console : Error: Request failed with status code 402
     return Promise.reject(error)
   },
 )

@@ -525,10 +525,12 @@ export default {
         switch (this.searchData / 1) {
           case 0:
             console.log("姓名");
+            this.selectSearchForm.userId=''
             this.selectSearchForm.userName = this.searchForm.searchData;
             break;
           case 1:
             console.log("身份证号");
+            this.selectSearchForm.userName=''
             this.selectSearchForm.userId = this.searchForm.searchData;
             break;
         }

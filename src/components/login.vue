@@ -28,6 +28,7 @@
 <script>
 import axios from 'axios'
 import {loginInter,login} from '../request/api/base.js'
+
   export default {
     name: "login.vue",
     data:function(){
