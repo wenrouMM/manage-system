@@ -32,24 +32,6 @@ import 'nprogress/nprogress.css'
 import {PersonalCentre} from '@/request/api/base.js'
 Vue.config.productionTip = false
 NProgress.configure({ showSpinner: false })
-const test = function (options) {
-  options.duration = 2000
-  options.showClose = true
-  return Message(options)
-}
-
-test.error = (options) => {
-  if (typeof options === 'string') {
-    options = {
-      message: options
-    };
-    options.type = 'error'
-    options.duration = 2000
-    options.showClose = true
-    return Message(options)
-  }
-}
-Vue.prototype.$customMessage = test
 router.beforeEach((to, from, next) => {
   NProgress.start()
   let token = sessionStorage.getItem('token')

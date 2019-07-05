@@ -81,7 +81,7 @@
                     class="input-with-select"
                     @keyup.enter.native="selectBtn"
                   >
-                    <el-select v-model="searchForm.selectBook" slot="prepend" placeholder="请选择">
+                    <el-select id="protect" v-model="searchForm.selectBook" slot="prepend" placeholder="请选择">
                       <el-option label="书籍" value="1"></el-option>
                       <el-option label="期刊" value="2"></el-option>
                     </el-select>
@@ -180,7 +180,7 @@
               </el-table>
             </section>
           </el-tab-pane>
-          <el-tab-pane label="待归还书籍" name="second">
+          <!-- <el-tab-pane label="待归还书籍" name="second">
             <section class="endTable">
               <el-table
                 class="tableBorder"
@@ -199,12 +199,7 @@
                 <el-table-column align="center" prop="createTime" label="借书开始时间"></el-table-column>
                 <el-table-column align="center" prop="planReturnTime" label="预计书籍归还时间"></el-table-column>
                 <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
-                <!-- <el-table-column align="center" label="操作">
-                  <template slot-scope="scope">
-                    <el-button @click="renewBtn(scope.row)" type="text" size="small">续借</el-button>
-                    <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
-                  </template>
-                </el-table-column> -->
+                
               </el-table>
             </section>
           </el-tab-pane>
@@ -235,8 +230,14 @@
                 <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
               </el-table>
             </section>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
+        <!-- <el-table-column align="center" label="操作">
+                  <template slot-scope="scope">
+                    <el-button @click="renewBtn(scope.row)" type="text" size="small">续借</el-button>
+                    <el-button @click="damageBtn(scope.row)" type="text" size="small">报损</el-button>
+                  </template>
+                </el-table-column> -->
       </div>
     </div>
   </div>
@@ -251,6 +252,7 @@ export default {
     return {
       message: "",
       labelPosition: "left",
+      
       searchForm: {
         cardNum: "",
         bookCode: "",
@@ -319,7 +321,9 @@ export default {
     selectBtn() {
       if (this.searchForm.selectBook == "1") {
         this.codeSearchApi(this.searchTimeForm);
+        console.log('就是看看',this.searchForm.selectBook)
       } else {
+        this.$message.info('现在还未决定怎么做')
         console.log("现在调用的是期刊API");
       }
     },
@@ -710,4 +714,5 @@ export default {
 .borrowbook .searchBox .el-select .el-input--suffix {
   width: 75px;
 }
+
 </style>

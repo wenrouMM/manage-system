@@ -22,11 +22,9 @@ export function dataSearch() {
 
 export function dataAdd(data) {
   return  axios.post(recommendInt.add,data).then((res) =>{
-        if(res.data.state == true){
+        
             return Promise.resolve(res)
-        } else {
-            Message.error(res.data.msg)
-        }
+        
     })
 }
 
@@ -37,10 +35,10 @@ export function dataDelete(obj) {
       
       data:obj
   }).then((res) => {
-        if(res.data.state == true){
+        
             return Promise.resolve(res)
-        } else {
-            Message.error(res.data.msg)
-        }
+        
+            
+       
     })
 }

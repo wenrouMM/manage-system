@@ -129,7 +129,7 @@
               </el-table>
             </section>
           </el-tab-pane>
-          <el-tab-pane label="历史借阅记录" name="third">
+          <!-- <el-tab-pane label="历史借阅记录" name="third">
             <section class="endTable">
               <el-table
                 class="tableBorder"
@@ -155,7 +155,7 @@
                 <el-table-column align="center" prop="renewCount" label="续借次数"></el-table-column>
               </el-table>
             </section>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
       </div>
     </div>

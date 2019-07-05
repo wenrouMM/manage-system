@@ -32,7 +32,7 @@
           <p style="color: #0096FF">发布公告列表</p>
           <div class="noneNotice" v-if="showNotice.length==0">暂无公告</div>
           <div style="margin-top: 20px;height: 550px;">
-            <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice">
+            <div class="flexLayout NoticeContent" v-for="(item,index) of showNotice" :key="index">
               <div style="display: flex;flex-direction: column;width: 730px ">
                 <p style="color: rgba(69,71,77,1)">【{{item.title}}】</p>
                 <p style="margin-top: 10px;color: #878787">{{item.content}}</p>
@@ -181,7 +181,7 @@
     line-height:140px;
     font-size: 12px;
     color:red;
-    cursor: default;
+    cursor: pointer;
     width: 30px;
   }
   .buttonStyle{
@@ -190,6 +190,7 @@
   }
   .buttonBlue{
     color: white;
+    cursor: pointer;
     background-color: #0096ffad;
   }
   .buttonBlue:hover{
@@ -199,6 +200,7 @@
   .buttonGray{
     background-color: #DCDCDC;
     color: #878787;
+    cursor: pointer;
     margin-left: 10px
   }
   .buttonGray:hover{

@@ -38,72 +38,72 @@
               </div>
             </el-upload>
             <div class="textCenter firstButton">
-              <el-button type="primary" @click="addBtn">上传</el-button>
-              <el-button type="info" @click="cancelBtn">取消</el-button>
+              <el-button class="buttonBlue" type="primary" @click="addBtn">上传</el-button>
+              <el-button class="buttonGray" type="info" @click="cancelBtn">取消</el-button>
             </div>
           </div>
         </div>
       </section>
       <section class="ListBox">
-        <section class="recomandList">
-          <p class="data-title mb_20" style="color:#0096FF">上传视频列表</p>
-          <section class="tableBox">
-            <el-table
-              :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
-              empty-text="无数据"
-              style="width: 100%; text-align:center;"
-              :data="videoArr"
-              :row-style="{height:'50px'}"
-            >
-              <el-table-column min-width="160px" align="center" prop="name" label="视频封面">
-                <template slot-scope="scope">
-                  <div class="tab-imgBox">
-                    <video controls :src="scope.row.showFile" width="160" height="120"></video>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                :show-overflow-tooltip="true"
-                align="left"
-                prop="title"
-                label="标题/时长"
+        <el-scrollbar class="recomandList">
+          <section >
+            <p class="data-title mb_20" style="color:#0096FF">上传视频列表</p>
+            <section class="tableBox">
+              <el-table
+                :header-cell-style="{background:'#0096FF', color:'#fff',height:'50px', fontSize:'18px',borderRight:'none'}"
+                empty-text="无数据"
+                style="width: 100%; text-align:center;"
+                :data="videoArr"
+                :row-style="{height:'50px'}"
               >
-                <template slot-scope="scope">
-                  <div style="text-align:left" class="box">
-                    <p>{{scope.row.title}}</p>
-                    <p>{{scope.row.videoTime}}</p>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="fkHandleModeName" label="上传者"></el-table-column>
-              <el-table-column
-                min-width="160"
-                :show-overflow-tooltip="true"
-                align="center"
-                prop="createTime"
-                label="时间/大小"
-              >
-                <template slot-scope="scope">
-                  <div class>
-                    <p>{{scope.row.createTime}}</p>
-                    <p>{{scope.row.videoSize}}M</p>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="操作">
-                <template slot-scope="scope">
-                  <span class="red" @click="deleteBtn(scope.$index, scope.row)">删除</span>
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-table-column min-width="160px" align="center" prop="name" label="视频封面">
+                  <template slot-scope="scope">
+                    <div class="tab-imgBox">
+                      <video controls :src="scope.row.showFile" width="160" height="120"></video>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  :show-overflow-tooltip="true"
+                  align="left"
+                  prop="title"
+                  label="标题/时长"
+                >
+                  <template slot-scope="scope">
+                    <div style="text-align:left" class="box">
+                      <p>{{scope.row.title}}</p>
+                      <p>{{scope.row.videoTime}}</p>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" prop="fkHandleModeName" label="上传者"></el-table-column>
+                <el-table-column
+                  min-width="160"
+                  :show-overflow-tooltip="true"
+                  align="center"
+                  prop="createTime"
+                  label="时间/大小"
+                >
+                  <template slot-scope="scope">
+                    <div class>
+                      <p>{{scope.row.createTime}}</p>
+                      <p>{{scope.row.videoSize}}M</p>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" label="操作">
+                  <template slot-scope="scope">
+                    <span class="red" @click="deleteBtn(scope.$index, scope.row)">删除</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </section>
           </section>
-        </section>
+        </el-scrollbar>
       </section>
       <div class="forbid collectionDelete">
         <el-dialog title="删除" :visible.sync="centerDialogVisible" width="400px" center>
-          <div class="dialogBody">
-            是否删除这条视频?
-          </div>
+          <div class="dialogBody">是否删除这条视频?</div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="deleteDefineBut()">确 定</span>
             <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
@@ -126,7 +126,7 @@ export default {
   data() {
     return {
       fileUrl: videoUpload,
-      centerDialogVisible:false,
+      centerDialogVisible: false,
       fileList: [], // 文件列表
       backUrl: "", // 返回的视频链接
       videoArr: [], // video数组
@@ -162,9 +162,8 @@ export default {
   methods: {
     /*--- ---*/
     cancelBtn() {
-
       this.$refs.addForm.resetFields();
-      this.fileList = []
+      this.fileList = [];
     },
     addBtn() {
       this.$refs.addForm.validate(valid => {
@@ -178,40 +177,50 @@ export default {
       console.log("上传之前的数据", this.addTimeForm);
     },
     deleteBtn(index, row) {
-      this.centerDialogVisible=true
+      this.centerDialogVisible = true;
       this.deleteObj.id = row.id;
     },
-    deleteDefineBut(){
+    deleteDefineBut() {
       this._delete();
     },
     /*--- API ---*/
     _search() {
       dataSearch().then(res => {
-        if (res.data.row == null || res.data.row.length == 6) {
-          this.juge = true;
+        if (res.data.state == true) {
+          if (res.data.row == null || res.data.length > 3) {
+            this.juge = true;
+          } else {
+            this.juge = false;
+          }
+          this.videoArr = this._toFilter(res.data.row);
         } else {
-          this.juge = false;
+          this.$message.error(res.data.msg);
         }
-        this.videoArr = this._toFilter(res.data.row);
-
         console.log("测试接口", res);
       });
     },
     _add() {
       dataAdd(this.addTimeForm).then(res => {
-        console.log("测试添加", res);
-        this.clearObj(this.upForm);
-        this.fileList = [];
-        this.$refs.addForm.resetFields();
-        this._search();
-        this.$message.success(res.data.msg);
+        if (res.data.state == true) {
+          this.clearObj(this.addForm);
+          this.fileList = [];
+          this.$refs.addForm.resetFields();
+          this._search();
+          this.$message.success(res.data.msg);
+        } else {
+          this.$message.error(res.data.msg);
+        }
       });
     },
     _delete() {
       dataDelete(this.deleteObj).then(res => {
-        this.$message.success(res.data.msg);
-        this.centerDialogVisible=false
-        this._search();
+        if (res.data.state == true) {
+          this.$message.success(res.data.msg);
+          this.centerDialogVisible = false;
+          this._search();
+        } else {
+          this.$message.error(res.data.msg);
+        }
       });
     },
     /*--- 过滤函数 ---*/
@@ -232,6 +241,7 @@ export default {
       console.log("添加之后", this.videoArr);
     },
     /*--- 功能函数 ---*/
+    // 传入一个字符串和一个限制长度的数字 生成一个补0到指定长度的字符串
     toNumebr(value, num) {
       let str = String(value);
       let length = str.length;
@@ -251,9 +261,10 @@ export default {
       console.log(this.videoSize, file.size);
       // 获取视频时长
       var video = document.createElement("video");
-      video.preload = "metadata";
+      video.preload = "metadata"; // 暗示加载元数据
       video.onloadedmetadata = function() {
-        window.URL.revokeObjectURL(video.src);
+        // 元数据加载完毕的生命周期函数
+        window.URL.revokeObjectURL(video.src); // 回收生成的url对象
         var duration = video.duration;
         var curhours = that.toNumebr(parseInt(duration / 3600), 2);
         var curminutes = that.toNumebr(
@@ -285,6 +296,9 @@ export default {
     },
     fileRemove(file, fileList) {
       this.fileList = fileList;
+      this.addForm.backUrl = "";
+      this.videoSize = "";
+      this.videoTime = "";
       console.log("删除后的列表", this.fileList);
     },
     handleExceed(files, fileList) {
@@ -343,7 +357,6 @@ export default {
   display: flex;
   flex-direction: row;
 
-  height: 610px;
   box-sizing: border-box;
 }
 .uploadBox {
@@ -366,8 +379,10 @@ export default {
 .ListBox {
   max-width: 820px;
   width: 100%;
+  height: 610px;
 }
 .recomandList {
+  height: 100%;
 }
 .red {
   cursor: pointer;
@@ -376,5 +391,40 @@ export default {
 .firstButton {
   margin-top: 30px;
 }
+.buttonBlue {
+  color: white;
+  cursor: pointer;
+  background-color: #0096ffad;
+  border-width: 0px;
+  border-style: none;
+  width: 100px;
+
+  outline: none;
+}
+.buttonBlue:hover {
+  color: white;
+  background-color: #0096ff73;
+}
+.buttonGray {
+  background-color: #dcdcdc;
+  color: #878787;
+  cursor: pointer;
+  margin-left: 10px;
+  border-style: none;
+  width: 100px;
+
+  outline: none;
+}
+.buttonGray:hover {
+  background-color: #d2d2d2;
+  color: #878787;
+  margin-left: 10px;
+}
+</style>
+<style>
+ #video .el-scrollbar__wrap {
+   overflow-x: hidden;
+ }
+
 </style>
 
