@@ -70,7 +70,6 @@ textarea {
 	margin-top: 0!important;
 	border-radius:20px;
 	background:rgba(0,150,255,0);
-
 	box-shadow: none;
 }
 /* 弹框头部颜色大小 按钮更改 */
@@ -106,9 +105,11 @@ textarea {
 }
 .el-dialog__body{
 	min-height: 140px;
-	padding: 30px!important;
+	padding: 20px!important;
 	box-sizing: border-box;
 	background-color: #fff;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 
 	/*后期不居中的时候删掉*/
 	display: flex;
@@ -337,7 +338,7 @@ textarea {
 	border-radius: 0 0 20px 20px;
 }
 .addEditDialog .el-form-item{
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 }
 .addEditDialog .el-form-item.uploadBox{
 	width: 100%;

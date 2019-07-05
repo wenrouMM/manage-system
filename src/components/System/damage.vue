@@ -114,7 +114,7 @@
         <!-- Form -->
         <el-dialog
           @close="closeForm"
-          width="620px"
+          width="600px"
           :title="Dialogtitle[i]"
           :visible.sync="dialogFormVisible"
         >
@@ -123,7 +123,7 @@
             :model="addForm"
             :rules="rules"
             :ref="addForm"
-            label-width="100px"
+            label-width="90px"
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
           >
@@ -151,12 +151,14 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="备注信息 : " prop="remark">
-              <el-input type="textarea" v-model="addForm.remark" resize="none"  :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入备注信息"></el-input>
+              <el-input type="textarea" style="width: 464px" v-model="addForm.remark" resize="none"  :autosize="{ minRows: 4, maxRows: 4}" placeholder="请输入备注信息"></el-input>
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item>
-              <el-button type="primary" @click="submitForm('addForm')" style="margin-left: 20px">确定</el-button>
-              <el-button type="info" @click="resetForm('addForm')">取消</el-button>
+              <div style="width: 255px;margin-left: 70px">
+                <span class="dialogButton true mr_40" @click="submitForm('addForm')">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('addForm')">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -258,12 +260,12 @@
         console.log('赔偿方式',val)
         console.log(this.rules.payforNum[0].message)
         if(val==0){
-          this.title='具体金额:'
+          this.title='具体金额 :'
           this.placeholderTitle='请输入具体赔偿金额'
           this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
           this.moneyTitle='元'
         }else if(val==1){
-          this.title='价格倍数:'
+          this.title='价格倍数 :'
           this.placeholderTitle='请输入赔偿价格倍数'
           this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
           this.moneyTitle='倍'
@@ -305,11 +307,13 @@
         this.id=row.id
         this.dialogFormVisible=true
         if(row.compensationType==0){
-          this.title='具体金额:'
+          this.title='具体金额 :'
+          this.moneyTitle="元"
           //this.placeholderTitle='请输入具体赔偿金额'
           //this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
         }else if(row.compensationType==1){
-          this.title='价格倍数:'
+          this.title='价格倍数 :'
+          this.moneyTitle="倍"
           //this.placeholderTitle='请输入赔偿价格倍数'
           //this.rules.payforNum[0].message='赔偿的价格倍数/具体金额不能为空'
         }
@@ -379,6 +383,7 @@
       },
       closeForm() {
         this.title=''
+        this.moneyTitle=""
         this.placeholderTitle=''
         let obj = this.addForm;
         this.$refs[this.addForm].resetFields(); // 调用这个方法进行清除登陆状态 打开的时候再清理？

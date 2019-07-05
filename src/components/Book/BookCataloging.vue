@@ -268,9 +268,9 @@
               </el-form>
             </div>
             <div class="messageAdd_Edit buttonStyle">
-              <div style="width: 450px;margin:0px auto">
-                <el-button type="primary" style="width: 150px" @click="definiteCheck()" >确定</el-button>
-                <el-button type="info" style="width: 150px;margin-left: 100px" @click="cancelCheck()" >取消</el-button>
+              <div style="margin:10px auto 10px;width:400px ">
+                <span class="dialogButton true mr_40" @click="definiteCheck()" style="width: 150px">确 定</span>
+                <span class="dialogButton cancel" @click="cancelCheck()" style="width: 150px;margin-left: 50px">取 消</span>
               </div>
             </div>
             <div style="margin-bottom: 10px">

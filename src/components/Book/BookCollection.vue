@@ -565,12 +565,10 @@
                   </div>
                 </div>
                 <div style="width: 450px;margin:10px auto 0px">
-                  <el-button type="primary" @click="definiteCheck" style="width: 150px">确定</el-button>
-                  <el-button
-                    type="info"
-                    style="margin-left: 100px;width: 150px"
-                    @click="cancelCheck"
-                  >取消</el-button>
+                  <div style="margin:0px auto  20px;">
+                    <span class="dialogButton true mr_40" @click="definiteCheck" style="width: 150px">确 定</span>
+                    <span class="dialogButton cancel" @click="cancelCheck" style="width: 150px;margin-left: 50px">取 消</span>
+                  </div>
                 </div>
               </div>
             </el-form>
@@ -584,7 +582,7 @@
               :model="numberValidateForm"
               :ref="numberValidateForm"
               :rules="rules"
-              label-width="100px"
+              label-width="90px"
               class="demo-ruleForm"
             >
               <el-form-item label=" 剔除原因 :" prop="cause">
@@ -592,7 +590,7 @@
                   v-model="numberValidateForm.cause"
                   clearable
                   placeholder="请选择"
-                  style="width: 330px"
+                  style="width: 250px"
                 >
                   <el-option label="未还" value="4"></el-option>
                   <el-option label="被盗" value="5"></el-option>
@@ -1030,7 +1028,7 @@ export default {
     },
     //剔除按钮
     rejectBtn() {
-      this.widthMessage = "500px";
+      this.widthMessage = "400px";
       if (this.tableChecked.length) {
         this.j = 5;
         this.centerDialogVisible = true;

@@ -17,37 +17,6 @@
 
     <div style="width: 610px;height: 600px;" class="formDiv">
       <el-form ref="addForm" :model="addForm" :rules="addRules">
-        <el-form-item class="uploadBox" style="width: 100px;margin-left: 250px;margin-top: 20px">
-          <section class="upload mb_30">
-            <!-- 背景图片做改动 -->
-            <!--<div
-              class="defultHead"
-              style="width:100px; height:100px; border-radius:50%;position: relative"
-            >
-              <img
-                src="../../../base/img/normalHead.jpg"
-                style="position: absolute;top: 0;left: 0;width:100px; height:100px; border-radius:50%;"
-                v-if="!addForm.preloading"
-              >
-              <img
-                style="width:100px; height:100px ;border-radius:50%;position: absolute;top: 0;left: 0"
-                v-if="addForm.preloadImg"
-                :src="addForm.preloadImg"
-                alt="预览照片"
-                class="preloadImg"
-              >
-              <!--
-              <input
-                type="file"
-                accept="jpg/png"
-                style="display:none;"
-                ref="file"
-                id="file"
-                @change="getFile"
-              >
-            </div>-->
-          </section>
-        </el-form-item>
         <!-- 表单域 -->
         <div class="hideBox" v-if="!rebackData">
           <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
@@ -494,7 +463,7 @@ export default {
   height: 30px;
 }
 .formDiv {
-  margin: 70px auto;
+  margin: 100px auto;
 }
 .textBox p {
   margin-bottom: 30px;

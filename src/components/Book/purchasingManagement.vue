@@ -112,8 +112,10 @@
             ></el-input>
           </el-form-item>
           <el-form-item style="margin:0px auto">
-            <el-button type="primary" @click="submitForm()" style="margin-left: 20px">确定</el-button>
-            <el-button type="info" @click="resetForm()">取消</el-button>
+            <div style="margin-bottom: 10px">
+              <span class="dialogButton true mr_40" @click="submitForm()">确 定</span>
+              <span class="dialogButton cancel" @click="resetForm()">取 消</span>
+            </div>
           </el-form-item>
         </el-form>
       </el-dialog>

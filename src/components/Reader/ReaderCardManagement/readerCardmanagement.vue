@@ -152,15 +152,15 @@
         </div>
       </div>
       <!-- 禁用弹框/批量删除弹框 -->
-      <div class="forbid">
-        <el-dialog title="用户注销" :visible.sync="deleteDialog" width="500px" center>
+      <div class="forbid collectionDelete">
+        <el-dialog title="用户注销" :visible.sync="deleteDialog" width="450px" center>
           <!-- <div class="dialogBody">是否注销?</div> -->
           <div class="formBox" style="width:360px">
             <el-form :model="logOut">
-              <el-form-item labelWidth="60px" label="卡号">
+              <el-form-item labelWidth="50px" label="卡号 :">
                 <span>{{logOut.fkCardNumber}}</span>
               </el-form-item>
-              <el-form-item label="备注" labelWidth="60px">
+              <el-form-item label="备注 :" labelWidth="50px">
                 <el-input
                   type="textarea"
                   resize="none"
@@ -169,22 +169,22 @@
                   v-model="logOut.remarks"
                 ></el-input>
               </el-form-item>
-              <el-form-item class="textCenter">
-                <el-button type="primary" @click="subDelete">确定</el-button>
-                <el-button type="info" @click="deleteDialog = false">取消</el-button>
-              </el-form-item>
             </el-form>
+            <div style="margin:0px auto 20px;width: 255px">
+              <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
+              <span class="dialogButton cancel" @click="deleteDialog = false">取 消</span>
+            </div>
           </div>
           <!-- <p class="tips">注销用户属于敏感操作</p> -->
         </el-dialog>
       </div>
       <!-- 批量删除弹框 -->
       <!-- 添加弹框 -->
-      <div class="addEditDialog readerCard">
+      <div class="collectionDelete readerCard">
         <!-- Form -->
         <el-dialog
           @close="closeForm('changeForm')"
-          width="460px"
+          width="400px"
           :title="Dialogtitle[i]"
           :visible.sync="changeFormDialog"
         >
@@ -194,7 +194,7 @@
               <el-form-item :label="labelName[i]" prop="idCard">
                 <el-input @keyup.enter.native v-model="changeForm.idCard" autocomplete="off"></el-input>
               </el-form-item>
-              <div class="supply">
+              <div class="supply" style="width: 100px;margin: 0 auto 30px;color: #878787">
                 <p>
                   补卡费用：
                   <span>{{supplyCost}}</span>
@@ -217,14 +217,8 @@
             </div>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button
-                class="buttonTrueColor"
-                @click="submitForm('changeForm','changeFormDialog')"
-              >确定</el-button>
-              <el-button
-                class="buttonCancelColor"
-                @click="resetForm('changeForm','changeFormDialog')"
-              >取消</el-button>
+                <span class="dialogButton true mr_40" @click="submitForm('changeForm','changeFormDialog')">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('changeForm','changeFormDialog')">取 消</span>
             </el-form-item>
           </el-form>
         </el-dialog>

@@ -141,7 +141,7 @@
       <div id="typeMessage">
         <div style="position: relative">
           <p>授权</p>
-          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 10px;left: 360px;width: 20px;height: 20px" @click="closeCheck">
+          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 16px;left: 360px;width: 20px;height: 20px" @click="closeCheck">
         </div>
         <div class="powerControl">
           <ul id="treeDemo" class="ztree"></ul>

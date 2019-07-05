@@ -115,14 +115,10 @@
               </el-form-item>
             </div>
             <el-form-item class="dialogFooter">
-              <el-button
-                class="buttonTrueColor"
-                @click="submitForm('changeStoreForm','storeRoomDialog')"
-              >确定</el-button>
-              <el-button
-                class="buttonCancelColor"
-                @click="resetForm('changeStoreForm','storeRoomDialog')"
-              >取消</el-button>
+              <div>
+                <span class="dialogButton true mr_40" @click="submitForm('changeStoreForm','storeRoomDialog')">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('changeStoreForm','storeRoomDialog')">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -130,31 +126,6 @@
 
       <!-- 右侧弹框组 -->
       <!-- 绑定区 -->
-      <div class="bind">
-        <el-dialog
-          :title="dialogTitle[i]"
-          :visible.sync="bindDialog"
-          width="442px"
-          @close="handleClose('bindForm')"
-        >
-          <el-form ref="bindForm" :rules="bindRules" :model="bindForm">
-            <el-form-item label="绑定区" prop="bindId">
-              <el-select v-model="bindForm.bindId" placeholder="请选择">
-                <el-option
-                  v-for="(item,index) of changeOption"
-                  :key="index"
-                  :label="item.regionName"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item class="dialogFooter">
-              <el-button class="buttonTrueColor" @click="bindSubmit('bindForm','bindDialog')">确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('bindForm','bindDialog')">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
-      </div>
       <!-- 删除区Or删除库房 -->
       <div class="forbid collectionDelete">
         <el-dialog :title="dialogTitle[i]" :visible.sync="deleteDialog" width="400px" center>
@@ -172,7 +143,7 @@
         <el-dialog
           :title="dialogTitle[i]"
           :visible.sync="changeDialog"
-          width="900px"
+          width="750px"
           @close="handleClose('changeAreaForm')"
           center
         >
@@ -229,14 +200,10 @@
             </el-form-item>
 
             <el-form-item class="dialogFooter">
-              <el-button
-                class="buttonTrueColor"
-                @click="submitForm('changeAreaForm','changeDialog')"
-              >确定</el-button>
-              <el-button
-                class="buttonCancelColor"
-                @click="resetForm('changeAreaForm','changeDialog')"
-              >取消</el-button>
+              <div>
+                <span class="dialogButton true mr_40" @click="submitForm('changeAreaForm','changeDialog')" style="width: 150px">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('changeAreaForm','changeDialog')" style="width: 150px">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -1178,21 +1145,21 @@ export default {
 .row2 .text {
   position: absolute;
   top: 13px;
-  right: 80px;
+  right: 10px;
   font-size: 14px;
   color: #878787;
 }
 .row2 .text2 {
   position: absolute;
   top: 13px;
-  left: 390px;
+  left: 330px;
   font-size: 14px;
   color: #878787;
 }
 .row2 .text1 {
   position: absolute;
   top: 13px;
-  right:80px;
+  right:10px;
   font-size: 14px;
   color: #878787;
 }

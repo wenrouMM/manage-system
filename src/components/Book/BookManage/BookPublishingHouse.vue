@@ -102,24 +102,26 @@
           <!-- 添加弹框 -->
           <div class="addEditDialog">
             <!-- Form -->
-            <el-dialog @close="closeForm" width="568px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
-              <el-form id="addFormYf"  label-width="120px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column">
-                <el-form-item label="出版社名称 :" prop="publishName" style="padding-left: 60px">
+            <el-dialog @close="closeForm" width="500px" :title="Dialogtitle[i]" :visible.sync="dialogFormVisible">
+              <el-form id="addFormYf"  label-width="130px" :rules="addRules" :model="addForm" :ref="addForm" style="display: flex;flex-direction: column;margin-top: 15px">
+                <el-form-item label="出版社名称 :" prop="publishName">
                   <el-input v-model="addForm.publishName"></el-input>
                 </el-form-item>
-                <el-form-item label="公 司 地 址 :" prop="componentAddress" style="padding-left: 60px">
+                <el-form-item label="公 司 地 址 :" prop="componentAddress">
                   <el-input v-model="addForm.componentAddress"></el-input>
                 </el-form-item>
-                <el-form-item label="联　系　人 :" prop="contacts" style="padding-left: 60px">
+                <el-form-item label="联　系　人 :" prop="contacts">
                   <el-input v-model="addForm.contacts"></el-input>
                 </el-form-item>
-                <el-form-item label="联 系 电 话 :" prop="contactPhone" style="padding-left: 60px">
+                <el-form-item label="联 系 电 话 :" prop="contactPhone">
                   <el-input v-model="addForm.contactPhone"></el-input>
                 </el-form-item>
                 <!-- 弹框表单按钮  验证失效-->
-                <el-form-item>
-                  <el-button type="primary" @click="submitForm()">确定</el-button>
-                  <el-button type="info" @click="resetForm()" >取消</el-button>
+                <el-form-item label-width="110px">
+                  <div>
+                    <span class="dialogButton true mr_40" @click="submitForm()">确 定</span>
+                    <span class="dialogButton cancel" @click="resetForm()">取 消</span>
+                  </div>
                 </el-form-item>
               </el-form>
             </el-dialog>

@@ -123,7 +123,7 @@
         <!-- Form -->
         <el-dialog
           @close="closeForm"
-          width="586px"
+          width="500px"
           :title="Dialogtitle[i]"
           :visible.sync="dialogFormVisible"
         >
@@ -132,14 +132,14 @@
             :model="addForm"
             :rules="rules"
             :ref="addForm"
-            label-width="100px"
+            label-width="110px"
             class="demo-ruleForm"
             style="display: flex;flex-direction: column"
           >
-            <el-form-item label="名称" prop="userType" style="margin-left: 50px;">
+            <el-form-item label="名称" prop="userType">
               <el-input v-model="addForm.userType"></el-input>
             </el-form-item>
-            <el-form-item label="上级" prop="parent" style="margin-left: 50px">
+            <el-form-item label="上级" prop="parent">
               <el-select clearable v-model="addForm.parent" placeholder="请选择上级">
                 <el-option
                   v-for="(option,index) of optionsData"
@@ -149,7 +149,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item prop="isLock" label="状态" style="margin-left: 50px">
+            <el-form-item prop="isLock" label="状态" >
               <el-radio-group v-model="addForm.isLock">
                 <el-radio label="禁用"></el-radio>
                 <el-radio label="启用"></el-radio>
@@ -157,8 +157,10 @@
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item>
-              <el-button type="primary" @click="submitForm('addForm')">确定</el-button>
-              <el-button type="info" @click="resetForm('addForm')">取消</el-button>
+              <div style="margin-bottom: 20px;width: 255px;">
+                <span class="dialogButton true mr_40" @click="submitForm('addForm')">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('addForm')">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>

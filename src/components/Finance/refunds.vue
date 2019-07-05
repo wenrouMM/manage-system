@@ -70,8 +70,8 @@
       </el-form>
       </div>
       <div class="butonBox">
-        <el-button type="info" @click="resetFormBtn">重置</el-button>
-        <el-button type="primary" @click="rechargeBtn">充值</el-button>
+        <el-button type="info" @click="resetFormBtn" style="width: 150px">重置</el-button>
+        <el-button type="primary" @click="rechargeBtn" style="width: 150px">充值</el-button>
       </div>
     </section>
   </div>

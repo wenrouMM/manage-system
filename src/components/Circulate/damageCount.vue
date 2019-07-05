@@ -105,11 +105,11 @@
             <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
           </section>
         </section>
-        <div class="dealDialog">
+        <div class="dealDialog collectionDelete">
           <el-dialog  title="报损处理" :visible.sync="dealDialog" width="400px">
-            <div class="FormBox" style="width: 200px">
+            <div class="FormBox" style="width: 255px">
               <el-form :model="dealForm">
-                <el-form-item label="应收金额" label-width="100px">
+                <el-form-item label="应收金额" label-width="150px">
                   <span class="text">{{dealCash}}</span>
                 </el-form-item>
                 <!--
@@ -117,13 +117,11 @@
                   <el-input v-model="dealForm.dealNum" auto-complete="off"></el-input>
                 </el-form-item>
                 -->
-                <el-form-item>
-                  <div class="textCenter">
-                    <el-button type="primary" @click="dealFormBtn">确 定</el-button>
-                    <el-button @click="dealDialog = false">取 消</el-button>
-                  </div>
-                </el-form-item>
               </el-form>
+              <div style="margin-bottom: 20px">
+                <span class="dialogButton true mr_40" @click="dealFormBtn">确 定</span>
+                <span class="dialogButton cancel" @click="dealDialog = false">取 消</span>
+              </div>
             </div>
           </el-dialog>
         </div>

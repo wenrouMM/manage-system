@@ -8,7 +8,7 @@
         <!-- 2.0表单填写 -->
         <section class="searchBox">
           <div class="left buttonBox">
-            <button @click="addBtn" class="add"><i class="addIcon el-icon-plus">添加</i></button>
+            <button @click="addBtn" class="add"><i class="addIcon el-icon-plus"></i>添加</button>
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
@@ -461,7 +461,6 @@ export default {
   text-align: center;
   margin-top: 30px;
 }
-
 .confirm_bt {
   display: inline-block;
   text-align: center;
@@ -512,6 +511,9 @@ export default {
     background: rgba(255, 146, 49, 1);
     border-radius: 10px;
     margin-right: 30px;
+}
+.buttonBox .add .addIcon {
+  margin-right: 6px;
 }
 .buttonBox button {
     padding-left: 18px;

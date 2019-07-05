@@ -134,11 +134,11 @@
         <!-- Form -->
         <el-dialog
           @close="closeForm('changeForm')"
-          width="685px"
+          width="680px"
           :title="Dialogtitle[i]"
           :visible.sync="changeFormDialog"
         >
-          <el-form ref="changeForm" :model="changeForm" :rules="addRules">
+          <el-form ref="changeForm" :model="changeForm" :rules="addRules" style="margin-top: 20px">
             <!-- 表单域 -->
             <el-form-item label="等级名称" prop="name" :label-width="formLabelWidth">
               <el-input v-model="changeForm.name" autocomplete="off" @blur="verifyGradeFun"></el-input>
@@ -165,14 +165,10 @@
             </el-form-item>
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button
-                class="buttonTrueColor"
-                @click="submitForm('changeForm','changeFormDialog')"
-              >确定</el-button>
-              <el-button
-                class="buttonCancelColor"
-                @click="resetForm('changeForm','changeFormDialog')"
-              >取消</el-button>
+              <div>
+                <span class="dialogButton true mr_40" @click="submitForm('changeForm','changeFormDialog')">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('changeForm','changeFormDialog')">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -217,7 +213,7 @@ export default {
       // 添加编辑
       i: 0, // 切换弹框标题
       changeFormDialog: false, // // 添加弹框的展示和消失
-      formLabelWidth: "100px",
+      formLabelWidth: "105px",
       changeForm: {
         name: "", // 等级名称
         renewNum: "", // 续借次数

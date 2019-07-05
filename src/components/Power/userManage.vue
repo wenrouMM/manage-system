@@ -36,7 +36,7 @@
               <!--<el-form-item label="手机号码:" size="160">
                 <el-input v-model="searchForm.userPhone" clearable placeholder="请输入手机号码" style="width: 170px"></el-input>
               </el-form-item>-->
-              <el-form-item label="角色名称:">
+              <el-form-item label="角色名称 :">
                 <!-- 当value为对象时必须要给一个对象内的参数与绑定的key值一致才不会出现选中一个变为选中多个 -->
                 <el-select
                   clearable
@@ -53,7 +53,7 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="创建时间:" size="160">
+              <el-form-item label="创建时间 :" size="160">
                 <el-date-picker
                   v-model="searchForm.beginTime"
                   style="width: 180px"
@@ -187,9 +187,9 @@
           width="400px"
           center
         >
-          <div class="dialogBody">
-            是否{{Dialogtitle[i]}}?
-            <p v-if="i==0">重置过后密码默认为身份证号后6位</p>
+          <div style="text-align: center;padding: 30px">
+            <p style="font-size: 20px;color: #878787">是否{{Dialogtitle[i]}}?</p>
+            <p v-if="i==0" style="font-size: 15px;margin-top: 10px;color: red">(重置过后密码默认为身份证号后6位)</p>
           </div>
 
           <div style="margin-bottom: 30px">
@@ -221,7 +221,7 @@
             :rules="addRules"
           >
             <el-form-item class="uploadBox">
-              <section class="upload mb_30">
+              <section class="upload">
                 <!-- 背景图片做改动 -->
                 <div class="defultHead" style="width:100px; height:100px; border-radius:50%;">
                   <img
@@ -299,24 +299,22 @@
               <el-input v-model="addForm.phone" autocomplete="off" @blur="verifyPhoneFun"></el-input>
             </el-form-item>
 
-            <el-form-item class="select" prop="isLock" label="状　　态">
+            <el-form-item class="select" prop="isLock" label="状　　态"  label-width="85px" style="width: 310px">
               <el-radio-group v-model="addForm.isLock">
                 <el-radio :label="1">禁用</el-radio>
                 <el-radio :label="0">启用</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
-              <p>初始密码为身份证号后6位</p>
+              <p style="color: red;">(初始密码为身份证号后6位)</p>
             </el-form-item>
 
             <!-- 弹框表单按钮  验证失效-->
             <el-form-item class="dialogFooter">
-              <el-button
-                :loading="submitLoading"
-                class="buttonTrueColor"
-                @click="submitForm('addForm')"
-              >确定</el-button>
-              <el-button class="buttonCancelColor" @click="resetForm('addForm')">取消</el-button>
+              <div style="">
+                <span class="dialogButton true mr_40" @click="submitForm('addForm')" :loading="submitLoading">确 定</span>
+                <span class="dialogButton cancel" @click="resetForm('addForm')">取 消</span>
+              </div>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -429,7 +427,7 @@ export default {
         phone: [{ validator: checkPhone, required: true, trigger: "blur" }],
         isLock: [{ required: true, message: "请选择状态", trigger: "change" }]
       },
-      formLabelWidth: "100px",
+      formLabelWidth: "105px",
       /*====== 2.0表单提交数据项 ======*/
       pickerOptions: {
         disabledDate(time) {

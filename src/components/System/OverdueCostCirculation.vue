@@ -18,7 +18,7 @@
           </div>
           <div class="right">
             <el-form :inline="true" :model="searchForm">
-              <el-form-item label="用户名">
+              <el-form-item label="用户名:">
                 <el-input v-model="searchForm.userName" style="width: 200px" clearable placeholder="请输入用户名"></el-input>
               </el-form-item>
               <el-form-item label="创建时间:" size="130">

@@ -115,7 +115,7 @@
       </div>
       <!--'调馆','删除','启用','报损'弹框-->
       <div class="forbid collectionDelete">
-        <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="400px" center>
+        <el-dialog :title="Messagetitle[j]" :visible.sync="centerDialogVisible" width="400px" center>
           <div class="dialogBody">
             是否{{Dialogtitle[i]}}?
           </div>
@@ -139,8 +139,10 @@
         /*====== 2.0表单搜索区域 ======*/
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
-        Dialogtitle: ["上架", "下架"],
+        Messagetitle:["上架","下架"],
+        Dialogtitle: ["上架这本书", "下架这本书","批量上架这些书","批量下架这些书"],
         i: null, // 切换弹框标题
+        j:null,
         searchForm: {
           // 接受搜索表单的数据
           makeMethod:'',
@@ -243,7 +245,8 @@
       //批量上架
       groundingBtn(){
         if(this.tableChecked.length){
-          this.i=0
+          this.j=0
+          this.i=2
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择上架对象')
@@ -252,7 +255,8 @@
       //批量下架
       undercarriageBtn(){
         if(this.tableChecked.length){
-          this.i=1
+          this.j=1
+          this.i=3
           this.centerDialogVisible=true
         } else {
           this.$message.error('请先选择下架对象')
@@ -263,8 +267,10 @@
         console.log('上下架修改',row.id)
         this.id=row.id
         if(row.lendState==0){
+          this.j=0
           this.i=0
         }else{
+          this.j=1
           this.i=1
         }
         this.centerDialogVisible=true
