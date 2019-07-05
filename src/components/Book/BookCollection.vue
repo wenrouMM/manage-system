@@ -608,7 +608,7 @@
             v-if="this.j==0||this.j==1||this.j==2||this.j==4||this.j==5"
           >
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="cancelDialog">取消</span>
+            <span class="dialogButton cancel" @click="cancelDialog">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -714,7 +714,7 @@ export default {
       Dialogtitle: ["修改", "书籍典藏(新增)"],
       Secondarytitle: [
         "调馆",
-        "删除",
+        "批量删除",
         "启用",
         "报损",
         "停用",
@@ -985,6 +985,10 @@ export default {
     },
     selectSearchCheck(val) {
       console.log("查询val", val);
+      this.searchForm.searchData=""
+      for(const index in this.selectSearchForm){
+        this.selectSearchForm[index]=""
+      }
       this.searchData = val;
     },
     findCherries(fruit) {

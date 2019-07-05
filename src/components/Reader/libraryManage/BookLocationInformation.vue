@@ -121,7 +121,7 @@
           </div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="cancelCheck">取消</span>
+            <span class="dialogButton cancel" @click="cancelCheck">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -229,6 +229,10 @@
       //筛选搜索
       selectCheck(val){
         console.log('val',val)
+        this.searchForm.searchData=""
+        for(const index in this.selectSearchForm){
+          this.selectSearchForm[index]=""
+        }
         this.searchData=val
       },
       //批量选择

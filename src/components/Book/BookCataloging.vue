@@ -298,7 +298,7 @@
             </div>
             <div style="margin-bottom: 30px">
               <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-              <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+              <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
             </div>
           </div>
           <div v-if="j==3||j==4" class="bookInfo">
@@ -426,7 +426,7 @@
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ["修改", "新增"],
-        catalogtitle:['删除','导出','导入','本地数据','远程数据'],
+        catalogtitle:['批量删除','导出','导入','本地数据','远程数据'],
         i: null, // 切换弹框标题
         j:null,
         /*初始化 */
@@ -509,6 +509,10 @@
       },
       selectCheck(val) {
         console.log("val", val);
+        this.searchForm.searchData=""
+        for(const index in this.selectSearchForm){
+          this.selectSearchForm[index]=""
+        }
         this.searchData = val;
       },
       //获取图书信息弹窗的多选按钮
@@ -950,6 +954,7 @@
             }
           })
           .catch(error => {
+            this.$message.error(res.data.msg)
             console.log(error);
           });
       },
@@ -973,6 +978,7 @@
             }
           })
           .catch(error => {
+            this.$message.error(res.data.msg)
             console.log(error);
           });
       },

@@ -124,7 +124,7 @@
         <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
         <div style="margin-bottom: 30px">
           <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-          <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+          <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
         </div>
       </el-dialog>
     </div>
@@ -167,7 +167,7 @@ export default {
       tableLoading:true,
       dialogFormVisible: false, // // 新增修改弹框的展示和消失
       centerDialogVisible: false, // 删除弹框
-      Dialogtitle: ["修改", "新增", "删除"],
+      Dialogtitle: ["修改", "新增", "批量删除"],
       i: null, // 切换弹框标题
       tableChecked: [], // 批量选择的的数据
       currentPage: 1,
@@ -208,6 +208,10 @@ export default {
     //筛选搜索
     selectCheck(val) {
       console.log("val", val);
+      this.searchForm.searchData=""
+      for(const index in this.selectSearchForm){
+        this.selectSearchForm[index]=""
+      }
       this.searchData = val;
     },
     //新增按钮

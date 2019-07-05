@@ -206,7 +206,7 @@
               //console.log("保存当前查询", this.paginationForm);
               this.tableLoading = false
             } else {
-              this.$message.error(res.data.msg)
+              this.$customMessage.error(res.data.msg)
               this.tableLoading = false
             }
           })

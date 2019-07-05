@@ -141,7 +141,7 @@
           </div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-            <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+            <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -160,7 +160,7 @@
         tableChecked: [], // 全选绑定的数据
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible:false,
-        Dialogtitle: ["修改", "新增","删除"],
+        Dialogtitle: ["修改", "新增","批量删除"],
         i: null, // 切换弹框标题
         searchForm: {
           // 接受搜索表单的数据

@@ -194,7 +194,7 @@
 
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="delteBan">确 定</span>
-            <span class="dialogButton cancel" @click="deleteBanCancel">取消</span>
+            <span class="dialogButton cancel" @click="deleteBanCancel">取 消</span>
           </div>
         </el-dialog>
       </div>
@@ -578,6 +578,10 @@ export default {
   methods: {
     selectCheck(val) {
       console.log("val", val);
+      this.searchForm.searchData=""
+      for(const index in this.selectSearchForm){
+        this.selectSearchForm[index]=""
+      }
       this.searchData = val;
     },
     //添加时身份证验证

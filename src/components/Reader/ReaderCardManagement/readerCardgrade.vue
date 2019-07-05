@@ -123,7 +123,7 @@
           <div class="dialogBody">是否{{Dialogtitle[i]}}?</div>
           <div style="margin-bottom: 30px">
             <span class="dialogButton true mr_40" @click="subDelete">确 定</span>
-            <span class="dialogButton cancel" @click="deleteDialog = false">取消</span>
+            <span class="dialogButton cancel" @click="deleteDialog = false">取 消</span>
           </div>
         </el-dialog>
       </div>

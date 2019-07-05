@@ -181,6 +181,10 @@
     methods: {
       selectCheck(val) {
         console.log("val", val);
+        this.searchForm.searchData=""
+        for(const index in this.selectSearchForm){
+          this.selectSearchForm[index]=""
+        }
         this.searchData = val;
       },
       jumpBtn() {

@@ -30,7 +30,6 @@
                   <el-option label="卡号" value="0"></el-option>
                   <el-option label="用户名" value="1"></el-option>
                   <el-option label="等级名称" value="2"></el-option>
-                  <el-option label="状态" value="3"></el-option>
                 </el-select>
                 <el-input v-model="searchForm.searchData" id="searchInput" placeholder="请输入相关信息" clearable style="width: 250px"></el-input>
                 <el-select clearable id="gradeName" v-model="searchForm.type" style="width: 250px;display: none" placeholder="请选择等级名称">
@@ -41,7 +40,9 @@
                     :value="option.code"
                   ></el-option>
                 </el-select>
-                <el-select clearable id="state" v-model="searchForm.state" style="width: 250px;display: none" placeholder="请选择状态">
+              </el-form-item>
+              <el-form-item label="状态:">
+                <el-select clearable v-model="searchForm.state" style="width: 200px" placeholder="请选择状态">
                   <el-option
                     v-for="(option,index) of optionsData"
                     :key="index"
@@ -102,7 +103,7 @@
               <el-table-column align="center" prop="updateTime" label="修改时间" width="200"></el-table-column>
               <el-table-column align="center" prop="state" label="状态" width="150">
                 <template slot-scope="scope">
-                  <span>{{scope.row.state ===0?'在用':'挂失'}}</span>
+                  <span>{{scope.row.state ===0?'正常':'挂失'}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="操作" width="300" fixed="right">
@@ -255,7 +256,7 @@ export default {
       selectSearchForm: {
         cardNum: "",
         username: "",
-        uerType: "",
+        gradeName: "",
         state: "",
         currentPage: 0
       },
@@ -322,6 +323,11 @@ export default {
             console.log("用户名");
             this.selectSearchForm.name = this.searchForm.searchData;
             break;
+          case 2:
+            console.log('等级名称')
+            this.selectSearchForm.gradeName = this.searchForm.searchData;
+            break;
+
         }
       } else {
         console.log("为空");
@@ -331,7 +337,7 @@ export default {
       let obj = {
         name: this.selectSearchForm.name,
         cardNumber: this.selectSearchForm.cardNumber,
-        gradeCode: this.searchForm.type,
+        gradeName: this.selectSearchForm.gradeName,
         state: this.searchForm.state,
         currentPage: 1,
         pageSize: this.pageSize
@@ -378,6 +384,10 @@ export default {
   methods: {
     selectCheck(val) {
       console.log("val", val);
+      this.searchForm.searchData=""
+      for(const index in this.selectSearchForm){
+        this.selectSearchForm[index]=""
+      }
       this.searchData = val;
     },
     jumpBtn() {
