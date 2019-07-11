@@ -8,7 +8,8 @@
         <div class="nomal-Box noticeForm">
           <el-form  :model="formLabelAlign" style="margin-right: 40px">
             <el-form-item label="公告标题 :" label-width="80px">
-              <el-input v-model="formLabelAlign.title" maxlength="40" show-word-limit></el-input>
+              <el-input v-model="formLabelAlign.title" maxlength="40" show-word-limit>
+              </el-input>
             </el-form-item>
             <el-form-item label="公告内容 :" label-width="80px">
               <el-input
@@ -17,8 +18,10 @@
                 maxlength="300"
                 show-word-limit
                 resize="none"
+                @input="contentNumFun(formLabelAlign.content)"
                 v-model="formLabelAlign.content">
               </el-input>
+              <p style="margin-top: -40px;margin-left: 450px;color: #878787">{{FontNum}}/300</p>
             </el-form-item>
             <el-form-item class="buttonStyle">
               <el-button type="primary" @click="publishBut()">上传</el-button>
@@ -62,6 +65,7 @@
   export default {
     data() {
       return {
+        FontNum:0,
         centerDialogVisible:false,
         formLabelAlign:{
           title:"", //标题
@@ -79,6 +83,9 @@
       this.initializationFun()
     },
     methods: {
+      contentNumFun(value){
+        this.FontNum=value.length
+      },
       deleteButOk(value){
         console.log('id为',value)
         this.centerDialogVisible=true
@@ -110,6 +117,7 @@
               for(const item in this.formLabelAlign){
                 this.formLabelAlign[item]=""
               }
+              this.FontNum=0
               this.initializationFun()
             }else{
               this.$message.error(res.data.msg);
@@ -158,7 +166,7 @@
   @keyframes fadeInLeft {
     from {
       opacity: 0;
-      transform: translate3d(-100%, 0, 0);
+      transform: translate3d(0, -100%, 0);
     }
 
     to {
@@ -169,7 +177,7 @@
   @-webkit-keyframes fadeInLeft {
     from {
       opacity: 0;
-      transform: translate3d(-10%, 0, 0);
+      transform: translate3d(0, -10%, 0);
     }
 
     to {
@@ -179,7 +187,7 @@
   }
   #deleteBut{
     line-height:140px;
-    font-size: 12px;
+    font-size: 15px;
     color:red;
     cursor: pointer;
     width: 30px;

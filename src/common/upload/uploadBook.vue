@@ -2,7 +2,7 @@
   <div class="uploadBook" id="bookUpload">
     <div class="title mb_30">
       <div class="sonTitle">
-        <span class="titleName">用户管理列表</span>
+        <span class="titleName">书籍导入</span>
       </div>
     </div>
     <!-- 附件上传 -->

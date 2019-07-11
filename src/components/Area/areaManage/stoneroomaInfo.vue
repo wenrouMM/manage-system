@@ -503,9 +503,6 @@ export default {
       };
       return obj;
     },
-    actionApi() {
-      return headUpload;
-    }
   },
   methods: {
     /*====== 弹框组  ======*/
@@ -543,7 +540,7 @@ export default {
       this.deleteDialog = true;
     },
     regionBtn(store, index) {
-      console.log("点击库房数据", store, index);
+
       this.activeIndex = index; // 当前索引与active相等就给予active样式
       this.searchRegion(store.id);
     },
@@ -562,7 +559,7 @@ export default {
       this.changeDialog = true;
     },
     editAreaBtn(region, index) {
-      console.log("编辑区的数据", region, index);
+
       this.i = 1;
       this.changeAreaForm.storeName = region.fkStoreName;
       this.changeAreaForm.zoneName = region.regionName;
@@ -579,19 +576,8 @@ export default {
 
       this.changeAreaForm.id = region.id;
       this.changeAreaForm.fkStoreId = region.fkStoreId;
-      console.log(this.changeAreaForm);
-      this.changeDialog = true;
-    },
-    bindAreaBtn(region, index) {
-      this.i = 2;
-      this.bindForm.id = region.id;
-      this.bindForm.bindId = ''
-      if(this.bindFormBug){
-        this.$refs.bindForm.resetFields();
-      }
 
-      this.changeOptionApi(); // 这样写会不会太耦合 数据都在内层 可扩展性不强
-      this.bindDialog = true;
+      this.changeDialog = true;
     },
     deleteAreaBtn(region, index) {
       this.i = 3;
@@ -599,26 +585,22 @@ export default {
       this.deleteDialog = true;
     },
     /*------ 弹框按钮 ------*/
-    // 未按待续 图片上传按钮功能
-    Bancacncel() {
-      this.deleteDialog = false;
-    },
     // 删除弹框的提交按钮
     subDelete() {
       let flag = this.i; // 关闭弹框
       switch (flag) {
         case 3:
-          console.log("删除区Api");
+          //console.log("删除区Api");
           this.deleteRegion();
           break;
         case 6:
           this.deleteStore();
-          console.log("删除库房API");
+          //console.log("删除库房API");
       }
     },
     submitForm(formName, dialogName) {
       // 提交后也要清空 表单验证要开起来
-      console.log("提交了哦");
+
       let i = this.i;
       let data = {};
       //let method = 'post'
@@ -628,11 +610,11 @@ export default {
         url = i == 4 ? storeInt.edit : storeInt.add;
         //method = 'put'
         data = this.editStoreSub;
-        console.log("提交的数据", data);
+
         this.$refs[formName].validate(valid => {
           if (valid) {
             // 发送上传图片请求
-            this.uploadImgApi();
+
             // 发送数据提交请求
             axios({
               url: url,
@@ -640,7 +622,7 @@ export default {
               data: data
             }).then(res => {
               if (res.data.state === true) {
-                this.$message.success("执行成功");
+
                 this.searchStore();
                 this[dialogName] = false;
               } else {
@@ -648,7 +630,7 @@ export default {
               }
             });
           } else {
-            console.log("error submit!!");
+
             return false;
           }
         });
@@ -657,7 +639,7 @@ export default {
       if (i == 0 || i == 1) {
         url = i == 0 ? regionInt.add : regionInt.edit;
         data = this.editAreaSub;
-        console.log("提交的数据", data);
+
         this.$refs[formName].validate(valid => {
           if (valid) {
             axios({
@@ -674,7 +656,7 @@ export default {
               }
             });
           } else {
-            console.log("error submit!!");
+
             return false;
           }
         });
@@ -684,31 +666,6 @@ export default {
     resetForm(formName, dialogName) {
       // /this.$refs[formName].resetFields();
       this[dialogName] = false;
-    },
-    // 绑定区按钮提交按钮
-    bindSubmit(formName, dialogName) {
-      this.$refs[formName].validate(valid => {
-        let data = this.bindTimeForm;
-        let url = regionInt.bind;
-        console.log("绑定区提交的数据", data);
-        if (valid) {
-          axios({
-            url: url,
-            method: "post",
-            data: data
-          }).then(res => {
-            if (res.data.state === true) {
-              this.$message.success("执行成功");
-              this[dialogName] = false;
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
     },
     // 弹框关闭执行的回调函数
     handleClose(formName) {
@@ -721,41 +678,22 @@ export default {
       }
       if(formName == 'bindForm'){
         this.bindFormBug = true
-        console.log('已经被打开过了')
+
       }
-      console.log("清空表单的哇",this.changeAreaForm);
-      console.log('仓库',this.changeStoreForm)
+      //console.log("清空表单的哇",this.changeAreaForm);
+      //console.log('仓库',this.changeStoreForm)
       //this.$refs[formName].resetFields();
       // 清空的是手动输入的值 而绑定的值还是要手动清理掉 循环清理吧
-    },
-    /*------ 图片上传相关按钮 ------*/
-    pointer() {
-      this.$refs.file.click();
-    },
-    getFile(e) {
-      let _this = this; // 缓存this
-      let value = _this.$refs.file.value;
-      var files = e.target.files[0]; // 事件对象包含的信息 files是路径
-      _this.imgfiles = files; // 文件对象保留
-      console.log(_this.imgfiles);
-      if (!e || !window.FileReader) return; // 看支持不支持FileReader
-      let reader = new FileReader(); // 定义 fileReader对象
-      reader.readAsDataURL(files); // 转换为base64的url路径 其他三个API转换为text 二进制  arraybuffer
-      reader.onloadend = function() {
-        _this.preImg = this.result;
-        console.log("图片地址", _this.preImg);
-        _this.$refs.file.value = ""; // 文件地址
-      };
     },
     /*====== Api部分 总计10个接口 ======*/
     /*------ 库房API ------*/
     searchStore() {
       // 查询库房
       axios.get(storeInt.select).then(res => {
-        console.log("当前获取的库房数据", res);
+
         if (res.data.state === true) {
           this.storeInfo = res.data.row;
-          console.log("库房信息", this.storeInfo);
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -764,14 +702,14 @@ export default {
     deleteStore() {
       // 删除库房
       let data = this.deleteStoreData;
-      console.log("提交的删除数据", data);
+
       axios.post(storeInt.delete, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("删除成功");
           this.searchStore();
           this.searchRegion();
           this.deleteDialog = false;
-          console.log(res);
+
         } else {
           this.$message.error(res.data.msg);
         }
@@ -786,9 +724,9 @@ export default {
           params: obj
         })
         .then(res => {
-          console.log("区域信息", res);
+
           if (res.data.state === true) {
-              console.log('问题在这里？',res.data.row)
+
             for(let item of res.data.row){
 
               for (let reg of item.regionIcon){
@@ -802,7 +740,7 @@ export default {
 
             }
             this.regionInfo = res.data.row;
-            console.log("获取的区信息", this.regionInfo);
+            //console.log("获取的区信息", this.regionInfo);
           } else {
             this.$message.error(res.data.msg);
           }
@@ -810,73 +748,18 @@ export default {
     },
     deleteRegion() {
       let data = this.deleteArea;
-      console.log("提交的删除数据", data);
+
       axios.post(regionInt.delete, data).then(res => {
         if (res.data.state === true) {
           this.$message.success("删除成功");
           this.searchRegion();
           this.deleteDialog = false;
-          console.log(res);
+
         } else {
           this.$message.error(res.data.msg);
         }
       });
     },
-    // 获取绑定区下拉框
-    changeOptionApi() {
-      let data = this.bindForm;
-      axios
-        .get(regionInt.selectBind, {
-          params: data
-        })
-        .then(res => {
-          if (res.data.state === true) {
-            let arr = [];
-
-            for (let item of res.data.row) {
-              let obj = {};
-              obj.regionName = item.regionName;
-              obj.id = item.id;
-              arr.push(obj);
-            }
-            this.changeOption = arr;
-            console.log("获取的绑定区信息", this.changeOption);
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        });
-    },
-    // 图片上传API
-    uploadImgApi() {
-      let files = this.imgfiles
-      if (files) {
-        var formdatas = new FormData();
-        formdatas.append("file", files);
-        //console.log(formdatas.get('file'))
-        this.axios({
-          method: "post",
-          url: headUpload,
-          data: formdatas,
-          //cache: false,//上传文件无需缓存
-          processData: false, //用于对data参数进行序列化处理 这里必须false
-          contentType: false, //
-          dataType: "JSON",
-          ContentType: "multipart/form-data",
-          xhrFields: {
-            withCredentials: true
-          },
-          crossDomain: true
-        }).then(request => {
-          // 如果是编辑 更换图片失败后
-          if (request.data.row != "") {
-            console.log('上传图片成功')
-          }else{
-            this.$message.error('图片上传失败')
-          }
-
-        });
-      }
-    }
   },
   components: {
     VeHis,

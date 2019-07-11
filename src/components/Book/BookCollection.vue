@@ -756,27 +756,27 @@ export default {
   computed: {
     searchTimeForm() {
       let newState = "";
-      console.log("this.searchData", this.searchData);
+
       if (this.searchData) {
         switch (this.searchData / 1) {
           case 0:
-            console.log("索书号");
+
             this.selectSearchForm.searchNumber = this.searchForm.searchData;
             break;
           case 1:
-            console.log("馆藏码");
+
             this.selectSearchForm.code = this.searchForm.searchData;
             break;
           case 2:
-            console.log("isbn");
+
             this.selectSearchForm.isbn = this.searchForm.searchData;
             break;
           case 3:
-            console.log("书名");
+
             this.selectSearchForm.bookName = this.searchForm.searchData;
             break;
           case 4:
-            console.log("状态");
+
             this.selectSearchForm.state = this.searchForm.searchData;
             if (this.selectSearchForm.state == "不在架") {
               newState = 0;
@@ -791,12 +791,12 @@ export default {
             }
             break;
           case 5:
-            console.log('丛编题名');
+
             this.selectSearchForm.clusterName=this.searchForm.searchData;
             break
         }
       } else {
-        console.log("为空");
+
         this.selectSearchForm.searchNumber = "";
         this.selectSearchForm.code = "";
         this.selectSearchForm.isbn = "";
@@ -814,7 +814,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1
       };
-      console.log("搜索数据", newData);
+
       return newData;
     },
     addFormData() {
@@ -848,14 +848,14 @@ export default {
         pageSize: this.pageSize,
         currentPage: 1
       };
-      console.log("newData", newData);
+
       return newData;
     }
   },
   methods: {
     //选中馆藏地
     libraryOn(row,index){
-      console.log('选中的馆藏地',row,index)
+
       $(".libraryAddressMessage").fadeOut();
       this.addForm.place=index.name
     },
@@ -865,7 +865,7 @@ export default {
     },
     //是否有复本
     duplicateFun(val){
-      console.log(val)
+
       if(val==true){
         this.duplicateDisable=false
       }else{
@@ -878,7 +878,7 @@ export default {
     },
     //索取号弹窗确定按钮
     callNumberMessageDefine() {
-      console.log('this.showData.orderNum',this.showData.orderNum)
+
       var orderNum=parseInt(this.showData.orderNum)+1
       var orderNum1=parseInt(this.showData.orderNum)+2
       var orderNum2=parseInt(this.showData.orderNum)+3
@@ -889,14 +889,14 @@ export default {
         this.addForm.callNumber1=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum1
         this.addForm.callNumber2=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum2
         this.addForm.callNumber3=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum3
-        console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+
       }else{
         this.startCallNumber=this.showData.fkTypeCode+"/"+this.showData.orderNum
         this.addForm.callNumber=this.showData.fkTypeCode+"/"+orderNum
         this.addForm.callNumber1=this.showData.fkTypeCode+"/"+orderNum1
         this.addForm.callNumber2=this.showData.fkTypeCode+"/"+orderNum2
         this.addForm.callNumber3=this.showData.fkTypeCode+"/"+orderNum3
-        console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+
       }
       $(".callNumberMessage").fadeOut();
     },
@@ -912,7 +912,7 @@ export default {
     },
     libraryDataFun(value){
       this.axios.get(collection.getLibName,{params:value}).then((res)=>{
-        console.log('获取馆藏地返回的数据',res)
+
         if(res.data.state==true){
           this.libraryData=res.data.row
         }else{
@@ -940,19 +940,19 @@ export default {
     //累加值
     AccumFun(val){
       this.axios.get(collection.selectFromCataID,{params:{fkCataBookId:val}}).then((res)=>{
-        console.log('获取新增弹窗表格数据',res)
+
         if(res.data.state==true){
           this.messageData=res.data.row
         }
       })
       this.axios.get(collection.selectCataOrderByID,{params:{id:val}}).then((res)=>{
-        console.log('获取累加值返回的数据',res)
+
         if(res.data.state==true){
           this.showData=res.data.row
           this.disabled = true;
           this.showData.volumeNum=res.data.row.volumeNum
           this.showData.orderNum=res.data.row.orderNum
-          console.log('卷册号为:',this.showData.volumeNum,"种次号为:",this.showData.orderNum)
+
           var orderNum=this.showData.orderNum+1
           var orderNum1=this.showData.orderNum+2
           var orderNum2=this.showData.orderNum+3
@@ -963,26 +963,26 @@ export default {
             this.addForm.callNumber1=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum1
             this.addForm.callNumber2=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum2
             this.addForm.callNumber3=this.showData.fkTypeCode+"v"+this.showData.volumeNum+"/"+orderNum3
-            console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+
           }else{
             this.startCallNumber=this.showData.fkTypeCode+"/"+this.showData.orderNum
             this.addForm.callNumber=this.showData.fkTypeCode+"/"+orderNum
             this.addForm.callNumber1=this.showData.fkTypeCode+"/"+orderNum1
             this.addForm.callNumber2=this.showData.fkTypeCode+"/"+orderNum2
             this.addForm.callNumber3=this.showData.fkTypeCode+"/"+orderNum3
-            console.log('this.showData.orderNum+1',this.showData.orderNum+1)
+
           }
         }
       })
       this.axios.get(collection.getAllOrder,{params:{id:val}}).then((res)=>{
-        console.log("获取馆藏吗",res)
+
         if(res.data.state==true){
           this.addForm.code=res.data.row
         }
       })
     },
     selectSearchCheck(val) {
-      console.log("查询val", val);
+
       this.searchForm.searchData=""
       for(const index in this.selectSearchForm){
         this.selectSearchForm[index]=""
@@ -995,11 +995,10 @@ export default {
 
     selectCheck(val) {
       let harmData = [];
-      console.log("更改的数据", val);
+
       this.damageId = val;
       harmData = this.options.find(this.findCherries);
-      console.log("type", harmData.type);
-      console.log("num", harmData.num);
+
       if (harmData.type == 1) {
         this.harmForm.amountCompensation = harmData.num * this.harmForm.price;
       } else {
@@ -1008,10 +1007,10 @@ export default {
     },
     harmMethod() {
       this.axios.get(collection.harmSelect).then(res => {
-        console.log("搜索损坏的下拉的数据", res.data.row);
+
         this.options.length = 0;
         for (const item of res.data.row) {
-          console.log("item", item);
+
           this.options.push({
             label: item.damageName,
             value: item.id,
@@ -1023,7 +1022,7 @@ export default {
     },
     //批量选择
     handleSelectionChange(val) {
-      console.log("全选按钮之后的数据", val);
+
       this.tableChecked = val;
     },
     //剔除按钮
@@ -1064,7 +1063,7 @@ export default {
       this.axios
         .get(collection.isbn, { params: { isbn: this.addForm.isbn } })
         .then(res => {
-          console.log("isbn的数据", res);
+
           if (res.data.state === true) {
             if (res.data.row.length >1) {
               this.j = 6;
@@ -1089,7 +1088,7 @@ export default {
     },
     //修改弹框
     EditBtn(index, row) {
-      console.log("修改按钮获取的数据", row);
+
       this.i = 0;
       this.dialogFormVisible = true;
       this.addForm = row;
@@ -1102,7 +1101,7 @@ export default {
     },
     // 修改添加弹框确定按钮
     submitForm() {
-      console.log("ISBN", this.addForm.isbn);
+
       if (this.i == 1) {
         if (this.addForm.isbn) {
 
@@ -1156,7 +1155,7 @@ export default {
     //添加修改弹框取消按钮
     resetForm() {
       this.dialogFormVisible = false;
-      console.log("???");
+
     },
     //添加修改关闭按钮
     closeForm() {
@@ -1177,23 +1176,27 @@ export default {
         this.disabled = false;
         this.selectIsbnData.length = 0;
         $(".callNumberMessage").fadeOut();
+        this.duplicate=false
+        this.duplicateNum=1
+        this.duplicateDisable=true
       }
       //this.dialogFormVisible = false
       this.searchApi(this.searchTimeForm);
     },
     // 查询按钮
     searchBtn() {
-      //console.log(this.)
+
       this.searchApi(this.searchTimeForm); // 查询后 把新数据保存到分页表单中
       this.currentPage = 1;
     },
     //报损弹框
     deleteBtn(index, row) {
+      this.widthMessage="920px"
       this.j = 3;
       this.addForm.id = row.id;
       this.bookId = row.id;
       this.centerDialogVisible = true;
-      console.log("报损按钮数据", row);
+
       this.harmForm.bookIndex = row.callNumber;
       this.harmForm.libAdress = row.place;
       this.harmForm.isbn = row.isbn;
@@ -1213,7 +1216,7 @@ export default {
           cardNum: this.harmForm.cardNumber
         })
         .then(res => {
-          console.log("报损后的处理", res);
+
           if (res.data.state == true) {
             this.$message({
               message: res.data.msg,
@@ -1241,7 +1244,7 @@ export default {
     },
     //启用按钮
     makeBtn(index, row) {
-      console.log(row.available);
+
       if (row.available == 0) {
         this.widthMessage="400px"
         this.j = 2;
@@ -1256,7 +1259,7 @@ export default {
       let idData = [];
       let bookId = [];
       for (var item of this.tableChecked) {
-        console.log("删除id", item.id);
+
         idData.push({ id: item.id });
         bookId.push(item.id);
       }
@@ -1298,7 +1301,7 @@ export default {
             }
           });
       } else if (this.j == 1) {
-        console.log("idData", idData);
+
         this.axios.post(collection.delete, idData).then(res => {
           if (res.data.state == true) {
             this.$message({
@@ -1315,7 +1318,7 @@ export default {
           }
         });
       } else if (this.j == 0) {
-        console.log("idData", idData);
+
         this.axios.post(collection.letLeave, idData).then(res => {
           if (res.data.state == true) {
             this.$message({
@@ -1355,7 +1358,7 @@ export default {
                 }
               });
           } else {
-            console.log("error submit!!");
+
             return false;
           }
         });
@@ -1374,14 +1377,14 @@ export default {
     // 分页按钮
     jumpBtn() {
       // v-mode绑定好像会默认转数据类型
-      console.log("数据类型检测", this.pageInput);
+
       let page = Math.ceil(this.total / this.pageSize);
       page == 0 ? 1 : page;
       if (this.pageInput > page || this.pageInput == "" || this.pageInput < 0) {
         this.pageInput = 1;
         this.$nextTick(() => {
           this.$refs.text.value = 1; // hack方法
-          console.log("Vmode绑定值", this.pageInput);
+
         });
       } else {
         this.pageInput = parseInt(this.pageInput);
@@ -1393,14 +1396,14 @@ export default {
     /*------ Api ------*/
     searchApi(value) {
       //获取登录记录
-      console.log(value);
+
       this.tableLoading = true;
       axios
         .get(collection.select, {
           params: value
         })
         .then(res => {
-          console.log("书籍典藏", res.data);
+
           if (res.data.state === true) {
             this.tableData = res.data.row; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -1416,19 +1419,19 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+
         });
     },
     paginationApi(value) {
       //获取登录记录
-      console.log(value);
+
       this.tableLoading = true;
       axios
         .get(collection.select, {
           params: value
         })
         .then(res => {
-          console.log("损坏记录", res.data);
+
           if (res.data.state === true) {
             this.tableData = res.data.row; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -1443,14 +1446,14 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+
         });
     },
     current_change(currentPage) {
       //分页查询
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
-      console.log("保存当前查询", this.paginationForm, this.currentPage);
+
       this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     }
   },

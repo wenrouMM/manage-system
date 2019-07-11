@@ -347,14 +347,14 @@
   export default {
     data() {
       return {
-        SuitBook:false,
-        selectbookInfo:'',
-        messageWidth:'',
-        excelUrl:'',
-        excelName:'',
-        downloadLoading:false,
+        SuitBook: false,
+        selectbookInfo: '',
+        messageWidth: '',
+        excelUrl: '',
+        excelName: '',
+        downloadLoading: false,
         /*====== 2.0表单搜索区域 ======*/
-        messageName:'',//树弹框的名称
+        messageName: '',//树弹框的名称
         setting: {
           edit: {
             enable: true,
@@ -384,51 +384,51 @@
           }
         }, //ztree树加载的配置
         zNodes: [], //ztree树的数据
-        addForm:{
-          isbn:'',
-          name:'', //正题名
-          viceName:'', //副题名
-          clusterName:'',//丛编题名
-          literatureType:'',//文献类别
-          layout:'',//装订版面
-          fkTypeCode:'',//分类号
-          fkTypeName:'',//分类名
-          author:'',//编著者
-          fkPressName:'',//出版社
-          publishingPleace:'',//出版地
-          fkPressCode:'',//出版码
-          publishingTime:'',//出版时间
-          pageNumber:'',//页码
-          openBook:'',//开本
-          price:'',//价格
-          language:'',//语种
-          edition:'',//版次
-          volumeNum:'',//卷册号
-          appendix:'',//附件
-          languageCode:'',
-          annotations:'',//附注
-          themeWord:'',//主题词
-          renarks:'',//备注
-          setBooks:0,//套装书
+        addForm: {
+          isbn: '',
+          name: '', //正题名
+          viceName: '', //副题名
+          clusterName: '',//丛编题名
+          literatureType: '',//文献类别
+          layout: '',//装订版面
+          fkTypeCode: '',//分类号
+          fkTypeName: '',//分类名
+          author: '',//编著者
+          fkPressName: '',//出版社
+          publishingPleace: '',//出版地
+          fkPressCode: '',//出版码
+          publishingTime: '',//出版时间
+          pageNumber: '',//页码
+          openBook: '',//开本
+          price: '',//价格
+          language: '',//语种
+          edition: '',//版次
+          volumeNum: '',//卷册号
+          appendix: '',//附件
+          languageCode: '',
+          annotations: '',//附注
+          themeWord: '',//主题词
+          renarks: '',//备注
+          setBooks: 0,//套装书
         },
-        rules:{
-          isbn:[{ required: true, message: "请输入ISBN查询相应书籍信息进行添加", trigger: "blur" }],
-          searchNumber:[{required:true,message:'索书号不能为空',trigger:'blur'}],
-          name:[{required:true,message:'正题名不能为空',trigger:'blur'}],
-          author:[{required:true,message:'编著者不能为空',trigger:'blur'}],
-          languageCode:[{required:true,message:'常用语言不能为空',trigger:'change'}],
-          fkTypeCode:[{required:true,message:'分类号不能为空',trigger:'change'}],
-          fkTypeName:[{required:true,message:'分类名不能为空',trigger:'change'}],
-          fkPressName:[{required:true,message:'出版社不能为空',trigger:'change'}],
-          publishingPleace:[{required:true,message:'出版地不能为空',trigger:'blur'}],
-          price:[{required:true,message:'价格不能为空',trigger:'blur'}],
+        rules: {
+          isbn: [{required: true, message: "请输入ISBN查询相应书籍信息进行添加", trigger: "blur"}],
+          searchNumber: [{required: true, message: '索书号不能为空', trigger: 'blur'}],
+          name: [{required: true, message: '正题名不能为空', trigger: 'blur'}],
+          author: [{required: true, message: '编著者不能为空', trigger: 'blur'}],
+          languageCode: [{required: true, message: '常用语言不能为空', trigger: 'change'}],
+          fkTypeCode: [{required: true, message: '分类号不能为空', trigger: 'change'}],
+          fkTypeName: [{required: true, message: '分类名不能为空', trigger: 'change'}],
+          fkPressName: [{required: true, message: '出版社不能为空', trigger: 'change'}],
+          publishingPleace: [{required: true, message: '出版地不能为空', trigger: 'blur'}],
+          price: [{required: true, message: '价格不能为空', trigger: 'blur'}],
         },
         dialogFormVisible: false, // // 新增修改弹框的展示和消失
         centerDialogVisible: false, // 删除弹框
         Dialogtitle: ["修改", "新增"],
-        catalogtitle:['批量删除','导出','导入','本地数据','远程数据'],
+        catalogtitle: ['批量删除', '导出', '导入', '本地数据', '远程数据'],
         i: null, // 切换弹框标题
-        j:null,
+        j: null,
         /*初始化 */
         options: [],
         tableLoading: true,
@@ -437,11 +437,11 @@
         pageInput: 1,
         currentPage: 1,
         tableData: [],
-        catalogingData:[],//编目数据
-        id:'',
+        catalogingData: [],//编目数据
+        id: '',
         tableChecked: [], // 全选绑定的数据
-        type:[1,2],//选择远程或本地的获取数据的按钮
-        decideOnData:false,
+        type: [1, 2],//选择远程或本地的获取数据的按钮
+        decideOnData: false,
         searchForm: {
           // 接受搜索表单的数据
           makeMethod: "",
@@ -452,7 +452,7 @@
         selectSearchForm: {
           name: "", //书名
           isbn: "", //isbn
-          clusterName:"",//丛编题名
+          clusterName: "",//丛编题名
           currentPage: 0
         },
       };
@@ -462,19 +462,19 @@
         if (this.searchData) {
           switch (this.searchData / 1) {
             case 0:
-              console.log("书名");
+
               this.selectSearchForm.name = this.searchForm.searchData;
               break;
             case 1:
-              console.log("备注信息");
+
               this.selectSearchForm.isbn = this.searchForm.searchData;
               break;
             case 2:
-              console.log('丛编题名');
+
               this.selectSearchForm.clusterName = this.searchForm.searchData
           }
         } else {
-          console.log("为空");
+
           this.selectSearchForm.name = "";
           this.selectSearchForm.isbn = "";
           this.selectSearchForm.clusterName = ""
@@ -486,7 +486,6 @@
           pageSize: this.pageSize,
           currentPage: 1,
         }
-        console.log('搜索数据',newData)
         return newData
       },
       addFormData(){
@@ -500,7 +499,6 @@
     },
     methods: {
       SuitBookFun(val){
-        console.log(val)
         if(val=false){
           this.addForm.setBooks=0
         }else{
@@ -508,7 +506,6 @@
         }
       },
       selectCheck(val) {
-        console.log("val", val);
         this.searchForm.searchData=""
         for(const index in this.selectSearchForm){
           this.selectSearchForm[index]=""
@@ -517,13 +514,11 @@
       },
       //获取图书信息弹窗的多选按钮
       BookInfoFun(value){
-        console.log('获取图书信息',value)
-        console.log('isbn的值',this.addForm.isbn)
+
       },
       //选中某条数据的选中按钮
       decideOn(index,row){
-        console.log('选中的多选框',this.type)
-        console.log('选中的数据',row)
+
         this.decideOnData=true
         this.addForm=row
         this.centerDialogVisible=false
@@ -540,7 +535,7 @@
       },
       /*====== 书籍弹窗内容 ======*/
       typeTreeFun() {
-        console.log('书籍树状图')
+
         this.messageName = '请选择书籍类型'
         this.zNodes.length = 0
         this.freshArea(catalog.typeTree)
@@ -549,10 +544,8 @@
       async freshArea(value) {
         let list=[]
         this.axios.get(value).then((response) => {
-          console.log('树结构的数据',response)
           if(response.data.state==true){
             for (let item of response.data.row) {
-              //console.log('ztree树',item)
               list.push({
                 id: item.id, //节点id
                 pId: item.pid, //节点父id
@@ -580,7 +573,6 @@
         return true;
       },
       singlePath(currNode) {
-        //console.log(currNode);
         //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
         var cLevel = currNode.level;
         //这里假设id是唯一的
@@ -592,7 +584,6 @@
          * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
          */
         var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
-        console.log(expandedNodes);
         for(var i = expandedNodes.length - 1; i >= 0; i--){
           var node = expandedNodes[i];
           var level = node.level;
@@ -610,7 +601,6 @@
       zTreeOnDblClick(event, treeId, treeNode){
         if(this.messageName=='请选择出版社名称'){
           if(treeNode.code!=null){
-            console.log(treeNode)
             this.addForm.fkPressName=treeNode.name
             this.addForm.fkPressCode=treeNode.code
             $('#typeMessage').fadeOut()
@@ -629,12 +619,10 @@
       },
       //筛选搜索
       selectCheck(val){
-        console.log('val',val)
         this.searchData=val
       },
       //批量选择
       handleSelectionChange(val) {
-        console.log('全选按钮之后的数据',val);
         this.tableChecked = val;
       },
       //导出按钮
@@ -669,7 +657,6 @@
       //语种下拉框数据
       languageFun(){
         this.axios.get(catalog.language).then((res)=>{
-          console.log('语种下拉框数据',res)
           if(res.data.state==true){
             this.options.length=0
             for(const item of res.data.row){
@@ -680,27 +667,19 @@
       },
       //添加isbn数据搜索
       isbnData(){
-        console.log('远程或者本地',this.type)
-        console.log('远程或者本地长度',this.type.length)
         let typeIndex
         for(const item of this.type){
           typeIndex=item
-          console.log('typeIndex',typeIndex)
         }
         if(this.addForm.isbn){
           if(this.type.length===1){
             if(typeIndex===1){
-              console.log('本地数据')
               this.localCatalogData()
             }else if(typeIndex===2){
-              console.log('远程数据')
               this.remoteCatalogData()
             }
           }else if(this.type.length===2){
-            console.log('远程又本地')
             this.localCatalogData()
-            console.log('this.catalogingData',this.catalogingData)
-            console.log('this.catalogingData.length',this.catalogingData.length)
             if(this.catalogingData.length==0){
               this.remoteCatalogData()
             }
@@ -711,13 +690,11 @@
             });
           }
         }
-        console.log('addForm.name',this.addForm.name)
       },
       //本地数据
       localCatalogData(){
         this.axios.get(catalog.localCataloging,{params:{isbn:this.addForm.isbn}}).then((res)=>{
           if(res.data.state==true){
-            console.log('本地编目获取的数据',res.data.row)
             if(res.data.row.length>1){
               this.catalogingData = res.data.row
               this.j=3
@@ -730,7 +707,6 @@
             }
           }
         },(err)=>{
-          console.log('err',err)
           this.$message({
             message: '网络出错',
             type: "error"
@@ -740,7 +716,6 @@
       //远程数据
       remoteCatalogData(){
         this.axios.get(catalog.remoteCataloging,{params:{selectisbn:this.addForm.isbn}}).then((res)=>{
-          console.log('远程编目获取的数据',res.data.row)
           if(res.data.state==true){
             if(res.data.row.length>1){
               this.catalogingData = res.data.row
@@ -754,7 +729,6 @@
             }
           }
         },(err)=>{
-          console.log('err',err)
           this.$message({
             message: '网络出错',
             type: "error"
@@ -763,7 +737,6 @@
       },
       //修改弹框
       EditBtn(index,row){
-        console.log('点击修改按钮获取的数据',row)
         this.i=0
         this.addForm=row
         if(row.languageCode==='CN'){
@@ -784,7 +757,6 @@
       },
       //添加弹窗确定按钮
       definiteCheck(){
-        console.log('新增编目数据')
         if(this.i==0){
           this.editApi(this.editFormData)
         }else if(this.i==1){
@@ -807,7 +779,7 @@
             });
           }
         },(err)=>{
-          console.log('请检查网络')
+
         })
       },
       editApi(value){
@@ -853,11 +825,9 @@
       submitDialog(){
         let idData=[]
         for (var item of this.tableChecked) {
-          console.log('删除id',item.id);
           idData.push(item.id)
         }
         this.axios.post(catalog.delete,{ids:idData}).then((res)=>{
-          console.log('删除后返回的数据',res)
           if (res.data.state == true){
             this.$message({
               message: '书目信息删除成功',
@@ -876,14 +846,12 @@
       // 分页按钮
       jumpBtn() {
         // v-mode绑定好像会默认转数据类型
-        console.log('数据类型检测',this.pageInput)
         let page = Math.ceil(this.total / this.pageSize)
         page ==0?1:page;
         if(this.pageInput>page || this.pageInput == ''|| this.pageInput<0){
           this.pageInput = 1
           this.$nextTick(()=>{
             this.$refs.text.value = 1 // hack方法
-            console.log('Vmode绑定值',this.pageInput)
           })
         }else{
           this.pageInput = parseInt(this.pageInput)
@@ -898,7 +866,6 @@
           params:value
         }).then((res)=>{
 
-          console.log('查询条件',res)
         })
       },
       diriveApi(val){
@@ -921,27 +888,21 @@
             this.downloadLoading = false
 
           }
-          console.log('测试下载',res)
         })
       },
       searchApi(value) {
         //获取登录记录
-        console.log(value);
         this.tableLoading = true;
         axios
           .get(catalog.select, {
             params: value
           })
           .then(res => {
-            console.log("书籍编目", res);
             if (res.data.state === true) {
-              console.log(res.data.rows)
               if(res.data.rows){
                 this.tableData = res.data.rows;
-                console.log('非null、')
               } else{
                 this.tableData = []
-                console.log('null、')
               }
                //获取返回数据
               this.total = res.data.total; //总条目数
@@ -950,24 +911,20 @@
               this.tableLoading = false;
             } else {
               this.tableLoading = false;
-              console.log('查询失败',res.data.rows)
             }
           })
           .catch(error => {
             this.$message.error(res.data.msg)
-            console.log(error);
           });
       },
       paginationApi(value) {
         //获取登录记录
-        console.log(value);
         this.tableLoading = true;
         axios
           .get(catalog.select, {
             params: value
           })
           .then(res => {
-            console.log("书籍编目", res.data);
             if (res.data.state === true) {
               this.tableData = res.data.rows; //获取返回数据
               this.total = res.data.total; //总条目数
@@ -979,14 +936,12 @@
           })
           .catch(error => {
             this.$message.error(res.data.msg)
-            console.log(error);
           });
       },
       current_change(currentPage) {
         //分页查询
         this.currentPage = currentPage; //点击第几页
         this.paginationForm.currentPage = currentPage;
-        console.log("保存当前查询", this.paginationForm, this.currentPage);
         this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
       }
     },
@@ -1153,7 +1108,11 @@
     position: absolute;
     top: 100px;
     z-index: 30000;
-
+    border-radius: 20px;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:5px 5px 30px #909090;
   }
   #typeMessage div:nth-child(1){
     width: 400px;
@@ -1165,10 +1124,6 @@
     line-height: 50px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
-    -moz-box-shadow: 2px 2px 10px #909090;
-    -webkit-box-shadow: 2px 2px 10px #909090;
-    box-shadow:2px 2px 10px #909090;
   }
   #typeMessage div:nth-child(2){
     overflow: auto;
@@ -1179,9 +1134,5 @@
     border-bottom-right-radius: 15px;
     padding-left: 30px;
     padding-bottom: 30px;
-    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
-    -moz-box-shadow: 2px 2px 10px #909090;
-    -webkit-box-shadow: 2px 2px 10px #909090;
-    box-shadow:2px 2px 100px #909090;
   }
 </style>

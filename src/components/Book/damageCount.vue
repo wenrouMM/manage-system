@@ -140,16 +140,16 @@ export default {
       if (this.searchData) {
         switch (this.searchData / 1) {
           case 0:
-            console.log("书名");
+
             this.selectSearchForm.bookName = this.searchForm.searchData;
             break;
           case 1:
-            console.log("备注信息");
+
             this.selectSearchForm.isbn = this.searchForm.searchData;
             break;
         }
       } else {
-        console.log("为空");
+
         this.selectSearchForm.bookName = "";
         this.selectSearchForm.isbn = "";
       }
@@ -164,7 +164,7 @@ export default {
   },
   methods: {
     selectCheck(val) {
-      console.log("val", val);
+
       this.searchForm.searchData=""
       for(const index in this.selectSearchForm){
         this.selectSearchForm[index]=""
@@ -181,7 +181,7 @@ export default {
     // 详情按钮
     detailBtn(index, row) {
       let bookId = row.id;
-      console.log(row);
+
       this.$router.push({ path: `/checkDetails/${bookId}` });
     },
     // 分页按钮
@@ -193,7 +193,7 @@ export default {
         this.pageInput = 1;
         this.$nextTick(() => {
           this.$refs.text.value = 1; // hack方法
-          console.log("Vmode绑定值", this.pageInput);
+
         });
       } else {
         this.pageInput = parseInt(this.pageInput);
@@ -205,14 +205,14 @@ export default {
     /*------ Api ------*/
     searchApi(value) {
       //获取登录记录
-      console.log(value);
+
       this.tableLoading = true;
       axios
         .get(damageInt.outline, {
           params: value
         })
         .then(res => {
-          console.log("损坏记录", res.data);
+
           if (res.data.state === true) {
             this.tableData = res.data.row; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -225,19 +225,19 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+
         });
     },
     paginationApi(value) {
       //获取登录记录
-      console.log(value);
+
       this.tableLoading = true;
       axios
         .get(damageInt.outline, {
           params: value
         })
         .then(res => {
-          console.log("损坏记录", res.data);
+
           if (res.data.state === true) {
             this.tableData = res.data.row; //获取返回数据
             this.total = res.data.total; //总条目数
@@ -249,14 +249,14 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+
         });
     },
     current_change(currentPage) {
       //分页查询
       this.currentPage = currentPage; //点击第几页
       this.paginationForm.currentPage = currentPage;
-      console.log("保存当前查询", this.paginationForm, this.currentPage);
+
       this.paginationApi(this.paginationForm); // 这里的分页应该默认提交上次查询的条件
     }
   },
