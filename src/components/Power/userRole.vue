@@ -75,6 +75,7 @@
                 <!-- 这里的scope代表着什么 index是索引 row则是这一行的对象 -->
                 <template slot-scope="scope">
                   <span class="edit" @click="handleEdit(scope.$index, scope.row)">编辑</span>
+                  <span class="edit" style="margin-left: 10px" @click="editButton(scope.$index, scope.row)">授权</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -165,13 +166,23 @@
           </el-form>
         </el-dialog>
       </div>
+      <div id="typeMessage">
+        <div style="position: relative">
+          <p>授权</p>
+          <img src="../../base/img/menu/xx.png" style="position: absolute;top: 16px;left: 360px;width: 20px;height: 20px" @click="closeCheck">
+        </div>
+        <div class="powerControl">
+          <ul id="treeDemo" class="ztree"></ul>
+          <el-button type="primary" plain style="margin-left: 70px;width: 200px;margin-top: 10px" @click="controlClick">确定</el-button>
+        </div>
+      </div>
     </el-container>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import {roleManageInt,role_table,roleType} from '../../request/api/base.js'
+import {roleManageInt,role_table,roleType,control} from '../../request/api/base.js'
 export default {
   data() {
     return {
@@ -219,6 +230,40 @@ export default {
           );
         }
       },
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          showRenameBtn: false,
+          editNameSelectAll: true
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: false,
+          selectedMulti: false,
+        },
+        callback: {
+          onCheck: this.zTreeOnCheck, //勾选时事件
+          beforeCheck: this.zTreeBeforeCheck,
+          beforeExpand: this.zTreeBeforeExpand,
+        },
+        check: {
+          enable: true,
+          chkStyle: "checkbox", //选择框的类型
+          chkboxType: { "Y": "ps", "N": "ps" }, //关联父子节点
+        },
+      },//ztree树配置
+      zNodes: [], //ztree树加载的数据
       /*======4.0分页器相关数据 ======*/
       tableLoading: true,
       /*初始化 */
@@ -247,11 +292,118 @@ export default {
       ],
       id: null,
       roleCode: null,
+      menuId:[],
+      roleId:null,
+      checked:false
       /*====== 5.0 分页相关设置项 ======*/
     };
   },
 
   methods: {
+    /*====== zTree保持展开单一路径的实现 ======*/
+    zTreeBeforeExpand(treeId, treeNode) {
+      this.singlePath(treeNode);
+      return true;
+    },
+    singlePath(currNode) {
+      //console.log(currNode);
+      //节点级别，即节点展开的等级，是爸爸辈还是儿子辈
+      var cLevel = currNode.level;
+      //这里假设id是唯一的
+      var cId = currNode.id;
+      //此对象可以保存起来，没有必要每次查找
+      var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+      /**
+       * 展开的所有节点，这是从父节点开始查找（也可以全文查找）
+       * 从当前节点的父节点开始查找，看有没有打开的节点，如果有则判断，若为同一级别的不同节点，则关闭，否则不关闭
+       */
+      var expandedNodes = treeObj.getNodesByParam("open", true, currNode.getParentNode());
+      //console.log(expandedNodes);
+      for(var i = expandedNodes.length - 1; i >= 0; i--){
+        var node = expandedNodes[i];
+        var level = node.level;
+        var id = node.id;
+        if (cId != id && level == cLevel) {
+          treeObj.expandNode(node, false);
+        }
+      }
+    },
+    /*====== 取消授权弹框 ======*/
+    closeCheck() {
+      $('#typeMessage').fadeOut()
+    },
+    /*====== 点击授权时 ======*/
+    editButton(index,row) {
+      //console.log(row.id)
+      this.roleId=row.id
+      this.zNodes.length=0
+      let list=[]
+      this.axios.get(control.tree,{params:{roleid:row.id}}).then((res)=>{
+        console.log("树状图",res)
+        if(res.data.state==true){
+          for (var item of res.data.rows) {
+            //console.log(item)
+            list.push({
+              id: item.id, //节点id
+              pId: item.pid, //节点父id
+              name: item.name, //节点名称
+              checked:item.choose,
+              type:item.type
+            });
+          }
+          //将数据渲染到ztree树
+          $.fn.zTree.init($("#treeDemo"), this.setting,list);
+          if(list.length>0){
+            $('#typeMessage').fadeIn()
+            this.zNodes=list
+          }
+        }
+      })
+    },
+    /*====== 授权加载ztree树，节点被勾选时 ======*/
+    zTreeOnCheck(event,treeId,treeNode){
+      this.checked=true
+      this.menuId.length=0
+      console.log(treeNode)
+      let treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+        nodes=treeObj.getCheckedNodes(true);
+      console.log('nodes',nodes)
+      console.log('nodes.length',nodes.length)
+      if(nodes.length!=0){
+        for(let item of nodes){
+          console.log(item.id)
+          this.menuId.push(item.id)
+        }
+      }else{
+        this.menuId.length=0
+      }
+    },
+    controlClick(){
+      console.log('选中值id',this.menuId)
+      if(this.checked==true){
+        this.axios.post(control.add,{id:this.roleId,menuIds:this.menuId}).then((res)=>{
+          console.log(res)
+          if(res.data.state==true){
+            this.$message({
+              message: res.data.msg,
+              type: "success"
+            });
+          }else{
+            this.$message({
+              message: res.data.msg,
+              type: "error"
+            });
+          }
+        })
+        $('#typeMessage').fadeOut()
+      }else{
+        this.$message({
+          message:'请先选择您要赋予的权限',
+          type: "error"
+        });
+      }
+
+    },
     jumpBtn() {
      console.log('数据类型检测',this.pageInput)
         let page = Math.ceil(this.total / this.pageSize)
@@ -476,6 +628,7 @@ export default {
     }
   },
   mounted() {
+    $('#typeMessage').fadeOut()
     console.log(this.searchTimeForm);
     //this.select(this.searchTimeForm)
     this.selectApi(this.searchTimeForm);
@@ -541,6 +694,41 @@ export default {
 </script>
 
 <style scoped>
+  #typeMessage{
+    display: none;
+    position: absolute;
+    border-radius: 20px;
+    top: 200px;
+    left:750px;
+    z-index: 30000;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+    -moz-box-shadow: 2px 2px 10px #909090;
+    -webkit-box-shadow: 2px 2px 10px #909090;
+    box-shadow:5px 5px 40px #909090;
+  }
+  #typeMessage div:nth-child(1){
+    width: 400px;
+    height: 50px;
+    background-color: #0096FF;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+  }
+  #typeMessage div:nth-child(2){
+    overflow: auto;
+    width: 370px;
+    height: 400px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+
+  }
 /*====== 0.0 初始化部分 ======*/
 section.pagination {
   display: flex;
