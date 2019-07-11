@@ -388,6 +388,7 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            this.checked=false
           }else{
             this.$message({
               message: res.data.msg,
