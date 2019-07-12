@@ -77,7 +77,7 @@ router.afterEach(() => {
 
   NProgress.done()
 })
- //判定依据token起手 废弃
+//判定依据token起手 废弃
 /*
 router.beforeEach((to, from, next) => {
   let token = getToken()

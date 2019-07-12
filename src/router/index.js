@@ -89,7 +89,7 @@ export default new Router({
         {
           path:'/recommandBook',
           meta:{
-            title:'书籍推荐设置',
+            title:'图书推荐',
             Mode:'6',
           },
           component:() => import('../components/System/DataSetting.vue')

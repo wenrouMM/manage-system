@@ -42,7 +42,7 @@
               <el-table-column align="center" prop="fkReaderName" label="用户名"></el-table-column>
               <el-table-column align="center" prop="fkCardNumber" label="卡号"></el-table-column>
               <el-table-column align="center" prop="bookName" label="书名"></el-table-column>
-              <el-table-column align="center" prop="creatTime" label="实际归还时间"></el-table-column>
+              <el-table-column align="center" prop="realityRturnTme" label="实际归还时间"></el-table-column>
               <el-table-column align="center" prop="overdueDay" label="已逾期天数">
                 <template slot-scope="scope">
                   <span>{{scope.row.overdueDay}}天</span>

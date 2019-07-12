@@ -186,6 +186,43 @@ import {roleManageInt,role_table,roleType,control} from '../../request/api/base.
 export default {
   data() {
     return {
+      setting: {
+        edit: {
+          enable: true,
+          showRemoveBtn: false,
+          addHoverBtn: false,
+          showRenameBtn: false,
+          editNameSelectAll: true
+        },
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+          }
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          dblClickExpand: false,
+          selectedMulti: false,
+        },
+        callback: {
+          onCheck: this.zTreeOnCheck, //勾选时事件
+          beforeCheck: this.zTreeBeforeCheck,
+          beforeExpand: this.zTreeBeforeExpand,
+        },
+        check: {
+          enable: true,
+          chkStyle: "checkbox", //选择框的类型
+          chkboxType: { "Y": "ps", "N": "ps" }, //关联父子节点
+        },
+      },//ztree树配置
+      zNodes: [], //ztree树加载的数据
+      menuId:[],
+      roleId:null,
+      checked:false,
       tableData: [],
       tableChecked: [], // 全选绑定的数据
       ids: [],
@@ -230,40 +267,6 @@ export default {
           );
         }
       },
-      setting: {
-        edit: {
-          enable: true,
-          showRemoveBtn: false,
-          addHoverBtn: false,
-          showRenameBtn: false,
-          editNameSelectAll: true
-        },
-        data: {
-          simpleData: {
-            enable: true,
-            idKey: "id",
-            pIdKey: "pId",
-            rootPId: 0
-          }
-        },
-        view: {
-          showLine: false,
-          showIcon: true,
-          dblClickExpand: false,
-          selectedMulti: false,
-        },
-        callback: {
-          onCheck: this.zTreeOnCheck, //勾选时事件
-          beforeCheck: this.zTreeBeforeCheck,
-          beforeExpand: this.zTreeBeforeExpand,
-        },
-        check: {
-          enable: true,
-          chkStyle: "checkbox", //选择框的类型
-          chkboxType: { "Y": "ps", "N": "ps" }, //关联父子节点
-        },
-      },//ztree树配置
-      zNodes: [], //ztree树加载的数据
       /*======4.0分页器相关数据 ======*/
       tableLoading: true,
       /*初始化 */
@@ -292,9 +295,6 @@ export default {
       ],
       id: null,
       roleCode: null,
-      menuId:[],
-      roleId:null,
-      checked:false
       /*====== 5.0 分页相关设置项 ======*/
     };
   },
@@ -388,7 +388,6 @@ export default {
               message: res.data.msg,
               type: "success"
             });
-            this.checked=false
           }else{
             this.$message({
               message: res.data.msg,
@@ -695,42 +694,42 @@ export default {
 </script>
 
 <style scoped>
-  #typeMessage{
-    display: none;
-    position: absolute;
-    border-radius: 20px;
-    top: 200px;
-    left:750px;
-    z-index: 30000;
-    filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
-    -moz-box-shadow: 2px 2px 10px #909090;
-    -webkit-box-shadow: 2px 2px 10px #909090;
-    box-shadow:5px 5px 40px #909090;
-  }
-  #typeMessage div:nth-child(1){
-    width: 400px;
-    height: 50px;
-    background-color: #0096FF;
-    font-size: 20px;
-    color: white;
-    text-align: center;
-    line-height: 50px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-
-  }
-  #typeMessage div:nth-child(2){
-    overflow: auto;
-    width: 370px;
-    height: 400px;
-    background-color: white;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    padding-left: 30px;
-    padding-bottom: 30px;
-
-  }
 /*====== 0.0 初始化部分 ======*/
+#typeMessage{
+  display: none;
+  position: absolute;
+  border-radius: 20px;
+  top: 200px;
+  left:750px;
+  z-index: 30000;
+  filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=4);
+  -moz-box-shadow: 2px 2px 10px #909090;
+  -webkit-box-shadow: 2px 2px 10px #909090;
+  box-shadow:5px 5px 40px #909090;
+}
+#typeMessage div:nth-child(1){
+  width: 400px;
+  height: 50px;
+  background-color: #0096FF;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+
+}
+#typeMessage div:nth-child(2){
+  overflow: auto;
+  width: 370px;
+  height: 400px;
+  background-color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+
+}
 section.pagination {
   display: flex;
   justify-content: center;
