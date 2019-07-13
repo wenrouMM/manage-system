@@ -91,15 +91,15 @@
               <el-button type="primary" class="ml_30" size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
-          <div class="forbid">
-            <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="500px" center>
-              <div v-if="i!=1" style="text-align: center">
-                <div style="font-size: 20px;color: grey">电话 : &nbsp; &nbsp;{{phone}}</div>
+          <div class="forbid collectionDelete">
+            <el-dialog :title="Dialogtitle[i]" :visible.sync="centerDialogVisible" width="400px" center>
+              <div v-if="i!=1" style="text-align: center;">
+                <div style="font-size: 15px;color: grey;margin-top: 10px">电话 : &nbsp; &nbsp;{{phone}}</div>
               </div>
               <div v-if="i==1">
-                <div style="font-size: 20px;color: grey">该用户逾期金额为{{overdueMoney}}元，是否处理？</div>
+                <div style="font-size: 15px;color: grey;margin-top: 10px">该用户逾期金额为{{overdueMoney}}元，是否处理？</div>
               </div>
-              <div slot="footer">
+              <div style="margin-top: 30px;margin-bottom: 30px">
                 <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
                 <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
               </div>
