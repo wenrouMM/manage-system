@@ -81,12 +81,12 @@
               <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
-          <div class="forbid">
-            <el-dialog title="撤销" :visible.sync="centerDialogVisible" width="500px" center>
-              <div style="text-align: center">
-                <div style="font-size: 20px;color: grey">是否撤销他 (她) 的失信记录？</div>
+          <div class="forbid collectionDelete">
+            <el-dialog title="撤销" :visible.sync="centerDialogVisible" width="400px" center>
+              <div style="text-align: center;margin-top: 10px">
+                <div style="font-size: 15px;color: grey">是否撤销他 (她) 的失信记录？</div>
               </div>
-              <div slot="footer">
+              <div style="margin-top: 30px;margin-bottom: 30px">
                 <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
                 <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
               </div>

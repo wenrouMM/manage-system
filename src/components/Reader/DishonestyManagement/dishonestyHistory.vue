@@ -81,17 +81,6 @@
               <el-button type="primary" class="ml_30"  size="medium" @click="jumpBtn">确定</el-button>
             </section>
           </section>
-          <div class="forbid">
-            <el-dialog title="撤销" :visible.sync="centerDialogVisible" width="500px" center>
-              <div style="text-align: center">
-                <div style="font-size: 20px;color: grey">是否撤销他 (她) 的失信记录？</div>
-              </div>
-              <div slot="footer">
-                <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-                <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
-              </div>
-            </el-dialog>
-          </div>
         </div>
       </div>
     </el-container>
@@ -193,25 +182,6 @@
           let num = parseInt(this.pageInput)
           this.current_change(num)
         }
-      },
-      submitDialog(){
-        console.log(this.id)
-        this.axios.post(dishonestyRevoke,{id:this.id,fkReaderId:this.fkReaderId}).then((res)=>{
-          console.log(res)
-          if(res.data.state==true){
-            this.$message({
-              message: res.data.msg,
-              type: 'success'
-            });
-            this.centerDialogVisible=false
-            this.SearchApi(this.searchTimeForm)
-          }else{
-            this.$message({
-              message: res.data.msg,
-              type: 'error'
-            });
-          }
-        })
       },
       onSubmit() {
         // date提交的值需要做相关处理转换 提交之后的数据绑定到tableDta 映射到表格数据中
