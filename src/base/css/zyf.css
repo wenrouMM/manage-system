@@ -11,8 +11,17 @@
 #vacationForm .el-date-editor.el-input, .el-date-editor.el-input__inner {
   width: 250px;
 }
+#subscribeTimeScope .el-form-item__content{
+  height: 40px;
+}
 #libbookinfo .el-input .el-input__inner{
   width: 180px;
+}
+#subscribeTimeScope{
+  position: relative;
+}
+#subscribeTimeScope .el-input__inner{
+  width: 170px;
 }
 .flexLayout{
   display: flex;

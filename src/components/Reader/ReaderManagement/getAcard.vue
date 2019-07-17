@@ -19,14 +19,25 @@
       <el-form ref="addForm" :model="addForm" :rules="addRules">
         <!-- 表单域 -->
         <div class="hideBox" v-if="!rebackData">
-          <el-form-item label="身份证号" prop="id" :label-width="formLabelWidth">
-            <el-input
-              @blur="select"
-              v-model="addForm.id"
-              autocomplete="off"
-              class="inputDiv"
-              placeholder="请输入身份证号"
-            ></el-input>
+          <el-form-item label="证件号码" prop="id" :label-width="formLabelWidth" >
+            <div class="flexLayout">
+              <el-select  v-model="addForm.idCardType" placeholder="请选择证件类型">
+                <el-option
+                  v-for="(item) in idCardType"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+              <el-input
+                @blur="select"
+                v-model="addForm.id"
+                autocomplete="off"
+                class="inputDiv"
+                style="margin-left: 5px"
+                placeholder="请输入证件号"
+              ></el-input>
+            </div>
             <i v-if="loading" class="el-icon-loading"></i>
           </el-form-item>
 
@@ -144,12 +155,14 @@ import {
   addCardInt,
   bookWordInt,
   cardInfoInt,
-  rechargeInt
+  rechargeInt,
+  idCardType
 } from "@request/api/base.js";
 export default {
   name: "getAcard",
   data() {
     return {
+      idCardType:[],//证件类型选择
       optionsData:[],// 等级选择下拉框
       formBox: false,
       formLabelWidth: "100px",
@@ -161,6 +174,7 @@ export default {
 
       addForm: {
         // 添加的数据表单 共8个参数
+        idCardType:'',//证件类型
         address: "", // 地址相关
         name: "", // 用户名
         sex: "", // 性别
@@ -196,6 +210,7 @@ export default {
     addTimeForm() {
       let cost =  this.isSupply?this.supplyCost:0
       let obj = {
+        fkPapersTypeId:this.addForm.idCardType,
         fkGradeCode:this.addForm.level.code,
         balance: this.addForm.level.deposit,
         phone: this.addForm.phoneNumber,
@@ -438,6 +453,12 @@ export default {
   created() {
     this.supplyCashApi()
     this.levelOptionApi();
+    this.axios.get(idCardType).then((res)=>{
+      if(res.data.state==true){
+        console.log('证件类型的数据',res)
+        this.idCardType=res.data.row
+      }
+    })
   }
 };
 </script>

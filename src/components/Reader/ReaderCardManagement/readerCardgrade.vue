@@ -68,6 +68,16 @@
                   <span>{{scope.row.deposit}}元</span>
                 </template>
               </el-table-column>
+              <el-table-column align="center" prop="subscribeTimeScope" width="200" label="预借数量">
+                <template slot-scope="scope">
+                  <span>{{scope.row.subscribeNumScope  == null || scope.row.subscribeNumScope =='' ?0:scope.row.subscribeNumScope }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="subscribeTimeScope" width="200" label="预约保护时间">
+                <template slot-scope="scope">
+                  <span>{{scope.row.subscribeTimeScope == null || scope.row.subscribeTimeScope=='' ?'---':scope.row.subscribeTimeScope}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="creatTime" width="200" label="创建时间"></el-table-column>
               <el-table-column align="center" prop="updateTime" width="200" label="修改时间"></el-table-column>
               <el-table-column align="center" prop="disabled" width="150" label="状态">
@@ -156,7 +166,13 @@
             <el-form-item label="押金金额" prop="deposit" :label-width="formLabelWidth">
               <el-input :disabled="editJude" v-model="changeForm.deposit" autocomplete="off" @blur="verifyDepositFun"></el-input>
             </el-form-item>
-
+            <el-form-item label="预借数量" prop="subscribeNumScope" :label-width="formLabelWidth">
+              <el-input v-model="changeForm.subscribeNumScope  " autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="预约保护时间" id="subscribeTimeScope" prop="subscribeTimeScope" label-width="132px" >
+              <el-input v-model="changeForm.subscribeTimeScope  " autocomplete="off"></el-input>
+              <span style="position: relative;top: -40px;right: -150px">天</span>
+            </el-form-item>
             <el-form-item class="select" prop="disabled" label="状　　态">
               <el-radio-group v-model="changeForm.disabled">
                 <el-radio label="1" value="1">禁用</el-radio>
@@ -220,6 +236,8 @@ export default {
         readerTime: "", // 借阅时间
         bookNum: "", // 借阅数量
         deposit: "", //押金金额
+        subscribeTimeScope:'',//预约保护时间
+        subscribeNumScope:'',//预借数量
         disabled: "", // 状态
         id: "" // ID
       },
@@ -228,6 +246,8 @@ export default {
         name: [{ required: true, message: "请输入等级名称", trigger: "blur" }],
         renewNum: [{ required: true, message: "请输入续借天数", trigger: "blur" }],
         readerTime: [{ required: true, message: "请输入借阅时间", trigger: "blur" }],
+        subscribeNumScope: [{ required: true, message: "请输入预借数量", trigger: "blur" }],
+        subscribeTimeScope:[{ required: true, message: "请输入预约保护时间", trigger: "blur" }],
         bookNum: [{ required: true, message: "请输入借阅数量", trigger: "blur" }],
         deposit: [{ required: true, message: "请输入押金金额", trigger: "blur" }],
         disabled: [{ required: true, message: "请选择状态", trigger: "change" }]
@@ -246,6 +266,8 @@ export default {
     addTimeForm() {
       let obj = {
         name: this.changeForm.name,
+        subscribeTimeScope: this.changeForm.subscribeTimeScope,
+        subscribeNumScope:this.changeForm.subscribeNumScope,
         renewNumber: this.changeForm.renewNum,
         borrowTime: this.changeForm.readerTime,
         borrowNumber: this.changeForm.bookNum,
@@ -257,6 +279,8 @@ export default {
     editTimeForm() {
       let obj = {
         name: this.changeForm.name,
+        subscribeTimeScope: this.changeForm.subscribeTimeScope,
+        subscribeNumScope:this.changeForm.subscribeNumScope,
         renewNumber: this.changeForm.renewNum,
         borrowTime: this.changeForm.readerTime,
         borrowNumber: this.changeForm.bookNum,
@@ -353,6 +377,8 @@ export default {
       this.changeForm.name = row.name;
       this.changeForm.renewNum = row.renewNumber;
       this.changeForm.readerTime = row.borrowTime;
+      this.changeForm.subscribeTimeScope = row.subscribeTimeScope;
+      this.changeForm.subscribeNumScope = row.subscribeNumScope;
       this.changeForm.bookNum = row.borrowNumber;
       this.changeForm.deposit = row.deposit;
       this.changeForm.id = row.id;

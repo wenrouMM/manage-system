@@ -132,6 +132,7 @@ export const cardInfoInt = {
   verifyCard:`${url}readermodule/readerTbCardBase/currency/verifyBaseCard` //读者卡验证
 }
 export const getCardInt = url + 'tibetmuseummodule/readerTbCardGradeinfo/currency/selectAllDropBox';
+export const idCardType = url + 'readermodule/currency/PapersType';//办卡页面证件类型
 //读者卡等级
 
 export const cardLevelInt = {
@@ -201,7 +202,7 @@ export const indexInt = {
 // 权限管理模块
 export const control = {
   tree:`${url}authmodule/currency/getAllMenuAndElement`,
-  add:`${url}authmodule/roleMenuElement/edit`, //权限添加
+  add:`${url}authmodule/roleInformation/editMenuRole`, //权限添加
 }
 
 var userManage = url + 'authmodule/managerInformation/';

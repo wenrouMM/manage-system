@@ -98,6 +98,8 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="fkGradeName" label="等级名称" width="200"></el-table-column>
+              <el-table-column align="center" prop="fkGradeName" label="等级名称" width="200"></el-table-column>
+              <el-table-column align="center" prop="fkGradeName" label="等级名称" width="200"></el-table-column>
               <!-- <el-table-column align="center" prop="fkFromLibraryName" width="100" label="所属地区"></el-table-column> -->
               <el-table-column align="center" prop="creatTime" label="创建时间" width="200"></el-table-column>
               <el-table-column align="center" prop="updateTime" label="修改时间" width="200"></el-table-column>

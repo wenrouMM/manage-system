@@ -16,7 +16,7 @@
                 <el-select
                   style="width: 150px"
                   v-model="searchForm.makeMethod"
-                  placeholder="请选择 :"
+                  placeholder="请选择"
                   clearable
                   @change="selectCheck(searchForm.makeMethod)"
                 >
@@ -101,7 +101,7 @@
               </div>
               <div style="margin-top: 30px;margin-bottom: 30px">
                 <span class="dialogButton true mr_40" @click="submitDialog">确 定</span>
-                <span class="dialogButton cancel" @click="centerDialogVisible = false">取消</span>
+                <span class="dialogButton cancel" @click="centerDialogVisible = false">取 消</span>
               </div>
             </el-dialog>
           </div>

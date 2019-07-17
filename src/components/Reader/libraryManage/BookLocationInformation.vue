@@ -246,7 +246,6 @@
       },
       //批量选择
       handleSelectionChange(val) {
-
         this.tableChecked = val;
       },
       //批量上架
@@ -271,16 +270,20 @@
       },
       //下架按钮
       deleteBtn(index, row) {
-
-        this.id = row.id
-        if (row.lendState == 0) {
-          this.j = 0
-          this.i = 0
-        } else {
-          this.j = 1
-          this.i = 1
+        if(this.tableChecked.length>0){
+          this.$message.error('选择多条后请您批量上下架')
+        }else{
+          this.id = row.id
+          if (row.lendState == 0) {
+            this.j = 0
+            this.i = 0
+          } else {
+            this.j = 1
+            this.i = 1
+          }
+          this.centerDialogVisible = true
         }
-        this.centerDialogVisible = true
+
       },
       //下架弹框取消按钮
       cancelCheck() {
