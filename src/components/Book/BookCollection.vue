@@ -88,7 +88,7 @@
                 <span>{{scope.row.callNumber == null || scope.row.callNumber=='' ?'---':scope.row.callNumber}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="code" label="馆藏码" width="200" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="code" label="馆藏码" width="300"></el-table-column>
             <el-table-column align="center" prop="isbn" label="ISBN" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="name" label="书名" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="clusterName" label="丛编题名" width="200" :show-overflow-tooltip="true">
