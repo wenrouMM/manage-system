@@ -67,7 +67,7 @@
                 <span>{{scope.row.locationNam == null || scope.row.locationNam=='' ?'---':scope.row.locationNam}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="author" label="录入员" width="200"
+            <el-table-column align="center" prop="author" label="编著者" width="200"
                              :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="updateTime" label="上架时间" width="200"></el-table-column>
             <el-table-column align="center" prop="fkTypeName" label="类型" width="200"></el-table-column>
