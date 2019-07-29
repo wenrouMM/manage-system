@@ -110,6 +110,22 @@ export default new Router({
           },
           component:() => import('../components/System/noticeSetting.vue')
         },
+        {
+          path:'/recommendationLog',
+          meta:{
+            title:'荐购审核',
+            Mode:'6',
+          },
+          component:() => import('../components/System/recommendedPurchase.vue')
+        },
+        {
+          path:'/recommendationHis',
+          meta:{
+            title:'荐购历史记录',
+            Mode:'6',
+          },
+          component:() => import('../components/System/recommendedHis.vue')
+        },
         // 1.0 采编管理
         {
           path: '/uploadBook',
